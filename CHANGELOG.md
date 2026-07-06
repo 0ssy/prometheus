@@ -5,7 +5,7 @@ All notable changes to Prometheus are documented in this file.
 ## [0.4.0-delta] - 2026-07-06
 
 Codename: **Daedalus**  
-Status: **IN_PROGRESS**
+Status: **COMPLETE**
 
 ### Added
 - Delta digital engineering lab modules:
@@ -22,6 +22,15 @@ Status: **IN_PROGRESS**
 ### Changed
 - Bootstrap now registers `delta_service`, `epsilon_service`, and `omega_service`.
 - Runtime version advanced to `0.4.0-delta`.
+- Delta service now integrates with knowledge engine and digital twin:
+  - `DeltaService` records simulation outcomes to knowledge graph
+  - `DeltaService.build_twin()` materializes digital twins from knowledge graph facts
+- Epsilon service now bridges to Delta digital twin:
+  - `EpsilonService.diagnostics()` updates digital twin during hardware assessment
+  - `EpsilonService.recovery_plan()` includes digital twin context
+- Omega service now integrates with kernel permission system:
+  - `OmegaService.grant_permission()` delegates to kernel `PermissionManager`
+  - `OmegaService.plan_collaboration()` considers HAL interfaces from Epsilon
 
 ## [0.3.0-gamma] - 2026-07-06
 

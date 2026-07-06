@@ -1,5 +1,23 @@
 # Architecture Decision Log
 
+## 2026-07-06 — Phase Delta Freeze Checkpoint (Daedalus)
+
+### Context
+Delta completed the simulation and digital engineering lab milestone. The platform can now
+materialize device twins from the knowledge graph, run multi-step failure scenarios, forecast
+battery health, and record simulation outcomes for downstream learning.
+
+### Decision
+1. Freeze Delta as `v0.4.0-delta`.
+2. Mark codename `Daedalus` with status `COMPLETE`.
+3. Route future simulation, twin, and scenario enhancements to Epsilon or Omega instead of
+   expanding Delta scope.
+
+### Consequences
+- `v0.4.0-delta` is the canonical checkpoint for simulation and digital-engineering foundations.
+- Delta remains feature-frozen except for bug fixes.
+- Epsilon can now safely build on Delta's digital twin and knowledge graph integration.
+
 ## 2026-07-06 — Delta/Epsilon/Omega Roadmap Lock-In
 
 ### Context
