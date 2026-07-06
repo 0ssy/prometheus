@@ -1,5 +1,13 @@
-from .hal import HALRegistry, HardwareInterface
-from .recovery import RecoveryPlanner
-from .diagnostics import DiagnosticsEngine
+from __future__ import annotations
 
-__all__ = ["HALRegistry", "HardwareInterface", "RecoveryPlanner", "DiagnosticsEngine"]
+from epsilon.hal import HALManager
+from epsilon.diagnostics import EpsilonDiagnostics
+from epsilon.recovery import EpsilonRecoveryPlanner
+from epsilon.firmware import EpsilonFirmwareIntelligence
+
+__all__ = [
+    "HALManager",
+    "EpsilonDiagnostics",
+    "EpsilonRecoveryPlanner",
+    "EpsilonFirmwareIntelligence",
+]

@@ -615,11 +615,35 @@ def epsilon_list_interfaces(epsilon: EpsilonService = Depends(get_epsilon_servic
     return epsilon.list_interfaces()
 
 
+@app.post("/epsilon/connect/{device_id}")
+def epsilon_connect_device(
+    device_id: str,
+    driver_name: str = "virtual",
+    epsilon: EpsilonService = Depends(get_epsilon_service),
+):
+    return epsilon.connect_device(device_id=device_id, driver_name=driver_name)
+
+
+@app.post("/epsilon/disconnect/{device_id}")
+def epsilon_disconnect_device(
+    device_id: str,
+    epsilon: EpsilonService = Depends(get_epsilon_service),
+):
+    return epsilon.disconnect_device(device_id=device_id)
+
+
 @app.get("/epsilon/diagnostics/{device_id}")
 def epsilon_device_diagnostics(
     device_id: str, epsilon: EpsilonService = Depends(get_epsilon_service)
 ):
     return epsilon.diagnostics(device_id=device_id)
+
+
+@app.get("/epsilon/diagnostics/{device_id}/full")
+def epsilon_full_diagnostics(
+    device_id: str, epsilon: EpsilonService = Depends(get_epsilon_service)
+):
+    return epsilon.full_diagnostics(device_id=device_id)
 
 
 @app.post("/epsilon/recovery/{device_id}")
@@ -637,6 +661,14 @@ def epsilon_firmware_summary(
     epsilon: EpsilonService = Depends(get_epsilon_service),
 ):
     return epsilon.firmware_summary(metadata=metadata)
+
+
+@app.post("/epsilon/firmware/parse")
+def epsilon_firmware_parse(
+    data: bytes,
+    epsilon: EpsilonService = Depends(get_epsilon_service),
+):
+    return epsilon._firmware.parse(data)
 
 
 # ---------------------------------------------------------------------------
@@ -690,3 +722,55 @@ def omega_check_policy(
 @app.get("/omega/public-apis")
 def omega_public_apis(omega: OmegaService = Depends(get_omega_service)):
     return omega.public_apis()
+
+
+@app.post("/omega/agents/coordinate")
+def omega_agents_coordinate(
+    tasks: list[dict], omega: OmegaService = Depends(get_omega_service)
+):
+    return omega.coordinate_agents(tasks)
+
+
+@app.post("/omega/agents/plan")
+def omega_agents_plan(
+    objective: str,
+    available_agents: list[str],
+    capabilities: dict | None = None,
+    omega: OmegaService = Depends(get_omega_service),
+):
+    return omega.plan_tasks(objective, available_agents, capabilities or {})
+
+
+@app.post("/omega/agents/consensus")
+def omega_agents_consensus(
+    proposal: dict,
+    participants: list[str],
+    omega: OmegaService = Depends(get_omega_service),
+):
+    return omega.consensus_propose(proposal, participants)
+
+
+@app.post("/omega/agents/delegate")
+def omega_agents_delegate(
+    from_agent: str,
+    to_agent: str,
+    task: dict,
+    omega: OmegaService = Depends(get_omega_service),
+):
+    return omega.delegate_task(from_agent, to_agent, task)
+
+
+@app.post("/omega/distributed/sync")
+def omega_distributed_sync(
+    source_node: str,
+    target_node: str,
+    omega: OmegaService = Depends(get_omega_service),
+):
+    return omega._knowledge_sync.sync(source_node, target_node).to_dict()
+
+
+@app.get("/omega/dashboard/{section}")
+def omega_dashboard_section(
+    section: str, omega: OmegaService = Depends(get_omega_service)
+):
+    return omega.get_dashboard(section)

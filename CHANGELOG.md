@@ -2,6 +2,68 @@
 
 All notable changes to Prometheus are documented in this file.
 
+## [0.6.0-omega] - 2026-07-06
+
+Codename: **Olympus**  
+Status: **IN_PROGRESS**
+
+### Added
+- Plugin SDK (`sdk/plugin_sdk/`):
+  - `interfaces.py`, `decorators.py`, `lifecycle.py`, `testing.py`, `examples/`
+- Multi-Agent Coordination (`agents/`):
+  - `coordinator.py`, `planner.py`, `consensus.py`, `delegation.py`
+- Distributed Runtime (`distributed/`):
+  - `node.py`, `runtime.py`, `sync.py`
+- Policy Engine (`policy/`):
+  - `authorization.py`, `permissions.py`, `rules.py`, `audit.py`
+- Marketplace (`marketplace/`):
+  - `plugin_repo.py`, `capability_repo.py`, `driver_repo.py`, `agent_repo.py`
+- Enterprise Configuration (`enterprise/`):
+  - `organizations.py`, `projects.py`, `users.py`, `teams.py`, `roles.py`
+- Runtime Management (`runtime_management/`):
+  - `resource_manager.py`, `memory_manager.py`, `lifecycle_manager.py`
+- Engineering Dashboard (`dashboard/`):
+  - `overview.py`, `devices.py`, `knowledge.py`, `simulation.py`, `firmware.py`, `diagnostics.py`, `recovery.py`, `agents.py`, `plugins.py`, `metrics.py`, `logs.py`, `policies.py`
+- Omega service integration:
+  - Updated `services/omega_service.py` to orchestrate all Omega components
+  - Updated `core/bootstrap.py` to register Omega sub-services
+  - Added Omega API endpoints in `backend/main.py`
+
+### Architecture
+- Platform now supports plugin SDK, multi-agent coordination, distributed runtime, policy engine, marketplace, enterprise configuration, runtime management, and unified dashboard.
+- All hardware actions remain policy-aware and auditable.
+
+## [0.5.0-epsilon] - 2026-07-06
+
+Codename: **Hephaestus**  
+Status: **IN_PROGRESS**
+
+### Added
+- Hardware Abstraction Layer (HAL):
+  - `hardware/hal/interface.py`, `hardware/hal/manager.py`, `hardware/hal/registry.py`, `hardware/hal/capability_mapper.py`
+- Driver framework:
+  - `hardware/drivers/base.py`, `hardware/drivers/usb.py`, `hardware/drivers/adb.py`, `hardware/drivers/fastboot.py`, `hardware/drivers/network.py`, `hardware/drivers/virtual.py`
+- Device Session Manager:
+  - `hardware/session.py` with `DeviceSession` and `DeviceSessionManager`
+- Hardware diagnostics engine:
+  - `hardware/diagnostics.py` with `HardwareDiagnostics`
+- Hardware recovery planner:
+  - `hardware/recovery.py` with `HardwareRecovery`
+- Hardware event pipeline:
+  - `hardware/events.py` with `DeviceConnectedEvent`, `DeviceDisconnectedEvent`, `BatteryLowEvent`, `FirmwareDetectedEvent`, `DriverFailedEvent`, `SessionExpiredEvent`
+- Firmware intelligence package:
+  - `firmware/metadata.py`, `firmware/partitions.py`, `firmware/compatibility.py`, `firmware/parser.py`
+- Security layer package:
+  - `security/authorization.py`, `security/permissions.py`, `security/auditing.py`, `security/integrity.py`
+- Epsilon service integration:
+  - Updated `services/epsilon_service.py` to orchestrate HAL, sessions, diagnostics, recovery, firmware, and security
+  - Updated `core/bootstrap.py` to wire Epsilon components
+  - Added Epsilon API endpoints in `backend/main.py`
+
+### Architecture
+- Hardware never bypasses reasoning. All hardware actions flow through the HAL, are authorized, audited, and feed into the digital twin/knowledge graph.
+- Recovery planning is separate from execution. Prometheus analyzes and recommends; execution remains an explicit, authorized step.
+
 ## [0.4.0-delta] - 2026-07-06
 
 Codename: **Daedalus**  

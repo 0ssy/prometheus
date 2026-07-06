@@ -1,5 +1,45 @@
 # Architecture Decision Log
 
+## 2026-07-06 — Phase Omega Kickoff (Olympus)
+
+### Context
+Epsilon (Hephaestus) is complete. The next phase transforms Prometheus from an advanced engineering platform into a stable, extensible operating environment for engineering intelligence.
+
+### Decision
+1. Create `sdk/plugin_sdk/` for third-party plugin development with interfaces, decorators, lifecycle, and testing.
+2. Create `agents/` for multi-agent coordination: coordinator, planner, consensus, delegation.
+3. Create `distributed/` for multi-node runtime: node registry, distributed runtime, knowledge/capability sync.
+4. Create `policy/` for policy-aware operations: authorization, permissions, rules, audit.
+5. Create `marketplace/` for plugin, capability, driver, and agent repositories.
+6. Create `enterprise/` for multi-tenancy: organizations, projects, users, teams, roles.
+7. Create `runtime_management/` for resource, memory, and lifecycle management.
+8. Create `dashboard/` for unified engineering dashboard.
+9. Update `OmegaService` to orchestrate all Omega components.
+10. Update `core/bootstrap.py` to register all Omega sub-services.
+
+### Consequences
+- Prometheus becomes a mature platform others can extend without modifying Core.
+- Breaking changes after Olympus require major versions.
+- Every action is policy-aware, auditable, and attributable.
+
+## 2026-07-06 — Phase Epsilon Kickoff (Hephaestus)
+
+### Context
+Delta (Daedalus) is frozen. The next phase must bridge the virtual world and the physical world through well-defined hardware abstractions while preserving the platform's "reason → simulate → verify → act" philosophy.
+
+### Decision
+1. Create `hardware/` package as the HAL layer: interface, manager, registry, capability_mapper, drivers, session, diagnostics, recovery, events.
+2. Create `firmware/` package for firmware intelligence (metadata, partitions, compatibility, parser).
+3. Create `security/` package for authorization, permissions, auditing, and integrity.
+4. Update `epsilon/` modules to bridge the new hardware layer into Prometheus Core.
+5. Update `EpsilonService` to orchestrate HAL, sessions, diagnostics, recovery, firmware, and security.
+6. All hardware actions remain observable, auditable, and attributable. Recovery planning is separate from execution.
+
+### Consequences
+- Hardware becomes an extension of the platform, not a shortcut around it.
+- The reasoning engine stays in charge of all recommendations.
+- Every hardware operation updates the digital twin and knowledge graph.
+
 ## 2026-07-06 — Phase Delta Freeze Checkpoint (Daedalus)
 
 ### Context

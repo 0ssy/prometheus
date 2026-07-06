@@ -73,6 +73,8 @@ def _register_services(container: ServiceContainer) -> None:
     kernel.start()
     kernel.grant_permission("system", "device.recover")
     kernel.grant_permission("system", "device.diagnose")
+    kernel.grant_permission("system", "hardware.session.create")
+    kernel.grant_permission("system", "firmware.read")
     delta_service = DeltaService(
         knowledge_engine=components.knowledge_engine,
         device_api=components.device_api,
@@ -82,6 +84,8 @@ def _register_services(container: ServiceContainer) -> None:
         device_api=components.device_api,
         delta_service=delta_service,
         session_factory=SessionLocal,
+        event_bus=event_bus,
+        knowledge_engine=components.knowledge_engine,
     )
     omega_service = OmegaService(
         epsilon_service=epsilon_service,
@@ -105,6 +109,39 @@ def _register_services(container: ServiceContainer) -> None:
     container.register("omega_service", omega_service)
     container.register("event_handlers", event_handlers)
     container.register("kernel", kernel)
+    container.register("hardware_hal", epsilon_service._hal)
+    container.register("hardware_session_manager", epsilon_service._session_manager)
+    container.register("hardware_diagnostics", epsilon_service._diagnostics)
+    container.register("hardware_recovery", epsilon_service._recovery)
+    container.register("hardware_firmware", epsilon_service._firmware)
+    container.register("security_authorizer", epsilon_service._authorizer)
+    container.register("security_audit", epsilon_service._audit)
+    container.register("security_integrity", epsilon_service._integrity)
+    container.register("omega_agent_coordinator", omega_service._agent_coordinator)
+    container.register("omega_task_planner", omega_service._task_planner)
+    container.register("omega_consensus", omega_service._consensus)
+    container.register("omega_delegation", omega_service._delegation)
+    container.register("omega_node_registry", omega_service._node_registry)
+    container.register("omega_distributed_runtime", omega_service._distributed_runtime)
+    container.register("omega_knowledge_sync", omega_service._knowledge_sync)
+    container.register("omega_capability_sync", omega_service._capability_sync)
+    container.register("omega_policy_engine", omega_service._policy_engine)
+    container.register("omega_permission_hierarchy", omega_service._permission_hierarchy)
+    container.register("omega_rule_engine", omega_service._rule_engine)
+    container.register("omega_policy_audit", omega_service._policy_audit)
+    container.register("omega_plugin_repo", omega_service._plugin_repo)
+    container.register("omega_capability_repo", omega_service._capability_repo)
+    container.register("omega_driver_repo", omega_service._driver_repo)
+    container.register("omega_agent_repo", omega_service._agent_repo)
+    container.register("omega_org_registry", omega_service._org_registry)
+    container.register("omega_project_registry", omega_service._project_registry)
+    container.register("omega_user_registry", omega_service._user_registry)
+    container.register("omega_team_registry", omega_service._team_registry)
+    container.register("omega_role_registry", omega_service._role_registry)
+    container.register("omega_resource_manager", omega_service._resource_manager)
+    container.register("omega_memory_manager", omega_service._memory_manager)
+    container.register("omega_lifecycle_manager", omega_service._lifecycle_manager)
+    container.register("omega_dashboard", omega_service._dashboard)
 
 
 def _load_plugins(container: ServiceContainer) -> None:
@@ -141,5 +178,5 @@ def boot(heartbeat_job: Callable[[], None]) -> ServiceContainer:
     _load_agents(container)
     _start_scheduler(container, heartbeat_job)
 
-    logger.info("Startup complete - Prometheus Core (Delta Daedalus) runtime online")
+    logger.info("Startup complete - Prometheus Core (Omega Olympus) runtime online")
     return container

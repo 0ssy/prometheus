@@ -1,11 +1,38 @@
 from __future__ import annotations
 
-from omega.ecosystem import (
-    DistributedRuntimeRegistry,
-    MultiAgentCoordinator,
+from omega.ecosystem_base import (
     PluginMarketplace,
+    MultiAgentCoordinator,
+    DistributedRuntimeRegistry,
     PolicyManager,
     PublicApiCatalog,
+)
+from omega.ecosystem import (
+    AgentCoordinator,
+    TaskPlanner,
+    ConsensusEngine,
+    DelegationRouter,
+    NodeRegistry,
+    DistributedRuntime,
+    KnowledgeSynchronizer,
+    CapabilitySynchronizer,
+    PolicyEngine,
+    PermissionHierarchy,
+    RuleEngine,
+    PolicyAuditLogger,
+    PluginRepository,
+    CapabilityRepository,
+    DriverRepository,
+    AgentRepository,
+    OrganizationRegistry,
+    ProjectRegistry,
+    UserRegistry,
+    TeamRegistry,
+    RoleRegistry,
+    ResourceManager,
+    MemoryManager,
+    LifecycleManager,
+    DashboardHub,
 )
 
 
@@ -16,6 +43,38 @@ class OmegaService:
         self._runtime = DistributedRuntimeRegistry()
         self._policy = PolicyManager()
         self._catalog = PublicApiCatalog()
+
+        self._agent_coordinator = AgentCoordinator()
+        self._task_planner = TaskPlanner()
+        self._consensus = ConsensusEngine()
+        self._delegation = DelegationRouter()
+
+        self._node_registry = NodeRegistry()
+        self._distributed_runtime = DistributedRuntime()
+        self._knowledge_sync = KnowledgeSynchronizer()
+        self._capability_sync = CapabilitySynchronizer()
+
+        self._policy_engine = PolicyEngine()
+        self._permission_hierarchy = PermissionHierarchy()
+        self._rule_engine = RuleEngine()
+        self._policy_audit = PolicyAuditLogger()
+
+        self._plugin_repo = PluginRepository()
+        self._capability_repo = CapabilityRepository()
+        self._driver_repo = DriverRepository()
+        self._agent_repo = AgentRepository()
+
+        self._org_registry = OrganizationRegistry()
+        self._project_registry = ProjectRegistry()
+        self._user_registry = UserRegistry()
+        self._team_registry = TeamRegistry()
+        self._role_registry = RoleRegistry()
+
+        self._resource_manager = ResourceManager()
+        self._memory_manager = MemoryManager()
+        self._lifecycle_manager = LifecycleManager()
+
+        self._dashboard = DashboardHub()
         self._epsilon_service = epsilon_service
         self._kernel = kernel
 
@@ -63,3 +122,24 @@ class OmegaService:
 
     def public_apis(self) -> dict:
         return {"apis": self._catalog.list_apis()}
+
+    def coordinate_agents(self, tasks: list[dict]) -> dict:
+        return self._agent_coordinator.coordinate(tasks)
+
+    def plan_tasks(self, objective: str, available_agents: list[str], capabilities: dict) -> dict:
+        graph = self._task_planner.plan(objective, available_agents, capabilities)
+        return {
+            "objective": objective,
+            "tasks": [t for t in graph.topological_sort()],
+        }
+
+    def consensus_propose(self, proposal: dict, participants: list[str]) -> dict:
+        result = self._consensus.propose(proposal, participants)
+        return result.to_dict()
+
+    def delegate_task(self, from_agent: str, to_agent: str, task: dict) -> dict:
+        result = self._delegation.delegate(from_agent, to_agent, task)
+        return result.to_dict()
+
+    def get_dashboard(self, section: str = "overview") -> dict:
+        return self._dashboard.get_dashboard(section)
