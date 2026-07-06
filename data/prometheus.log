@@ -438,3 +438,26 @@
 2026-07-06 10:25:48 | INFO     | epsilon.autonomous_engine | Generated 4 improvement suggestions
 2026-07-06 10:26:09 | INFO     | backend.main | Prometheus heartbeat — system alive
 2026-07-06 10:26:39 | INFO     | backend.main | Prometheus heartbeat — system alive
+2026-07-06 10:41:49 | INFO     | backend.main | Starting Prometheus v0.1.0
+2026-07-06 10:41:49 | INFO     | plugins.manager | Loaded plugin: echo v0.1.0
+2026-07-06 10:41:49 | INFO     | agents.manager | Registered agent: echo_agent
+2026-07-06 10:41:49 | INFO     | agents.manager | Registered agent: engineering_agent
+2026-07-06 10:41:49 | INFO     | core.scheduler | Scheduled job 'heartbeat' every 30s
+2026-07-06 10:41:49 | INFO     | backend.main | Prometheus heartbeat — system alive
+2026-07-06 10:41:49 | INFO     | core.scheduler | Scheduler started
+2026-07-06 10:41:49 | INFO     | backend.main | Startup complete — Phase Alpha milestone checklist online
+2026-07-06 10:42:19 | INFO     | backend.main | Prometheus heartbeat — system alive
+2026-07-06 10:42:32 | INFO     | devices.registry | Registered device: epsilon_demo_device (transport=simulated, ownership_declared=True)
+2026-07-06 10:42:32 | INFO     | reasoning.graph | Asserted fact: epsilon_demo_device -event-> connected
+2026-07-06 10:42:50 | INFO     | backend.main | Prometheus heartbeat — system alive
+2026-07-06 10:42:55 | INFO     | agents.manager | Dispatching task to agent 'engineering_agent': {'name': 'add_temp_field', 'change_type': 'add_twin_field', 'payload': {'field_name': 'temperature_c', 'default_value': None}, 'device_id': 'epsilon_demo_device'}
+2026-07-06 10:42:55 | INFO     | delta.twin | Built twin for epsilon_demo_device: state=online, health=1.0, 1 history entries
+2026-07-06 10:42:55 | INFO     | reasoning.graph | Asserted fact: add_temp_field -event-> engineering_proposal_evaluated:pass
+2026-07-06 10:43:20 | INFO     | backend.main | Prometheus heartbeat — system alive
+2026-07-06 10:43:46 | INFO     | agents.manager | Dispatching task to agent 'engineering_agent': {'device_id': 'epsilon_demo_device', 'name': 'add_temp_field', 'change_type': 'add_twin_field', 'payload': {'field_name': 'temperature_c', 'default_value': None}}
+2026-07-06 10:43:46 | INFO     | delta.twin | Built twin for epsilon_demo_device: state=online, health=1.0, 1 history entries
+2026-07-06 10:43:46 | INFO     | reasoning.graph | Asserted fact: add_temp_field -event-> engineering_proposal_evaluated:pass
+2026-07-06 10:43:50 | INFO     | backend.main | Prometheus heartbeat — system alive
+2026-07-06 10:44:09 | INFO     | agents.manager | Dispatching task to agent 'engineering_agent': {'change_type': 'delete_firmware', 'payload': {}, 'name': 'bad_proposal'}
+2026-07-06 10:44:20 | INFO     | backend.main | Prometheus heartbeat — system alive
+2026-07-06 10:44:50 | INFO     | backend.main | Prometheus heartbeat — system alive

@@ -35,8 +35,7 @@ from gamma.boot_chain import analyze_boot_chain
 from gamma.recovery_planner import plan_recovery
 from gamma.device_simulator import SimulatedFirmwareDevice
 from delta.twin import build_twin
-from epsilon.autonomous_engine import create_plan, suggest_improvements
-from epsilon.capability_backlog import get_backlog
+from epsilon.engineering_agent import EngineeringAgent
 
 logger = get_logger(__name__)
 
@@ -56,6 +55,7 @@ def startup():
     # Register Phase Alpha reference plugin + agent
     plugin_manager.register(EchoPlugin())
     agent_manager.register(EchoAgent())
+    agent_manager.register(EngineeringAgent())
 
     # Prove the scheduler works
     scheduler.schedule("heartbeat", _heartbeat_job, interval_seconds=30)
@@ -308,27 +308,3 @@ def run_gamma_simulation(scenario: str, db: Session = Depends(get_db)):
 def get_device_twin(device_id: str, db: Session = Depends(get_db)):
     twin = build_twin(db, device_id)
     return twin.to_dict()
-
-
-# ---------------------------------------------------------------------------
-# Phase Epsilon — Autonomous Engineering (RFC 0004)
-# Planning and suggestion layer. v0.1 is read-only — no code generation,
-# no deployment execution, no physical experiments.
-# ---------------------------------------------------------------------------
-
-@app.post("/epsilon/plan")
-def create_engineering_plan(plan_id: str, idea: str, db: Session = Depends(get_db)):
-    plan = create_plan(plan_id, idea, db)
-    return plan.to_dict()
-
-
-@app.get("/epsilon/suggestions")
-def get_improvement_suggestions(db: Session = Depends(get_db)):
-    suggestions = suggest_improvements(db)
-    return suggestions
-
-
-@app.get("/epsilon/backlog")
-def get_capability_backlog():
-    backlog = get_backlog()
-    return backlog.to_dict()
