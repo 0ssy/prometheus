@@ -53,3 +53,27 @@ class Device(ABC):
     def status(self) -> dict:
         """Return current connection/state info. Must be JSON-serializable."""
         ...
+
+    def diagnose(self) -> dict:
+        """
+        Optional device-local diagnostics hook.
+        Defaults to unsupported because real diagnostics currently live in
+        engineering modules operating on firmware/disk artifacts.
+        """
+        return {"supported": False, "reason": "diagnose_not_implemented"}
+
+    def verify(self) -> dict:
+        """
+        Optional device-local verification hook.
+        Defaults to unsupported to avoid claiming capabilities that do not
+        exist on all transports yet.
+        """
+        return {"supported": False, "reason": "verify_not_implemented"}
+
+    def recover(self) -> dict:
+        """
+        Optional device-local recovery hook.
+        Defaults to unsupported; recovery planning is currently handled in
+        engineering.recovery_planner.
+        """
+        return {"supported": False, "reason": "recover_not_implemented"}

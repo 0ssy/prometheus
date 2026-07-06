@@ -8,20 +8,20 @@ This wires up every Phase Alpha deliverable behind HTTP endpoints
 so you can verify the whole loop by hand: start server, hit /health,
 run a plugin, dispatch an agent, store/recall memory, query facts.
 """
+import json
+
 from fastapi import FastAPI, Depends, HTTPException
 from sqlalchemy.orm import Session
 
 from core.config import config
 from core.logger import get_logger
-from core.database import init_db, get_db
-from core.scheduler import scheduler
+from core.database import get_db
+from core.bootstrap import boot
 from core.ownership_registry import declare_owned, is_declared_owned, revoke_declaration, list_declared
 
 from plugins.manager import plugin_manager
-from plugins.installed.echo_plugin import EchoPlugin
 
 from agents.manager import agent_manager
-from agents.echo_agent import EchoAgent
 
 from memory.store import remember, recall
 from reasoning.graph import assert_fact, query_facts
@@ -29,13 +29,12 @@ from reasoning.graph import assert_fact, query_facts
 from devices.registry import device_registry
 from devices.simulated import SimulatedDevice
 from devices.serial_device import SerialDevice
-from gamma.partition_mapper import read_partition_table, OwnershipNotDeclaredError
-from gamma.firmware_inspector import inspect_firmware
-from gamma.boot_chain import analyze_boot_chain
-from gamma.recovery_planner import plan_recovery
-from gamma.device_simulator import SimulatedFirmwareDevice
-from delta.twin import build_twin
-from epsilon.engineering_agent import EngineeringAgent
+from engineering.partition_mapper import read_partition_table
+from engineering.firmware_inspector import inspect_firmware
+from engineering.boot_chain import analyze_boot_chain
+from engineering.recovery_planner import plan_recovery
+from engineering.device_simulator import SimulatedFirmwareDevice
+from digital_twin.twin import build_twin
 
 logger = get_logger(__name__)
 
@@ -49,19 +48,7 @@ def _heartbeat_job():
 
 @app.on_event("startup")
 def startup():
-    logger.info(f"Starting {config.app_name} v{config.version}")
-    init_db()
-
-    # Register Phase Alpha reference plugin + agent
-    plugin_manager.register(EchoPlugin())
-    agent_manager.register(EchoAgent())
-    agent_manager.register(EngineeringAgent())
-
-    # Prove the scheduler works
-    scheduler.schedule("heartbeat", _heartbeat_job, interval_seconds=30)
-    scheduler.start()
-
-    logger.info("Startup complete — Phase Alpha milestone checklist online")
+    boot(_heartbeat_job)
 
 
 @app.get("/health")
@@ -209,8 +196,31 @@ def disconnect_device(device_id: str, db: Session = Depends(get_db)):
 # ---------------------------------------------------------------------------
 
 @app.post("/ownership/declare")
-def declare_ownership(target_id: str, note: str = "", db: Session = Depends(get_db)):
-    entry = declare_owned(target_id, note=note)
+def declare_ownership(
+    target_id: str,
+    note: str = "",
+    owner: str = "",
+    trust_level: str = "declared",
+    keys: list[str] | None = None,
+    certificates: list[str] | None = None,
+    recovery_policy: str | None = None,
+    db: Session = Depends(get_db),
+):
+    parsed_recovery_policy = None
+    if recovery_policy is not None:
+        try:
+            parsed_recovery_policy = json.loads(recovery_policy)
+        except json.JSONDecodeError as e:
+            raise HTTPException(status_code=422, detail=f"Invalid recovery_policy JSON: {e.msg}") from e
+    entry = declare_owned(
+        target_id,
+        note=note,
+        owner=owner,
+        trust_level=trust_level,
+        keys=keys,
+        certificates=certificates,
+        recovery_policy=parsed_recovery_policy,
+    )
     assert_fact(db, subject=target_id, predicate="event", obj="ownership_declared")
     return entry
 

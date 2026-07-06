@@ -8,7 +8,7 @@ PrometheusAgent, dispatched through the existing
 """
 from agents.base import PrometheusAgent
 from reasoning.graph import assert_fact
-from delta.twin import build_twin
+from digital_twin.twin import build_twin
 from .proposals import Proposal
 from .simulator import simulate_proposal
 from .tester import run_tests

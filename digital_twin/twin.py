@@ -18,7 +18,7 @@ from sqlalchemy.orm import Session
 from reasoning.graph import query_facts
 from devices.registry import device_registry
 from core.ownership_registry import is_declared_owned
-from gamma.recovery_planner import plan_recovery
+from engineering.recovery_planner import plan_recovery
 from core.logger import get_logger
 
 logger = get_logger(__name__)

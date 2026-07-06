@@ -35,19 +35,32 @@ def is_declared_owned(target_id: str) -> bool:
     return any(entry["id"] == target_id for entry in data.get("declared_owners", []))
 
 
-def declare_owned(target_id: str, note: str = "") -> dict:
+def declare_owned(
+    target_id: str,
+    note: str = "",
+    owner: str = "",
+    trust_level: str = "declared",
+    keys: list | None = None,
+    certificates: list | None = None,
+    recovery_policy: dict | None = None,
+) -> dict:
     data = _load()
     if is_declared_owned(target_id):
         logger.info(f"{target_id} already declared owned — no change")
         return {"id": target_id, "already_declared": True}
     entry = {
         "id": target_id,
+        "owner": owner,
         "declared_at": datetime.now(timezone.utc).isoformat(),
         "note": note,
+        "trust_level": trust_level,
+        "keys": keys or [],
+        "certificates": certificates or [],
+        "recovery_policy": recovery_policy,
     }
     data.setdefault("declared_owners", []).append(entry)
     _save(data)
-    logger.info(f"Declared ownership: {target_id} ({note})")
+    logger.info(f"Declared ownership: {target_id} (owner={owner!r}, trust_level={trust_level})")
     return entry
 
 
