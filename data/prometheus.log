@@ -894,3 +894,220 @@
 2026-07-06 13:01:46 | INFO     | reasoning.graph | Asserted fact: dev1 -rel-> obj1
 2026-07-06 13:01:46 | INFO     | reasoning.graph | Asserted fact: dev2 -rel-> obj2
 2026-07-06 13:01:46 | INFO     | reasoning.graph | Asserted fact: device_2 -status-> online
+2026-07-06 15:51:43 | INFO     | agents.manager | Registered agent: fake_agent
+2026-07-06 15:51:43 | INFO     | agents.manager | Registered agent: fake_agent
+2026-07-06 15:51:43 | INFO     | agents.manager | Dispatching task to agent 'fake_agent': {}
+2026-07-06 15:51:43 | INFO     | core.event_bus | Subscribed handler for event: agent.dispatched
+2026-07-06 15:51:43 | INFO     | agents.manager | Registered agent: fake_agent
+2026-07-06 15:51:43 | INFO     | agents.manager | Dispatching task to agent 'fake_agent': {'task': 'x'}
+2026-07-06 15:51:43 | INFO     | core.container | Registered service: config
+2026-07-06 15:51:43 | INFO     | core.container | Registered service: db_engine
+2026-07-06 15:51:43 | INFO     | core.event_bus | Subscribed handler for event: device.connected
+2026-07-06 15:51:43 | INFO     | core.event_bus | Subscribed handler for event: device.disconnected
+2026-07-06 15:51:43 | INFO     | core.event_bus | Subscribed handler for event: device.connect_failed
+2026-07-06 15:51:43 | INFO     | core.event_bus | Subscribed handler for event: device.wrote
+2026-07-06 15:51:43 | INFO     | core.event_bus | Subscribed handler for event: plugin.ran
+2026-07-06 15:51:43 | INFO     | core.event_bus | Subscribed handler for event: agent.dispatched
+2026-07-06 15:51:43 | INFO     | core.event_bus | Subscribed handler for event: memory.stored
+2026-07-06 15:51:43 | INFO     | core.container | Registered service: event_bus
+2026-07-06 15:51:43 | INFO     | core.container | Registered service: scheduler
+2026-07-06 15:51:43 | INFO     | core.container | Registered service: session_factory
+2026-07-06 15:51:43 | INFO     | core.container | Registered service: memory_api
+2026-07-06 15:51:43 | INFO     | core.container | Registered service: reasoning_api
+2026-07-06 15:51:43 | INFO     | core.container | Registered service: plugin_api
+2026-07-06 15:51:43 | INFO     | core.container | Registered service: agent_api
+2026-07-06 15:51:43 | INFO     | core.container | Registered service: device_api
+2026-07-06 15:51:43 | INFO     | core.container | Registered service: platform_service
+2026-07-06 15:51:43 | INFO     | core.container | Registered service: event_handlers
+2026-07-06 15:51:43 | INFO     | plugins.manager | Loaded plugin: echo v0.1.0
+2026-07-06 15:51:43 | INFO     | agents.manager | Registered agent: echo_agent
+2026-07-06 15:51:43 | INFO     | agents.manager | Registered agent: engineering_agent
+2026-07-06 15:51:43 | INFO     | core.scheduler | Scheduled job 'heartbeat' every 30s
+2026-07-06 15:51:43 | INFO     | core.scheduler | Scheduler started
+2026-07-06 15:51:43 | INFO     | core.bootstrap | Startup complete — Phase Alpha milestone checklist online
+2026-07-06 15:51:43 | INFO     | core.container | Registered service: config
+2026-07-06 15:51:43 | INFO     | core.container | Registered service: db_engine
+2026-07-06 15:51:43 | INFO     | core.event_bus | Subscribed handler for event: device.connected
+2026-07-06 15:51:43 | INFO     | core.event_bus | Subscribed handler for event: device.disconnected
+2026-07-06 15:51:43 | INFO     | core.event_bus | Subscribed handler for event: device.connect_failed
+2026-07-06 15:51:43 | INFO     | core.event_bus | Subscribed handler for event: device.wrote
+2026-07-06 15:51:43 | INFO     | core.event_bus | Subscribed handler for event: plugin.ran
+2026-07-06 15:51:43 | INFO     | core.event_bus | Subscribed handler for event: agent.dispatched
+2026-07-06 15:51:43 | INFO     | core.event_bus | Subscribed handler for event: memory.stored
+2026-07-06 15:51:43 | INFO     | core.container | Registered service: event_bus
+2026-07-06 15:51:43 | INFO     | core.container | Registered service: scheduler
+2026-07-06 15:51:43 | INFO     | core.container | Registered service: session_factory
+2026-07-06 15:51:43 | INFO     | core.container | Registered service: memory_api
+2026-07-06 15:51:43 | INFO     | core.container | Registered service: reasoning_api
+2026-07-06 15:51:43 | INFO     | core.container | Registered service: plugin_api
+2026-07-06 15:51:43 | INFO     | core.container | Registered service: agent_api
+2026-07-06 15:51:43 | INFO     | core.container | Registered service: device_api
+2026-07-06 15:51:43 | INFO     | core.container | Registered service: platform_service
+2026-07-06 15:51:43 | INFO     | core.container | Registered service: event_handlers
+2026-07-06 15:51:43 | INFO     | plugins.manager | Loaded plugin: echo v0.1.0
+2026-07-06 15:51:43 | INFO     | agents.manager | Registered agent: echo_agent
+2026-07-06 15:51:43 | INFO     | agents.manager | Registered agent: engineering_agent
+2026-07-06 15:51:43 | INFO     | core.scheduler | Scheduled job 'heartbeat' every 30s
+2026-07-06 15:51:43 | INFO     | core.scheduler | Scheduler started
+2026-07-06 15:51:43 | INFO     | core.bootstrap | Startup complete — Phase Alpha milestone checklist online
+2026-07-06 15:51:43 | INFO     | core.container | Registered service: config
+2026-07-06 15:51:43 | INFO     | core.container | Registered service: db_engine
+2026-07-06 15:51:43 | INFO     | core.event_bus | Subscribed handler for event: device.connected
+2026-07-06 15:51:43 | INFO     | core.event_bus | Subscribed handler for event: device.disconnected
+2026-07-06 15:51:43 | INFO     | core.event_bus | Subscribed handler for event: device.connect_failed
+2026-07-06 15:51:43 | INFO     | core.event_bus | Subscribed handler for event: device.wrote
+2026-07-06 15:51:43 | INFO     | core.event_bus | Subscribed handler for event: plugin.ran
+2026-07-06 15:51:43 | INFO     | core.event_bus | Subscribed handler for event: agent.dispatched
+2026-07-06 15:51:43 | INFO     | core.event_bus | Subscribed handler for event: memory.stored
+2026-07-06 15:51:43 | INFO     | core.container | Registered service: event_bus
+2026-07-06 15:51:43 | INFO     | core.container | Registered service: scheduler
+2026-07-06 15:51:43 | INFO     | core.container | Registered service: session_factory
+2026-07-06 15:51:43 | INFO     | core.container | Registered service: memory_api
+2026-07-06 15:51:43 | INFO     | core.container | Registered service: reasoning_api
+2026-07-06 15:51:43 | INFO     | core.container | Registered service: plugin_api
+2026-07-06 15:51:43 | INFO     | core.container | Registered service: agent_api
+2026-07-06 15:51:43 | INFO     | core.container | Registered service: device_api
+2026-07-06 15:51:43 | INFO     | core.container | Registered service: platform_service
+2026-07-06 15:51:43 | INFO     | core.container | Registered service: event_handlers
+2026-07-06 15:51:43 | INFO     | plugins.manager | Loaded plugin: echo v0.1.0
+2026-07-06 15:51:43 | INFO     | agents.manager | Registered agent: echo_agent
+2026-07-06 15:51:43 | INFO     | agents.manager | Registered agent: engineering_agent
+2026-07-06 15:51:43 | INFO     | core.scheduler | Scheduled job 'heartbeat' every 30s
+2026-07-06 15:51:43 | INFO     | core.scheduler | Scheduler started
+2026-07-06 15:51:43 | INFO     | core.bootstrap | Startup complete — Phase Alpha milestone checklist online
+2026-07-06 15:51:43 | INFO     | core.container | Registered service: config
+2026-07-06 15:51:43 | INFO     | core.container | Registered service: db_engine
+2026-07-06 15:51:43 | INFO     | core.event_bus | Subscribed handler for event: device.connected
+2026-07-06 15:51:43 | INFO     | core.event_bus | Subscribed handler for event: device.disconnected
+2026-07-06 15:51:43 | INFO     | core.event_bus | Subscribed handler for event: device.connect_failed
+2026-07-06 15:51:43 | INFO     | core.event_bus | Subscribed handler for event: device.wrote
+2026-07-06 15:51:43 | INFO     | core.event_bus | Subscribed handler for event: plugin.ran
+2026-07-06 15:51:43 | INFO     | core.event_bus | Subscribed handler for event: agent.dispatched
+2026-07-06 15:51:43 | INFO     | core.event_bus | Subscribed handler for event: memory.stored
+2026-07-06 15:51:43 | INFO     | core.container | Registered service: event_bus
+2026-07-06 15:51:43 | INFO     | core.container | Registered service: scheduler
+2026-07-06 15:51:43 | INFO     | core.container | Registered service: session_factory
+2026-07-06 15:51:43 | INFO     | core.container | Registered service: memory_api
+2026-07-06 15:51:43 | INFO     | core.container | Registered service: reasoning_api
+2026-07-06 15:51:43 | INFO     | core.container | Registered service: plugin_api
+2026-07-06 15:51:43 | INFO     | core.container | Registered service: agent_api
+2026-07-06 15:51:43 | INFO     | core.container | Registered service: device_api
+2026-07-06 15:51:43 | INFO     | core.container | Registered service: platform_service
+2026-07-06 15:51:43 | INFO     | core.container | Registered service: event_handlers
+2026-07-06 15:51:43 | INFO     | plugins.manager | Loaded plugin: echo v0.1.0
+2026-07-06 15:51:43 | INFO     | agents.manager | Registered agent: echo_agent
+2026-07-06 15:51:43 | INFO     | agents.manager | Registered agent: engineering_agent
+2026-07-06 15:51:43 | INFO     | core.scheduler | Scheduled job 'heartbeat' every 30s
+2026-07-06 15:51:43 | INFO     | core.scheduler | Scheduler started
+2026-07-06 15:51:43 | INFO     | core.bootstrap | Startup complete — Phase Alpha milestone checklist online
+2026-07-06 15:51:43 | INFO     | core.container | Registered service: foo
+2026-07-06 15:51:43 | INFO     | core.container | Registered service: a
+2026-07-06 15:51:43 | INFO     | core.container | Registered service: b
+2026-07-06 15:51:43 | INFO     | core.container | Registered service: foo
+2026-07-06 15:51:43 | INFO     | core.container | Registered service: foo
+2026-07-06 15:51:43 | INFO     | core.container | Registered service: foo
+2026-07-06 15:51:43 | INFO     | core.container | Registered service: foo
+2026-07-06 15:51:43 | INFO     | devices.registry | Registered device: dev1 (transport=simulated, ownership_declared=False)
+2026-07-06 15:51:43 | INFO     | devices.registry | Registered device: dev1 (transport=simulated, ownership_declared=False)
+2026-07-06 15:51:43 | INFO     | devices.registry | Unregistered device: dev1
+2026-07-06 15:51:43 | INFO     | devices.registry | Registered device: dev1 (transport=simulated, ownership_declared=False)
+2026-07-06 15:51:43 | INFO     | core.event_bus | Subscribed handler for event: device.connected
+2026-07-06 15:51:43 | INFO     | core.event_bus | Subscribed handler for event: device.disconnected
+2026-07-06 15:51:43 | INFO     | devices.registry | Registered device: dev1 (transport=simulated, ownership_declared=False)
+2026-07-06 15:51:43 | INFO     | devices.registry | Unregistered device: dev1
+2026-07-06 15:51:43 | INFO     | core.event_bus | Subscribed handler for event: device.connected
+2026-07-06 15:51:43 | INFO     | core.event_bus | Subscribed handler for event: device.disconnected
+2026-07-06 15:51:43 | INFO     | core.event_bus | Subscribed handler for event: device.connect_failed
+2026-07-06 15:51:43 | INFO     | core.event_bus | Subscribed handler for event: device.wrote
+2026-07-06 15:51:43 | INFO     | core.event_bus | Subscribed handler for event: plugin.ran
+2026-07-06 15:51:43 | INFO     | core.event_bus | Subscribed handler for event: agent.dispatched
+2026-07-06 15:51:43 | INFO     | core.event_bus | Subscribed handler for event: memory.stored
+2026-07-06 15:51:43 | INFO     | reasoning.graph | Asserted fact: dev-1 -event-> connected
+2026-07-06 15:51:43 | INFO     | reasoning.graph | Asserted fact: dev-1 -wrote-> 42
+2026-07-06 15:51:44 | INFO     | services.event_handlers | Memory event observed: tag=plugin_event source=event_bus
+2026-07-06 15:51:44 | INFO     | memory.store | Stored memory [plugin_event] from event_bus: Plugin echo ran with result keys: ['ok']
+2026-07-06 15:51:44 | INFO     | happy_path | === HAPPY PATH START ===
+2026-07-06 15:51:44 | INFO     | core.container | Registered service: config
+2026-07-06 15:51:44 | INFO     | core.container | Registered service: db_engine
+2026-07-06 15:51:44 | INFO     | core.event_bus | Subscribed handler for event: device.connected
+2026-07-06 15:51:44 | INFO     | core.event_bus | Subscribed handler for event: device.disconnected
+2026-07-06 15:51:44 | INFO     | core.event_bus | Subscribed handler for event: device.connect_failed
+2026-07-06 15:51:44 | INFO     | core.event_bus | Subscribed handler for event: device.wrote
+2026-07-06 15:51:44 | INFO     | core.event_bus | Subscribed handler for event: plugin.ran
+2026-07-06 15:51:44 | INFO     | core.event_bus | Subscribed handler for event: agent.dispatched
+2026-07-06 15:51:44 | INFO     | core.event_bus | Subscribed handler for event: memory.stored
+2026-07-06 15:51:44 | INFO     | core.container | Registered service: event_bus
+2026-07-06 15:51:44 | INFO     | core.container | Registered service: scheduler
+2026-07-06 15:51:44 | INFO     | core.container | Registered service: session_factory
+2026-07-06 15:51:44 | INFO     | core.container | Registered service: memory_api
+2026-07-06 15:51:44 | INFO     | core.container | Registered service: reasoning_api
+2026-07-06 15:51:44 | INFO     | core.container | Registered service: plugin_api
+2026-07-06 15:51:44 | INFO     | core.container | Registered service: agent_api
+2026-07-06 15:51:44 | INFO     | core.container | Registered service: device_api
+2026-07-06 15:51:44 | INFO     | core.container | Registered service: platform_service
+2026-07-06 15:51:44 | INFO     | core.container | Registered service: event_handlers
+2026-07-06 15:51:44 | INFO     | plugins.manager | Loaded plugin: echo v0.1.0
+2026-07-06 15:51:44 | INFO     | agents.manager | Registered agent: echo_agent
+2026-07-06 15:51:44 | INFO     | agents.manager | Registered agent: engineering_agent
+2026-07-06 15:51:44 | INFO     | core.scheduler | Scheduled job 'heartbeat' every 30s
+2026-07-06 15:51:44 | INFO     | core.scheduler | Scheduler started
+2026-07-06 15:51:44 | INFO     | core.bootstrap | Startup complete — Phase Alpha milestone checklist online
+2026-07-06 15:51:44 | INFO     | memory.store | Stored memory [plugin_run] from echo: Echo plugin ran with: hello from happy path
+2026-07-06 15:51:44 | INFO     | services.event_handlers | Memory event observed: tag=plugin_event source=event_bus
+2026-07-06 15:51:44 | INFO     | memory.store | Stored memory [plugin_event] from event_bus: Plugin echo ran with result keys: ['echoed', 'plugin']
+2026-07-06 15:51:44 | INFO     | happy_path | [plugin] echo ran -> {'echoed': 'hello from happy path', 'plugin': 'echo'}
+2026-07-06 15:51:44 | INFO     | agents.manager | Dispatching task to agent 'echo_agent': {'device_id': 'happy_device', 'status': 'seen'}
+2026-07-06 15:51:44 | INFO     | reasoning.graph | Asserted fact: happy_device -status-> seen
+2026-07-06 15:51:44 | INFO     | reasoning.graph | Asserted fact: echo_agent -event-> dispatched
+2026-07-06 15:51:44 | INFO     | happy_path | [agent] echo_agent dispatched -> {'agent': 'echo_agent', 'device_id': 'happy_device', 'recorded_status': 'seen'}
+2026-07-06 15:51:44 | INFO     | reasoning.graph | Asserted fact: happy_device -event-> connected
+2026-07-06 15:51:44 | INFO     | devices.registry | Registered device: happy_device (transport=simulated, ownership_declared=True)
+2026-07-06 15:51:44 | INFO     | happy_path | [device] registered happy_device (transport=simulated)
+2026-07-06 15:51:44 | INFO     | services.event_handlers | Memory event observed: tag=happy_path source=demo
+2026-07-06 15:51:44 | INFO     | memory.store | Stored memory [happy_path] from demo: Happy path executed successfully
+2026-07-06 15:51:44 | INFO     | happy_path | [memory] stored entry 5
+2026-07-06 15:51:44 | INFO     | happy_path | [reasoning] found 4 fact(s) for happy_device
+2026-07-06 15:51:44 | INFO     | happy_path |   -> status: seen
+2026-07-06 15:51:44 | INFO     | happy_path |   -> event: connected
+2026-07-06 15:51:44 | INFO     | happy_path |   -> status: seen
+2026-07-06 15:51:44 | INFO     | happy_path |   -> event: connected
+2026-07-06 15:51:44 | INFO     | digital_twin.twin | Built twin for happy_device: state=online, health=1.0, 4 history entries
+2026-07-06 15:51:44 | INFO     | happy_path | [twin] built twin for happy_device: state=online, health=1.0
+2026-07-06 15:51:44 | INFO     | happy_path | [report] {'platform': 'Prometheus v0.3.0', 'plugins_loaded': [{'name': 'echo', 'version': '0.1.0'}], 'agents_loaded': ['echo_agent', 'engineering_agent'], 'devices_registered': 1, 'services_registered': ['config', 'db_engine', 'event_bus', 'scheduler', 'session_factory', 'memory_api', 'reasoning_api', 'plugin_api', 'agent_api', 'device_api', 'platform_service', 'event_handlers'], 'memory_entries': 5, 'knowledge_facts': 29, 'status': 'ok'}
+2026-07-06 15:51:44 | INFO     | happy_path | === HAPPY PATH COMPLETE ===
+2026-07-06 15:51:44 | INFO     | memory.store | Stored memory [test] from system: hello world
+2026-07-06 15:51:44 | INFO     | memory.store | Stored memory [general] from system: general memory
+2026-07-06 15:51:44 | INFO     | memory.store | Stored memory [other] from system: other memory
+2026-07-06 15:51:44 | INFO     | memory.store | Stored memory [limited] from system: memory 0
+2026-07-06 15:51:44 | INFO     | memory.store | Stored memory [limited] from system: memory 1
+2026-07-06 15:51:44 | INFO     | memory.store | Stored memory [limited] from system: memory 2
+2026-07-06 15:51:44 | INFO     | memory.store | Stored memory [limited] from system: memory 3
+2026-07-06 15:51:44 | INFO     | memory.store | Stored memory [limited] from system: memory 4
+2026-07-06 15:51:44 | INFO     | memory.store | Stored memory [limited] from system: memory 5
+2026-07-06 15:51:44 | INFO     | memory.store | Stored memory [limited] from system: memory 6
+2026-07-06 15:51:44 | INFO     | memory.store | Stored memory [limited] from system: memory 7
+2026-07-06 15:51:44 | INFO     | memory.store | Stored memory [limited] from system: memory 8
+2026-07-06 15:51:44 | INFO     | memory.store | Stored memory [limited] from system: memory 9
+2026-07-06 15:51:44 | INFO     | memory.store | Stored memory [alpha] from system: tagged
+2026-07-06 15:51:44 | INFO     | memory.store | Stored memory [beta] from system: tagged too
+2026-07-06 15:51:44 | INFO     | memory.store | Stored memory [compat] from system: backward compat test
+2026-07-06 15:51:44 | INFO     | core.event_bus | Subscribed handler for event: memory.stored
+2026-07-06 15:51:44 | INFO     | memory.store | Stored memory [events] from test: event memory
+2026-07-06 15:51:44 | INFO     | core.event_bus | Subscribed handler for event: device.wrote
+2026-07-06 15:51:44 | INFO     | devices.registry | Registered device: dev-2 (transport=simulated, ownership_declared=True)
+2026-07-06 15:51:44 | INFO     | plugins.manager | Loaded plugin: fake_plugin v1.0.0
+2026-07-06 15:51:44 | INFO     | plugins.manager | Loaded plugin: fake_plugin v1.0.0
+2026-07-06 15:51:44 | WARNING  | plugins.manager | Plugin 'fake_plugin' already registered — overwriting
+2026-07-06 15:51:44 | INFO     | plugins.manager | Loaded plugin: fake_plugin v1.0.0
+2026-07-06 15:51:44 | INFO     | plugins.manager | Loaded plugin: fake_plugin v1.0.0
+2026-07-06 15:51:44 | INFO     | plugins.manager | Loaded plugin: fake_plugin v1.0.0
+2026-07-06 15:51:44 | INFO     | core.event_bus | Subscribed handler for event: plugin.ran
+2026-07-06 15:51:44 | INFO     | plugins.manager | Loaded plugin: fake_plugin v1.0.0
+2026-07-06 15:51:44 | INFO     | reasoning.graph | Asserted fact: device_1 -has_firmware-> v1.0
+2026-07-06 15:51:44 | INFO     | reasoning.graph | Asserted fact: dev1 -status-> online
+2026-07-06 15:51:44 | INFO     | reasoning.graph | Asserted fact: dev2 -status-> offline
+2026-07-06 15:51:44 | INFO     | reasoning.graph | Asserted fact: dev1 -rel-> obj1
+2026-07-06 15:51:44 | INFO     | reasoning.graph | Asserted fact: dev2 -rel-> obj2
+2026-07-06 15:51:44 | INFO     | reasoning.graph | Asserted fact: device_2 -status-> online
+2026-07-06 15:51:44 | INFO     | core.event_bus | Subscribed handler for event: fact.asserted
+2026-07-06 15:51:44 | INFO     | reasoning.graph | Asserted fact: devx -status-> online

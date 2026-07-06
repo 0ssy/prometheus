@@ -9,17 +9,19 @@ Phase Beta/Gamma concern once there's a security model for it.
 """
 
 from .base import PrometheusPlugin
-from api.plugin_api import PluginApi
+from contracts.plugin import PluginApi
+from contracts.event_bus import EventBus
 from api.events import PluginRanEvent
 from core.logger import get_logger
-from core.event_bus import event_bus
+from core.event_bus import event_bus as default_event_bus
 
 logger = get_logger(__name__)
 
 
 class PluginManager(PluginApi):
-    def __init__(self):
+    def __init__(self, event_bus: EventBus | None = None):
         self._plugins: dict[str, PrometheusPlugin] = {}
+        self._event_bus = event_bus or default_event_bus
 
     def register(self, plugin: PrometheusPlugin) -> None:
         if plugin.name in self._plugins:
@@ -39,7 +41,7 @@ class PluginManager(PluginApi):
         if plugin is None:
             raise ValueError(f"No such plugin: {name}")
         result = plugin.run(context)
-        event_bus.publish(PluginRanEvent(plugin_name=name, result=result))
+        self._event_bus.publish(PluginRanEvent(plugin_name=name, result=result))
         return result
 
 

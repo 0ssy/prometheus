@@ -9,13 +9,19 @@ later without changing every caller.
 
 from sqlalchemy.orm import Session
 from .models import MemoryEntry
-from api.memory_api import MemoryApi
+from contracts.memory import MemoryApi
+from contracts.event_bus import EventBus
+from api.events import MemoryStoredEvent
 from core.logger import get_logger
+from core.event_bus import event_bus as default_event_bus
 
 logger = get_logger(__name__)
 
 
 class MemoryStore(MemoryApi):
+    def __init__(self, event_bus: EventBus | None = None):
+        self._event_bus = event_bus or default_event_bus
+
     def remember(
         self, db: Session, content: str, tag: str = "general", source: str = "system"
     ) -> MemoryEntry:
@@ -23,6 +29,7 @@ class MemoryStore(MemoryApi):
         db.add(entry)
         db.commit()
         db.refresh(entry)
+        self._event_bus.publish(MemoryStoredEvent(content=content, tag=tag, source=source))
         logger.info(f"Stored memory [{tag}] from {source}: {content[:60]}")
         return entry
 

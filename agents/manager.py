@@ -7,17 +7,19 @@ capability; agents perform tasks using that capability.
 """
 
 from .base import PrometheusAgent
-from api.agent_api import AgentApi
+from contracts.agent import AgentApi
+from contracts.event_bus import EventBus
 from api.events import AgentDispatchedEvent
 from core.logger import get_logger
-from core.event_bus import event_bus
+from core.event_bus import event_bus as default_event_bus
 
 logger = get_logger(__name__)
 
 
 class AgentManager(AgentApi):
-    def __init__(self):
+    def __init__(self, event_bus: EventBus | None = None):
         self._agents: dict[str, PrometheusAgent] = {}
+        self._event_bus = event_bus or default_event_bus
 
     def register(self, agent: PrometheusAgent) -> None:
         self._agents[agent.name] = agent
@@ -32,7 +34,7 @@ class AgentManager(AgentApi):
             raise ValueError(f"No such agent: {agent_name}")
         logger.info(f"Dispatching task to agent '{agent_name}': {task}")
         result = agent.perform(task, context)
-        event_bus.publish(AgentDispatchedEvent(agent_name=agent_name, task=task))
+        self._event_bus.publish(AgentDispatchedEvent(agent_name=agent_name, task=task))
         return result
 
 

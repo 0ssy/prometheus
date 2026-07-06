@@ -6,9 +6,9 @@ def utc_now() -> datetime:
     return datetime.now(timezone.utc)
 
 
-@dataclass
+@dataclass(kw_only=True)
 class Event:
-    event_type: str = ""
+    event_type: str = field(default="", init=False)
     timestamp: datetime = field(default_factory=utc_now)
 
 
@@ -45,6 +45,24 @@ class DeviceDisconnectedEvent(Event):
 
     def __post_init__(self) -> None:
         self.event_type = "device.disconnected"
+
+
+@dataclass
+class DeviceConnectionFailedEvent(Event):
+    device_id: str
+    reason: str
+
+    def __post_init__(self) -> None:
+        self.event_type = "device.connect_failed"
+
+
+@dataclass
+class DeviceWriteEvent(Event):
+    device_id: str
+    value: str
+
+    def __post_init__(self) -> None:
+        self.event_type = "device.wrote"
 
 
 @dataclass

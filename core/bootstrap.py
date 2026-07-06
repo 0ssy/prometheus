@@ -9,14 +9,20 @@ orchestrated platform to a test harness, CLI, or API layer without
 repeating wiring logic.
 
 Sequence:
-  Load Config -> Init Database -> Register Services -> Load Plugins ->
-  Load Agents -> Start Scheduler
+  Load Config -> Init Database -> Build Implementations -> Bind Events ->
+  Load Plugins -> Load Agents -> Start Scheduler
 """
 
 from collections.abc import Callable
 
 from core.config import config
-from core.event_bus import event_bus
+from core.container import ServiceContainer
+from core.database import init_db
+from core.event_bus import InMemoryEventBus
+from core.logger import get_logger
+from implementations.platform_components import build_platform_components
+from services.event_handlers import PlatformEventHandlers
+from services.platform_service import PlatformService
 
 logger = get_logger(__name__)
 
@@ -30,20 +36,35 @@ def _load_database(container: ServiceContainer) -> None:
 
 def _register_services(container: ServiceContainer) -> None:
     from core.database import SessionLocal
-    from core.event_bus import event_bus
-    from memory.store import memory_store
-    from reasoning.graph import reasoning_store
-    from plugins.manager import plugin_manager
-    from agents.manager import agent_manager
-    from devices.registry import device_registry
+
+    event_bus = InMemoryEventBus()
+    components = build_platform_components(event_bus=event_bus)
+    platform_service = PlatformService(
+        plugin_api=components.plugin_api,
+        agent_api=components.agent_api,
+        device_api=components.device_api,
+        memory_api=components.memory_api,
+        reasoning_api=components.reasoning_api,
+        event_bus=event_bus,
+    )
+    event_handlers = PlatformEventHandlers(
+        event_bus=event_bus,
+        session_factory=SessionLocal,
+        memory_api=components.memory_api,
+        reasoning_api=components.reasoning_api,
+    )
+    event_handlers.bind()
 
     container.register("event_bus", event_bus)
+    container.register("scheduler", components.scheduler)
     container.register("session_factory", SessionLocal)
-    container.register("memory_api", memory_store)
-    container.register("reasoning_api", reasoning_store)
-    container.register("plugin_api", plugin_manager)
-    container.register("agent_api", agent_manager)
-    container.register("device_api", device_registry)
+    container.register("memory_api", components.memory_api)
+    container.register("reasoning_api", components.reasoning_api)
+    container.register("plugin_api", components.plugin_api)
+    container.register("agent_api", components.agent_api)
+    container.register("device_api", components.device_api)
+    container.register("platform_service", platform_service)
+    container.register("event_handlers", event_handlers)
 
 
 def _load_plugins(container: ServiceContainer) -> None:
@@ -65,9 +86,9 @@ def _load_agents(container: ServiceContainer) -> None:
 def _start_scheduler(
     container: ServiceContainer, heartbeat_job: Callable[[], None]
 ) -> None:
+    scheduler = container.get("scheduler")
     scheduler.schedule("heartbeat", heartbeat_job, interval_seconds=30)
     scheduler.start()
-    container.register("scheduler", scheduler)
 
 
 def boot(heartbeat_job: Callable[[], None]) -> ServiceContainer:

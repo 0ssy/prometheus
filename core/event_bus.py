@@ -1,9 +1,9 @@
 from __future__ import annotations
 
 from collections import defaultdict
-from typing import Any, Callable
+from collections.abc import Callable
 
-from api.event_api import EventBus
+from contracts.event_bus import EventBus
 from api.events import Event
 from core.logger import get_logger
 
@@ -26,10 +26,7 @@ class InMemoryEventBus(EventBus):
     def publish(self, event: Event) -> None:
         event_type = event.event_type
         for handler in self._subscribers.get(event_type, []):
-            try:
-                handler(event)
-            except Exception:
-                logger.exception(f"Event handler raised for {event_type}")
+            handler(event)
 
 
 event_bus = InMemoryEventBus()

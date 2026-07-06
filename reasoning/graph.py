@@ -9,13 +9,19 @@ until something in the system actually needs it.
 
 from sqlalchemy.orm import Session
 from .models import KnowledgeFact
-from api.reasoning_api import ReasoningApi
+from contracts.reasoning import ReasoningApi
+from contracts.event_bus import EventBus
+from api.events import FactAssertedEvent
 from core.logger import get_logger
+from core.event_bus import event_bus as default_event_bus
 
 logger = get_logger(__name__)
 
 
 class ReasoningStore(ReasoningApi):
+    def __init__(self, event_bus: EventBus | None = None):
+        self._event_bus = event_bus or default_event_bus
+
     def assert_fact(
         self, db: Session, subject: str, predicate: str, obj: str, confidence: int = 100
     ) -> KnowledgeFact:
@@ -25,6 +31,11 @@ class ReasoningStore(ReasoningApi):
         db.add(fact)
         db.commit()
         db.refresh(fact)
+        self._event_bus.publish(
+            FactAssertedEvent(
+                subject=subject, predicate=predicate, obj=obj, confidence=confidence
+            )
+        )
         logger.info(f"Asserted fact: {subject} -{predicate}-> {obj}")
         return fact
 

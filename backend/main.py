@@ -19,6 +19,7 @@ from core.logger import get_logger
 from core.database import get_db
 from core.bootstrap import boot
 from core.container import ServiceContainer
+from services.platform_service import PlatformService
 from core.ownership_registry import (
     declare_owned,
     is_declared_owned,
@@ -41,6 +42,12 @@ def get_container() -> ServiceContainer:
 
 def _heartbeat_job():
     logger.info("Prometheus heartbeat — system alive")
+
+
+def get_platform_service(
+    container: ServiceContainer = Depends(get_container),
+) -> PlatformService:
+    return container.resolve("platform_service", PlatformService)
 
 
 @app.on_event("startup")
@@ -73,13 +80,9 @@ def run_plugin(
     plugin_name: str,
     payload: dict,
     db: Session = Depends(get_db),
-    container: ServiceContainer = Depends(get_container),
+    platform: PlatformService = Depends(get_platform_service),
 ):
-    plugin_api = container.get("plugin_api")
-    context = {"db": db, "logger": logger}
-    context.update(payload)
-    result = plugin_api.run(plugin_name, context)
-    return result
+    return platform.run_plugin(db, plugin_name=plugin_name, payload=payload)
 
 
 @app.post("/agents/{agent_name}/dispatch")
@@ -87,12 +90,9 @@ def dispatch_agent(
     agent_name: str,
     task: dict,
     db: Session = Depends(get_db),
-    container: ServiceContainer = Depends(get_container),
+    platform: PlatformService = Depends(get_platform_service),
 ):
-    agent_api = container.get("agent_api")
-    context = {"db": db, "logger": logger}
-    result = agent_api.dispatch(agent_name, task, context)
-    return result
+    return platform.dispatch_agent(db, agent_name=agent_name, task=task)
 
 
 @app.post("/memory")
@@ -100,10 +100,9 @@ def store_memory(
     content: str,
     tag: str = "general",
     db: Session = Depends(get_db),
-    container: ServiceContainer = Depends(get_container),
+    platform: PlatformService = Depends(get_platform_service),
 ):
-    memory_api = container.get("memory_api")
-    entry = memory_api.remember(db, content=content, tag=tag, source="api")
+    entry = platform.store_memory(db, content=content, tag=tag, source="api")
     return {"id": entry.id, "content": entry.content, "tag": entry.tag}
 
 
@@ -112,10 +111,9 @@ def get_memory(
     tag: str | None = None,
     limit: int = 50,
     db: Session = Depends(get_db),
-    container: ServiceContainer = Depends(get_container),
+    platform: PlatformService = Depends(get_platform_service),
 ):
-    memory_api = container.get("memory_api")
-    entries = memory_api.recall(db, tag=tag, limit=limit)
+    entries = platform.get_memory(db, tag=tag, limit=limit)
     return [
         {
             "id": e.id,
@@ -133,10 +131,9 @@ def store_fact(
     predicate: str,
     object: str,
     db: Session = Depends(get_db),
-    container: ServiceContainer = Depends(get_container),
+    platform: PlatformService = Depends(get_platform_service),
 ):
-    reasoning_api = container.get("reasoning_api")
-    fact = reasoning_api.assert_fact(db, subject, predicate, object)
+    fact = platform.store_fact(db, subject=subject, predicate=predicate, obj=object)
     return {
         "id": fact.id,
         "subject": fact.subject,
@@ -149,10 +146,9 @@ def store_fact(
 def get_facts(
     subject: str | None = None,
     db: Session = Depends(get_db),
-    container: ServiceContainer = Depends(get_container),
+    platform: PlatformService = Depends(get_platform_service),
 ):
-    reasoning_api = container.get("reasoning_api")
-    facts = reasoning_api.query_facts(db, subject=subject)
+    facts = platform.get_facts(db, subject=subject)
     return [
         {"subject": f.subject, "predicate": f.predicate, "object": f.object}
         for f in facts
@@ -170,23 +166,14 @@ def register_simulated_device(
     latency_seconds: float = 0.0,
     failure_rate: float = 0.0,
     ownership_declared: bool = True,
-    db: Session = Depends(get_db),
-    container: ServiceContainer = Depends(get_container),
+    platform: PlatformService = Depends(get_platform_service),
 ):
-    from devices.simulated import SimulatedDevice
-
-    device_api = container.get("device_api")
-    reasoning_api = container.get("reasoning_api")
-    device = SimulatedDevice(
+    return platform.register_simulated_device(
         device_id=device_id,
-        ownership_declared=ownership_declared,
         latency_seconds=latency_seconds,
         failure_rate=failure_rate,
+        ownership_declared=ownership_declared,
     )
-    device.connect()
-    device_api.register(device)
-    reasoning_api.assert_fact(db, subject=device_id, predicate="event", obj="connected")
-    return {"device_id": device_id, "transport": "simulated", **device.status()}
 
 
 @app.post("/devices/serial")
@@ -195,42 +182,28 @@ def register_serial_device(
     port: str,
     baudrate: int = 115200,
     ownership_declared: bool = False,
-    db: Session = Depends(get_db),
-    container: ServiceContainer = Depends(get_container),
+    platform: PlatformService = Depends(get_platform_service),
 ):
-    from devices.serial_device import SerialDevice
-
-    device_api = container.get("device_api")
-    reasoning_api = container.get("reasoning_api")
-    device = SerialDevice(
-        device_id=device_id,
-        port=port,
-        baudrate=baudrate,
-        ownership_declared=ownership_declared,
-    )
     try:
-        device.connect()
-    except Exception as e:
-        logger.exception(f"Failed to connect serial device {device_id}")
-        reasoning_api.assert_fact(
-            db, subject=device_id, predicate="event", obj=f"connect_failed:{e}"
+        return platform.register_serial_device(
+            device_id=device_id,
+            port=port,
+            baudrate=baudrate,
+            ownership_declared=ownership_declared,
         )
+    except Exception:
+        logger.exception(f"Failed to connect serial device {device_id}")
         raise
-    device_api.register(device)
-    reasoning_api.assert_fact(db, subject=device_id, predicate="event", obj="connected")
-    return {"device_id": device_id, "transport": "serial", **device.status()}
 
 
 @app.get("/devices")
-def list_devices(container: ServiceContainer = Depends(get_container)):
-    device_api = container.get("device_api")
-    return device_api.list()
+def list_devices(platform: PlatformService = Depends(get_platform_service)):
+    return platform.list_devices()
 
 
 @app.get("/devices/{device_id}")
-def get_device(device_id: str, container: ServiceContainer = Depends(get_container)):
-    device_api = container.get("device_api")
-    device = device_api.get(device_id)
+def get_device(device_id: str, platform: PlatformService = Depends(get_platform_service)):
+    device = platform.get_device(device_id)
     if device is None:
         raise RuntimeError(f"No such device: {device_id}")
     return {
@@ -244,37 +217,18 @@ def get_device(device_id: str, container: ServiceContainer = Depends(get_contain
 def write_device(
     device_id: str,
     payload: dict,
-    db: Session = Depends(get_db),
-    container: ServiceContainer = Depends(get_container),
+    platform: PlatformService = Depends(get_platform_service),
 ):
-    device_api = container.get("device_api")
-    reasoning_api = container.get("reasoning_api")
-    device = device_api.get(device_id)
-    if device is None:
-        raise RuntimeError(f"No such device: {device_id}")
     value = payload.get("value")
-    device.write(value)
-    reasoning_api.assert_fact(db, subject=device_id, predicate="wrote", obj=str(value))
-    return {"device_id": device_id, "status": device.status()}
+    return platform.write_device(device_id=device_id, value=value)
 
 
 @app.post("/devices/{device_id}/disconnect")
 def disconnect_device(
     device_id: str,
-    db: Session = Depends(get_db),
-    container: ServiceContainer = Depends(get_container),
+    platform: PlatformService = Depends(get_platform_service),
 ):
-    device_api = container.get("device_api")
-    reasoning_api = container.get("reasoning_api")
-    device = device_api.get(device_id)
-    if device is None:
-        raise RuntimeError(f"No such device: {device_id}")
-    device.disconnect()
-    device_api.unregister(device_id)
-    reasoning_api.assert_fact(
-        db, subject=device_id, predicate="event", obj="disconnected"
-    )
-    return {"device_id": device_id, "status": "disconnected"}
+    return platform.disconnect_device(device_id=device_id)
 
 
 # ---------------------------------------------------------------------------
@@ -443,8 +397,13 @@ def run_gamma_simulation(
 
 
 @app.get("/delta/twin/{device_id}")
-def get_device_twin(device_id: str, db: Session = Depends(get_db)):
+def get_device_twin(
+    device_id: str,
+    db: Session = Depends(get_db),
+    container: ServiceContainer = Depends(get_container),
+):
     from digital_twin.twin import build_twin
 
-    twin = build_twin(db, device_id)
+    device_api = container.get("device_api")
+    twin = build_twin(db, device_id, device_api=device_api)
     return twin.to_dict()

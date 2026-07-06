@@ -24,3 +24,15 @@ class TestServiceContainer:
         container.register("foo", 1)
         container.register("foo", 2)
         assert container.get("foo") == 2
+
+    def test_resolve_type(self):
+        container = ServiceContainer()
+        container.register("foo", {"bar": 1})
+        resolved = container.resolve("foo", dict)
+        assert resolved == {"bar": 1}
+
+    def test_resolve_wrong_type_raises(self):
+        container = ServiceContainer()
+        container.register("foo", {"bar": 1})
+        with pytest.raises(TypeError, match="expected int"):
+            container.resolve("foo", int)

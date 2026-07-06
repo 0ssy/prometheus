@@ -17,6 +17,7 @@ from dataclasses import dataclass, asdict
 from sqlalchemy.orm import Session
 
 from reasoning.graph import query_facts
+from contracts.device import DeviceApi
 from devices.registry import device_registry
 from core.ownership_registry import is_declared_owned
 from engineering.recovery_planner import plan_recovery
@@ -82,7 +83,7 @@ def _derive_health(facts_by_predicate: dict) -> float:
     return max(0.0, min(1.0, score))
 
 
-def build_twin(db: Session, device_id: str) -> DeviceTwin:
+def build_twin(db: Session, device_id: str, device_api: DeviceApi | None = None) -> DeviceTwin:
     facts = query_facts(db, subject=device_id)
     facts_sorted = sorted(facts, key=lambda f: f.created_at)
 
@@ -119,7 +120,8 @@ def build_twin(db: Session, device_id: str) -> DeviceTwin:
         partition_events[-1].split(":", 1)[1] if partition_events else "unknown"
     )
 
-    live_device = device_registry.get(device_id)
+    registry = device_api or device_registry
+    live_device = registry.get(device_id)
     if live_device:
         hardware = {"transport": live_device.transport, **live_device.status()}
     else:

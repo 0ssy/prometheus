@@ -1,6 +1,8 @@
 from reasoning.graph import ReasoningStore, reasoning_store, assert_fact, query_facts
 from api.reasoning_api import ReasoningApi
 from reasoning.models import KnowledgeFact
+from api.events import FactAssertedEvent
+from core.event_bus import InMemoryEventBus
 
 
 class TestReasoningStore:
@@ -53,3 +55,14 @@ class TestReasoningStore:
     def test_reasoning_store_singleton(self):
         assert reasoning_store is not None
         assert isinstance(reasoning_store, ReasoningApi)
+
+    def test_assert_fact_publishes_event(self, db_session):
+        bus = InMemoryEventBus()
+        events: list[FactAssertedEvent] = []
+        bus.subscribe("fact.asserted", lambda event: events.append(event))
+        store = ReasoningStore(event_bus=bus)
+
+        store.assert_fact(db_session, "devx", "status", "online")
+
+        assert len(events) == 1
+        assert events[0].subject == "devx"

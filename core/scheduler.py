@@ -11,13 +11,15 @@ distributed workers.
 
 import threading
 import time
-from typing import Callable
+from collections.abc import Callable
+
+from contracts.scheduler import SchedulerApi
 from core.logger import get_logger
 
 logger = get_logger(__name__)
 
 
-class TaskScheduler:
+class TaskScheduler(SchedulerApi):
     def __init__(self):
         self._jobs: list[tuple[str, Callable, int]] = (
             []
@@ -51,6 +53,9 @@ class TaskScheduler:
 
     def stop(self):
         self._stop_event.set()
+
+    def list_jobs(self) -> list[str]:
+        return [name for name, _, _ in self._jobs]
 
 
 scheduler = TaskScheduler()

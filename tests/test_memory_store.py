@@ -1,6 +1,8 @@
 from memory.store import MemoryStore, memory_store, remember, recall
 from api.memory_api import MemoryApi
 from memory.models import MemoryEntry
+from api.events import MemoryStoredEvent
+from core.event_bus import InMemoryEventBus
 
 
 class TestMemoryStore:
@@ -60,3 +62,14 @@ class TestMemoryStore:
     def test_memory_store_singleton(self):
         assert memory_store is not None
         assert isinstance(memory_store, MemoryApi)
+
+    def test_remember_publishes_event(self, db_session):
+        bus = InMemoryEventBus()
+        events: list[MemoryStoredEvent] = []
+        bus.subscribe("memory.stored", lambda event: events.append(event))
+        store = MemoryStore(event_bus=bus)
+
+        store.remember(db_session, "event memory", tag="events", source="test")
+
+        assert len(events) == 1
+        assert events[0].tag == "events"

@@ -1,6 +1,8 @@
 import pytest
 from plugins.manager import PluginManager
 from api.plugin_api import PluginApi
+from api.events import PluginRanEvent
+from core.event_bus import InMemoryEventBus
 
 
 class FakePlugin:
@@ -51,3 +53,16 @@ class TestPluginManager:
         manager = PluginManager()
         with pytest.raises(ValueError, match="No such plugin"):
             manager.run("missing_plugin", {})
+
+    def test_run_publishes_event(self):
+        bus = InMemoryEventBus()
+        events: list[PluginRanEvent] = []
+        bus.subscribe("plugin.ran", lambda event: events.append(event))
+        manager = PluginManager(event_bus=bus)
+        plugin = FakePlugin()
+        manager.register(plugin)
+
+        manager.run("fake_plugin", {})
+
+        assert len(events) == 1
+        assert events[0].plugin_name == "fake_plugin"

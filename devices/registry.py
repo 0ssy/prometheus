@@ -9,18 +9,25 @@ actually needs devices to survive a restart.
 """
 
 from .base import Device
-from api.device_api import DeviceApi
+from contracts.device import DeviceApi
+from contracts.event_bus import EventBus
+from api.events import DeviceConnectedEvent, DeviceDisconnectedEvent
 from core.logger import get_logger
+from core.event_bus import event_bus as default_event_bus
 
 logger = get_logger(__name__)
 
 
 class DeviceRegistry(DeviceApi):
-    def __init__(self):
+    def __init__(self, event_bus: EventBus | None = None):
         self._devices: dict[str, Device] = {}
+        self._event_bus = event_bus or default_event_bus
 
     def register(self, device: Device) -> None:
         self._devices[device.device_id] = device
+        self._event_bus.publish(
+            DeviceConnectedEvent(device_id=device.device_id, transport=device.transport)
+        )
         logger.info(
             f"Registered device: {device.device_id} "
             f"(transport={device.transport}, ownership_declared={device.ownership_declared})"
@@ -29,6 +36,7 @@ class DeviceRegistry(DeviceApi):
     def unregister(self, device_id: str) -> None:
         device = self._devices.pop(device_id, None)
         if device:
+            self._event_bus.publish(DeviceDisconnectedEvent(device_id=device_id))
             logger.info(f"Unregistered device: {device_id}")
 
     def get(self, device_id: str) -> Device | None:

@@ -1,5 +1,7 @@
 from devices.registry import DeviceRegistry
 from api.device_api import DeviceApi
+from api.events import DeviceConnectedEvent, DeviceDisconnectedEvent
+from core.event_bus import InMemoryEventBus
 
 
 class FakeDevice:
@@ -53,3 +55,19 @@ class TestDeviceRegistry:
         assert len(result) == 1
         assert result[0]["device_id"] == "dev1"
         assert result[0]["transport"] == "simulated"
+
+    def test_register_unregister_publish_events(self):
+        bus = InMemoryEventBus()
+        connected: list[DeviceConnectedEvent] = []
+        disconnected: list[DeviceDisconnectedEvent] = []
+        bus.subscribe("device.connected", lambda event: connected.append(event))
+        bus.subscribe("device.disconnected", lambda event: disconnected.append(event))
+        registry = DeviceRegistry(event_bus=bus)
+
+        registry.register(FakeDevice())
+        registry.unregister("dev1")
+
+        assert len(connected) == 1
+        assert connected[0].device_id == "dev1"
+        assert len(disconnected) == 1
+        assert disconnected[0].device_id == "dev1"

@@ -1,16 +1,3 @@
-from abc import ABC, abstractmethod
-from typing import Any
+from contracts.event_bus import EventBus
 
-
-class EventBus(ABC):
-    @abstractmethod
-    def subscribe(self, event_type: str, handler: Any) -> None:
-        ...
-
-    @abstractmethod
-    def unsubscribe(self, event_type: str, handler: Any) -> None:
-        ...
-
-    @abstractmethod
-    def publish(self, event: Any) -> None:
-        ...
+__all__ = ["EventBus"]
