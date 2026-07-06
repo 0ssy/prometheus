@@ -35,6 +35,10 @@ pip install -r requirements.txt
 ## Run it
 
 ```bash
+# Platform runtime (no web API):
+python main.py
+
+# Web API frontend:
 uvicorn backend.main:app --reload
 ```
 
@@ -109,6 +113,15 @@ this skeleton first — that's the actual Phase Alpha goal.
 | v0.6.0  | Firmware lab |
 | v0.7.0  | Recovery engine |
 | v1.0.0  | Stable platform API |
+
+## Phase Alpha freeze checkpoint
+
+- Tag: `v0.1.0-alpha`
+- Codename: `Genesis`
+- Status: `COMPLETE`
+
+This tag is the formal architectural freeze for the Phase Alpha foundation.
+All subsequent work should be tracked as post-Alpha milestones.
 
 ## Project layout
 

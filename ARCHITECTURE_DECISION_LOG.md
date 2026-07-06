@@ -1,5 +1,28 @@
 # Architecture Decision Log
 
+## 2026-07-06 — Phase Alpha Freeze Checkpoint (Genesis)
+
+### Context
+Phase Alpha reached a stable architectural baseline with contract-first interfaces,
+container-based wiring, event-driven internals, and an end-to-end happy path.
+Further changes in the same phase would blur milestone boundaries.
+
+### Decision
+1. Freeze Phase Alpha as a completed checkpoint.
+2. Create git tag `v0.1.0-alpha`.
+3. Assign codename `Genesis` and status `COMPLETE`.
+4. Treat all new architectural work as post-Alpha milestones.
+
+### Rationale
+- Milestone integrity: stable checkpoints make architectural evolution auditable.
+- Traceability: an immutable tag anchors future comparisons and reviews.
+- Engineering discipline: phase transitions should be explicit, not implicit.
+
+### Consequences
+- `v0.1.0-alpha` becomes the canonical reference for the Alpha baseline.
+- New work should avoid retroactively redefining Alpha scope.
+- Future release notes can compare against this tag as the first stable architecture checkpoint.
+
 ## 2026-07-06 — Contract-First Architecture & Dependency Injection
 
 ### Context
