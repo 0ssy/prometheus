@@ -1,5 +1,22 @@
 # Architecture Decision Log
 
+## 2026-07-06 — Delta/Epsilon/Omega Roadmap Lock-In
+
+### Context
+With Gamma frozen, the project needed a stable forward roadmap for the next three phases to
+avoid ad-hoc milestone drift.
+
+### Decision
+1. Keep the phase sequence: Delta (Daedalus), Epsilon (Hephaestus), Omega (Olympus).
+2. Define clear objectives and measurable Definitions of Done per phase.
+3. Require roadmap changes to be made through RFC updates.
+4. Start implementation scaffolding for Delta/Epsilon/Omega services and APIs.
+
+### Consequences
+- Phase scope is explicit and reviewable.
+- New work aligns to measurable outcomes instead of feature drift.
+- Platform now has executable upgrade paths for simulation lab, hardware abstraction, and ecosystem layers.
+
 ## 2026-07-06 — Phase Gamma Freeze Checkpoint (Helios)
 
 ### Context

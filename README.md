@@ -1,4 +1,4 @@
-# Prometheus Core — Gamma Helios
+# Prometheus Core — Delta Daedalus (in progress)
 
 ## What this is
 
@@ -108,6 +108,24 @@ Copy `plugins/installed/echo_plugin.py`. Your plugin must:
 
 Same pattern for agents — copy `agents/echo_agent.py`, subclass `PrometheusAgent`.
 
+### Contract versioning rules (plugin compatibility)
+
+Prometheus plugin contracts follow semantic versioning:
+
+- `MAJOR`: breaking contract changes
+- `MINOR`: backward-compatible contract additions
+- `PATCH`: backward-compatible fixes/clarifications
+
+Runtime contract version is defined in `contracts/versioning.py` as `CONTRACT_VERSION`.
+Each plugin declares `required_contract_version` in `PrometheusPlugin`.
+
+A plugin is load-compatible when:
+
+- `required_contract_version.major == CONTRACT_VERSION.major`
+- `required_contract_version <= CONTRACT_VERSION` (minor/patch)
+
+If incompatible, plugin registration fails fast with a clear error.
+
 ## What's deliberately NOT here yet
 
 - Dynamic plugin discovery from the filesystem (Phase Beta+, needs a security model first)
@@ -120,18 +138,18 @@ Same pattern for agents — copy `agents/echo_agent.py`, subclass `PrometheusAge
 Don't build these now. Get comfortable extending plugins/agents on top of
 this skeleton first — that's the actual Phase Alpha goal.
 
-## Versioning strategy (architectural milestones)
+## Roadmap (RFC-governed phases)
 
-| Version | Milestone |
-|---------|-----------|
-| v0.1.0  | Foundation |
-| v0.2.0  | Event system + contracts |
-| v0.3.0  | Service container maturity |
-| v0.4.0  | Simulation engine |
-| v0.5.0  | Hardware layer |
-| v0.6.0  | Firmware lab |
-| v0.7.0  | Recovery engine |
-| v1.0.0  | Stable platform API |
+| Version | Codename | Phase |
+|---------|----------|-------|
+| v0.1.0-alpha | Genesis | Foundation |
+| v0.2.0-beta | Atlas | Reasoning + capabilities |
+| v0.3.0-gamma | Helios | Knowledge + learning |
+| v0.4.0-delta | Daedalus | Simulation + digital engineering lab |
+| v0.5.0-epsilon | Hephaestus | Hardware abstractions + recovery planning |
+| v1.0.0-omega | Olympus | Stable ecosystem + public APIs |
+
+Roadmap changes are made deliberately through RFC updates.
 
 ## Gamma Helios knowledge workflow
 
@@ -157,6 +175,29 @@ Related Devices + Capabilities + Past Simulations
 Recommendation + Learning record
 ```
 
+## Delta/Epsilon/Omega upgrade endpoints
+
+- Delta (Daedalus):
+  - `POST /delta/lab/workspaces/{workspace_id}`
+  - `POST /delta/lab/workspaces/{workspace_id}/failures`
+  - `POST /delta/scenarios/{workspace_id}`
+  - `GET /delta/time/battery-forecast`
+- Epsilon (Hephaestus):
+  - `POST /epsilon/hal/register-defaults`
+  - `GET /epsilon/hal/interfaces`
+  - `GET /epsilon/diagnostics/{device_id}`
+  - `POST /epsilon/recovery/{device_id}`
+  - `POST /epsilon/firmware/summary`
+- Omega (Olympus):
+  - `POST /omega/marketplace/plugins`
+  - `GET /omega/marketplace/plugins`
+  - `POST /omega/collaboration/plan`
+  - `POST /omega/distributed/nodes/{node_id}`
+  - `GET /omega/distributed/nodes`
+  - `POST /omega/policy/grant`
+  - `GET /omega/policy/check`
+  - `GET /omega/public-apis`
+
 ## Phase Alpha freeze checkpoint
 
 - Tag: `v0.1.0-alpha`
@@ -179,6 +220,9 @@ prometheus/
 ├── memory/         # long-term memory store
 ├── reasoning/      # reasoning pipeline + compatibility reasoning API
 ├── knowledge/      # graph, ontology, provenance, learning, query engine
+├── delta/          # digital engineering lab + time/scenario engines
+├── epsilon/        # HAL, diagnostics, firmware knowledge, recovery planning
+├── omega/          # marketplace, policy, distributed runtime, public API catalog
 ├── backend/        # FastAPI app — the local API
 ├── tests/          # pytest coverage for managers/stores/bootstrap/happy path
 └── requirements.txt

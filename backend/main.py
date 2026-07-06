@@ -20,6 +20,9 @@ from core.database import get_db
 from core.bootstrap import boot
 from core.container import ServiceContainer
 from services.platform_service import PlatformService
+from services.delta_service import DeltaService
+from services.epsilon_service import EpsilonService
+from services.omega_service import OmegaService
 from core.ownership_registry import (
     declare_owned,
     is_declared_owned,
@@ -48,6 +51,24 @@ def get_platform_service(
     container: ServiceContainer = Depends(get_container),
 ) -> PlatformService:
     return container.resolve("platform_service", PlatformService)
+
+
+def get_delta_service(
+    container: ServiceContainer = Depends(get_container),
+) -> DeltaService:
+    return container.resolve("delta_service", DeltaService)
+
+
+def get_epsilon_service(
+    container: ServiceContainer = Depends(get_container),
+) -> EpsilonService:
+    return container.resolve("epsilon_service", EpsilonService)
+
+
+def get_omega_service(
+    container: ServiceContainer = Depends(get_container),
+) -> OmegaService:
+    return container.resolve("omega_service", OmegaService)
 
 
 @app.on_event("startup")
@@ -531,3 +552,141 @@ def gamma_learning(
     platform: PlatformService = Depends(get_platform_service),
 ):
     return {"learning": platform.learning_history(scenario_key=scenario_key)}
+
+
+# ---------------------------------------------------------------------------
+# Phase Delta - Daedalus
+# ---------------------------------------------------------------------------
+
+
+@app.post("/delta/lab/workspaces/{workspace_id}")
+def delta_create_workspace(
+    workspace_id: str,
+    device_count: int = 1,
+    delta: DeltaService = Depends(get_delta_service),
+):
+    return delta.create_workspace(workspace_id=workspace_id, device_count=device_count)
+
+
+@app.post("/delta/lab/workspaces/{workspace_id}/failures")
+def delta_inject_failure(
+    workspace_id: str,
+    failure_type: str,
+    delta: DeltaService = Depends(get_delta_service),
+):
+    return delta.inject_failure(workspace_id=workspace_id, failure_type=failure_type)
+
+
+@app.post("/delta/scenarios/{workspace_id}")
+def delta_run_scenario(
+    workspace_id: str,
+    steps: list[str],
+    delta: DeltaService = Depends(get_delta_service),
+):
+    return delta.run_scenario(workspace_id=workspace_id, steps=steps)
+
+
+@app.get("/delta/time/battery-forecast")
+def delta_battery_forecast(
+    current_health: float,
+    months: int,
+    monthly_degradation: float = 0.01,
+    delta: DeltaService = Depends(get_delta_service),
+):
+    return delta.forecast_battery(
+        current_health=current_health,
+        months=months,
+        monthly_degradation=monthly_degradation,
+    )
+
+
+# ---------------------------------------------------------------------------
+# Phase Epsilon - Hephaestus
+# ---------------------------------------------------------------------------
+
+
+@app.post("/epsilon/hal/register-defaults")
+def epsilon_register_defaults(epsilon: EpsilonService = Depends(get_epsilon_service)):
+    return epsilon.register_default_interfaces()
+
+
+@app.get("/epsilon/hal/interfaces")
+def epsilon_list_interfaces(epsilon: EpsilonService = Depends(get_epsilon_service)):
+    return epsilon.list_interfaces()
+
+
+@app.get("/epsilon/diagnostics/{device_id}")
+def epsilon_device_diagnostics(
+    device_id: str, epsilon: EpsilonService = Depends(get_epsilon_service)
+):
+    return epsilon.diagnostics(device_id=device_id)
+
+
+@app.post("/epsilon/recovery/{device_id}")
+def epsilon_recovery_plan(
+    device_id: str,
+    risk: str = "high",
+    epsilon: EpsilonService = Depends(get_epsilon_service),
+):
+    return epsilon.recovery_plan(device_id=device_id, risk=risk)
+
+
+@app.post("/epsilon/firmware/summary")
+def epsilon_firmware_summary(
+    metadata: dict,
+    epsilon: EpsilonService = Depends(get_epsilon_service),
+):
+    return epsilon.firmware_summary(metadata=metadata)
+
+
+# ---------------------------------------------------------------------------
+# Phase Omega - Olympus
+# ---------------------------------------------------------------------------
+
+
+@app.post("/omega/marketplace/plugins")
+def omega_publish_plugin(
+    plugin: dict, omega: OmegaService = Depends(get_omega_service)
+):
+    return omega.publish_plugin(plugin)
+
+
+@app.get("/omega/marketplace/plugins")
+def omega_list_plugins(omega: OmegaService = Depends(get_omega_service)):
+    return {"plugins": omega.list_plugins()}
+
+
+@app.post("/omega/collaboration/plan")
+def omega_collaboration_plan(
+    tasks: list[str], omega: OmegaService = Depends(get_omega_service)
+):
+    return omega.plan_collaboration(tasks)
+
+
+@app.post("/omega/distributed/nodes/{node_id}")
+def omega_register_node(node_id: str, omega: OmegaService = Depends(get_omega_service)):
+    return omega.register_node(node_id=node_id)
+
+
+@app.get("/omega/distributed/nodes")
+def omega_list_nodes(omega: OmegaService = Depends(get_omega_service)):
+    return omega.list_nodes()
+
+
+@app.post("/omega/policy/grant")
+def omega_grant_policy(
+    actor: str, permission: str, omega: OmegaService = Depends(get_omega_service)
+):
+    return omega.grant_permission(actor=actor, permission=permission)
+
+
+@app.get("/omega/policy/check")
+def omega_check_policy(
+    actor: str, permission: str, omega: OmegaService = Depends(get_omega_service)
+):
+    return omega.check_permission(actor=actor, permission=permission)
+
+
+@app.get("/omega/public-apis")
+def omega_public_apis(omega: OmegaService = Depends(get_omega_service)):
+    return omega.public_apis()

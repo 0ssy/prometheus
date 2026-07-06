@@ -8,6 +8,7 @@ from core.event_bus import InMemoryEventBus
 class FakePlugin:
     name = "fake_plugin"
     version = "1.0.0"
+    required_contract_version = "1.0.0"
 
     def on_load(self) -> None:
         pass
@@ -66,3 +67,12 @@ class TestPluginManager:
 
         assert len(events) == 1
         assert events[0].plugin_name == "fake_plugin"
+
+    def test_register_incompatible_contract_version_raises(self):
+        class IncompatiblePlugin(FakePlugin):
+            name = "incompatible_plugin"
+            required_contract_version = "2.0.0"
+
+        manager = PluginManager()
+        with pytest.raises(RuntimeError, match="Incompatible contract version"):
+            manager.register(IncompatiblePlugin())

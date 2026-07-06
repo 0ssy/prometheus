@@ -6,6 +6,7 @@ from .memory import MemoryApi
 from .plugin import PluginApi
 from .reasoning import ReasoningApi
 from .scheduler import SchedulerApi
+from .versioning import CONTRACT_VERSION, is_contract_compatible
 
 __all__ = [
     "PluginApi",
@@ -16,4 +17,6 @@ __all__ = [
     "ReasoningApi",
     "EventBus",
     "SchedulerApi",
+    "CONTRACT_VERSION",
+    "is_contract_compatible",
 ]

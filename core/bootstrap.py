@@ -23,7 +23,10 @@ from core.logger import get_logger
 from core.observability import ObservabilityStore
 from implementations.platform_components import build_platform_components
 from kernel.runtime import PrometheusCoreKernel
+from services.delta_service import DeltaService
+from services.epsilon_service import EpsilonService
 from services.event_handlers import PlatformEventHandlers
+from services.omega_service import OmegaService
 from services.platform_service import PlatformService
 
 logger = get_logger(__name__)
@@ -70,6 +73,9 @@ def _register_services(container: ServiceContainer) -> None:
     kernel.start()
     kernel.grant_permission("system", "device.recover")
     kernel.grant_permission("system", "device.diagnose")
+    delta_service = DeltaService()
+    epsilon_service = EpsilonService(device_api=components.device_api)
+    omega_service = OmegaService()
 
     container.register("event_bus", event_bus)
     container.register("observability", observability)
@@ -83,6 +89,9 @@ def _register_services(container: ServiceContainer) -> None:
     container.register("capability_api", components.capability_api)
     container.register("device_api", components.device_api)
     container.register("platform_service", platform_service)
+    container.register("delta_service", delta_service)
+    container.register("epsilon_service", epsilon_service)
+    container.register("omega_service", omega_service)
     container.register("event_handlers", event_handlers)
     container.register("kernel", kernel)
 
@@ -121,5 +130,5 @@ def boot(heartbeat_job: Callable[[], None]) -> ServiceContainer:
     _load_agents(container)
     _start_scheduler(container, heartbeat_job)
 
-    logger.info("Startup complete - Prometheus Core (Gamma Helios) runtime online")
+    logger.info("Startup complete - Prometheus Core (Delta Daedalus) runtime online")
     return container

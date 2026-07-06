@@ -25,7 +25,10 @@ class InMemoryEventBus(EventBus):
 
     def publish(self, event: Event) -> None:
         event_type = event.event_type
-        for handler in self._subscribers.get(event_type, []):
+        # Snapshot handlers so high-volume publishing is stable even if
+        # subscribers change while events are flowing.
+        handlers = list(self._subscribers.get(event_type, []))
+        for handler in handlers:
             handler(event)
 
 

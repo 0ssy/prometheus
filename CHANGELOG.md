@@ -2,6 +2,27 @@
 
 All notable changes to Prometheus are documented in this file.
 
+## [0.4.0-delta] - 2026-07-06
+
+Codename: **Daedalus**  
+Status: **IN_PROGRESS**
+
+### Added
+- Delta digital engineering lab modules:
+  - `delta/lab.py`, `delta/scenario_engine.py`, `delta/time_engine.py`
+- Epsilon bridge scaffolding modules:
+  - `epsilon/hal.py`, `epsilon/diagnostics.py`, `epsilon/recovery.py`, `epsilon/firmware.py`
+- Omega ecosystem scaffolding modules:
+  - `omega/ecosystem.py`
+- New services and API endpoints for Delta/Epsilon/Omega progression:
+  - `services/delta_service.py`
+  - `services/epsilon_service.py`
+  - `services/omega_service.py`
+
+### Changed
+- Bootstrap now registers `delta_service`, `epsilon_service`, and `omega_service`.
+- Runtime version advanced to `0.4.0-delta`.
+
 ## [0.3.0-gamma] - 2026-07-06
 
 Codename: **Helios**  

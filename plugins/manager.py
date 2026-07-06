@@ -11,6 +11,7 @@ Phase Beta/Gamma concern once there's a security model for it.
 from .base import PrometheusPlugin
 from contracts.plugin import PluginApi
 from contracts.event_bus import EventBus
+from contracts.versioning import CONTRACT_VERSION, validate_contract_compatibility
 from api.events import PluginRanEvent
 from core.logger import get_logger
 from core.event_bus import event_bus as default_event_bus
@@ -26,6 +27,7 @@ class PluginManager(PluginApi):
     def register(self, plugin: PrometheusPlugin) -> None:
         if plugin.name in self._plugins:
             logger.warning(f"Plugin '{plugin.name}' already registered — overwriting")
+        validate_contract_compatibility(plugin.required_contract_version, CONTRACT_VERSION)
         plugin.on_load()
         self._plugins[plugin.name] = plugin
         logger.info(f"Loaded plugin: {plugin.name} v{plugin.version}")

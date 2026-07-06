@@ -21,6 +21,8 @@ from typing import Any
 class PrometheusPlugin(ABC):
     name: str = "unnamed_plugin"
     version: str = "0.1.0"
+    # Semantic version for the contracts API this plugin expects.
+    required_contract_version: str = "1.0.0"
 
     @abstractmethod
     def on_load(self) -> None:
