@@ -7,8 +7,10 @@ from contracts.memory import MemoryApi
 from contracts.reasoning import ReasoningApi
 from contracts.plugin import PluginApi
 from contracts.agent import AgentApi
+from contracts.capability import CapabilityApi
 from contracts.device import DeviceApi
 from contracts.scheduler import SchedulerApi
+from core.capabilities import CapabilityManager
 from core.scheduler import TaskScheduler
 from memory.store import MemoryStore
 from reasoning.graph import ReasoningStore
@@ -24,6 +26,7 @@ class PlatformComponents:
     reasoning_api: ReasoningApi
     plugin_api: PluginApi
     agent_api: AgentApi
+    capability_api: CapabilityApi
     device_api: DeviceApi
 
 
@@ -33,6 +36,7 @@ def build_platform_components(event_bus: EventBus) -> PlatformComponents:
     reasoning_api = ReasoningStore(event_bus=event_bus)
     plugin_api = PluginManager(event_bus=event_bus)
     agent_api = AgentManager(event_bus=event_bus)
+    capability_api = CapabilityManager(event_bus=event_bus)
     device_api = DeviceRegistry(event_bus=event_bus)
     return PlatformComponents(
         scheduler=scheduler,
@@ -40,5 +44,6 @@ def build_platform_components(event_bus: EventBus) -> PlatformComponents:
         reasoning_api=reasoning_api,
         plugin_api=plugin_api,
         agent_api=agent_api,
+        capability_api=capability_api,
         device_api=device_api,
     )

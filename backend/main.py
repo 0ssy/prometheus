@@ -61,18 +61,66 @@ def startup():
 def health(container: ServiceContainer = Depends(get_container)):
     plugin_api = container.get("plugin_api")
     agent_api = container.get("agent_api")
+    capability_api = container.get("capability_api")
+    kernel = container.get("kernel")
     return {
         "status": "ok",
         "app": config.app_name,
         "version": config.version,
         "plugins_loaded": plugin_api.list_plugins(),
         "agents_loaded": agent_api.list_agents(),
+        "capabilities_registered": len(capability_api.discover()),
+        "kernel_health": kernel.health(),
     }
 
 
 @app.get("/system/services")
 def list_services(container: ServiceContainer = Depends(get_container)):
     return {"services": container.list_services()}
+
+
+@app.get("/capabilities")
+def list_capabilities(
+    prefix: str | None = None,
+    target: str | None = None,
+    platform: PlatformService = Depends(get_platform_service),
+):
+    return {"capabilities": platform.list_capabilities(prefix=prefix, target=target)}
+
+
+@app.post("/capabilities/execute")
+def execute_capability(
+    name: str,
+    payload: dict | None = None,
+    permissions: list[str] | None = None,
+    platform: PlatformService = Depends(get_platform_service),
+):
+    result = platform.execute_capability(
+        capability_name=name,
+        payload=payload or {},
+        granted_permissions=set(permissions or []),
+    )
+    return {"capability": name, "result": result}
+
+
+@app.get("/capabilities/history")
+def capability_history(
+    name: str | None = None,
+    platform: PlatformService = Depends(get_platform_service),
+):
+    return {"history": platform.capability_history(capability_name=name)}
+
+
+@app.get("/core/status")
+def core_status(container: ServiceContainer = Depends(get_container)):
+    kernel = container.get("kernel")
+    return {"status": kernel.status(), "health": kernel.health()}
+
+
+@app.get("/observability")
+def observability_snapshot(container: ServiceContainer = Depends(get_container)):
+    observability = container.get("observability")
+    return observability.snapshot()
 
 
 @app.post("/plugins/{plugin_name}/run")
@@ -407,3 +455,35 @@ def get_device_twin(
     device_api = container.get("device_api")
     twin = build_twin(db, device_id, device_api=device_api)
     return twin.to_dict()
+
+
+# ---------------------------------------------------------------------------
+# Phase Beta — Atlas Intelligence Layer
+# ---------------------------------------------------------------------------
+
+
+@app.get("/beta/digital-device/{device_id}")
+def get_beta_digital_device(
+    device_id: str,
+    db: Session = Depends(get_db),
+    platform: PlatformService = Depends(get_platform_service),
+):
+    return platform.digital_device(db, device_id)
+
+
+@app.post("/beta/workflow/{device_id}")
+def run_beta_workflow(
+    device_id: str,
+    failure_mode: str = "disconnect",
+    execute: bool = False,
+    permissions: list[str] | None = None,
+    db: Session = Depends(get_db),
+    platform: PlatformService = Depends(get_platform_service),
+):
+    return platform.run_beta_workflow(
+        db=db,
+        device_id=device_id,
+        failure_mode=failure_mode,
+        execute=execute,
+        permissions=set(permissions or []),
+    )

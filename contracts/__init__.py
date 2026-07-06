@@ -1,4 +1,5 @@
 from .agent import AgentApi
+from .capability import CapabilityApi
 from .device import DeviceApi
 from .event_bus import EventBus
 from .memory import MemoryApi
@@ -9,6 +10,7 @@ from .scheduler import SchedulerApi
 __all__ = [
     "PluginApi",
     "AgentApi",
+    "CapabilityApi",
     "DeviceApi",
     "MemoryApi",
     "ReasoningApi",

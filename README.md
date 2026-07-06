@@ -1,9 +1,10 @@
-# Prometheus — Platform Architecture Phase
+# Prometheus Core — Beta Atlas
 
 ## What this is
 
-The current architecture milestone focuses on platform contracts, event-driven internals,
-and a clean bootstrap/container orchestration layer.
+Prometheus Core now includes the Phase Alpha foundation plus the Beta intelligence layer:
+capabilities, digital-device modeling, simulation, reasoning workflow, kernel status,
+and observability.
 
 | Deliverable            | File                                |
 |-------------------------|--------------------------------------|
@@ -12,6 +13,11 @@ and a clean bootstrap/container orchestration layer.
 | Platform contracts      | `contracts/`                            |
 | Internal services       | `services/platform_service.py`, `services/event_handlers.py` |
 | Implementations layer   | `implementations/platform_components.py` |
+| Capability framework    | `core/capabilities.py`, `contracts/capability.py` |
+| Reasoning pipeline      | `reasoning/pipeline.py` |
+| Simulation engine       | `simulation/engine.py` |
+| Core kernel             | `kernel/runtime.py` |
+| Observability           | `core/observability.py` |
 | Event bus               | `core/event_bus.py`, `api/events.py`    |
 | Long-term memory        | `memory/models.py`, `memory/store.py`   |
 | Knowledge graph         | `reasoning/models.py`, `reasoning/graph.py` |
@@ -66,6 +72,12 @@ curl http://127.0.0.1:8000/memory
 
 # 5. Queries the knowledge graph
 curl "http://127.0.0.1:8000/knowledge?subject=esp32_01"
+
+# 6. Lists capabilities (after registering devices)
+curl "http://127.0.0.1:8000/capabilities"
+
+# 7. Run Beta workflow (digital-device -> simulation -> reasoning)
+curl -X POST "http://127.0.0.1:8000/beta/workflow/esp32_01?failure_mode=disconnect"
 ```
 
 If all five return sensible JSON, the core platform orchestration is working end-to-end.
@@ -113,6 +125,26 @@ this skeleton first — that's the actual Phase Alpha goal.
 | v0.6.0  | Firmware lab |
 | v0.7.0  | Recovery engine |
 | v1.0.0  | Stable platform API |
+
+## Beta Atlas workflow
+
+```
+User Request
+      ↓
+Capability Lookup
+      ↓
+Digital Device View
+      ↓
+Simulation Engine
+      ↓
+Reasoning Pipeline
+      ↓
+Recommendation
+      ↓
+Optional Capability Execution
+      ↓
+Memory + Knowledge + Observability record
+```
 
 ## Phase Alpha freeze checkpoint
 

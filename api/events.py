@@ -84,3 +84,12 @@ class FactAssertedEvent(Event):
 
     def __post_init__(self) -> None:
         self.event_type = "fact.asserted"
+
+
+@dataclass
+class CapabilityExecutedEvent(Event):
+    capability_name: str
+    success: bool
+
+    def __post_init__(self) -> None:
+        self.event_type = "capability.executed"

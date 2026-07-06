@@ -1,5 +1,24 @@
 # Architecture Decision Log
 
+## 2026-07-06 — Phase Beta (Atlas) Intelligence Layer
+
+### Context
+After freezing Alpha (Genesis), the next objective was to prove Prometheus can reason
+about simulated systems before direct execution.
+
+### Decision
+1. Added a capability framework (`CapabilityManager`) with register/discover/authorize/execute/history.
+2. Introduced a Prometheus Core Kernel (`kernel/runtime.py`) owning lifecycle, permissions, and runtime status.
+3. Added simulation and reasoning pipeline modules (`simulation/engine.py`, `reasoning/pipeline.py`).
+4. Added a digital-device service projection (`services/digital_device_service.py`) for state/events/memory.
+5. Added observability store for metrics, traces, and event history (`core/observability.py`).
+6. Exposed Beta workflow endpoint: `/beta/workflow/{device_id}`.
+
+### Consequences
+- Capability execution is now first-class and auditable.
+- Core runtime can report health/status independently of frontend.
+- Workflows now prefer simulation and recommendation before execution.
+
 ## 2026-07-06 — Phase Alpha Freeze Checkpoint (Genesis)
 
 ### Context

@@ -19,9 +19,12 @@ class TestBootstrap:
         assert container.get("reasoning_api") is not None
         assert container.get("plugin_api") is not None
         assert container.get("agent_api") is not None
+        assert container.get("capability_api") is not None
         assert container.get("device_api") is not None
         assert container.get("platform_service") is not None
         assert container.get("event_handlers") is not None
+        assert container.get("observability") is not None
+        assert container.get("kernel") is not None
         assert container.get("scheduler") is not None
         container.get("scheduler").stop()
 

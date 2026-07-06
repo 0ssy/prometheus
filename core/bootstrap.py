@@ -20,7 +20,9 @@ from core.container import ServiceContainer
 from core.database import init_db
 from core.event_bus import InMemoryEventBus
 from core.logger import get_logger
+from core.observability import ObservabilityStore
 from implementations.platform_components import build_platform_components
+from kernel.runtime import PrometheusCoreKernel
 from services.event_handlers import PlatformEventHandlers
 from services.platform_service import PlatformService
 
@@ -38,33 +40,48 @@ def _register_services(container: ServiceContainer) -> None:
     from core.database import SessionLocal
 
     event_bus = InMemoryEventBus()
+    observability = ObservabilityStore()
     components = build_platform_components(event_bus=event_bus)
     platform_service = PlatformService(
         plugin_api=components.plugin_api,
         agent_api=components.agent_api,
+        capability_api=components.capability_api,
         device_api=components.device_api,
         memory_api=components.memory_api,
         reasoning_api=components.reasoning_api,
         event_bus=event_bus,
+        observability=observability,
     )
     event_handlers = PlatformEventHandlers(
         event_bus=event_bus,
         session_factory=SessionLocal,
         memory_api=components.memory_api,
         reasoning_api=components.reasoning_api,
+        observability=observability,
     )
     event_handlers.bind()
+    kernel = PrometheusCoreKernel(
+        capability_api=components.capability_api,
+        scheduler=components.scheduler,
+        version=config.version,
+    )
+    kernel.start()
+    kernel.grant_permission("system", "device.recover")
+    kernel.grant_permission("system", "device.diagnose")
 
     container.register("event_bus", event_bus)
+    container.register("observability", observability)
     container.register("scheduler", components.scheduler)
     container.register("session_factory", SessionLocal)
     container.register("memory_api", components.memory_api)
     container.register("reasoning_api", components.reasoning_api)
     container.register("plugin_api", components.plugin_api)
     container.register("agent_api", components.agent_api)
+    container.register("capability_api", components.capability_api)
     container.register("device_api", components.device_api)
     container.register("platform_service", platform_service)
     container.register("event_handlers", event_handlers)
+    container.register("kernel", kernel)
 
 
 def _load_plugins(container: ServiceContainer) -> None:
@@ -101,5 +118,5 @@ def boot(heartbeat_job: Callable[[], None]) -> ServiceContainer:
     _load_agents(container)
     _start_scheduler(container, heartbeat_job)
 
-    logger.info("Startup complete — Phase Alpha milestone checklist online")
+    logger.info("Startup complete - Prometheus Core (Beta Atlas) runtime online")
     return container
