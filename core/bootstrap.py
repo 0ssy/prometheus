@@ -73,9 +73,20 @@ def _register_services(container: ServiceContainer) -> None:
     kernel.start()
     kernel.grant_permission("system", "device.recover")
     kernel.grant_permission("system", "device.diagnose")
-    delta_service = DeltaService()
-    epsilon_service = EpsilonService(device_api=components.device_api)
-    omega_service = OmegaService()
+    delta_service = DeltaService(
+        knowledge_engine=components.knowledge_engine,
+        device_api=components.device_api,
+        session_factory=SessionLocal,
+    )
+    epsilon_service = EpsilonService(
+        device_api=components.device_api,
+        delta_service=delta_service,
+        session_factory=SessionLocal,
+    )
+    omega_service = OmegaService(
+        epsilon_service=epsilon_service,
+        kernel=kernel,
+    )
 
     container.register("event_bus", event_bus)
     container.register("observability", observability)
