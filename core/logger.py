@@ -6,6 +6,7 @@ console and a file so you have a persistent research/debug trail —
 this matters later when Prometheus is reasoning about hardware and
 you need to reconstruct what it did and why.
 """
+
 import logging
 import os
 from .config import config

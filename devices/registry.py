@@ -7,13 +7,15 @@ persistence yet: if Prometheus restarts, devices must reconnect.
 That's fine for v0.1 — don't add persistence before something
 actually needs devices to survive a restart.
 """
+
 from .base import Device
+from api.device_api import DeviceApi
 from core.logger import get_logger
 
 logger = get_logger(__name__)
 
 
-class DeviceRegistry:
+class DeviceRegistry(DeviceApi):
     def __init__(self):
         self._devices: dict[str, Device] = {}
 

@@ -7,13 +7,15 @@ plugins/installed/echo_plugin.py for the reference example) —
 dynamic filesystem discovery of arbitrary third-party plugins is a
 Phase Beta/Gamma concern once there's a security model for it.
 """
+
 from .base import PrometheusPlugin
+from api.plugin_api import PluginApi
 from core.logger import get_logger
 
 logger = get_logger(__name__)
 
 
-class PluginManager:
+class PluginManager(PluginApi):
     def __init__(self):
         self._plugins: dict[str, PrometheusPlugin] = {}
 
@@ -37,5 +39,4 @@ class PluginManager:
         return plugin.run(context)
 
 
-# Singleton — one registry for the whole running process
 plugin_manager = PluginManager()

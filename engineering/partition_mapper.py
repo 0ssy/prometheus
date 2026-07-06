@@ -18,6 +18,7 @@ full MBR partition parsing is a small, separate addition, not built here
 to keep this module's first version focused on GPT (the modern default on
 anything you're likely to test against in 2026).
 """
+
 import struct
 from dataclasses import dataclass, field, asdict
 from core.logger import get_logger
@@ -82,13 +83,21 @@ def read_partition_table(
     is_gpt = mbr[0x1C2] == 0xEE  # protective MBR partition type byte
 
     if not is_gpt:
-        logger.info(f"{disk_path}: no GPT protective MBR found — reporting as scheme=mbr")
-        return PartitionTable(disk_path=disk_path, scheme="mbr", sector_size=sector_size)
+        logger.info(
+            f"{disk_path}: no GPT protective MBR found — reporting as scheme=mbr"
+        )
+        return PartitionTable(
+            disk_path=disk_path, scheme="mbr", sector_size=sector_size
+        )
 
     gpt_header = _read_sectors(disk_path, 1, 1, sector_size)
     if gpt_header[0:8] != GPT_SIGNATURE:
-        logger.warning(f"{disk_path}: protective MBR present but GPT signature missing/corrupt")
-        return PartitionTable(disk_path=disk_path, scheme="unknown", sector_size=sector_size)
+        logger.warning(
+            f"{disk_path}: protective MBR present but GPT signature missing/corrupt"
+        )
+        return PartitionTable(
+            disk_path=disk_path, scheme="unknown", sector_size=sector_size
+        )
 
     partition_entry_lba = struct.unpack("<Q", gpt_header[72:80])[0]
     num_entries = struct.unpack("<I", gpt_header[80:84])[0]
@@ -96,11 +105,13 @@ def read_partition_table(
 
     entries_bytes_needed = num_entries * entry_size
     sectors_needed = (entries_bytes_needed + sector_size - 1) // sector_size
-    raw_entries = _read_sectors(disk_path, partition_entry_lba, sectors_needed, sector_size)
+    raw_entries = _read_sectors(
+        disk_path, partition_entry_lba, sectors_needed, sector_size
+    )
 
     partitions = []
     for i in range(num_entries):
-        entry = raw_entries[i * entry_size: i * entry_size + entry_size]
+        entry = raw_entries[i * entry_size : i * entry_size + entry_size]
         if len(entry) < 128:
             break
         type_guid_raw = entry[0:16]
@@ -111,15 +122,22 @@ def read_partition_table(
         name_raw = entry[56:128]
         name = name_raw.decode("utf-16-le", errors="ignore").rstrip("\x00")
 
-        partitions.append(PartitionEntry(
-            index=i,
-            type_guid=_format_guid(type_guid_raw),
-            unique_guid=_format_guid(unique_guid_raw),
-            first_lba=first_lba,
-            last_lba=last_lba,
-            name=name,
-            size_bytes=(last_lba - first_lba + 1) * sector_size,
-        ))
+        partitions.append(
+            PartitionEntry(
+                index=i,
+                type_guid=_format_guid(type_guid_raw),
+                unique_guid=_format_guid(unique_guid_raw),
+                first_lba=first_lba,
+                last_lba=last_lba,
+                name=name,
+                size_bytes=(last_lba - first_lba + 1) * sector_size,
+            )
+        )
 
     logger.info(f"{disk_path}: parsed GPT table, {len(partitions)} partitions found")
-    return PartitionTable(disk_path=disk_path, scheme="gpt", sector_size=sector_size, partitions=partitions)
+    return PartitionTable(
+        disk_path=disk_path,
+        scheme="gpt",
+        sector_size=sector_size,
+        partitions=partitions,
+    )

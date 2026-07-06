@@ -10,6 +10,7 @@ Analyzer, Recovery Planner — MUST call require_ownership_declared() before
 touching the device. This is the actual code-level gate RFC 0000 promised,
 not a comment telling some future version of you to add one later.
 """
+
 from core.logger import get_logger
 from devices.base import Device
 

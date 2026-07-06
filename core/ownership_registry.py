@@ -7,6 +7,7 @@ touch a target. Still an honor system — RFC 0000 is explicit that this
 is "declared", not "verified" — but it closes the gap of "anyone can
 just type ?ownership_declared=true in a URL."
 """
+
 import json
 from pathlib import Path
 from datetime import datetime, timezone
@@ -14,7 +15,9 @@ from core.logger import get_logger
 
 logger = get_logger(__name__)
 
-OWNED_DEVICES_PATH = Path(__file__).resolve().parent.parent / "config" / "owned_devices.json"
+OWNED_DEVICES_PATH = (
+    Path(__file__).resolve().parent.parent / "config" / "owned_devices.json"
+)
 
 
 def _load() -> dict:
@@ -60,14 +63,18 @@ def declare_owned(
     }
     data.setdefault("declared_owners", []).append(entry)
     _save(data)
-    logger.info(f"Declared ownership: {target_id} (owner={owner!r}, trust_level={trust_level})")
+    logger.info(
+        f"Declared ownership: {target_id} (owner={owner!r}, trust_level={trust_level})"
+    )
     return entry
 
 
 def revoke_declaration(target_id: str) -> bool:
     data = _load()
     before = len(data.get("declared_owners", []))
-    data["declared_owners"] = [e for e in data.get("declared_owners", []) if e["id"] != target_id]
+    data["declared_owners"] = [
+        e for e in data.get("declared_owners", []) if e["id"] != target_id
+    ]
     _save(data)
     removed = before != len(data["declared_owners"])
     if removed:

@@ -8,6 +8,7 @@ without blocking the API. Swap this for something more serious
 once you actually have jobs that need retries, persistence, or
 distributed workers.
 """
+
 import threading
 import time
 from typing import Callable
@@ -18,7 +19,9 @@ logger = get_logger(__name__)
 
 class TaskScheduler:
     def __init__(self):
-        self._jobs: list[tuple[str, Callable, int]] = []  # (name, func, interval_seconds)
+        self._jobs: list[tuple[str, Callable, int]] = (
+            []
+        )  # (name, func, interval_seconds)
         self._stop_event = threading.Event()
         self._thread: threading.Thread | None = None
 

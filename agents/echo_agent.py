@@ -5,6 +5,7 @@ Proves the agent contract works and demonstrates writing to the
 knowledge graph. A "device tracking" task here stands in for what
 will eventually be the Digital Twin Engine (Phase Delta).
 """
+
 from .base import PrometheusAgent
 from reasoning.graph import assert_fact
 

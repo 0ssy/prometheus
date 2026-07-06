@@ -6,6 +6,7 @@ NEVER deploys — a hard stop by design. Extends Phase Alpha's
 PrometheusAgent, dispatched through the existing
 /agents/{agent_name}/dispatch route — no new API surface needed.
 """
+
 from agents.base import PrometheusAgent
 from reasoning.graph import assert_fact
 from digital_twin.twin import build_twin
@@ -37,7 +38,9 @@ class EngineeringAgent(PrometheusAgent):
         report = build_report(proposal, test_results)
 
         assert_fact(
-            db, subject=proposal.name, predicate="event",
+            db,
+            subject=proposal.name,
+            predicate="event",
             obj=f"engineering_proposal_evaluated:{'pass' if report.all_tests_passed else 'fail'}",
         )
 

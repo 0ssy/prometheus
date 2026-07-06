@@ -8,6 +8,7 @@ per RFC 0002's design.
 Uses Ed25519, per the project's original tech choices. Verification
 only — this module never signs anything on Prometheus's behalf.
 """
+
 import hashlib
 from cryptography.hazmat.primitives.asymmetric.ed25519 import Ed25519PublicKey
 from cryptography.exceptions import InvalidSignature

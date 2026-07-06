@@ -7,6 +7,7 @@ coordination, message-passing between agents, and autonomous
 scheduling loops are Phase Epsilon territory — don't reach for
 that complexity yet.
 """
+
 from abc import ABC, abstractmethod
 from typing import Any
 

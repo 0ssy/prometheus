@@ -12,6 +12,7 @@ or deletes rows.
 Health is a simple rules-based score (0.0-1.0) for v0.1 — no ML,
 per RFC 0003's explicit non-goal.
 """
+
 from dataclasses import dataclass, asdict
 from sqlalchemy.orm import Session
 
@@ -89,11 +90,13 @@ def build_twin(db: Session, device_id: str) -> DeviceTwin:
     history = []
     for f in facts_sorted:
         facts_by_predicate.setdefault(f.predicate, []).append(f.object)
-        history.append({
-            "timestamp": f.created_at.isoformat(),
-            "predicate": f.predicate,
-            "object": f.object,
-        })
+        history.append(
+            {
+                "timestamp": f.created_at.isoformat(),
+                "predicate": f.predicate,
+                "object": f.object,
+            }
+        )
 
     events = facts_by_predicate.get("event", [])
     state = _derive_state(events)
@@ -105,18 +108,25 @@ def build_twin(db: Session, device_id: str) -> DeviceTwin:
         firmware["format"] = firmware_events[-1].split(":", 1)[1]
 
     boot_chain_events = [e for e in events if e.startswith("boot_chain:")]
-    boot_chain_status = boot_chain_events[-1].split(":", 1)[1] if boot_chain_events else "unknown"
+    boot_chain_status = (
+        boot_chain_events[-1].split(":", 1)[1] if boot_chain_events else "unknown"
+    )
     if boot_chain_events:
         firmware["boot_chain_status"] = boot_chain_status
 
     partition_events = [e for e in events if e.startswith("partition_table_read:")]
-    partition_scheme = partition_events[-1].split(":", 1)[1] if partition_events else "unknown"
+    partition_scheme = (
+        partition_events[-1].split(":", 1)[1] if partition_events else "unknown"
+    )
 
     live_device = device_registry.get(device_id)
     if live_device:
         hardware = {"transport": live_device.transport, **live_device.status()}
     else:
-        hardware = {"transport": "unknown", "note": "not currently registered — historical facts only"}
+        hardware = {
+            "transport": "unknown",
+            "note": "not currently registered — historical facts only",
+        }
 
     sensors = {}
     wrote_events = facts_by_predicate.get("wrote", [])
@@ -128,17 +138,32 @@ def build_twin(db: Session, device_id: str) -> DeviceTwin:
         "ownership_declared": is_declared_owned(device_id),
     }
 
-    logs = [f"See core/logger.py output for {device_id} — {len(facts_sorted)} knowledge-graph event(s) recorded"]
+    logs = [
+        f"See core/logger.py output for {device_id} — {len(facts_sorted)} knowledge-graph event(s) recorded"
+    ]
 
     recovery_options = []
     if boot_chain_events or partition_events:
-        plan = plan_recovery(device_id, boot_chain_status=boot_chain_status, partition_scheme=partition_scheme)
+        plan = plan_recovery(
+            device_id,
+            boot_chain_status=boot_chain_status,
+            partition_scheme=partition_scheme,
+        )
         recovery_options = plan.to_dict()["steps"]
 
     twin = DeviceTwin(
-        device_id=device_id, identity=identity, firmware=firmware, hardware=hardware,
-        sensors=sensors, state=state, logs=logs, health=health,
-        recovery_options=recovery_options, history=history,
+        device_id=device_id,
+        identity=identity,
+        firmware=firmware,
+        hardware=hardware,
+        sensors=sensors,
+        state=state,
+        logs=logs,
+        health=health,
+        recovery_options=recovery_options,
+        history=history,
     )
-    logger.info(f"Built twin for {device_id}: state={state}, health={health}, {len(history)} history entries")
+    logger.info(
+        f"Built twin for {device_id}: state={state}, health={health}, {len(history)} history entries"
+    )
     return twin

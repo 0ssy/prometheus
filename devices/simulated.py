@@ -7,6 +7,7 @@ exists. It echoes writes back as reads, and supports injecting latency
 or failures so you can test how an agent handles a flaky device
 *before* a real flaky device teaches you the hard way.
 """
+
 import time
 import random
 from typing import Any

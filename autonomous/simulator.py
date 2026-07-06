@@ -4,6 +4,7 @@ Engineering Simulator (RFC 0004)
 Applies a Proposal to a COPY of an existing DeviceTwin dict — never
 the live twin, never a real file on disk.
 """
+
 import copy
 from .proposals import Proposal
 

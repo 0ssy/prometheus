@@ -6,6 +6,7 @@ else — memory, knowledge graph, device registry — writes through
 this one engine/session pattern so swapping to Postgres later is a
 one-line change, not a rewrite.
 """
+
 import os
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker, declarative_base
@@ -35,6 +36,7 @@ def get_db():
 def init_db():
     """Create all tables. Called once at startup."""
     # Import models here so they register with Base before create_all
-    from memory.models import MemoryEntry           # noqa
-    from reasoning.models import KnowledgeFact       # noqa
+    from memory.models import MemoryEntry  # noqa
+    from reasoning.models import KnowledgeFact  # noqa
+
     Base.metadata.create_all(bind=engine)

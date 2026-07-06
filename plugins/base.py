@@ -13,6 +13,7 @@ Keeping this contract tiny is deliberate — a wide plugin interface
 is exactly how these frameworks calcify early. Grow it only when a
 real plugin needs more.
 """
+
 from abc import ABC, abstractmethod
 from typing import Any
 

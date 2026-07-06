@@ -5,6 +5,7 @@ Extends Phase Beta's SimulatedDevice with fake firmware and a REAL
 Ed25519 signature over it — so Boot Chain Analyzer gets tested against
 actual cryptographic verification, not a mocked True/False.
 """
+
 from devices.simulated import SimulatedDevice
 from cryptography.hazmat.primitives.asymmetric.ed25519 import Ed25519PrivateKey
 

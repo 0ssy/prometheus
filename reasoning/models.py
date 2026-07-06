@@ -8,6 +8,7 @@ That's enough to prove the concept in Phase Alpha; a real graph
 engine (or Neo4j) can replace this later without touching callers,
 since everything goes through reasoning/graph.py.
 """
+
 from sqlalchemy import Column, Integer, String, DateTime
 from datetime import datetime, timezone
 from core.database import Base

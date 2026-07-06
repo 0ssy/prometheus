@@ -20,6 +20,7 @@ guarantee. Every place this field is surfaced (API, logs) must call it
 "declared", not "verified" — see RFC 0000 for why that distinction
 matters.
 """
+
 from abc import ABC, abstractmethod
 from typing import Any
 

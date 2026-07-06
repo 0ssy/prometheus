@@ -5,13 +5,15 @@ Registry + dispatcher for agents, mirroring the plugin manager's
 shape on purpose — same pattern, different concern. Plugins extend
 capability; agents perform tasks using that capability.
 """
+
 from .base import PrometheusAgent
+from api.agent_api import AgentApi
 from core.logger import get_logger
 
 logger = get_logger(__name__)
 
 
-class AgentManager:
+class AgentManager(AgentApi):
     def __init__(self):
         self._agents: dict[str, PrometheusAgent] = {}
 

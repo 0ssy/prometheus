@@ -461,3 +461,436 @@
 2026-07-06 10:44:09 | INFO     | agents.manager | Dispatching task to agent 'engineering_agent': {'change_type': 'delete_firmware', 'payload': {}, 'name': 'bad_proposal'}
 2026-07-06 10:44:20 | INFO     | backend.main | Prometheus heartbeat — system alive
 2026-07-06 10:44:50 | INFO     | backend.main | Prometheus heartbeat — system alive
+2026-07-06 12:52:42 | INFO     | agents.manager | Registered agent: fake_agent
+2026-07-06 12:52:42 | INFO     | agents.manager | Registered agent: fake_agent
+2026-07-06 12:52:42 | INFO     | agents.manager | Dispatching task to agent 'fake_agent': {}
+2026-07-06 12:52:42 | INFO     | core.container | Registered service: config
+2026-07-06 12:52:42 | INFO     | core.container | Registered service: db_engine
+2026-07-06 12:52:42 | INFO     | core.container | Registered service: session_factory
+2026-07-06 12:52:42 | INFO     | core.container | Registered service: memory_api
+2026-07-06 12:52:42 | INFO     | core.container | Registered service: reasoning_api
+2026-07-06 12:52:42 | INFO     | core.container | Registered service: plugin_api
+2026-07-06 12:52:42 | INFO     | core.container | Registered service: agent_api
+2026-07-06 12:52:42 | INFO     | core.container | Registered service: device_api
+2026-07-06 12:52:42 | INFO     | plugins.manager | Loaded plugin: echo v0.1.0
+2026-07-06 12:52:42 | INFO     | agents.manager | Registered agent: echo_agent
+2026-07-06 12:52:42 | INFO     | agents.manager | Registered agent: engineering_agent
+2026-07-06 12:52:42 | INFO     | core.scheduler | Scheduled job 'heartbeat' every 30s
+2026-07-06 12:52:42 | INFO     | core.scheduler | Scheduler started
+2026-07-06 12:52:42 | INFO     | core.container | Registered service: scheduler
+2026-07-06 12:52:42 | INFO     | core.bootstrap | Startup complete — Phase Alpha milestone checklist online
+2026-07-06 12:52:42 | INFO     | core.container | Registered service: config
+2026-07-06 12:52:42 | INFO     | core.container | Registered service: db_engine
+2026-07-06 12:52:42 | INFO     | core.container | Registered service: session_factory
+2026-07-06 12:52:42 | INFO     | core.container | Registered service: memory_api
+2026-07-06 12:52:42 | INFO     | core.container | Registered service: reasoning_api
+2026-07-06 12:52:42 | INFO     | core.container | Registered service: plugin_api
+2026-07-06 12:52:42 | INFO     | core.container | Registered service: agent_api
+2026-07-06 12:52:42 | INFO     | core.container | Registered service: device_api
+2026-07-06 12:52:42 | WARNING  | plugins.manager | Plugin 'echo' already registered — overwriting
+2026-07-06 12:52:42 | INFO     | plugins.manager | Loaded plugin: echo v0.1.0
+2026-07-06 12:52:42 | INFO     | agents.manager | Registered agent: echo_agent
+2026-07-06 12:52:42 | INFO     | agents.manager | Registered agent: engineering_agent
+2026-07-06 12:52:42 | INFO     | core.scheduler | Scheduled job 'heartbeat' every 30s
+2026-07-06 12:52:42 | INFO     | core.container | Registered service: scheduler
+2026-07-06 12:52:42 | INFO     | core.bootstrap | Startup complete — Phase Alpha milestone checklist online
+2026-07-06 12:52:42 | INFO     | core.container | Registered service: config
+2026-07-06 12:52:42 | INFO     | core.container | Registered service: db_engine
+2026-07-06 12:52:42 | INFO     | core.container | Registered service: session_factory
+2026-07-06 12:52:42 | INFO     | core.container | Registered service: memory_api
+2026-07-06 12:52:42 | INFO     | core.container | Registered service: reasoning_api
+2026-07-06 12:52:42 | INFO     | core.container | Registered service: plugin_api
+2026-07-06 12:52:42 | INFO     | core.container | Registered service: agent_api
+2026-07-06 12:52:42 | INFO     | core.container | Registered service: device_api
+2026-07-06 12:52:42 | WARNING  | plugins.manager | Plugin 'echo' already registered — overwriting
+2026-07-06 12:52:42 | INFO     | plugins.manager | Loaded plugin: echo v0.1.0
+2026-07-06 12:52:42 | INFO     | agents.manager | Registered agent: echo_agent
+2026-07-06 12:52:42 | INFO     | agents.manager | Registered agent: engineering_agent
+2026-07-06 12:52:42 | INFO     | core.scheduler | Scheduled job 'heartbeat' every 30s
+2026-07-06 12:52:42 | INFO     | core.container | Registered service: scheduler
+2026-07-06 12:52:42 | INFO     | core.bootstrap | Startup complete — Phase Alpha milestone checklist online
+2026-07-06 12:52:42 | INFO     | core.container | Registered service: config
+2026-07-06 12:52:42 | INFO     | core.container | Registered service: db_engine
+2026-07-06 12:52:42 | INFO     | core.container | Registered service: session_factory
+2026-07-06 12:52:42 | INFO     | core.container | Registered service: memory_api
+2026-07-06 12:52:42 | INFO     | core.container | Registered service: reasoning_api
+2026-07-06 12:52:42 | INFO     | core.container | Registered service: plugin_api
+2026-07-06 12:52:42 | INFO     | core.container | Registered service: agent_api
+2026-07-06 12:52:42 | INFO     | core.container | Registered service: device_api
+2026-07-06 12:52:42 | WARNING  | plugins.manager | Plugin 'echo' already registered — overwriting
+2026-07-06 12:52:42 | INFO     | plugins.manager | Loaded plugin: echo v0.1.0
+2026-07-06 12:52:42 | INFO     | agents.manager | Registered agent: echo_agent
+2026-07-06 12:52:42 | INFO     | agents.manager | Registered agent: engineering_agent
+2026-07-06 12:52:42 | INFO     | core.scheduler | Scheduled job 'heartbeat' every 30s
+2026-07-06 12:52:42 | INFO     | core.container | Registered service: scheduler
+2026-07-06 12:52:42 | INFO     | core.bootstrap | Startup complete — Phase Alpha milestone checklist online
+2026-07-06 12:52:42 | INFO     | core.container | Registered service: foo
+2026-07-06 12:52:42 | INFO     | core.container | Registered service: a
+2026-07-06 12:52:42 | INFO     | core.container | Registered service: b
+2026-07-06 12:52:42 | INFO     | core.container | Registered service: foo
+2026-07-06 12:52:42 | INFO     | core.container | Registered service: foo
+2026-07-06 12:52:42 | INFO     | devices.registry | Registered device: dev1 (transport=simulated, ownership_declared=False)
+2026-07-06 12:52:42 | INFO     | devices.registry | Registered device: dev1 (transport=simulated, ownership_declared=False)
+2026-07-06 12:52:42 | INFO     | devices.registry | Unregistered device: dev1
+2026-07-06 12:52:42 | INFO     | devices.registry | Registered device: dev1 (transport=simulated, ownership_declared=False)
+2026-07-06 12:52:42 | INFO     | memory.store | Stored memory [test] from system: hello world
+2026-07-06 12:52:42 | INFO     | memory.store | Stored memory [general] from system: general memory
+2026-07-06 12:52:42 | INFO     | memory.store | Stored memory [other] from system: other memory
+2026-07-06 12:52:42 | INFO     | memory.store | Stored memory [limited] from system: memory 0
+2026-07-06 12:52:42 | INFO     | memory.store | Stored memory [limited] from system: memory 1
+2026-07-06 12:52:42 | INFO     | memory.store | Stored memory [limited] from system: memory 2
+2026-07-06 12:52:42 | INFO     | memory.store | Stored memory [limited] from system: memory 3
+2026-07-06 12:52:42 | INFO     | memory.store | Stored memory [limited] from system: memory 4
+2026-07-06 12:52:42 | INFO     | memory.store | Stored memory [limited] from system: memory 5
+2026-07-06 12:52:42 | INFO     | memory.store | Stored memory [limited] from system: memory 6
+2026-07-06 12:52:42 | INFO     | memory.store | Stored memory [limited] from system: memory 7
+2026-07-06 12:52:42 | INFO     | memory.store | Stored memory [limited] from system: memory 8
+2026-07-06 12:52:42 | INFO     | memory.store | Stored memory [limited] from system: memory 9
+2026-07-06 12:52:42 | INFO     | memory.store | Stored memory [alpha] from system: tagged
+2026-07-06 12:52:42 | INFO     | memory.store | Stored memory [beta] from system: tagged too
+2026-07-06 12:52:42 | INFO     | memory.store | Stored memory [compat] from system: backward compat test
+2026-07-06 12:52:42 | INFO     | plugins.manager | Loaded plugin: fake_plugin v1.0.0
+2026-07-06 12:52:42 | INFO     | plugins.manager | Loaded plugin: fake_plugin v1.0.0
+2026-07-06 12:52:42 | WARNING  | plugins.manager | Plugin 'fake_plugin' already registered — overwriting
+2026-07-06 12:52:42 | INFO     | plugins.manager | Loaded plugin: fake_plugin v1.0.0
+2026-07-06 12:52:42 | INFO     | plugins.manager | Loaded plugin: fake_plugin v1.0.0
+2026-07-06 12:52:42 | INFO     | plugins.manager | Loaded plugin: fake_plugin v1.0.0
+2026-07-06 12:52:42 | INFO     | reasoning.graph | Asserted fact: device_1 -has_firmware-> v1.0
+2026-07-06 12:52:42 | INFO     | reasoning.graph | Asserted fact: dev1 -status-> online
+2026-07-06 12:52:42 | INFO     | reasoning.graph | Asserted fact: dev2 -status-> offline
+2026-07-06 12:52:42 | INFO     | reasoning.graph | Asserted fact: dev1 -rel-> obj1
+2026-07-06 12:52:42 | INFO     | reasoning.graph | Asserted fact: dev2 -rel-> obj2
+2026-07-06 12:52:42 | INFO     | reasoning.graph | Asserted fact: device_2 -status-> online
+2026-07-06 12:57:36 | INFO     | agents.manager | Registered agent: fake_agent
+2026-07-06 12:57:36 | INFO     | agents.manager | Registered agent: fake_agent
+2026-07-06 12:57:36 | INFO     | agents.manager | Dispatching task to agent 'fake_agent': {}
+2026-07-06 12:57:36 | INFO     | core.container | Registered service: config
+2026-07-06 12:57:36 | INFO     | core.container | Registered service: db_engine
+2026-07-06 12:57:36 | INFO     | core.container | Registered service: session_factory
+2026-07-06 12:57:36 | INFO     | core.container | Registered service: memory_api
+2026-07-06 12:57:36 | INFO     | core.container | Registered service: reasoning_api
+2026-07-06 12:57:36 | INFO     | core.container | Registered service: plugin_api
+2026-07-06 12:57:36 | INFO     | core.container | Registered service: agent_api
+2026-07-06 12:57:36 | INFO     | core.container | Registered service: device_api
+2026-07-06 12:57:36 | INFO     | plugins.manager | Loaded plugin: echo v0.1.0
+2026-07-06 12:57:36 | INFO     | agents.manager | Registered agent: echo_agent
+2026-07-06 12:57:36 | INFO     | agents.manager | Registered agent: engineering_agent
+2026-07-06 12:57:36 | INFO     | core.scheduler | Scheduled job 'heartbeat' every 30s
+2026-07-06 12:57:36 | INFO     | core.scheduler | Scheduler started
+2026-07-06 12:57:36 | INFO     | core.container | Registered service: scheduler
+2026-07-06 12:57:36 | INFO     | core.bootstrap | Startup complete — Phase Alpha milestone checklist online
+2026-07-06 12:57:36 | INFO     | core.container | Registered service: config
+2026-07-06 12:57:36 | INFO     | core.container | Registered service: db_engine
+2026-07-06 12:57:36 | INFO     | core.container | Registered service: session_factory
+2026-07-06 12:57:36 | INFO     | core.container | Registered service: memory_api
+2026-07-06 12:57:36 | INFO     | core.container | Registered service: reasoning_api
+2026-07-06 12:57:36 | INFO     | core.container | Registered service: plugin_api
+2026-07-06 12:57:36 | INFO     | core.container | Registered service: agent_api
+2026-07-06 12:57:36 | INFO     | core.container | Registered service: device_api
+2026-07-06 12:57:36 | WARNING  | plugins.manager | Plugin 'echo' already registered — overwriting
+2026-07-06 12:57:36 | INFO     | plugins.manager | Loaded plugin: echo v0.1.0
+2026-07-06 12:57:36 | INFO     | agents.manager | Registered agent: echo_agent
+2026-07-06 12:57:36 | INFO     | agents.manager | Registered agent: engineering_agent
+2026-07-06 12:57:36 | INFO     | core.scheduler | Scheduled job 'heartbeat' every 30s
+2026-07-06 12:57:36 | INFO     | core.container | Registered service: scheduler
+2026-07-06 12:57:36 | INFO     | core.bootstrap | Startup complete — Phase Alpha milestone checklist online
+2026-07-06 12:57:36 | INFO     | core.container | Registered service: config
+2026-07-06 12:57:36 | INFO     | core.container | Registered service: db_engine
+2026-07-06 12:57:36 | INFO     | core.container | Registered service: session_factory
+2026-07-06 12:57:36 | INFO     | core.container | Registered service: memory_api
+2026-07-06 12:57:36 | INFO     | core.container | Registered service: reasoning_api
+2026-07-06 12:57:36 | INFO     | core.container | Registered service: plugin_api
+2026-07-06 12:57:36 | INFO     | core.container | Registered service: agent_api
+2026-07-06 12:57:36 | INFO     | core.container | Registered service: device_api
+2026-07-06 12:57:36 | WARNING  | plugins.manager | Plugin 'echo' already registered — overwriting
+2026-07-06 12:57:36 | INFO     | plugins.manager | Loaded plugin: echo v0.1.0
+2026-07-06 12:57:36 | INFO     | agents.manager | Registered agent: echo_agent
+2026-07-06 12:57:36 | INFO     | agents.manager | Registered agent: engineering_agent
+2026-07-06 12:57:36 | INFO     | core.scheduler | Scheduled job 'heartbeat' every 30s
+2026-07-06 12:57:36 | INFO     | core.container | Registered service: scheduler
+2026-07-06 12:57:36 | INFO     | core.bootstrap | Startup complete — Phase Alpha milestone checklist online
+2026-07-06 12:57:36 | INFO     | core.container | Registered service: config
+2026-07-06 12:57:36 | INFO     | core.container | Registered service: db_engine
+2026-07-06 12:57:36 | INFO     | core.container | Registered service: session_factory
+2026-07-06 12:57:36 | INFO     | core.container | Registered service: memory_api
+2026-07-06 12:57:36 | INFO     | core.container | Registered service: reasoning_api
+2026-07-06 12:57:36 | INFO     | core.container | Registered service: plugin_api
+2026-07-06 12:57:36 | INFO     | core.container | Registered service: agent_api
+2026-07-06 12:57:36 | INFO     | core.container | Registered service: device_api
+2026-07-06 12:57:36 | WARNING  | plugins.manager | Plugin 'echo' already registered — overwriting
+2026-07-06 12:57:36 | INFO     | plugins.manager | Loaded plugin: echo v0.1.0
+2026-07-06 12:57:36 | INFO     | agents.manager | Registered agent: echo_agent
+2026-07-06 12:57:36 | INFO     | agents.manager | Registered agent: engineering_agent
+2026-07-06 12:57:36 | INFO     | core.scheduler | Scheduled job 'heartbeat' every 30s
+2026-07-06 12:57:36 | INFO     | core.container | Registered service: scheduler
+2026-07-06 12:57:36 | INFO     | core.bootstrap | Startup complete — Phase Alpha milestone checklist online
+2026-07-06 12:57:36 | INFO     | core.container | Registered service: foo
+2026-07-06 12:57:36 | INFO     | core.container | Registered service: a
+2026-07-06 12:57:36 | INFO     | core.container | Registered service: b
+2026-07-06 12:57:36 | INFO     | core.container | Registered service: foo
+2026-07-06 12:57:36 | INFO     | core.container | Registered service: foo
+2026-07-06 12:57:36 | INFO     | devices.registry | Registered device: dev1 (transport=simulated, ownership_declared=False)
+2026-07-06 12:57:36 | INFO     | devices.registry | Registered device: dev1 (transport=simulated, ownership_declared=False)
+2026-07-06 12:57:36 | INFO     | devices.registry | Unregistered device: dev1
+2026-07-06 12:57:36 | INFO     | devices.registry | Registered device: dev1 (transport=simulated, ownership_declared=False)
+2026-07-06 12:57:36 | INFO     | memory.store | Stored memory [test] from system: hello world
+2026-07-06 12:57:36 | INFO     | memory.store | Stored memory [general] from system: general memory
+2026-07-06 12:57:36 | INFO     | memory.store | Stored memory [other] from system: other memory
+2026-07-06 12:57:36 | INFO     | memory.store | Stored memory [limited] from system: memory 0
+2026-07-06 12:57:36 | INFO     | memory.store | Stored memory [limited] from system: memory 1
+2026-07-06 12:57:36 | INFO     | memory.store | Stored memory [limited] from system: memory 2
+2026-07-06 12:57:36 | INFO     | memory.store | Stored memory [limited] from system: memory 3
+2026-07-06 12:57:36 | INFO     | memory.store | Stored memory [limited] from system: memory 4
+2026-07-06 12:57:36 | INFO     | memory.store | Stored memory [limited] from system: memory 5
+2026-07-06 12:57:36 | INFO     | memory.store | Stored memory [limited] from system: memory 6
+2026-07-06 12:57:36 | INFO     | memory.store | Stored memory [limited] from system: memory 7
+2026-07-06 12:57:36 | INFO     | memory.store | Stored memory [limited] from system: memory 8
+2026-07-06 12:57:36 | INFO     | memory.store | Stored memory [limited] from system: memory 9
+2026-07-06 12:57:36 | INFO     | memory.store | Stored memory [alpha] from system: tagged
+2026-07-06 12:57:36 | INFO     | memory.store | Stored memory [beta] from system: tagged too
+2026-07-06 12:57:36 | INFO     | memory.store | Stored memory [compat] from system: backward compat test
+2026-07-06 12:57:36 | INFO     | plugins.manager | Loaded plugin: fake_plugin v1.0.0
+2026-07-06 12:57:36 | INFO     | plugins.manager | Loaded plugin: fake_plugin v1.0.0
+2026-07-06 12:57:36 | WARNING  | plugins.manager | Plugin 'fake_plugin' already registered — overwriting
+2026-07-06 12:57:36 | INFO     | plugins.manager | Loaded plugin: fake_plugin v1.0.0
+2026-07-06 12:57:36 | INFO     | plugins.manager | Loaded plugin: fake_plugin v1.0.0
+2026-07-06 12:57:36 | INFO     | plugins.manager | Loaded plugin: fake_plugin v1.0.0
+2026-07-06 12:57:36 | INFO     | reasoning.graph | Asserted fact: device_1 -has_firmware-> v1.0
+2026-07-06 12:57:36 | INFO     | reasoning.graph | Asserted fact: dev1 -status-> online
+2026-07-06 12:57:36 | INFO     | reasoning.graph | Asserted fact: dev2 -status-> offline
+2026-07-06 12:57:37 | INFO     | reasoning.graph | Asserted fact: dev1 -rel-> obj1
+2026-07-06 12:57:37 | INFO     | reasoning.graph | Asserted fact: dev2 -rel-> obj2
+2026-07-06 12:57:37 | INFO     | reasoning.graph | Asserted fact: device_2 -status-> online
+2026-07-06 12:58:43 | INFO     | __main__ | === HAPPY PATH START ===
+2026-07-06 12:58:43 | INFO     | core.container | Registered service: config
+2026-07-06 12:58:43 | INFO     | core.container | Registered service: db_engine
+2026-07-06 12:58:43 | INFO     | core.container | Registered service: session_factory
+2026-07-06 12:58:43 | INFO     | core.container | Registered service: memory_api
+2026-07-06 12:58:43 | INFO     | core.container | Registered service: reasoning_api
+2026-07-06 12:58:43 | INFO     | core.container | Registered service: plugin_api
+2026-07-06 12:58:43 | INFO     | core.container | Registered service: agent_api
+2026-07-06 12:58:43 | INFO     | core.container | Registered service: device_api
+2026-07-06 12:58:43 | INFO     | plugins.manager | Loaded plugin: echo v0.1.0
+2026-07-06 12:58:43 | INFO     | agents.manager | Registered agent: echo_agent
+2026-07-06 12:58:43 | INFO     | agents.manager | Registered agent: engineering_agent
+2026-07-06 12:58:43 | INFO     | core.scheduler | Scheduled job 'heartbeat' every 30s
+2026-07-06 12:58:43 | INFO     | core.scheduler | Scheduler started
+2026-07-06 12:58:43 | INFO     | core.container | Registered service: scheduler
+2026-07-06 12:58:43 | INFO     | core.bootstrap | Startup complete — Phase Alpha milestone checklist online
+2026-07-06 12:58:43 | INFO     | memory.store | Stored memory [plugin_run] from echo: Echo plugin ran with: hello from happy path
+2026-07-06 12:58:43 | INFO     | __main__ | [plugin] echo ran -> {'echoed': 'hello from happy path', 'plugin': 'echo'}
+2026-07-06 12:58:43 | INFO     | agents.manager | Dispatching task to agent 'echo_agent': {'device_id': 'happy_device', 'status': 'seen'}
+2026-07-06 12:58:43 | INFO     | reasoning.graph | Asserted fact: happy_device -status-> seen
+2026-07-06 12:58:43 | INFO     | __main__ | [agent] echo_agent dispatched -> {'agent': 'echo_agent', 'device_id': 'happy_device', 'recorded_status': 'seen'}
+2026-07-06 12:58:43 | INFO     | devices.registry | Registered device: happy_device (transport=simulated, ownership_declared=True)
+2026-07-06 12:58:43 | INFO     | reasoning.graph | Asserted fact: happy_device -event-> connected
+2026-07-06 12:58:43 | INFO     | __main__ | [device] registered happy_device (transport=simulated)
+2026-07-06 12:58:43 | INFO     | memory.store | Stored memory [happy_path] from demo: Happy path executed successfully
+2026-07-06 12:58:43 | INFO     | __main__ | [memory] stored entry 2
+2026-07-06 12:58:43 | INFO     | __main__ | [reasoning] found 2 fact(s) for happy_device
+2026-07-06 12:58:43 | INFO     | __main__ |   -> status: seen
+2026-07-06 12:58:43 | INFO     | __main__ |   -> event: connected
+2026-07-06 12:58:43 | INFO     | digital_twin.twin | Built twin for happy_device: state=online, health=1.0, 2 history entries
+2026-07-06 12:58:43 | INFO     | __main__ | [twin] built twin for happy_device: state=online, health=1.0
+2026-07-06 12:58:43 | INFO     | __main__ | [report] {'platform': 'Prometheus v0.1.0', 'plugins_loaded': [{'name': 'echo', 'version': '0.1.0'}], 'agents_loaded': ['echo_agent', 'engineering_agent'], 'devices_registered': 1, 'services_registered': ['config', 'db_engine', 'session_factory', 'memory_api', 'reasoning_api', 'plugin_api', 'agent_api', 'device_api', 'scheduler'], 'memory_entries': 2, 'knowledge_facts': 26, 'status': 'ok'}
+2026-07-06 12:58:43 | INFO     | __main__ | === HAPPY PATH COMPLETE ===
+2026-07-06 12:59:06 | INFO     | agents.manager | Registered agent: fake_agent
+2026-07-06 12:59:06 | INFO     | agents.manager | Registered agent: fake_agent
+2026-07-06 12:59:06 | INFO     | agents.manager | Dispatching task to agent 'fake_agent': {}
+2026-07-06 12:59:06 | INFO     | core.container | Registered service: config
+2026-07-06 12:59:06 | INFO     | core.container | Registered service: db_engine
+2026-07-06 12:59:06 | INFO     | core.container | Registered service: session_factory
+2026-07-06 12:59:06 | INFO     | core.container | Registered service: memory_api
+2026-07-06 12:59:06 | INFO     | core.container | Registered service: reasoning_api
+2026-07-06 12:59:06 | INFO     | core.container | Registered service: plugin_api
+2026-07-06 12:59:06 | INFO     | core.container | Registered service: agent_api
+2026-07-06 12:59:06 | INFO     | core.container | Registered service: device_api
+2026-07-06 12:59:06 | INFO     | plugins.manager | Loaded plugin: echo v0.1.0
+2026-07-06 12:59:06 | INFO     | agents.manager | Registered agent: echo_agent
+2026-07-06 12:59:06 | INFO     | agents.manager | Registered agent: engineering_agent
+2026-07-06 12:59:06 | INFO     | core.scheduler | Scheduled job 'heartbeat' every 30s
+2026-07-06 12:59:06 | INFO     | core.scheduler | Scheduler started
+2026-07-06 12:59:06 | INFO     | core.container | Registered service: scheduler
+2026-07-06 12:59:06 | INFO     | core.bootstrap | Startup complete — Phase Alpha milestone checklist online
+2026-07-06 12:59:06 | INFO     | core.container | Registered service: config
+2026-07-06 12:59:06 | INFO     | core.container | Registered service: db_engine
+2026-07-06 12:59:06 | INFO     | core.container | Registered service: session_factory
+2026-07-06 12:59:06 | INFO     | core.container | Registered service: memory_api
+2026-07-06 12:59:06 | INFO     | core.container | Registered service: reasoning_api
+2026-07-06 12:59:06 | INFO     | core.container | Registered service: plugin_api
+2026-07-06 12:59:06 | INFO     | core.container | Registered service: agent_api
+2026-07-06 12:59:06 | INFO     | core.container | Registered service: device_api
+2026-07-06 12:59:06 | WARNING  | plugins.manager | Plugin 'echo' already registered — overwriting
+2026-07-06 12:59:06 | INFO     | plugins.manager | Loaded plugin: echo v0.1.0
+2026-07-06 12:59:06 | INFO     | agents.manager | Registered agent: echo_agent
+2026-07-06 12:59:06 | INFO     | agents.manager | Registered agent: engineering_agent
+2026-07-06 12:59:06 | INFO     | core.scheduler | Scheduled job 'heartbeat' every 30s
+2026-07-06 12:59:06 | INFO     | core.container | Registered service: scheduler
+2026-07-06 12:59:06 | INFO     | core.bootstrap | Startup complete — Phase Alpha milestone checklist online
+2026-07-06 12:59:06 | INFO     | core.container | Registered service: config
+2026-07-06 12:59:06 | INFO     | core.container | Registered service: db_engine
+2026-07-06 12:59:06 | INFO     | core.container | Registered service: session_factory
+2026-07-06 12:59:06 | INFO     | core.container | Registered service: memory_api
+2026-07-06 12:59:06 | INFO     | core.container | Registered service: reasoning_api
+2026-07-06 12:59:06 | INFO     | core.container | Registered service: plugin_api
+2026-07-06 12:59:06 | INFO     | core.container | Registered service: agent_api
+2026-07-06 12:59:06 | INFO     | core.container | Registered service: device_api
+2026-07-06 12:59:06 | WARNING  | plugins.manager | Plugin 'echo' already registered — overwriting
+2026-07-06 12:59:06 | INFO     | plugins.manager | Loaded plugin: echo v0.1.0
+2026-07-06 12:59:06 | INFO     | agents.manager | Registered agent: echo_agent
+2026-07-06 12:59:06 | INFO     | agents.manager | Registered agent: engineering_agent
+2026-07-06 12:59:06 | INFO     | core.scheduler | Scheduled job 'heartbeat' every 30s
+2026-07-06 12:59:06 | INFO     | core.container | Registered service: scheduler
+2026-07-06 12:59:06 | INFO     | core.bootstrap | Startup complete — Phase Alpha milestone checklist online
+2026-07-06 12:59:06 | INFO     | core.container | Registered service: config
+2026-07-06 12:59:06 | INFO     | core.container | Registered service: db_engine
+2026-07-06 12:59:06 | INFO     | core.container | Registered service: session_factory
+2026-07-06 12:59:06 | INFO     | core.container | Registered service: memory_api
+2026-07-06 12:59:06 | INFO     | core.container | Registered service: reasoning_api
+2026-07-06 12:59:06 | INFO     | core.container | Registered service: plugin_api
+2026-07-06 12:59:06 | INFO     | core.container | Registered service: agent_api
+2026-07-06 12:59:06 | INFO     | core.container | Registered service: device_api
+2026-07-06 12:59:06 | WARNING  | plugins.manager | Plugin 'echo' already registered — overwriting
+2026-07-06 12:59:06 | INFO     | plugins.manager | Loaded plugin: echo v0.1.0
+2026-07-06 12:59:06 | INFO     | agents.manager | Registered agent: echo_agent
+2026-07-06 12:59:06 | INFO     | agents.manager | Registered agent: engineering_agent
+2026-07-06 12:59:06 | INFO     | core.scheduler | Scheduled job 'heartbeat' every 30s
+2026-07-06 12:59:06 | INFO     | core.container | Registered service: scheduler
+2026-07-06 12:59:06 | INFO     | core.bootstrap | Startup complete — Phase Alpha milestone checklist online
+2026-07-06 12:59:06 | INFO     | core.container | Registered service: foo
+2026-07-06 12:59:06 | INFO     | core.container | Registered service: a
+2026-07-06 12:59:06 | INFO     | core.container | Registered service: b
+2026-07-06 12:59:06 | INFO     | core.container | Registered service: foo
+2026-07-06 12:59:06 | INFO     | core.container | Registered service: foo
+2026-07-06 12:59:06 | INFO     | devices.registry | Registered device: dev1 (transport=simulated, ownership_declared=False)
+2026-07-06 12:59:06 | INFO     | devices.registry | Registered device: dev1 (transport=simulated, ownership_declared=False)
+2026-07-06 12:59:06 | INFO     | devices.registry | Unregistered device: dev1
+2026-07-06 12:59:06 | INFO     | devices.registry | Registered device: dev1 (transport=simulated, ownership_declared=False)
+2026-07-06 12:59:06 | INFO     | memory.store | Stored memory [test] from system: hello world
+2026-07-06 12:59:06 | INFO     | memory.store | Stored memory [general] from system: general memory
+2026-07-06 12:59:06 | INFO     | memory.store | Stored memory [other] from system: other memory
+2026-07-06 12:59:06 | INFO     | memory.store | Stored memory [limited] from system: memory 0
+2026-07-06 12:59:06 | INFO     | memory.store | Stored memory [limited] from system: memory 1
+2026-07-06 12:59:06 | INFO     | memory.store | Stored memory [limited] from system: memory 2
+2026-07-06 12:59:06 | INFO     | memory.store | Stored memory [limited] from system: memory 3
+2026-07-06 12:59:06 | INFO     | memory.store | Stored memory [limited] from system: memory 4
+2026-07-06 12:59:06 | INFO     | memory.store | Stored memory [limited] from system: memory 5
+2026-07-06 12:59:06 | INFO     | memory.store | Stored memory [limited] from system: memory 6
+2026-07-06 12:59:06 | INFO     | memory.store | Stored memory [limited] from system: memory 7
+2026-07-06 12:59:06 | INFO     | memory.store | Stored memory [limited] from system: memory 8
+2026-07-06 12:59:06 | INFO     | memory.store | Stored memory [limited] from system: memory 9
+2026-07-06 12:59:06 | INFO     | memory.store | Stored memory [alpha] from system: tagged
+2026-07-06 12:59:06 | INFO     | memory.store | Stored memory [beta] from system: tagged too
+2026-07-06 12:59:06 | INFO     | memory.store | Stored memory [compat] from system: backward compat test
+2026-07-06 12:59:06 | INFO     | plugins.manager | Loaded plugin: fake_plugin v1.0.0
+2026-07-06 12:59:06 | INFO     | plugins.manager | Loaded plugin: fake_plugin v1.0.0
+2026-07-06 12:59:06 | WARNING  | plugins.manager | Plugin 'fake_plugin' already registered — overwriting
+2026-07-06 12:59:06 | INFO     | plugins.manager | Loaded plugin: fake_plugin v1.0.0
+2026-07-06 12:59:06 | INFO     | plugins.manager | Loaded plugin: fake_plugin v1.0.0
+2026-07-06 12:59:06 | INFO     | plugins.manager | Loaded plugin: fake_plugin v1.0.0
+2026-07-06 12:59:06 | INFO     | reasoning.graph | Asserted fact: device_1 -has_firmware-> v1.0
+2026-07-06 12:59:06 | INFO     | reasoning.graph | Asserted fact: dev1 -status-> online
+2026-07-06 12:59:06 | INFO     | reasoning.graph | Asserted fact: dev2 -status-> offline
+2026-07-06 12:59:06 | INFO     | reasoning.graph | Asserted fact: dev1 -rel-> obj1
+2026-07-06 12:59:06 | INFO     | reasoning.graph | Asserted fact: dev2 -rel-> obj2
+2026-07-06 12:59:06 | INFO     | reasoning.graph | Asserted fact: device_2 -status-> online
+2026-07-06 13:01:45 | INFO     | agents.manager | Registered agent: fake_agent
+2026-07-06 13:01:45 | INFO     | agents.manager | Registered agent: fake_agent
+2026-07-06 13:01:45 | INFO     | agents.manager | Dispatching task to agent 'fake_agent': {}
+2026-07-06 13:01:45 | INFO     | core.container | Registered service: config
+2026-07-06 13:01:45 | INFO     | core.container | Registered service: db_engine
+2026-07-06 13:01:45 | INFO     | core.container | Registered service: session_factory
+2026-07-06 13:01:45 | INFO     | core.container | Registered service: memory_api
+2026-07-06 13:01:45 | INFO     | core.container | Registered service: reasoning_api
+2026-07-06 13:01:45 | INFO     | core.container | Registered service: plugin_api
+2026-07-06 13:01:45 | INFO     | core.container | Registered service: agent_api
+2026-07-06 13:01:45 | INFO     | core.container | Registered service: device_api
+2026-07-06 13:01:45 | INFO     | plugins.manager | Loaded plugin: echo v0.1.0
+2026-07-06 13:01:45 | INFO     | agents.manager | Registered agent: echo_agent
+2026-07-06 13:01:45 | INFO     | agents.manager | Registered agent: engineering_agent
+2026-07-06 13:01:45 | INFO     | core.scheduler | Scheduled job 'heartbeat' every 30s
+2026-07-06 13:01:45 | INFO     | core.scheduler | Scheduler started
+2026-07-06 13:01:45 | INFO     | core.container | Registered service: scheduler
+2026-07-06 13:01:45 | INFO     | core.bootstrap | Startup complete — Phase Alpha milestone checklist online
+2026-07-06 13:01:45 | INFO     | core.container | Registered service: config
+2026-07-06 13:01:45 | INFO     | core.container | Registered service: db_engine
+2026-07-06 13:01:45 | INFO     | core.container | Registered service: session_factory
+2026-07-06 13:01:45 | INFO     | core.container | Registered service: memory_api
+2026-07-06 13:01:45 | INFO     | core.container | Registered service: reasoning_api
+2026-07-06 13:01:45 | INFO     | core.container | Registered service: plugin_api
+2026-07-06 13:01:45 | INFO     | core.container | Registered service: agent_api
+2026-07-06 13:01:45 | INFO     | core.container | Registered service: device_api
+2026-07-06 13:01:45 | WARNING  | plugins.manager | Plugin 'echo' already registered — overwriting
+2026-07-06 13:01:45 | INFO     | plugins.manager | Loaded plugin: echo v0.1.0
+2026-07-06 13:01:45 | INFO     | agents.manager | Registered agent: echo_agent
+2026-07-06 13:01:45 | INFO     | agents.manager | Registered agent: engineering_agent
+2026-07-06 13:01:45 | INFO     | core.scheduler | Scheduled job 'heartbeat' every 30s
+2026-07-06 13:01:45 | INFO     | core.container | Registered service: scheduler
+2026-07-06 13:01:45 | INFO     | core.bootstrap | Startup complete — Phase Alpha milestone checklist online
+2026-07-06 13:01:45 | INFO     | core.container | Registered service: config
+2026-07-06 13:01:45 | INFO     | core.container | Registered service: db_engine
+2026-07-06 13:01:45 | INFO     | core.container | Registered service: session_factory
+2026-07-06 13:01:45 | INFO     | core.container | Registered service: memory_api
+2026-07-06 13:01:45 | INFO     | core.container | Registered service: reasoning_api
+2026-07-06 13:01:45 | INFO     | core.container | Registered service: plugin_api
+2026-07-06 13:01:45 | INFO     | core.container | Registered service: agent_api
+2026-07-06 13:01:45 | INFO     | core.container | Registered service: device_api
+2026-07-06 13:01:45 | WARNING  | plugins.manager | Plugin 'echo' already registered — overwriting
+2026-07-06 13:01:45 | INFO     | plugins.manager | Loaded plugin: echo v0.1.0
+2026-07-06 13:01:45 | INFO     | agents.manager | Registered agent: echo_agent
+2026-07-06 13:01:45 | INFO     | agents.manager | Registered agent: engineering_agent
+2026-07-06 13:01:45 | INFO     | core.scheduler | Scheduled job 'heartbeat' every 30s
+2026-07-06 13:01:45 | INFO     | core.container | Registered service: scheduler
+2026-07-06 13:01:45 | INFO     | core.bootstrap | Startup complete — Phase Alpha milestone checklist online
+2026-07-06 13:01:45 | INFO     | core.container | Registered service: config
+2026-07-06 13:01:45 | INFO     | core.container | Registered service: db_engine
+2026-07-06 13:01:45 | INFO     | core.container | Registered service: session_factory
+2026-07-06 13:01:45 | INFO     | core.container | Registered service: memory_api
+2026-07-06 13:01:45 | INFO     | core.container | Registered service: reasoning_api
+2026-07-06 13:01:45 | INFO     | core.container | Registered service: plugin_api
+2026-07-06 13:01:45 | INFO     | core.container | Registered service: agent_api
+2026-07-06 13:01:45 | INFO     | core.container | Registered service: device_api
+2026-07-06 13:01:45 | WARNING  | plugins.manager | Plugin 'echo' already registered — overwriting
+2026-07-06 13:01:45 | INFO     | plugins.manager | Loaded plugin: echo v0.1.0
+2026-07-06 13:01:45 | INFO     | agents.manager | Registered agent: echo_agent
+2026-07-06 13:01:45 | INFO     | agents.manager | Registered agent: engineering_agent
+2026-07-06 13:01:45 | INFO     | core.scheduler | Scheduled job 'heartbeat' every 30s
+2026-07-06 13:01:45 | INFO     | core.container | Registered service: scheduler
+2026-07-06 13:01:45 | INFO     | core.bootstrap | Startup complete — Phase Alpha milestone checklist online
+2026-07-06 13:01:45 | INFO     | core.container | Registered service: foo
+2026-07-06 13:01:45 | INFO     | core.container | Registered service: a
+2026-07-06 13:01:45 | INFO     | core.container | Registered service: b
+2026-07-06 13:01:45 | INFO     | core.container | Registered service: foo
+2026-07-06 13:01:45 | INFO     | core.container | Registered service: foo
+2026-07-06 13:01:45 | INFO     | devices.registry | Registered device: dev1 (transport=simulated, ownership_declared=False)
+2026-07-06 13:01:45 | INFO     | devices.registry | Registered device: dev1 (transport=simulated, ownership_declared=False)
+2026-07-06 13:01:45 | INFO     | devices.registry | Unregistered device: dev1
+2026-07-06 13:01:45 | INFO     | devices.registry | Registered device: dev1 (transport=simulated, ownership_declared=False)
+2026-07-06 13:01:46 | INFO     | memory.store | Stored memory [test] from system: hello world
+2026-07-06 13:01:46 | INFO     | memory.store | Stored memory [general] from system: general memory
+2026-07-06 13:01:46 | INFO     | memory.store | Stored memory [other] from system: other memory
+2026-07-06 13:01:46 | INFO     | memory.store | Stored memory [limited] from system: memory 0
+2026-07-06 13:01:46 | INFO     | memory.store | Stored memory [limited] from system: memory 1
+2026-07-06 13:01:46 | INFO     | memory.store | Stored memory [limited] from system: memory 2
+2026-07-06 13:01:46 | INFO     | memory.store | Stored memory [limited] from system: memory 3
+2026-07-06 13:01:46 | INFO     | memory.store | Stored memory [limited] from system: memory 4
+2026-07-06 13:01:46 | INFO     | memory.store | Stored memory [limited] from system: memory 5
+2026-07-06 13:01:46 | INFO     | memory.store | Stored memory [limited] from system: memory 6
+2026-07-06 13:01:46 | INFO     | memory.store | Stored memory [limited] from system: memory 7
+2026-07-06 13:01:46 | INFO     | memory.store | Stored memory [limited] from system: memory 8
+2026-07-06 13:01:46 | INFO     | memory.store | Stored memory [limited] from system: memory 9
+2026-07-06 13:01:46 | INFO     | memory.store | Stored memory [alpha] from system: tagged
+2026-07-06 13:01:46 | INFO     | memory.store | Stored memory [beta] from system: tagged too
+2026-07-06 13:01:46 | INFO     | memory.store | Stored memory [compat] from system: backward compat test
+2026-07-06 13:01:46 | INFO     | plugins.manager | Loaded plugin: fake_plugin v1.0.0
+2026-07-06 13:01:46 | INFO     | plugins.manager | Loaded plugin: fake_plugin v1.0.0
+2026-07-06 13:01:46 | WARNING  | plugins.manager | Plugin 'fake_plugin' already registered — overwriting
+2026-07-06 13:01:46 | INFO     | plugins.manager | Loaded plugin: fake_plugin v1.0.0
+2026-07-06 13:01:46 | INFO     | plugins.manager | Loaded plugin: fake_plugin v1.0.0
+2026-07-06 13:01:46 | INFO     | plugins.manager | Loaded plugin: fake_plugin v1.0.0
+2026-07-06 13:01:46 | INFO     | reasoning.graph | Asserted fact: device_1 -has_firmware-> v1.0
+2026-07-06 13:01:46 | INFO     | reasoning.graph | Asserted fact: dev1 -status-> online
+2026-07-06 13:01:46 | INFO     | reasoning.graph | Asserted fact: dev2 -status-> offline
+2026-07-06 13:01:46 | INFO     | reasoning.graph | Asserted fact: dev1 -rel-> obj1
+2026-07-06 13:01:46 | INFO     | reasoning.graph | Asserted fact: dev2 -rel-> obj2
+2026-07-06 13:01:46 | INFO     | reasoning.graph | Asserted fact: device_2 -status-> online

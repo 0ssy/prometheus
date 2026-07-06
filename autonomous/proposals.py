@@ -7,6 +7,7 @@ free-form code execution. v0.1 supports exactly one change_type:
 the whitelist deliberately, one change_type at a time, rather than
 ever accepting arbitrary code to run.
 """
+
 from dataclasses import dataclass, asdict
 
 SUPPORTED_CHANGE_TYPES = ("add_twin_field",)
@@ -31,4 +32,6 @@ class Proposal:
             )
         if self.change_type == "add_twin_field":
             if "field_name" not in self.payload or "default_value" not in self.payload:
-                raise ValueError("add_twin_field requires payload keys: field_name, default_value")
+                raise ValueError(
+                    "add_twin_field requires payload keys: field_name, default_value"
+                )

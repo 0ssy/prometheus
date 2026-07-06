@@ -11,6 +11,7 @@ else (SimulatedDevice, the API, Phase Alpha) without crashing on
 import — the error only surfaces if you actually try to use a real
 serial device.
 """
+
 from typing import Any
 from .base import Device
 from core.logger import get_logger
@@ -19,6 +20,7 @@ logger = get_logger(__name__)
 
 try:
     import serial as pyserial
+
     _PYSERIAL_AVAILABLE = True
 except ImportError:
     pyserial = None
@@ -54,7 +56,9 @@ class SerialDevice(Device):
         if pyserial is None:
             raise RuntimeError("pyserial is not installed")
         self._conn = pyserial.Serial(self.port, self.baudrate, timeout=self.timeout)
-        logger.info(f"Serial device {self.device_id} connected on {self.port} @ {self.baudrate}")
+        logger.info(
+            f"Serial device {self.device_id} connected on {self.port} @ {self.baudrate}"
+        )
 
     def disconnect(self) -> None:
         if self._conn and self._conn.is_open:

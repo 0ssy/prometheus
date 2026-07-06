@@ -8,6 +8,7 @@ READ-ONLY. Reports size and hash always. If the file starts with the
 ESP32 image magic byte (0xE9), attempts a best-effort header parse.
 Anything else is reported honestly as "unknown_format".
 """
+
 from dataclasses import dataclass, asdict
 import struct
 from .crypto_verify import sha256_hex
@@ -48,9 +49,18 @@ def inspect_firmware(path: str, ownership_declared: bool) -> FirmwareReport:
         entry_point = struct.unpack("<I", data[4:8])[0]
         logger.info(f"{path}: recognized as ESP32 image, {segment_count} segment(s)")
         return FirmwareReport(
-            path=path, size_bytes=size_bytes, sha256=digest, format="esp32_image",
+            path=path,
+            size_bytes=size_bytes,
+            sha256=digest,
+            format="esp32_image",
             details={"segment_count": segment_count, "entry_point": hex(entry_point)},
         )
 
     logger.info(f"{path}: unrecognized firmware format — reporting hash/size only")
-    return FirmwareReport(path=path, size_bytes=size_bytes, sha256=digest, format="unknown_format", details={})
+    return FirmwareReport(
+        path=path,
+        size_bytes=size_bytes,
+        sha256=digest,
+        format="unknown_format",
+        details={},
+    )

@@ -5,6 +5,7 @@ The report format matters as much as the generated change — it's what
 makes autonomous output auditable later. deployed is hardcoded False
 for v0.1 — see RFC 0004 non-goals.
 """
+
 from dataclasses import dataclass, asdict
 
 

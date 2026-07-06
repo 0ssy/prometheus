@@ -5,6 +5,7 @@ The simplest possible durable memory: a timestamped, tagged record.
 This is intentionally not clever yet. Phase Alpha's job is to prove
 memory persists across restarts, not to build semantic search.
 """
+
 from sqlalchemy import Column, Integer, String, DateTime, Text
 from datetime import datetime, timezone
 from core.database import Base
