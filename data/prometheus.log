@@ -1,0 +1,440 @@
+2026-07-05 12:30:58 | INFO     | backend.main | Starting Prometheus v0.1.0
+2026-07-05 12:30:58 | INFO     | plugins.manager | Loaded plugin: echo v0.1.0
+2026-07-05 12:30:58 | INFO     | agents.manager | Registered agent: echo_agent
+2026-07-05 12:30:58 | INFO     | core.scheduler | Scheduled job 'heartbeat' every 30s
+2026-07-05 12:30:58 | INFO     | core.scheduler | Scheduler started
+2026-07-05 12:30:58 | INFO     | backend.main | Prometheus heartbeat â€” system alive
+2026-07-05 12:30:58 | INFO     | backend.main | Startup complete â€” Phase Alpha milestone checklist online
+2026-07-05 12:31:13 | INFO     | backend.main | Starting Prometheus v0.1.0
+2026-07-05 12:31:13 | INFO     | plugins.manager | Loaded plugin: echo v0.1.0
+2026-07-05 12:31:13 | INFO     | agents.manager | Registered agent: echo_agent
+2026-07-05 12:31:13 | INFO     | core.scheduler | Scheduled job 'heartbeat' every 30s
+2026-07-05 12:31:13 | INFO     | core.scheduler | Scheduler started
+2026-07-05 12:31:13 | INFO     | backend.main | Prometheus heartbeat â€” system alive
+2026-07-05 12:31:13 | INFO     | backend.main | Startup complete â€” Phase Alpha milestone checklist online
+2026-07-05 12:31:19 | INFO     | memory.store | Stored memory [plugin_run] from echo: Echo plugin ran with: hello
+2026-07-05 12:31:19 | INFO     | agents.manager | Dispatching task to agent 'echo_agent': {'device_id': 'esp32_01', 'status': 'online'}
+2026-07-05 12:31:19 | INFO     | reasoning.graph | Asserted fact: esp32_01 -status-> online
+2026-07-05 12:31:19 | INFO     | memory.store | Stored memory [milestone] from api: test
+2026-07-05 15:37:59 | INFO     | backend.main | Starting Prometheus v0.1.0
+2026-07-05 15:37:59 | INFO     | plugins.manager | Loaded plugin: echo v0.1.0
+2026-07-05 15:37:59 | INFO     | agents.manager | Registered agent: echo_agent
+2026-07-05 15:37:59 | INFO     | core.scheduler | Scheduled job 'heartbeat' every 30s
+2026-07-05 15:37:59 | INFO     | backend.main | Prometheus heartbeat — system alive
+2026-07-05 15:37:59 | INFO     | core.scheduler | Scheduler started
+2026-07-05 15:37:59 | INFO     | backend.main | Startup complete — Phase Alpha milestone checklist online
+2026-07-05 15:38:29 | INFO     | backend.main | Prometheus heartbeat — system alive
+2026-07-05 15:38:59 | INFO     | backend.main | Prometheus heartbeat — system alive
+2026-07-05 15:39:29 | INFO     | backend.main | Prometheus heartbeat — system alive
+2026-07-05 15:39:59 | INFO     | backend.main | Prometheus heartbeat — system alive
+2026-07-05 15:40:30 | INFO     | backend.main | Prometheus heartbeat — system alive
+2026-07-05 15:41:00 | INFO     | backend.main | Prometheus heartbeat — system alive
+2026-07-05 15:41:30 | INFO     | backend.main | Prometheus heartbeat — system alive
+2026-07-05 15:42:00 | INFO     | backend.main | Prometheus heartbeat — system alive
+2026-07-05 15:42:30 | INFO     | backend.main | Prometheus heartbeat — system alive
+2026-07-05 15:43:00 | INFO     | backend.main | Prometheus heartbeat — system alive
+2026-07-05 15:43:31 | INFO     | backend.main | Prometheus heartbeat — system alive
+2026-07-05 15:44:01 | INFO     | backend.main | Prometheus heartbeat — system alive
+2026-07-05 15:44:31 | INFO     | backend.main | Prometheus heartbeat — system alive
+2026-07-05 15:45:01 | INFO     | backend.main | Prometheus heartbeat — system alive
+2026-07-05 15:45:32 | INFO     | backend.main | Prometheus heartbeat — system alive
+2026-07-05 15:46:02 | INFO     | backend.main | Prometheus heartbeat — system alive
+2026-07-05 15:46:32 | INFO     | backend.main | Prometheus heartbeat — system alive
+2026-07-05 15:47:02 | INFO     | backend.main | Prometheus heartbeat — system alive
+2026-07-05 15:47:21 | INFO     | backend.main | Starting Prometheus v0.1.0
+2026-07-05 15:47:21 | INFO     | plugins.manager | Loaded plugin: echo v0.1.0
+2026-07-05 15:47:21 | INFO     | agents.manager | Registered agent: echo_agent
+2026-07-05 15:47:21 | INFO     | core.scheduler | Scheduled job 'heartbeat' every 30s
+2026-07-05 15:47:21 | INFO     | core.scheduler | Scheduler started
+— system alive
+2026-07-05 15:47:21 | INFO     | backend.main | Startup complete — Phase Alpha milestone checklist online
+2026-07-05 16:10:09 | INFO     | backend.main | Starting Prometheus v0.1.0
+2026-07-05 16:10:09 | INFO     | plugins.manager | Loaded plugin: echo v0.1.0
+2026-07-05 16:10:09 | INFO     | agents.manager | Registered agent: echo_agent
+2026-07-05 16:10:09 | INFO     | core.scheduler | Scheduled job 'heartbeat' every 30s
+2026-07-05 16:10:09 | INFO     | backend.main | Prometheus heartbeat — system alive
+2026-07-05 16:10:09 | INFO     | core.scheduler | Scheduler started
+2026-07-05 16:10:09 | INFO     | backend.main | Startup complete — Phase Alpha milestone checklist online
+2026-07-05 16:10:22 | INFO     | devices.registry | Registered device: sim_esp32_01 (transport=simulated, ownership_declared=True)
+2026-07-05 16:10:22 | INFO     | reasoning.graph | Asserted fact: sim_esp32_01 -event-> connected
+2026-07-05 16:10:40 | INFO     | backend.main | Prometheus heartbeat — system alive
+2026-07-05 16:14:10 | INFO     | backend.main | Starting Prometheus v0.1.0
+2026-07-05 16:14:10 | INFO     | plugins.manager | Loaded plugin: echo v0.1.0
+2026-07-05 16:14:10 | INFO     | agents.manager | Registered agent: echo_agent
+2026-07-05 16:14:10 | INFO     | core.scheduler | Scheduled job 'heartbeat' every 30s
+2026-07-05 16:14:10 | INFO     | backend.main | Prometheus heartbeat — system alive
+2026-07-05 16:14:10 | INFO     | core.scheduler | Scheduler started
+2026-07-05 16:14:10 | INFO     | backend.main | Startup complete — Phase Alpha milestone checklist online
+2026-07-05 16:14:35 | INFO     | devices.registry | Registered device: sim_esp32_01 (transport=simulated, ownership_declared=True)
+2026-07-05 16:14:35 | INFO     | reasoning.graph | Asserted fact: sim_esp32_01 -event-> connected
+2026-07-05 16:14:41 | INFO     | backend.main | Prometheus heartbeat — system alive
+2026-07-05 16:14:46 | INFO     | reasoning.graph | Asserted fact: sim_esp32_01 -wrote-> hello
+2026-07-05 20:52:44 | INFO     | backend.main | Starting Prometheus v0.1.0
+2026-07-05 20:52:44 | INFO     | plugins.manager | Loaded plugin: echo v0.1.0
+2026-07-05 20:52:44 | INFO     | agents.manager | Registered agent: echo_agent
+2026-07-05 20:52:44 | INFO     | core.scheduler | Scheduled job 'heartbeat' every 30s
+2026-07-05 20:52:44 | INFO     | backend.main | Prometheus heartbeat — system alive
+2026-07-05 20:52:44 | INFO     | core.scheduler | Scheduler started
+2026-07-05 20:52:44 | INFO     | backend.main | Startup complete — Phase Alpha milestone checklist online
+2026-07-05 20:53:14 | INFO     | backend.main | Prometheus heartbeat — system alive
+2026-07-05 20:53:44 | INFO     | backend.main | Prometheus heartbeat — system alive
+2026-07-05 20:54:15 | INFO     | backend.main | Prometheus heartbeat — system alive
+2026-07-05 20:54:45 | INFO     | backend.main | Prometheus heartbeat — system alive
+2026-07-05 20:55:15 | INFO     | backend.main | Prometheus heartbeat — system alive
+2026-07-05 20:55:45 | INFO     | backend.main | Prometheus heartbeat — system alive
+2026-07-05 20:56:16 | INFO     | backend.main | Prometheus heartbeat — system alive
+2026-07-05 20:56:46 | INFO     | backend.main | Prometheus heartbeat — system alive
+2026-07-05 20:57:16 | INFO     | backend.main | Prometheus heartbeat — system alive
+2026-07-05 20:57:46 | INFO     | backend.main | Prometheus heartbeat — system alive
+2026-07-05 20:58:16 | INFO     | backend.main | Prometheus heartbeat — system alive
+2026-07-05 20:58:47 | INFO     | backend.main | Prometheus heartbeat — system alive
+2026-07-05 20:59:17 | INFO     | backend.main | Prometheus heartbeat — system alive
+2026-07-05 20:59:47 | INFO     | backend.main | Prometheus heartbeat — system alive
+2026-07-05 21:00:17 | INFO     | backend.main | Prometheus heartbeat — system alive
+2026-07-05 21:00:48 | INFO     | backend.main | Prometheus heartbeat — system alive
+2026-07-05 21:01:18 | INFO     | backend.main | Prometheus heartbeat — system alive
+2026-07-05 21:01:48 | INFO     | backend.main | Prometheus heartbeat — system alive
+2026-07-05 21:02:18 | INFO     | backend.main | Prometheus heartbeat — system alive
+2026-07-05 21:03:27 | INFO     | backend.main | Starting Prometheus v0.1.0
+2026-07-05 21:03:27 | INFO     | plugins.manager | Loaded plugin: echo v0.1.0
+2026-07-05 21:03:27 | INFO     | agents.manager | Registered agent: echo_agent
+2026-07-05 21:03:27 | INFO     | core.scheduler | Scheduled job 'heartbeat' every 30s
+2026-07-05 21:03:27 | INFO     | backend.main | Prometheus heartbeat — system alive
+2026-07-05 21:03:27 | INFO     | core.scheduler | Scheduler started
+2026-07-05 21:03:27 | INFO     | backend.main | Startup complete — Phase Alpha milestone checklist online
+2026-07-05 21:03:57 | INFO     | backend.main | Prometheus heartbeat — system alive
+2026-07-05 21:04:28 | INFO     | backend.main | Prometheus heartbeat — system alive
+2026-07-05 21:04:58 | INFO     | backend.main | Prometheus heartbeat — system alive
+2026-07-05 21:05:28 | INFO     | backend.main | Prometheus heartbeat — system alive
+2026-07-05 21:05:58 | INFO     | backend.main | Prometheus heartbeat — system alive
+2026-07-05 21:06:29 | INFO     | backend.main | Prometheus heartbeat — system alive
+2026-07-05 21:07:50 | INFO     | backend.main | Starting Prometheus v0.1.0
+2026-07-05 21:07:50 | INFO     | plugins.manager | Loaded plugin: echo v0.1.0
+2026-07-05 21:07:50 | INFO     | agents.manager | Registered agent: echo_agent
+2026-07-05 21:07:50 | INFO     | core.scheduler | Scheduled job 'heartbeat' every 30s
+2026-07-05 21:07:50 | INFO     | backend.main | Prometheus heartbeat — system alive
+2026-07-05 21:07:50 | INFO     | core.scheduler | Scheduler started
+2026-07-05 21:07:50 | INFO     | backend.main | Startup complete — Phase Alpha milestone checklist online
+2026-07-05 21:08:08 | INFO     | gamma.partition_mapper | \\.\PhysicalDrive1: parsed GPT table, 4 partitions found
+2026-07-05 21:08:08 | INFO     | reasoning.graph | Asserted fact: \\.\PhysicalDrive1 -event-> partition_table_read:gpt
+2026-07-05 21:08:20 | INFO     | backend.main | Prometheus heartbeat — system alive
+2026-07-05 21:08:50 | INFO     | backend.main | Prometheus heartbeat — system alive
+2026-07-05 21:09:20 | INFO     | backend.main | Prometheus heartbeat — system alive
+2026-07-05 21:09:51 | INFO     | backend.main | Prometheus heartbeat — system alive
+2026-07-05 21:10:21 | INFO     | backend.main | Prometheus heartbeat — system alive
+2026-07-05 21:10:51 | INFO     | backend.main | Prometheus heartbeat — system alive
+2026-07-05 21:11:22 | INFO     | backend.main | Prometheus heartbeat — system alive
+2026-07-05 21:11:52 | INFO     | backend.main | Prometheus heartbeat — system alive
+2026-07-05 21:12:22 | INFO     | backend.main | Prometheus heartbeat — system alive
+2026-07-05 21:12:52 | INFO     | backend.main | Prometheus heartbeat — system alive
+2026-07-05 21:13:22 | INFO     | backend.main | Prometheus heartbeat — system alive
+2026-07-05 21:13:53 | INFO     | backend.main | Prometheus heartbeat — system alive
+2026-07-05 21:14:23 | INFO     | backend.main | Prometheus heartbeat — system alive
+2026-07-05 21:14:53 | INFO     | backend.main | Prometheus heartbeat — system alive
+2026-07-05 21:15:23 | INFO     | backend.main | Prometheus heartbeat — system alive
+2026-07-05 21:15:54 | INFO     | backend.main | Prometheus heartbeat — system alive
+2026-07-05 21:16:24 | INFO     | backend.main | Prometheus heartbeat — system alive
+2026-07-05 21:16:54 | INFO     | backend.main | Prometheus heartbeat — system alive
+2026-07-05 21:17:24 | INFO     | backend.main | Prometheus heartbeat — system alive
+2026-07-05 21:17:55 | INFO     | backend.main | Prometheus heartbeat — system alive
+2026-07-05 21:18:25 | INFO     | backend.main | Prometheus heartbeat — system alive
+2026-07-05 21:18:56 | INFO     | backend.main | Starting Prometheus v0.1.0
+2026-07-05 21:18:56 | INFO     | plugins.manager | Loaded plugin: echo v0.1.0
+2026-07-05 21:18:56 | INFO     | agents.manager | Registered agent: echo_agent
+2026-07-05 21:18:56 | INFO     | core.scheduler | Scheduled job 'heartbeat' every 30s
+2026-07-05 21:18:56 | INFO     | backend.main | Prometheus heartbeat — system alive
+2026-07-05 21:18:56 | INFO     | core.scheduler | Scheduler started
+2026-07-05 21:18:56 | INFO     | backend.main | Startup complete — Phase Alpha milestone checklist online
+2026-07-05 21:19:06 | INFO     | backend.main | Starting Prometheus v0.1.0
+2026-07-05 21:19:06 | INFO     | plugins.manager | Loaded plugin: echo v0.1.0
+2026-07-05 21:19:06 | INFO     | agents.manager | Registered agent: echo_agent
+2026-07-05 21:19:06 | INFO     | core.scheduler | Scheduled job 'heartbeat' every 30s
+2026-07-05 21:19:06 | INFO     | backend.main | Prometheus heartbeat — system alive
+2026-07-05 21:19:06 | INFO     | core.scheduler | Scheduler started
+2026-07-05 21:19:06 | INFO     | backend.main | Startup complete — Phase Alpha milestone checklist online
+2026-07-05 21:19:19 | INFO     | backend.main | Starting Prometheus v0.1.0
+2026-07-05 21:19:19 | INFO     | plugins.manager | Loaded plugin: echo v0.1.0
+2026-07-05 21:19:19 | INFO     | agents.manager | Registered agent: echo_agent
+2026-07-05 21:19:19 | INFO     | core.scheduler | Scheduled job 'heartbeat' every 30s
+2026-07-05 21:19:19 | INFO     | backend.main | Prometheus heartbeat — system alive
+2026-07-05 21:19:19 | INFO     | core.scheduler | Scheduler started
+2026-07-05 21:19:19 | INFO     | backend.main | Startup complete — Phase Alpha milestone checklist online
+2026-07-05 21:19:31 | INFO     | backend.main | Starting Prometheus v0.1.0
+2026-07-05 21:19:31 | INFO     | plugins.manager | Loaded plugin: echo v0.1.0
+2026-07-05 21:19:31 | INFO     | agents.manager | Registered agent: echo_agent
+2026-07-05 21:19:31 | INFO     | core.scheduler | Scheduled job 'heartbeat' every 30s
+2026-07-05 21:19:31 | INFO     | backend.main | Prometheus heartbeat — system alive
+2026-07-05 21:19:31 | INFO     | backend.main | Startup complete — Phase Alpha milestone checklist online
+2026-07-05 21:19:40 | INFO     | backend.main | Starting Prometheus v0.1.0
+2026-07-05 21:19:40 | INFO     | plugins.manager | Loaded plugin: echo v0.1.0
+2026-07-05 21:19:40 | INFO     | agents.manager | Registered agent: echo_agent
+2026-07-05 21:19:40 | INFO     | core.scheduler | Scheduled job 'heartbeat' every 30s
+2026-07-05 21:19:40 | INFO     | backend.main | Prometheus heartbeat — system alive
+2026-07-05 21:19:40 | INFO     | core.scheduler | Scheduler started
+2026-07-05 21:19:40 | INFO     | backend.main | Startup complete — Phase Alpha milestone checklist online
+2026-07-05 21:21:43 | INFO     | backend.main | Starting Prometheus v0.1.0
+2026-07-05 21:21:43 | INFO     | plugins.manager | Loaded plugin: echo v0.1.0
+2026-07-05 21:21:43 | INFO     | agents.manager | Registered agent: echo_agent
+2026-07-05 21:21:43 | INFO     | core.scheduler | Scheduled job 'heartbeat' every 30s
+2026-07-05 21:21:43 | INFO     | core.scheduler | Scheduler started
+2026-07-05 21:21:43 | INFO     | backend.main | Prometheus heartbeat — system alive
+2026-07-05 21:21:43 | INFO     | backend.main | Startup complete — Phase Alpha milestone checklist online
+2026-07-05 21:21:47 | INFO     | backend.main | Starting Prometheus v0.1.0
+2026-07-05 21:21:47 | INFO     | plugins.manager | Loaded plugin: echo v0.1.0
+2026-07-05 21:21:47 | INFO     | agents.manager | Registered agent: echo_agent
+2026-07-05 21:21:47 | INFO     | core.scheduler | Scheduled job 'heartbeat' every 30s
+2026-07-05 21:21:47 | INFO     | backend.main | Prometheus heartbeat — system alive
+2026-07-05 21:21:47 | INFO     | core.scheduler | Scheduler started
+2026-07-05 21:21:47 | INFO     | backend.main | Startup complete — Phase Alpha milestone checklist online
+2026-07-05 21:22:17 | INFO     | backend.main | Prometheus heartbeat — system alive
+2026-07-05 21:22:48 | INFO     | backend.main | Prometheus heartbeat — system alive
+2026-07-05 21:23:18 | INFO     | backend.main | Prometheus heartbeat — system alive
+2026-07-05 21:23:48 | INFO     | backend.main | Prometheus heartbeat — system alive
+2026-07-05 21:23:50 | INFO     | backend.main | Starting Prometheus v0.1.0
+2026-07-05 21:23:50 | INFO     | plugins.manager | Loaded plugin: echo v0.1.0
+2026-07-05 21:23:50 | INFO     | agents.manager | Registered agent: echo_agent
+2026-07-05 21:23:50 | INFO     | core.scheduler | Scheduled job 'heartbeat' every 30s
+2026-07-05 21:23:50 | INFO     | core.scheduler | Scheduler started
+2026-07-05 21:23:50 | INFO     | backend.main | Prometheus heartbeat — system alive
+2026-07-05 21:23:50 | INFO     | backend.main | Startup complete — Phase Alpha milestone checklist online
+2026-07-05 21:24:18 | INFO     | backend.main | Prometheus heartbeat — system alive
+2026-07-05 21:24:20 | INFO     | backend.main | Prometheus heartbeat — system alive
+2026-07-05 21:24:37 | INFO     | gamma.boot_chain | Boot chain analysis: signature valid
+2026-07-05 21:24:37 | INFO     | gamma.recovery_planner | Recovery plan generated for sim_valid: boot_chain=valid, partition_scheme=gpt -> 1 step(s)
+2026-07-05 21:24:38 | INFO     | reasoning.graph | Asserted fact: sim_valid -event-> boot_chain:valid
+2026-07-05 21:24:49 | INFO     | backend.main | Prometheus heartbeat — system alive
+2026-07-05 21:24:50 | INFO     | backend.main | Prometheus heartbeat — system alive
+2026-07-05 21:24:52 | WARNING  | gamma.boot_chain | Boot chain analysis: signature INVALID
+2026-07-05 21:24:52 | INFO     | gamma.recovery_planner | Recovery plan generated for sim_tampered: boot_chain=invalid, partition_scheme=gpt -> 2 step(s)
+2026-07-05 21:24:52 | INFO     | reasoning.graph | Asserted fact: sim_tampered -event-> boot_chain:invalid
+2026-07-05 21:25:03 | INFO     | gamma.firmware_inspector | test_fw.bin: recognized as ESP32 image, 2 segment(s)
+2026-07-05 21:25:03 | INFO     | reasoning.graph | Asserted fact: test_fw.bin -event-> firmware_inspected:esp32_image
+2026-07-05 21:25:19 | INFO     | backend.main | Prometheus heartbeat — system alive
+2026-07-05 21:25:20 | INFO     | backend.main | Prometheus heartbeat — system alive
+2026-07-05 21:25:22 | WARNING  | gamma.firmware_inspector | Blocked firmware inspection on test_fw.bin: ownership not declared
+2026-07-05 21:25:49 | INFO     | backend.main | Prometheus heartbeat — system alive
+2026-07-05 21:25:51 | INFO     | backend.main | Prometheus heartbeat — system alive
+2026-07-05 21:26:19 | INFO     | backend.main | Prometheus heartbeat — system alive
+2026-07-05 21:26:21 | INFO     | backend.main | Prometheus heartbeat — system alive
+2026-07-05 21:26:50 | INFO     | backend.main | Prometheus heartbeat — system alive
+2026-07-05 21:26:51 | INFO     | backend.main | Prometheus heartbeat — system alive
+2026-07-05 21:27:20 | INFO     | backend.main | Prometheus heartbeat — system alive
+2026-07-05 21:27:21 | INFO     | backend.main | Prometheus heartbeat — system alive
+2026-07-05 21:27:50 | INFO     | backend.main | Prometheus heartbeat — system alive
+2026-07-05 21:27:51 | INFO     | backend.main | Prometheus heartbeat — system alive
+2026-07-05 21:28:20 | INFO     | backend.main | Prometheus heartbeat — system alive
+2026-07-05 21:28:22 | INFO     | backend.main | Prometheus heartbeat — system alive
+2026-07-05 21:28:50 | INFO     | backend.main | Prometheus heartbeat — system alive
+2026-07-05 21:28:52 | INFO     | backend.main | Prometheus heartbeat — system alive
+2026-07-05 21:29:21 | INFO     | backend.main | Prometheus heartbeat — system alive
+2026-07-05 21:29:22 | INFO     | backend.main | Prometheus heartbeat — system alive
+2026-07-05 21:29:51 | INFO     | backend.main | Prometheus heartbeat — system alive
+2026-07-05 21:29:52 | INFO     | backend.main | Prometheus heartbeat — system alive
+2026-07-05 21:30:21 | INFO     | backend.main | Prometheus heartbeat — system alive
+2026-07-05 21:30:23 | INFO     | backend.main | Prometheus heartbeat — system alive
+2026-07-05 21:30:51 | INFO     | backend.main | Prometheus heartbeat — system alive
+2026-07-05 21:30:53 | INFO     | backend.main | Prometheus heartbeat — system alive
+2026-07-05 21:31:22 | INFO     | backend.main | Prometheus heartbeat — system alive
+2026-07-05 21:31:23 | INFO     | backend.main | Prometheus heartbeat — system alive
+2026-07-05 21:31:52 | INFO     | backend.main | Prometheus heartbeat — system alive
+2026-07-05 21:31:53 | INFO     | backend.main | Prometheus heartbeat — system alive
+2026-07-05 21:32:22 | INFO     | backend.main | Prometheus heartbeat — system alive
+2026-07-05 21:32:23 | INFO     | backend.main | Prometheus heartbeat — system alive
+2026-07-05 21:32:52 | INFO     | backend.main | Prometheus heartbeat — system alive
+2026-07-05 21:32:54 | INFO     | backend.main | Prometheus heartbeat — system alive
+2026-07-05 21:33:23 | INFO     | backend.main | Prometheus heartbeat — system alive
+2026-07-05 21:33:24 | INFO     | backend.main | Prometheus heartbeat — system alive
+2026-07-05 21:33:53 | INFO     | backend.main | Prometheus heartbeat — system alive
+2026-07-05 21:33:54 | INFO     | backend.main | Prometheus heartbeat — system alive
+2026-07-05 21:34:23 | INFO     | backend.main | Prometheus heartbeat — system alive
+2026-07-05 21:34:24 | INFO     | backend.main | Prometheus heartbeat — system alive
+2026-07-05 21:34:53 | INFO     | backend.main | Prometheus heartbeat — system alive
+2026-07-05 21:34:55 | INFO     | backend.main | Prometheus heartbeat — system alive
+2026-07-05 21:35:23 | INFO     | backend.main | Prometheus heartbeat — system alive
+2026-07-05 21:35:25 | INFO     | backend.main | Prometheus heartbeat — system alive
+2026-07-05 21:35:54 | INFO     | backend.main | Prometheus heartbeat — system alive
+2026-07-05 21:35:55 | INFO     | backend.main | Prometheus heartbeat — system alive
+2026-07-05 21:36:24 | INFO     | backend.main | Prometheus heartbeat — system alive
+2026-07-05 21:36:25 | INFO     | backend.main | Prometheus heartbeat — system alive
+2026-07-05 21:36:54 | INFO     | backend.main | Prometheus heartbeat — system alive
+2026-07-05 21:36:56 | INFO     | backend.main | Prometheus heartbeat — system alive
+2026-07-05 21:36:58 | INFO     | backend.main | Starting Prometheus v0.1.0
+2026-07-05 21:36:58 | INFO     | plugins.manager | Loaded plugin: echo v0.1.0
+2026-07-05 21:36:58 | INFO     | agents.manager | Registered agent: echo_agent
+2026-07-05 21:36:58 | INFO     | core.scheduler | Scheduled job 'heartbeat' every 30s
+2026-07-05 21:36:58 | INFO     | backend.main | Prometheus heartbeat — system alive
+2026-07-05 21:36:58 | INFO     | core.scheduler | Scheduler started
+2026-07-05 21:36:58 | INFO     | backend.main | Startup complete — Phase Alpha milestone checklist online
+2026-07-05 21:37:04 | INFO     | backend.main | Starting Prometheus v0.1.0
+2026-07-05 21:37:04 | INFO     | plugins.manager | Loaded plugin: echo v0.1.0
+2026-07-05 21:37:04 | INFO     | agents.manager | Registered agent: echo_agent
+2026-07-05 21:37:04 | INFO     | core.scheduler | Scheduled job 'heartbeat' every 30s
+2026-07-05 21:37:04 | INFO     | backend.main | Prometheus heartbeat — system alive
+2026-07-05 21:37:04 | INFO     | core.scheduler | Scheduler started
+2026-07-05 21:37:04 | INFO     | backend.main | Startup complete — Phase Alpha milestone checklist online
+2026-07-05 21:37:22 | INFO     | backend.main | Starting Prometheus v0.1.0
+2026-07-05 21:37:22 | INFO     | plugins.manager | Loaded plugin: echo v0.1.0
+2026-07-05 21:37:22 | INFO     | agents.manager | Registered agent: echo_agent
+2026-07-05 21:37:22 | INFO     | core.scheduler | Scheduled job 'heartbeat' every 30s
+2026-07-05 21:37:22 | INFO     | core.scheduler | Scheduler started
+— system alive
+2026-07-05 21:37:22 | INFO     | backend.main | Startup complete — Phase Alpha milestone checklist online
+2026-07-05 21:37:34 | INFO     | backend.main | Prometheus heartbeat — system alive
+2026-07-05 21:37:41 | INFO     | backend.main | Starting Prometheus v0.1.0
+2026-07-05 21:37:41 | INFO     | plugins.manager | Loaded plugin: echo v0.1.0
+2026-07-05 21:37:41 | INFO     | agents.manager | Registered agent: echo_agent
+2026-07-05 21:37:41 | INFO     | core.scheduler | Scheduled job 'heartbeat' every 30s
+2026-07-05 21:37:41 | INFO     | backend.main | Prometheus heartbeat — system alive
+2026-07-05 21:37:41 | INFO     | core.scheduler | Scheduler started
+2026-07-05 21:37:41 | INFO     | backend.main | Startup complete — Phase Alpha milestone checklist online
+2026-07-05 21:38:04 | INFO     | backend.main | Starting Prometheus v0.1.0
+2026-07-05 21:38:04 | INFO     | plugins.manager | Loaded plugin: echo v0.1.0
+2026-07-05 21:38:04 | INFO     | agents.manager | Registered agent: echo_agent
+2026-07-05 21:38:04 | INFO     | core.scheduler | Scheduled job 'heartbeat' every 30s
+2026-07-05 21:38:04 | INFO     | backend.main | Prometheus heartbeat — system alive
+2026-07-05 21:38:04 | INFO     | core.scheduler | Scheduler started
+2026-07-05 21:38:04 | INFO     | backend.main | Startup complete — Phase Alpha milestone checklist online
+2026-07-05 21:38:06 | INFO     | backend.main | Starting Prometheus v0.1.0
+2026-07-05 21:38:06 | INFO     | plugins.manager | Loaded plugin: echo v0.1.0
+2026-07-05 21:38:06 | INFO     | agents.manager | Registered agent: echo_agent
+2026-07-05 21:38:06 | INFO     | core.scheduler | Scheduled job 'heartbeat' every 30s
+2026-07-05 21:38:06 | INFO     | core.scheduler | Scheduler started
+2026-07-05 21:38:06 | INFO     | backend.main | Prometheus heartbeat — system alive
+2026-07-05 21:38:06 | INFO     | backend.main | Startup complete — Phase Alpha milestone checklist online
+2026-07-05 21:38:07 | INFO     | backend.main | Starting Prometheus v0.1.0
+2026-07-05 21:38:07 | INFO     | plugins.manager | Loaded plugin: echo v0.1.0
+2026-07-05 21:38:07 | INFO     | agents.manager | Registered agent: echo_agent
+2026-07-05 21:38:07 | INFO     | core.scheduler | Scheduled job 'heartbeat' every 30s
+2026-07-05 21:38:07 | INFO     | backend.main | Prometheus heartbeat — system alive
+2026-07-05 21:38:07 | INFO     | core.scheduler | Scheduler started
+2026-07-05 21:38:07 | INFO     | backend.main | Startup complete — Phase Alpha milestone checklist online
+2026-07-05 21:38:10 | INFO     | backend.main | Starting Prometheus v0.1.0
+2026-07-05 21:38:10 | INFO     | plugins.manager | Loaded plugin: echo v0.1.0
+2026-07-05 21:38:10 | INFO     | agents.manager | Registered agent: echo_agent
+2026-07-05 21:38:10 | INFO     | core.scheduler | Scheduled job 'heartbeat' every 30s
+2026-07-05 21:38:10 | INFO     | backend.main | Prometheus heartbeat — system alive
+2026-07-05 21:38:10 | INFO     | core.scheduler | Scheduler started
+2026-07-05 21:38:10 | INFO     | backend.main | Startup complete — Phase Alpha milestone checklist online
+2026-07-05 21:38:32 | INFO     | backend.main | Starting Prometheus v0.1.0
+2026-07-05 21:38:32 | INFO     | plugins.manager | Loaded plugin: echo v0.1.0
+2026-07-05 21:38:32 | INFO     | agents.manager | Registered agent: echo_agent
+2026-07-05 21:38:32 | INFO     | core.scheduler | Scheduled job 'heartbeat' every 30s
+2026-07-05 21:38:32 | INFO     | backend.main | Prometheus heartbeat — system alive
+2026-07-05 21:38:32 | INFO     | core.scheduler | Scheduler started
+2026-07-05 21:38:32 | INFO     | backend.main | Startup complete — Phase Alpha milestone checklist online
+2026-07-05 21:38:40 | INFO     | backend.main | Prometheus heartbeat — system alive
+2026-07-05 21:38:47 | INFO     | backend.main | Starting Prometheus v0.1.0
+2026-07-05 21:38:47 | INFO     | plugins.manager | Loaded plugin: echo v0.1.0
+2026-07-05 21:38:47 | INFO     | agents.manager | Registered agent: echo_agent
+2026-07-05 21:38:47 | INFO     | core.scheduler | Scheduled job 'heartbeat' every 30s
+2026-07-05 21:38:47 | INFO     | backend.main | Prometheus heartbeat — system alive
+2026-07-05 21:38:47 | INFO     | core.scheduler | Scheduler started
+2026-07-05 21:38:47 | INFO     | backend.main | Startup complete — Phase Alpha milestone checklist online
+2026-07-05 21:38:51 | INFO     | backend.main | Starting Prometheus v0.1.0
+2026-07-05 21:38:51 | INFO     | plugins.manager | Loaded plugin: echo v0.1.0
+2026-07-05 21:38:51 | INFO     | agents.manager | Registered agent: echo_agent
+2026-07-05 21:38:51 | INFO     | core.scheduler | Scheduled job 'heartbeat' every 30s
+2026-07-05 21:38:51 | INFO     | backend.main | Prometheus heartbeat — system alive
+2026-07-05 21:38:51 | INFO     | core.scheduler | Scheduler started
+2026-07-05 21:38:51 | INFO     | backend.main | Startup complete — Phase Alpha milestone checklist online
+2026-07-05 21:38:54 | INFO     | backend.main | Starting Prometheus v0.1.0
+2026-07-05 21:38:54 | INFO     | plugins.manager | Loaded plugin: echo v0.1.0
+2026-07-05 21:38:54 | INFO     | agents.manager | Registered agent: echo_agent
+2026-07-05 21:38:54 | INFO     | core.scheduler | Scheduled job 'heartbeat' every 30s
+2026-07-05 21:38:54 | INFO     | backend.main | Prometheus heartbeat — system alive
+2026-07-05 21:38:54 | INFO     | core.scheduler | Scheduler started
+2026-07-05 21:38:54 | INFO     | backend.main | Startup complete — Phase Alpha milestone checklist online
+2026-07-05 21:39:01 | INFO     | backend.main | Starting Prometheus v0.1.0
+2026-07-05 21:39:01 | INFO     | plugins.manager | Loaded plugin: echo v0.1.0
+2026-07-05 21:39:01 | INFO     | agents.manager | Registered agent: echo_agent
+2026-07-05 21:39:01 | INFO     | core.scheduler | Scheduled job 'heartbeat' every 30s
+2026-07-05 21:39:01 | INFO     | backend.main | Prometheus heartbeat — system alive
+2026-07-05 21:39:01 | INFO     | core.scheduler | Scheduler started
+2026-07-05 21:39:01 | INFO     | backend.main | Startup complete — Phase Alpha milestone checklist online
+2026-07-05 21:39:04 | INFO     | backend.main | Starting Prometheus v0.1.0
+2026-07-05 21:39:04 | INFO     | plugins.manager | Loaded plugin: echo v0.1.0
+2026-07-05 21:39:04 | INFO     | agents.manager | Registered agent: echo_agent
+2026-07-05 21:39:04 | INFO     | core.scheduler | Scheduled job 'heartbeat' every 30s
+2026-07-05 21:39:04 | INFO     | backend.main | Prometheus heartbeat — system alive
+2026-07-05 21:39:04 | INFO     | core.scheduler | Scheduler started
+2026-07-05 21:39:04 | INFO     | backend.main | Startup complete — Phase Alpha milestone checklist online
+2026-07-05 21:39:31 | INFO     | backend.main | Prometheus heartbeat — system alive
+2026-07-05 21:39:34 | INFO     | backend.main | Prometheus heartbeat — system alive
+2026-07-05 21:39:58 | INFO     | core.ownership_registry | Declared ownership: \\.\PhysicalDrive1 (my usb)
+2026-07-05 21:39:58 | INFO     | reasoning.graph | Asserted fact: \\.\PhysicalDrive1 -event-> ownership_declared
+2026-07-05 21:40:01 | INFO     | backend.main | Prometheus heartbeat — system alive
+2026-07-05 21:40:04 | INFO     | backend.main | Prometheus heartbeat — system alive
+2026-07-05 21:40:11 | INFO     | devices.registry | Registered device: twin_demo (transport=simulated, ownership_declared=True)
+2026-07-05 21:40:11 | INFO     | reasoning.graph | Asserted fact: twin_demo -event-> connected
+2026-07-05 21:40:32 | INFO     | backend.main | Prometheus heartbeat — system alive
+2026-07-05 21:40:34 | INFO     | reasoning.graph | Asserted fact: twin_demo -wrote-> sensor_23.5
+2026-07-05 21:40:34 | INFO     | backend.main | Prometheus heartbeat — system alive
+2026-07-05 21:40:44 | INFO     | core.ownership_registry | Declared ownership: twin_demo (demo)
+2026-07-05 21:40:44 | INFO     | reasoning.graph | Asserted fact: twin_demo -event-> ownership_declared
+2026-07-05 21:41:00 | INFO     | delta.twin | Built twin for twin_demo: state=online, health=1.0, 3 history entries
+2026-07-05 21:41:02 | INFO     | backend.main | Prometheus heartbeat — system alive
+2026-07-05 21:41:05 | INFO     | backend.main | Prometheus heartbeat — system alive
+2026-07-05 21:41:14 | INFO     | devices.registry | Unregistered device: twin_demo
+2026-07-05 21:41:14 | INFO     | reasoning.graph | Asserted fact: twin_demo -event-> disconnected
+2026-07-05 21:41:33 | INFO     | backend.main | Prometheus heartbeat — system alive
+2026-07-05 21:41:35 | INFO     | backend.main | Prometheus heartbeat — system alive
+2026-07-05 21:41:41 | INFO     | delta.twin | Built twin for twin_demo: state=offline, health=0.8, 4 history entries
+2026-07-05 21:42:03 | INFO     | backend.main | Prometheus heartbeat — system alive
+2026-07-05 21:42:05 | INFO     | backend.main | Prometheus heartbeat — system alive
+2026-07-05 21:42:14 | INFO     | core.ownership_registry | Declared ownership: test_fw.bin (test firmware)
+2026-07-05 21:42:14 | INFO     | reasoning.graph | Asserted fact: test_fw.bin -event-> ownership_declared
+2026-07-05 21:42:29 | INFO     | gamma.firmware_inspector | test_fw.bin: recognized as ESP32 image, 2 segment(s)
+2026-07-05 21:42:30 | INFO     | reasoning.graph | Asserted fact: test_fw.bin -event-> firmware_inspected:esp32_image
+2026-07-05 21:42:33 | INFO     | backend.main | Prometheus heartbeat — system alive
+2026-07-05 21:42:36 | INFO     | backend.main | Prometheus heartbeat — system alive
+2026-07-05 21:42:54 | INFO     | gamma.boot_chain | Boot chain analysis: signature valid
+2026-07-05 21:42:54 | INFO     | gamma.recovery_planner | Recovery plan generated for sim_valid: boot_chain=valid, partition_scheme=gpt -> 1 step(s)
+2026-07-05 21:42:54 | INFO     | reasoning.graph | Asserted fact: sim_valid -event-> boot_chain:valid
+2026-07-05 21:42:54 | WARNING  | gamma.boot_chain | Boot chain analysis: signature INVALID
+2026-07-05 21:42:54 | INFO     | gamma.recovery_planner | Recovery plan generated for sim_tampered: boot_chain=invalid, partition_scheme=gpt -> 2 step(s)
+2026-07-05 21:42:54 | INFO     | reasoning.graph | Asserted fact: sim_tampered -event-> boot_chain:invalid
+2026-07-05 21:43:03 | INFO     | backend.main | Prometheus heartbeat — system alive
+2026-07-05 21:43:06 | INFO     | backend.main | Prometheus heartbeat — system alive
+2026-07-05 21:43:34 | INFO     | backend.main | Prometheus heartbeat — system alive
+2026-07-05 21:44:04 | INFO     | backend.main | Prometheus heartbeat — system alive
+2026-07-05 21:44:06 | INFO     | backend.main | Starting Prometheus v0.1.0
+2026-07-05 21:44:06 | INFO     | plugins.manager | Loaded plugin: echo v0.1.0
+2026-07-05 21:44:06 | INFO     | agents.manager | Registered agent: echo_agent
+2026-07-05 21:44:06 | INFO     | core.scheduler | Scheduled job 'heartbeat' every 30s
+2026-07-05 21:44:06 | INFO     | backend.main | Prometheus heartbeat — system alive
+2026-07-05 21:44:06 | INFO     | core.scheduler | Scheduler started
+2026-07-05 21:44:06 | INFO     | backend.main | Startup complete — Phase Alpha milestone checklist online
+2026-07-05 21:44:30 | INFO     | devices.registry | Registered device: final_demo (transport=simulated, ownership_declared=True)
+2026-07-05 21:44:30 | INFO     | reasoning.graph | Asserted fact: final_demo -event-> connected
+2026-07-05 21:44:30 | INFO     | reasoning.graph | Asserted fact: final_demo -wrote-> sensor_23.5
+2026-07-05 21:44:30 | INFO     | core.ownership_registry | Declared ownership: final_demo (final test)
+2026-07-05 21:44:30 | INFO     | reasoning.graph | Asserted fact: final_demo -event-> ownership_declared
+2026-07-05 21:44:30 | INFO     | delta.twin | Built twin for final_demo: state=online, health=1.0, 3 history entries
+2026-07-05 21:44:34 | INFO     | backend.main | Prometheus heartbeat — system alive
+2026-07-05 21:44:37 | INFO     | backend.main | Prometheus heartbeat — system alive
+2026-07-05 21:45:04 | INFO     | backend.main | Prometheus heartbeat — system alive
+2026-07-05 21:45:34 | INFO     | backend.main | Prometheus heartbeat — system alive
+2026-07-05 21:46:05 | INFO     | backend.main | Prometheus heartbeat — system alive
+2026-07-05 21:46:35 | INFO     | backend.main | Prometheus heartbeat — system alive
+2026-07-05 21:47:05 | INFO     | backend.main | Prometheus heartbeat — system alive
+2026-07-05 21:47:35 | INFO     | backend.main | Prometheus heartbeat — system alive
+2026-07-05 21:48:06 | INFO     | backend.main | Prometheus heartbeat — system alive
+2026-07-05 21:48:36 | INFO     | backend.main | Prometheus heartbeat — system alive
+2026-07-05 21:49:06 | INFO     | backend.main | Prometheus heartbeat — system alive
+2026-07-05 21:49:36 | INFO     | backend.main | Prometheus heartbeat — system alive
+2026-07-05 21:50:07 | INFO     | backend.main | Prometheus heartbeat — system alive
+2026-07-06 10:25:08 | INFO     | backend.main | Starting Prometheus v0.1.0
+2026-07-06 10:25:08 | INFO     | plugins.manager | Loaded plugin: echo v0.1.0
+2026-07-06 10:25:08 | INFO     | agents.manager | Registered agent: echo_agent
+2026-07-06 10:25:08 | INFO     | core.scheduler | Scheduled job 'heartbeat' every 30s
+2026-07-06 10:25:08 | INFO     | backend.main | Prometheus heartbeat — system alive
+2026-07-06 10:25:08 | INFO     | core.scheduler | Scheduler started
+2026-07-06 10:25:08 | INFO     | backend.main | Startup complete — Phase Alpha milestone checklist online
+2026-07-06 10:25:37 | INFO     | epsilon.autonomous_engine | Creating engineering plan: plan_001
+2026-07-06 10:25:37 | INFO     | reasoning.graph | Asserted fact: plan_001 -event-> plan_created
+2026-07-06 10:25:37 | INFO     | reasoning.graph | Asserted fact: plan_001 -event-> plan_ready
+2026-07-06 10:25:37 | INFO     | epsilon.autonomous_engine | Plan plan_001 ready: 6 stages, 6 capability gaps identified
+2026-07-06 10:25:38 | INFO     | backend.main | Prometheus heartbeat — system alive
+2026-07-06 10:25:48 | INFO     | epsilon.autonomous_engine | Generated 4 improvement suggestions
+2026-07-06 10:26:09 | INFO     | backend.main | Prometheus heartbeat — system alive
+2026-07-06 10:26:39 | INFO     | backend.main | Prometheus heartbeat — system alive
