@@ -10,7 +10,9 @@ Phase Beta/Gamma concern once there's a security model for it.
 
 from .base import PrometheusPlugin
 from api.plugin_api import PluginApi
+from api.events import PluginRanEvent
 from core.logger import get_logger
+from core.event_bus import event_bus
 
 logger = get_logger(__name__)
 
@@ -36,7 +38,9 @@ class PluginManager(PluginApi):
         plugin = self.get(name)
         if plugin is None:
             raise ValueError(f"No such plugin: {name}")
-        return plugin.run(context)
+        result = plugin.run(context)
+        event_bus.publish(PluginRanEvent(plugin_name=name, result=result))
+        return result
 
 
 plugin_manager = PluginManager()

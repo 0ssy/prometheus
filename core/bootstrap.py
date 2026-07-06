@@ -16,10 +16,7 @@ Sequence:
 from collections.abc import Callable
 
 from core.config import config
-from core.container import ServiceContainer
-from core.scheduler import scheduler
-from core.database import init_db
-from core.logger import get_logger
+from core.event_bus import event_bus
 
 logger = get_logger(__name__)
 
@@ -33,12 +30,14 @@ def _load_database(container: ServiceContainer) -> None:
 
 def _register_services(container: ServiceContainer) -> None:
     from core.database import SessionLocal
+    from core.event_bus import event_bus
     from memory.store import memory_store
     from reasoning.graph import reasoning_store
     from plugins.manager import plugin_manager
     from agents.manager import agent_manager
     from devices.registry import device_registry
 
+    container.register("event_bus", event_bus)
     container.register("session_factory", SessionLocal)
     container.register("memory_api", memory_store)
     container.register("reasoning_api", reasoning_store)

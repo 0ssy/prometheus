@@ -8,7 +8,9 @@ capability; agents perform tasks using that capability.
 
 from .base import PrometheusAgent
 from api.agent_api import AgentApi
+from api.events import AgentDispatchedEvent
 from core.logger import get_logger
+from core.event_bus import event_bus
 
 logger = get_logger(__name__)
 
@@ -29,7 +31,9 @@ class AgentManager(AgentApi):
         if agent is None:
             raise ValueError(f"No such agent: {agent_name}")
         logger.info(f"Dispatching task to agent '{agent_name}': {task}")
-        return agent.perform(task, context)
+        result = agent.perform(task, context)
+        event_bus.publish(AgentDispatchedEvent(agent_name=agent_name, task=task))
+        return result
 
 
 agent_manager = AgentManager()
