@@ -1,5 +1,20 @@
 # Architecture Decision Log
 
+## 2026-07-06 — Phase Gamma Freeze Checkpoint (Helios)
+
+### Context
+Gamma introduced the dedicated knowledge layer and independent knowledge engine API surface.
+The milestone reached a stable boundary for graph, ontology, provenance, query, and learning.
+
+### Decision
+1. Freeze Gamma as `v0.3.0-gamma`.
+2. Mark codename `Helios` with status `COMPLETE`.
+3. Route future enhancements to the next phase instead of expanding Gamma scope.
+
+### Consequences
+- `v0.3.0-gamma` is the canonical checkpoint for knowledge-layer foundations.
+- Gamma remains feature-frozen except for bug fixes.
+
 ## 2026-07-06 — Phase Gamma (Helios) Knowledge Layer
 
 ### Context

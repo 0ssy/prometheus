@@ -26,7 +26,7 @@ def _infer_node_type(node_key: str) -> str:
 class KnowledgeEngine:
     def __init__(self):
         self.graph = KnowledgeGraph()
-        self.query = KnowledgeQueryEngine()
+        self.query_engine = KnowledgeQueryEngine()
         self.ontology = OntologyRegistry()
         self.learning = LearningStore()
 
@@ -66,6 +66,55 @@ class KnowledgeEngine:
             object_value=object_value,
             confidence=confidence,
             provenance=provenance,
+        )
+
+    def assert_fact(
+        self,
+        db: Session,
+        subject: str,
+        predicate: str,
+        obj: str,
+        confidence: float = 1.0,
+        source: str = "system",
+        rationale: str = "assert_fact",
+        evidence: dict | None = None,
+    ):
+        return self.record_fact(
+            db=db,
+            subject=subject,
+            predicate=predicate,
+            obj=obj,
+            confidence=confidence,
+            provenance=Provenance(
+                source=source,
+                rationale=rationale,
+                evidence=evidence or {},
+            ),
+        )
+
+    def query(self, db: Session, question: str, **kwargs):
+        if question == "devices_supporting_recovery":
+            return self.query_engine.devices_supporting_recovery(db)
+        if question == "simulations_failed":
+            return self.query_engine.simulations_failed(db)
+        if question == "capabilities_never_executed":
+            return self.query_engine.capabilities_never_executed(db)
+        if question == "plugins_for_recommendation":
+            recommendation_key = kwargs.get("recommendation_key")
+            if not recommendation_key:
+                raise ValueError("recommendation_key is required for plugins_for_recommendation")
+            return self.query_engine.plugins_for_recommendation(db, recommendation_key)
+        raise ValueError(f"Unknown knowledge query: {question}")
+
+    def learn(
+        self, db: Session, scenario_key: str, outcome: str, confidence: float, context: dict
+    ):
+        return self.record_learning(
+            db=db,
+            scenario_key=scenario_key,
+            outcome=outcome,
+            confidence=confidence,
+            context=context,
         )
 
     def record_capability_support(self, db: Session, device_id: str, capability_name: str):

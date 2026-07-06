@@ -2,7 +2,10 @@
 
 All notable changes to Prometheus are documented in this file.
 
-## [0.5.0-gamma] - 2026-07-06
+## [0.3.0-gamma] - 2026-07-06
+
+Codename: **Helios**  
+Status: **COMPLETE**
 
 ### Added
 - Phase Gamma (Helios) knowledge layer:
@@ -17,6 +20,10 @@ All notable changes to Prometheus are documented in this file.
   - `/gamma/knowledge/capabilities-never-executed`
   - `/gamma/knowledge/plugins-for-recommendation`
   - `/gamma/learning`
+- Independent knowledge engine API shape:
+  - `knowledge_engine.assert_fact(...)`
+  - `knowledge_engine.query(...)`
+  - `knowledge_engine.learn(...)`
 
 ### Changed
 - Reasoning writes now project into the knowledge graph with provenance and confidence.
@@ -29,6 +36,7 @@ All notable changes to Prometheus are documented in this file.
 
 ### Architecture
 - Introduced dedicated knowledge engine to isolate storage, ontology, query, and learning from other subsystems.
+- Knowledge layer now supports direct container usage without importing reasoning/simulation/platform services.
 
 ### Known limitations
 - Ontology is currently in-memory and seeded with starter taxonomy only.

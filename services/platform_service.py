@@ -255,20 +255,20 @@ class PlatformService:
 
     def query_devices_supporting_recovery(self) -> list[str]:
         with self._session_scope() as db:
-            return self._knowledge_engine.query.devices_supporting_recovery(db)
+            return self._knowledge_engine.query(db, "devices_supporting_recovery")
 
     def query_simulations_failed(self) -> list[dict]:
         with self._session_scope() as db:
-            return self._knowledge_engine.query.simulations_failed(db)
+            return self._knowledge_engine.query(db, "simulations_failed")
 
     def query_capabilities_never_executed(self) -> list[str]:
         with self._session_scope() as db:
-            return self._knowledge_engine.query.capabilities_never_executed(db)
+            return self._knowledge_engine.query(db, "capabilities_never_executed")
 
     def query_plugins_for_recommendation(self, recommendation_key: str) -> list[str]:
         with self._session_scope() as db:
-            return self._knowledge_engine.query.plugins_for_recommendation(
-                db, recommendation_key
+            return self._knowledge_engine.query(
+                db, "plugins_for_recommendation", recommendation_key=recommendation_key
             )
 
     def learning_history(self, scenario_key: str | None = None) -> list[dict]:

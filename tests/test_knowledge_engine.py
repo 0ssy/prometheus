@@ -32,12 +32,35 @@ def test_knowledge_engine_records_and_queries(db_session):
         context={"risk": "high"},
     )
 
-    recovery_devices = engine.query.devices_supporting_recovery(db_session)
-    failed = engine.query.simulations_failed(db_session)
-    never_executed = engine.query.capabilities_never_executed(db_session)
+    recovery_devices = engine.query(db_session, "devices_supporting_recovery")
+    failed = engine.query(db_session, "simulations_failed")
+    never_executed = engine.query(db_session, "capabilities_never_executed")
     learning = engine.learning.recall(db_session, scenario_key="devx:disconnect")
 
     assert "device.devx" in recovery_devices
     assert any(row["device"] == "device.devx" for row in failed)
     assert "device.devx.recover" not in never_executed
     assert len(learning) == 1
+
+
+def test_knowledge_engine_independent_usage_shape(db_session):
+    engine = KnowledgeEngine()
+    engine.assert_fact(
+        db_session,
+        subject="device.independent",
+        predicate="supports_capability",
+        obj="device.independent.recover",
+        confidence=0.9,
+        source="test",
+        rationale="independent usage",
+        evidence={"case": "shape"},
+    )
+    engine.learn(
+        db_session,
+        scenario_key="independent:disconnect",
+        outcome="attention_required",
+        confidence=0.7,
+        context={"risk": "high"},
+    )
+    devices = engine.query(db_session, "devices_supporting_recovery")
+    assert "device.independent" in devices
