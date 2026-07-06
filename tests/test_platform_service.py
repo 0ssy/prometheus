@@ -1,12 +1,15 @@
 from core.event_bus import InMemoryEventBus
 from core.capabilities import CapabilityManager
 from core.observability import ObservabilityStore
+from core.database import Base as PrometheusBase
 from memory.store import MemoryStore
 from reasoning.graph import ReasoningStore
 from devices.registry import DeviceRegistry
 from agents.manager import AgentManager
 from plugins.manager import PluginManager
 from services.platform_service import PlatformService
+from sqlalchemy import create_engine
+from sqlalchemy.orm import sessionmaker
 
 
 class FakeDevice:
@@ -104,3 +107,37 @@ def test_platform_service_beta_workflow_records_result(db_session):
     assert result["recorded"] is True
     assert result["simulation"]["failure_mode"] == "disconnect"
     assert result["reasoning"]["recommendation"]["recommended_capability"] == "device.sim-beta.recover"
+
+
+def test_platform_service_gamma_queries():
+    engine = create_engine("sqlite:///:memory:")
+    PrometheusBase.metadata.create_all(bind=engine)
+    SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
+    bus = InMemoryEventBus()
+    capability_api = CapabilityManager(event_bus=bus)
+    service = PlatformService(
+        plugin_api=PluginManager(event_bus=bus),
+        agent_api=AgentManager(event_bus=bus),
+        capability_api=capability_api,
+        device_api=DeviceRegistry(event_bus=bus),
+        memory_api=MemoryStore(event_bus=bus),
+        reasoning_api=ReasoningStore(event_bus=bus),
+        event_bus=bus,
+        session_factory=SessionLocal,
+        observability=ObservabilityStore(),
+    )
+
+    with SessionLocal() as db:
+        service.register_simulated_device("sim-gamma")
+        service.run_beta_workflow(
+            db=db, device_id="sim-gamma", failure_mode="disconnect", execute=False
+        )
+
+    devices = service.query_devices_supporting_recovery()
+    failed = service.query_simulations_failed()
+    learning = service.learning_history()
+
+    assert "device.sim-gamma" in devices
+    assert any("sim-gamma" in row["device"] for row in failed)
+    assert len(learning) >= 1
+    engine.dispose()

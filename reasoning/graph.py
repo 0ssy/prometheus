@@ -14,13 +14,20 @@ from contracts.event_bus import EventBus
 from api.events import FactAssertedEvent
 from core.logger import get_logger
 from core.event_bus import event_bus as default_event_bus
+from knowledge.engine import KnowledgeEngine
+from knowledge.provenance import Provenance
 
 logger = get_logger(__name__)
 
 
 class ReasoningStore(ReasoningApi):
-    def __init__(self, event_bus: EventBus | None = None):
+    def __init__(
+        self,
+        event_bus: EventBus | None = None,
+        knowledge_engine: KnowledgeEngine | None = None,
+    ):
         self._event_bus = event_bus or default_event_bus
+        self._knowledge_engine = knowledge_engine or KnowledgeEngine()
 
     def assert_fact(
         self, db: Session, subject: str, predicate: str, obj: str, confidence: int = 100
@@ -31,6 +38,18 @@ class ReasoningStore(ReasoningApi):
         db.add(fact)
         db.commit()
         db.refresh(fact)
+        self._knowledge_engine.record_fact(
+            db,
+            subject=subject,
+            predicate=predicate,
+            obj=obj,
+            confidence=max(0.0, min(1.0, confidence / 100.0)),
+            provenance=Provenance(
+                source="reasoning_store",
+                rationale="assert_fact",
+                evidence={"confidence": confidence},
+            ),
+        )
         self._event_bus.publish(
             FactAssertedEvent(
                 subject=subject, predicate=predicate, obj=obj, confidence=confidence

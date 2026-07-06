@@ -14,6 +14,7 @@ from contracts.reasoning import ReasoningApi
 from core.logger import get_logger
 from core.observability import ObservabilityStore
 from api.events import DeviceConnectionFailedEvent, DeviceWriteEvent
+from knowledge.engine import KnowledgeEngine
 from reasoning.pipeline import ReasoningPipeline
 from simulation.engine import SimulationEngine
 from services.digital_device_service import DigitalDeviceService
@@ -31,6 +32,8 @@ class PlatformService:
         memory_api: MemoryApi,
         reasoning_api: ReasoningApi,
         event_bus: EventBus,
+        knowledge_engine: KnowledgeEngine | None = None,
+        session_factory=None,
         simulation_engine: SimulationEngine | None = None,
         reasoning_pipeline: ReasoningPipeline | None = None,
         observability: ObservabilityStore | None = None,
@@ -42,6 +45,8 @@ class PlatformService:
         self._memory_api = memory_api
         self._reasoning_api = reasoning_api
         self._event_bus = event_bus
+        self._knowledge_engine = knowledge_engine or KnowledgeEngine()
+        self._session_factory = session_factory
         self._simulation_engine = simulation_engine or SimulationEngine()
         self._reasoning_pipeline = reasoning_pipeline or ReasoningPipeline()
         self._observability = observability
@@ -94,6 +99,7 @@ class PlatformService:
         device.connect()
         self._device_api.register(device)
         self._register_device_capabilities(device_id)
+        self._record_device_capabilities(device_id)
         self._trace("device.register", {"device_id": device_id, "transport": "simulated"})
         return {"device_id": device_id, "transport": "simulated", **device.status()}
 
@@ -121,6 +127,7 @@ class PlatformService:
             raise
         self._device_api.register(device)
         self._register_device_capabilities(device_id)
+        self._record_device_capabilities(device_id)
         self._trace("device.register", {"device_id": device_id, "transport": "serial"})
         return {"device_id": device_id, "transport": "serial", **device.status()}
 
@@ -159,9 +166,15 @@ class PlatformService:
         payload: dict[str, Any],
         granted_permissions: set[str],
     ) -> Any:
-        return self._capability_api.execute(
+        result = self._capability_api.execute(
             capability_name, payload=payload, granted_permissions=granted_permissions
         )
+        if capability_name.startswith("device."):
+            parts = capability_name.split(".")
+            if len(parts) >= 3:
+                device_id = parts[1]
+                self._record_capability_execution(device_id, capability_name, True)
+        return result
 
     def capability_history(self, capability_name: str | None = None) -> list[dict[str, Any]]:
         return self._capability_api.history(capability_name=capability_name)
@@ -214,6 +227,20 @@ class PlatformService:
             predicate="event",
             obj=f"beta_simulation:{failure_mode}:{simulation_result['risk']}",
         )
+        self._knowledge_engine.record_simulation(
+            db,
+            device_id=device_id,
+            failure_mode=failure_mode,
+            risk=simulation_result["risk"],
+            recommended=recommendation["recommended_capability"],
+        )
+        self._knowledge_engine.record_learning(
+            db,
+            scenario_key=f"{device_id}:{failure_mode}",
+            outcome="success" if simulation_result["risk"] != "high" else "attention_required",
+            confidence=0.8,
+            context={"simulation": simulation_result, "reasoning": reasoning},
+        )
         self._trace(
             "beta.workflow",
             {"device_id": device_id, "failure_mode": failure_mode, "execute": execute},
@@ -225,6 +252,38 @@ class PlatformService:
             "execution": execution_result,
             "recorded": True,
         }
+
+    def query_devices_supporting_recovery(self) -> list[str]:
+        with self._session_scope() as db:
+            return self._knowledge_engine.query.devices_supporting_recovery(db)
+
+    def query_simulations_failed(self) -> list[dict]:
+        with self._session_scope() as db:
+            return self._knowledge_engine.query.simulations_failed(db)
+
+    def query_capabilities_never_executed(self) -> list[str]:
+        with self._session_scope() as db:
+            return self._knowledge_engine.query.capabilities_never_executed(db)
+
+    def query_plugins_for_recommendation(self, recommendation_key: str) -> list[str]:
+        with self._session_scope() as db:
+            return self._knowledge_engine.query.plugins_for_recommendation(
+                db, recommendation_key
+            )
+
+    def learning_history(self, scenario_key: str | None = None) -> list[dict]:
+        with self._session_scope() as db:
+            rows = self._knowledge_engine.learning.recall(db, scenario_key=scenario_key)
+        return [
+            {
+                "id": row.id,
+                "scenario_key": row.scenario_key,
+                "outcome": row.outcome,
+                "confidence": row.confidence,
+                "created_at": row.created_at.isoformat(),
+            }
+            for row in rows
+        ]
 
     def _register_device_capabilities(self, device_id: str) -> None:
         prefix = f"device.{device_id}"
@@ -304,6 +363,17 @@ class PlatformService:
             executor=executor,
         )
 
+    def _record_device_capabilities(self, device_id: str) -> None:
+        prefix = f"device.{device_id}."
+        capabilities = self._capability_api.discover(prefix=prefix)
+        if not capabilities or self._session_factory is None:
+            return
+        with self._session_scope() as db:
+            for capability in capabilities:
+                self._knowledge_engine.record_capability_support(
+                    db=db, device_id=device_id, capability_name=capability["name"]
+                )
+
     def _device_action(self, device_id: str, action: str) -> Any:
         device = self._device_api.get(device_id)
         if device is None:
@@ -334,3 +404,31 @@ class PlatformService:
     def _trace(self, name: str, detail: dict[str, Any]) -> None:
         if self._observability is not None:
             self._observability.record_trace(name, detail)
+
+    def _record_capability_execution(
+        self, device_id: str, capability_name: str, success: bool
+    ) -> None:
+        if self._session_factory is None:
+            return
+        with self._session_scope() as db:
+            self._knowledge_engine.record_capability_execution(
+                db, device_id=device_id, capability_name=capability_name, success=success
+            )
+
+    class _SessionScope:
+        def __init__(self, session_factory):
+            self._session_factory = session_factory
+            self._session = None
+
+        def __enter__(self):
+            self._session = self._session_factory()
+            return self._session
+
+        def __exit__(self, exc_type, exc, tb):
+            if self._session is not None:
+                self._session.close()
+
+    def _session_scope(self):
+        if self._session_factory is None:
+            raise RuntimeError("PlatformService requires session_factory for knowledge queries")
+        return PlatformService._SessionScope(self._session_factory)

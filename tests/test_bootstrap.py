@@ -17,6 +17,7 @@ class TestBootstrap:
         assert container.get("db_engine") is not None
         assert container.get("memory_api") is not None
         assert container.get("reasoning_api") is not None
+        assert container.get("knowledge_engine") is not None
         assert container.get("plugin_api") is not None
         assert container.get("agent_api") is not None
         assert container.get("capability_api") is not None

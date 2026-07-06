@@ -487,3 +487,47 @@ def run_beta_workflow(
         execute=execute,
         permissions=set(permissions or []),
     )
+
+
+# ---------------------------------------------------------------------------
+# Phase Gamma - Helios Knowledge Layer
+# ---------------------------------------------------------------------------
+
+
+@app.get("/gamma/knowledge/devices-supporting-recovery")
+def gamma_devices_supporting_recovery(
+    platform: PlatformService = Depends(get_platform_service),
+):
+    return {"devices": platform.query_devices_supporting_recovery()}
+
+
+@app.get("/gamma/knowledge/simulations-failed")
+def gamma_simulations_failed(platform: PlatformService = Depends(get_platform_service)):
+    return {"simulations": platform.query_simulations_failed()}
+
+
+@app.get("/gamma/knowledge/capabilities-never-executed")
+def gamma_capabilities_never_executed(
+    platform: PlatformService = Depends(get_platform_service),
+):
+    return {"capabilities": platform.query_capabilities_never_executed()}
+
+
+@app.get("/gamma/knowledge/plugins-for-recommendation")
+def gamma_plugins_for_recommendation(
+    recommendation_key: str,
+    platform: PlatformService = Depends(get_platform_service),
+):
+    return {
+        "plugins": platform.query_plugins_for_recommendation(
+            recommendation_key=recommendation_key
+        )
+    }
+
+
+@app.get("/gamma/learning")
+def gamma_learning(
+    scenario_key: str | None = None,
+    platform: PlatformService = Depends(get_platform_service),
+):
+    return {"learning": platform.learning_history(scenario_key=scenario_key)}

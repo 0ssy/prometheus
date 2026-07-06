@@ -1,10 +1,9 @@
-# Prometheus Core — Beta Atlas
+# Prometheus Core — Gamma Helios
 
 ## What this is
 
-Prometheus Core now includes the Phase Alpha foundation plus the Beta intelligence layer:
-capabilities, digital-device modeling, simulation, reasoning workflow, kernel status,
-and observability.
+Prometheus Core now includes Alpha foundation, Beta intelligence, and Gamma knowledge:
+knowledge graph, ontology, provenance, confidence-based facts, query engine, and learning.
 
 | Deliverable            | File                                |
 |-------------------------|--------------------------------------|
@@ -18,6 +17,9 @@ and observability.
 | Simulation engine       | `simulation/engine.py` |
 | Core kernel             | `kernel/runtime.py` |
 | Observability           | `core/observability.py` |
+| Knowledge engine        | `knowledge/engine.py`, `knowledge/graph.py`, `knowledge/query.py` |
+| Ontology + provenance   | `knowledge/ontology.py`, `knowledge/provenance.py` |
+| Learning layer          | `knowledge/learning.py` |
 | Event bus               | `core/event_bus.py`, `api/events.py`    |
 | Long-term memory        | `memory/models.py`, `memory/store.py`   |
 | Knowledge graph         | `reasoning/models.py`, `reasoning/graph.py` |
@@ -78,6 +80,11 @@ curl "http://127.0.0.1:8000/capabilities"
 
 # 7. Run Beta workflow (digital-device -> simulation -> reasoning)
 curl -X POST "http://127.0.0.1:8000/beta/workflow/esp32_01?failure_mode=disconnect"
+
+# 8. Query Gamma knowledge graph views
+curl "http://127.0.0.1:8000/gamma/knowledge/devices-supporting-recovery"
+curl "http://127.0.0.1:8000/gamma/knowledge/simulations-failed"
+curl "http://127.0.0.1:8000/gamma/learning"
 ```
 
 If all five return sensible JSON, the core platform orchestration is working end-to-end.
@@ -126,7 +133,7 @@ this skeleton first — that's the actual Phase Alpha goal.
 | v0.7.0  | Recovery engine |
 | v1.0.0  | Stable platform API |
 
-## Beta Atlas workflow
+## Gamma Helios knowledge workflow
 
 ```
 User Request
@@ -143,7 +150,11 @@ Recommendation
       ↓
 Optional Capability Execution
       ↓
-Memory + Knowledge + Observability record
+Knowledge Graph Search
+      ↓
+Related Devices + Capabilities + Past Simulations
+      ↓
+Recommendation + Learning record
 ```
 
 ## Phase Alpha freeze checkpoint
@@ -166,7 +177,8 @@ prometheus/
 ├── plugins/        # plugin SDK + installed plugins
 ├── agents/         # agent SDK + registered agents
 ├── memory/         # long-term memory store
-├── reasoning/      # knowledge graph
+├── reasoning/      # reasoning pipeline + compatibility reasoning API
+├── knowledge/      # graph, ontology, provenance, learning, query engine
 ├── backend/        # FastAPI app — the local API
 ├── tests/          # pytest coverage for managers/stores/bootstrap/happy path
 └── requirements.txt

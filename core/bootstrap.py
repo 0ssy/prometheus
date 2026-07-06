@@ -50,6 +50,8 @@ def _register_services(container: ServiceContainer) -> None:
         memory_api=components.memory_api,
         reasoning_api=components.reasoning_api,
         event_bus=event_bus,
+        knowledge_engine=components.knowledge_engine,
+        session_factory=SessionLocal,
         observability=observability,
     )
     event_handlers = PlatformEventHandlers(
@@ -75,6 +77,7 @@ def _register_services(container: ServiceContainer) -> None:
     container.register("session_factory", SessionLocal)
     container.register("memory_api", components.memory_api)
     container.register("reasoning_api", components.reasoning_api)
+    container.register("knowledge_engine", components.knowledge_engine)
     container.register("plugin_api", components.plugin_api)
     container.register("agent_api", components.agent_api)
     container.register("capability_api", components.capability_api)
@@ -118,5 +121,5 @@ def boot(heartbeat_job: Callable[[], None]) -> ServiceContainer:
     _load_agents(container)
     _start_scheduler(container, heartbeat_job)
 
-    logger.info("Startup complete - Prometheus Core (Beta Atlas) runtime online")
+    logger.info("Startup complete - Prometheus Core (Gamma Helios) runtime online")
     return container

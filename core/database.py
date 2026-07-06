@@ -38,5 +38,8 @@ def init_db():
     # Import models here so they register with Base before create_all
     from memory.models import MemoryEntry  # noqa
     from reasoning.models import KnowledgeFact  # noqa
+    from knowledge.node import KnowledgeNode  # noqa
+    from knowledge.edge import KnowledgeEdge  # noqa
+    from knowledge.learning import LearningExperience  # noqa
 
     Base.metadata.create_all(bind=engine)

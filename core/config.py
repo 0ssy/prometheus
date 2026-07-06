@@ -13,7 +13,7 @@ from dataclasses import dataclass, field
 @dataclass
 class PrometheusConfig:
     app_name: str = "Prometheus"
-    version: str = "0.4.0-beta"
+    version: str = "0.5.0-gamma"
 
     # Storage
     db_path: str = field(

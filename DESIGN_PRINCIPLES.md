@@ -54,3 +54,7 @@ more convenient that day.
 
 - **Don't build the empty folder.** Structure gets added when
   something real needs it, not speculatively, in advance.
+
+- **Knowledge is immutable; understanding evolves.** Do not delete or
+  overwrite historical facts. Record new evidence with confidence and
+  provenance, then derive current belief from the full history.

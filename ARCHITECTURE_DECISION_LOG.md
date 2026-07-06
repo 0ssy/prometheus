@@ -1,5 +1,24 @@
 # Architecture Decision Log
 
+## 2026-07-06 — Phase Gamma (Helios) Knowledge Layer
+
+### Context
+Beta established capability execution and simulation-first workflows. The next step required
+a durable knowledge layer that can answer what Prometheus knows, how certain it is, and where
+that knowledge came from.
+
+### Decision
+1. Added `knowledge/` package with graph, node, edge, query, ontology, provenance, and learning modules.
+2. Introduced `KnowledgeEngine` as the only knowledge access boundary for services.
+3. Added immutable knowledge edges with confidence and provenance metadata.
+4. Added query endpoints for recovery support, simulation failures, unused capabilities, and learning history.
+5. Updated design principles to explicitly enforce immutable knowledge with evolving understanding.
+
+### Consequences
+- Knowledge is append-only and auditable.
+- Query use cases no longer require raw SQL at API boundaries.
+- Learning outcomes from simulation workflows are now persisted and reusable.
+
 ## 2026-07-06 — Phase Beta (Atlas) Intelligence Layer
 
 ### Context
