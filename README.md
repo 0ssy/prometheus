@@ -1,9 +1,9 @@
-# Prometheus Core — Delta Daedalus (in progress)
+# Prometheus Core — Olympus (in progress)
 
 ## What this is
 
-Prometheus Core now includes Alpha foundation, Beta intelligence, and Gamma knowledge:
-knowledge graph, ontology, provenance, confidence-based facts, query engine, and learning.
+Prometheus Core includes Alpha foundation, Beta intelligence, Gamma knowledge, Delta simulation, Epsilon hardware abstraction, and Omega ecosystem:
+knowledge graph, ontology, provenance, confidence-based facts, query engine, learning, digital twin, HAL, drivers, firmware intelligence, security, plugin SDK, multi-agent coordination, distributed runtime, policy engine, marketplace, enterprise configuration, runtime management, and unified dashboard.
 
 | Deliverable            | File                                |
 |-------------------------|--------------------------------------|
@@ -28,8 +28,9 @@ knowledge graph, ontology, provenance, confidence-based facts, query engine, and
 | Local database          | `core/database.py`                  |
 | Logging system          | `core/logger.py`                    |
 | Configuration manager   | `core/config.py`                    |
+| Unified entry point     | `prometheus.py`                      |
 
-Everything runs locally on SQLite — no cloud dependency for Phase Alpha.
+Everything runs locally on SQLite — no cloud dependency.
 
 ## Setup
 
@@ -43,16 +44,25 @@ pip install -r requirements.txt
 ## Run it
 
 ```bash
-# Platform runtime (no web API):
-python main.py
+# Unified entry point (runtime / api / demo / test):
+python prometheus.py runtime
+python prometheus.py api
+python prometheus.py demo
+python prometheus.py test
 
-# Web API frontend:
+# Legacy entry points (still supported):
+python main.py
 uvicorn backend.main:app --reload
+python happy_path.py
 ```
 
 Server comes up on `http://127.0.0.1:8000`. Interactive API docs (auto-generated
 by FastAPI) are at `http://127.0.0.1:8000/docs` — use this to click through
 every endpoint without writing curl commands.
+
+Engineering dashboard is at `http://127.0.0.1:8000/dashboard` — a single-page
+view of platform health, devices, knowledge, simulation, firmware, diagnostics,
+recovery, agents, plugins, metrics, logs, and policies.
 
 ## Verify the architecture vertical slice
 
@@ -197,6 +207,8 @@ Recommendation + Learning record
   - `POST /omega/policy/grant`
   - `GET /omega/policy/check`
   - `GET /omega/public-apis`
+  - `GET /dashboard` — engineering dashboard
+  - `GET /omega/dashboard/{section}` — dashboard JSON API
 
 ## Phase Alpha freeze checkpoint
 
@@ -222,7 +234,18 @@ prometheus/
 ├── knowledge/      # graph, ontology, provenance, learning, query engine
 ├── delta/          # digital engineering lab + time/scenario engines
 ├── epsilon/        # HAL, diagnostics, firmware knowledge, recovery planning
+├── hardware/       # HAL interfaces, drivers, sessions, diagnostics, recovery
+├── firmware/       # firmware metadata, partitions, compatibility, parser
+├── security/       # authorization, permissions, auditing, integrity
+├── sdk/            # plugin SDK (interfaces, decorators, lifecycle, testing)
 ├── omega/          # marketplace, policy, distributed runtime, public API catalog
+├── agents/         # multi-agent coordination (coordinator, planner, consensus)
+├── distributed/    # multi-node runtime (node registry, sync, runtime)
+├── policy/         # policy engine (authorization, permissions, rules, audit)
+├── marketplace/    # repositories (plugins, capabilities, drivers, agents)
+├── enterprise/     # multi-tenancy (orgs, projects, users, teams, roles)
+├── runtime_management/ # resource, memory, lifecycle management
+├── dashboard/      # unified engineering dashboard
 ├── backend/        # FastAPI app — the local API
 ├── tests/          # pytest coverage for managers/stores/bootstrap/happy path
 └── requirements.txt

@@ -75,7 +75,13 @@ def get_omega_service(
 def startup():
     global _container
     _container = boot(_heartbeat_job)
+    app.state.container = _container
     logger.info("Backend ready — services available via app.state.container")
+
+
+from backend.dashboard import mount_dashboard
+
+mount_dashboard(app)
 
 
 @app.get("/health")
