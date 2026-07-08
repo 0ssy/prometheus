@@ -17213,3 +17213,4 @@ live
 2026-07-08 19:15:11 | INFO     | core.event_bus | Subscribed handler for event: memory.stored
 2026-07-08 19:15:11 | INFO     | core.event_bus | Subscribed handler for event: fact.asserted
 2026-07-08 19:15:11 | INFO     | core.event_bus | Subscribed handler for event: capability.executed
+2026-07-08 19:15:38 | INFO     | backend.main | Prometheus heartbeat — system alive
