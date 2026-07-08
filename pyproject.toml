@@ -1,0 +1,26 @@
+# Packaging for the `prometheus` CLI face.
+# Runtime deps are mirrored from requirements.txt (keep in sync by hand).
+[build-system]
+requires = ["setuptools>=61"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "prometheus-engineering-os"
+version = "0.6.0"
+description = "Prometheus Engineering OS — unified CLI face"
+requires-python = ">=3.11"
+dependencies = [
+    "fastapi",
+    "uvicorn[standard]",
+    "sqlalchemy",
+    "pydantic",
+    "pyserial",
+    "cryptography",
+    "pytest",
+]
+
+[project.scripts]
+prometheus = "prometheus:main"
+
+[tool.setuptools]
+py-modules = ["prometheus"]

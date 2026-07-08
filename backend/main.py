@@ -9,9 +9,12 @@ at startup. Endpoints access services via the container rather than
 direct imports.
 """
 
+import asyncio
 import json
+from queue import Queue
 
 from fastapi import FastAPI, Depends
+from fastapi.responses import StreamingResponse
 from sqlalchemy.orm import Session
 
 from core.config import config
@@ -99,6 +102,111 @@ def health(container: ServiceContainer = Depends(get_container)):
         "capabilities_registered": len(capability_api.discover()),
         "kernel_health": kernel.health(),
     }
+
+
+def _status_snapshot(container: ServiceContainer, db) -> dict:
+    from sqlalchemy import func
+    from knowledge.node import KnowledgeNode
+    from memory.models import MemoryEntry
+    from reasoning.models import KnowledgeFact
+
+    kernel = container.get("kernel")
+    knowledge_engine = container.get("knowledge_engine")
+    reasoning_api = container.get("reasoning_api")
+    device_api = container.get("device_api")
+    plugin_api = container.get("plugin_api")
+    agent_api = container.get("agent_api")
+    capability_api = container.get("capability_api")
+
+    kernel_status = "Running" if kernel.health().get("status") == "ok" else "Stopped"
+
+    knowledge_node_count = db.query(func.count(KnowledgeNode.id)).scalar()
+    knowledge_status = "Healthy" if (knowledge_engine is not None and int(knowledge_node_count or 0) > 0) else "Idle"
+
+    simulation_status = "Idle"
+
+    reasoning_status = "Healthy" if reasoning_api is not None else "Idle"
+
+    devices = device_api.list() if device_api is not None else []
+    hardware_hal = container.get("hardware_hal")
+    hardware_status = "Active" if (hardware_hal is not None and len(devices) > 0) else "Idle"
+
+    return {
+        "kernel": kernel_status,
+        "knowledge": knowledge_status,
+        "simulation": simulation_status,
+        "reasoning": reasoning_status,
+        "hardware": hardware_status,
+        "devices": len(devices),
+        "agents": len(agent_api.list_agents()) if agent_api is not None else 0,
+        "plugins": len(plugin_api.list_plugins()) if plugin_api is not None else 0,
+        "capabilities": len(capability_api.discover()) if capability_api is not None else 0,
+        "knowledge_facts": int(db.query(func.count(KnowledgeFact.id)).scalar() or 0),
+    }
+
+
+@app.get("/status")
+def platform_status(container: ServiceContainer = Depends(get_container), db: Session = Depends(get_db)):
+    return _status_snapshot(container, db)
+
+
+@app.get("/stats")
+def platform_stats(container: ServiceContainer = Depends(get_container), db: Session = Depends(get_db)):
+    from sqlalchemy import func
+    from memory.models import MemoryEntry
+    from reasoning.models import KnowledgeFact
+    from knowledge.node import KnowledgeNode
+
+    return {
+        "devices": len(container.get("device_api").list()),
+        "agents": len(container.get("agent_api").list_agents()),
+        "plugins": len(container.get("plugin_api").list_plugins()),
+        "capabilities": len(container.get("capability_api").discover()),
+        "knowledge_nodes": int(db.query(func.count(KnowledgeNode.id)).scalar() or 0),
+        "facts": int(db.query(func.count(KnowledgeFact.id)).scalar() or 0),
+        "memory_entries": int(db.query(func.count(MemoryEntry.id)).scalar() or 0),
+    }
+
+
+@app.get("/events")
+async def event_stream(container: ServiceContainer = Depends(get_container)):
+    event_bus = container.get("event_bus")
+    queue: Queue = Queue()
+
+    event_types = [
+        "plugin.ran",
+        "agent.dispatched",
+        "device.connected",
+        "device.disconnected",
+        "device.connect_failed",
+        "device.wrote",
+        "memory.stored",
+        "fact.asserted",
+        "capability.executed",
+    ]
+
+    def handler(event):
+        queue.put(event)
+
+    for et in event_types:
+        event_bus.subscribe(et, handler)
+
+    async def generate():
+        loop = asyncio.get_event_loop()
+        try:
+            while True:
+                event = await loop.run_in_executor(None, queue.get)
+                payload = {
+                    "type": event.event_type,
+                    "timestamp": event.timestamp.isoformat(),
+                    "data": {k: v for k, v in event.__dict__.items() if k not in ("event_type", "timestamp")},
+                }
+                yield f"data: {json.dumps(payload)}\n\n"
+        finally:
+            for et in event_types:
+                event_bus.unsubscribe(et, handler)
+
+    return StreamingResponse(generate(), media_type="text/event-stream")
 
 
 @app.get("/system/services")
