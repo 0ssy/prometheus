@@ -15385,3 +15385,1831 @@ live
 2026-07-08 18:55:06 | INFO     | backend.main | Prometheus heartbeat — system alive
 2026-07-08 18:55:36 | INFO     | backend.main | Prometheus heartbeat — system alive
 2026-07-08 18:56:07 | INFO     | backend.main | Prometheus heartbeat — system alive
+2026-07-08 18:56:37 | INFO     | backend.main | Prometheus heartbeat — system alive
+2026-07-08 18:57:07 | INFO     | backend.main | Prometheus heartbeat — system alive
+2026-07-08 18:57:37 | INFO     | backend.main | Prometheus heartbeat — system alive
+2026-07-08 18:58:08 | INFO     | backend.main | Prometheus heartbeat — system alive
+2026-07-08 18:58:38 | INFO     | backend.main | Prometheus heartbeat — system alive
+2026-07-08 18:59:08 | INFO     | backend.main | Prometheus heartbeat — system alive
+2026-07-08 18:59:39 | INFO     | backend.main | Prometheus heartbeat — system alive
+2026-07-08 19:00:09 | INFO     | backend.main | Prometheus heartbeat — system alive
+2026-07-08 19:00:39 | INFO     | backend.main | Prometheus heartbeat — system alive
+2026-07-08 19:01:09 | INFO     | backend.main | Prometheus heartbeat — system alive
+2026-07-08 19:01:40 | INFO     | backend.main | Prometheus heartbeat — system alive
+2026-07-08 19:02:10 | INFO     | backend.main | Prometheus heartbeat — system alive
+2026-07-08 19:02:40 | INFO     | backend.main | Prometheus heartbeat — system alive
+2026-07-08 19:03:11 | INFO     | backend.main | Prometheus heartbeat — system alive
+2026-07-08 19:03:41 | INFO     | backend.main | Prometheus heartbeat — system alive
+2026-07-08 19:04:11 | INFO     | backend.main | Prometheus heartbeat — system alive
+2026-07-08 19:04:41 | INFO     | backend.main | Prometheus heartbeat — system alive
+2026-07-08 19:05:12 | INFO     | backend.main | Prometheus heartbeat — system alive
+2026-07-08 19:05:42 | INFO     | backend.main | Prometheus heartbeat — system alive
+2026-07-08 19:06:12 | INFO     | backend.main | Prometheus heartbeat — system alive
+2026-07-08 19:06:42 | INFO     | backend.main | Prometheus heartbeat — system alive
+2026-07-08 19:07:13 | INFO     | backend.main | Prometheus heartbeat — system alive
+2026-07-08 19:07:43 | INFO     | backend.main | Prometheus heartbeat — system alive
+2026-07-08 19:08:13 | INFO     | backend.main | Prometheus heartbeat — system alive
+2026-07-08 19:08:41 | INFO     | security.permissions | Registered permission: device.connect
+2026-07-08 19:08:41 | INFO     | security.permissions | Registered permission: device.disconnect
+2026-07-08 19:08:41 | INFO     | security.permissions | Registered permission: device.read
+2026-07-08 19:08:41 | INFO     | security.permissions | Registered permission: device.write
+2026-07-08 19:08:41 | INFO     | security.permissions | Registered permission: device.diagnose
+2026-07-08 19:08:41 | INFO     | security.permissions | Registered permission: device.recover
+2026-07-08 19:08:41 | INFO     | security.permissions | Registered permission: device.flash
+2026-07-08 19:08:41 | INFO     | security.permissions | Registered permission: device.reboot
+2026-07-08 19:08:41 | INFO     | security.permissions | Registered permission: hardware.session.create
+2026-07-08 19:08:41 | INFO     | security.permissions | Registered permission: hardware.session.close
+2026-07-08 19:08:41 | INFO     | security.permissions | Registered permission: firmware.read
+2026-07-08 19:08:41 | INFO     | security.permissions | Registered permission: firmware.parse
+2026-07-08 19:08:41 | INFO     | security.permissions | Mapped action device.connect -> ['device.connect']
+2026-07-08 19:08:41 | INFO     | security.permissions | Mapped action device.disconnect -> ['device.disconnect']
+2026-07-08 19:08:41 | INFO     | security.permissions | Mapped action device.read -> ['device.read']
+2026-07-08 19:08:41 | INFO     | security.permissions | Mapped action device.write -> ['device.write']
+2026-07-08 19:08:41 | INFO     | security.permissions | Mapped action device.diagnose -> ['device.diagnose']
+2026-07-08 19:08:41 | INFO     | security.permissions | Mapped action device.recover -> ['device.recover', 'ownership_declared']
+2026-07-08 19:08:41 | INFO     | security.permissions | Mapped action device.flash -> ['device.flash', 'ownership_declared']
+2026-07-08 19:08:41 | INFO     | security.permissions | Mapped action device.reboot -> ['device.reboot', 'ownership_declared']
+2026-07-08 19:08:41 | INFO     | security.permissions | Mapped action hardware.session.create -> ['hardware.session.create']
+2026-07-08 19:08:41 | INFO     | security.permissions | Mapped action hardware.session.close -> ['hardware.session.close']
+2026-07-08 19:08:41 | INFO     | security.permissions | Mapped action firmware.read -> ['firmware.read']
+2026-07-08 19:08:41 | INFO     | security.permissions | Mapped action firmware.parse -> ['firmware.parse']
+2026-07-08 19:08:42 | INFO     | agents.manager | Registered agent: fake_agent
+2026-07-08 19:08:42 | INFO     | agents.manager | Registered agent: fake_agent
+2026-07-08 19:08:42 | INFO     | agents.manager | Dispatching task to agent 'fake_agent': {}
+2026-07-08 19:08:42 | INFO     | core.event_bus | Subscribed handler for event: agent.dispatched
+2026-07-08 19:08:42 | INFO     | agents.manager | Registered agent: fake_agent
+2026-07-08 19:08:42 | INFO     | agents.manager | Dispatching task to agent 'fake_agent': {'task': 'x'}
+2026-07-08 19:08:42 | INFO     | core.container | Registered service: config
+2026-07-08 19:08:42 | INFO     | core.container | Registered service: db_engine
+2026-07-08 19:08:42 | INFO     | core.event_bus | Subscribed handler for event: device.connected
+2026-07-08 19:08:42 | INFO     | core.event_bus | Subscribed handler for event: device.disconnected
+2026-07-08 19:08:42 | INFO     | core.event_bus | Subscribed handler for event: device.connect_failed
+2026-07-08 19:08:42 | INFO     | core.event_bus | Subscribed handler for event: device.wrote
+2026-07-08 19:08:42 | INFO     | core.event_bus | Subscribed handler for event: plugin.ran
+2026-07-08 19:08:42 | INFO     | core.event_bus | Subscribed handler for event: agent.dispatched
+2026-07-08 19:08:42 | INFO     | core.event_bus | Subscribed handler for event: memory.stored
+2026-07-08 19:08:42 | INFO     | core.event_bus | Subscribed handler for event: fact.asserted
+2026-07-08 19:08:42 | INFO     | core.event_bus | Subscribed handler for event: capability.executed
+2026-07-08 19:08:42 | INFO     | hardware.hal.registry | Registered driver: usb
+2026-07-08 19:08:42 | INFO     | hardware.hal.registry | Registered driver: adb
+2026-07-08 19:08:42 | INFO     | hardware.hal.registry | Registered driver: fastboot
+2026-07-08 19:08:42 | INFO     | hardware.hal.registry | Registered driver: network
+2026-07-08 19:08:42 | INFO     | hardware.hal.registry | Registered driver: virtual
+2026-07-08 19:08:42 | INFO     | core.container | Registered service: event_bus
+2026-07-08 19:08:42 | INFO     | core.container | Registered service: observability
+2026-07-08 19:08:42 | INFO     | core.container | Registered service: scheduler
+2026-07-08 19:08:42 | INFO     | core.container | Registered service: session_factory
+2026-07-08 19:08:42 | INFO     | core.container | Registered service: memory_api
+2026-07-08 19:08:42 | INFO     | core.container | Registered service: reasoning_api
+2026-07-08 19:08:42 | INFO     | core.container | Registered service: knowledge_engine
+2026-07-08 19:08:42 | INFO     | core.container | Registered service: plugin_api
+2026-07-08 19:08:42 | INFO     | core.container | Registered service: agent_api
+2026-07-08 19:08:42 | INFO     | core.container | Registered service: capability_api
+2026-07-08 19:08:42 | INFO     | core.container | Registered service: device_api
+2026-07-08 19:08:42 | INFO     | core.container | Registered service: platform_service
+2026-07-08 19:08:42 | INFO     | core.container | Registered service: delta_service
+2026-07-08 19:08:42 | INFO     | core.container | Registered service: epsilon_service
+2026-07-08 19:08:42 | INFO     | core.container | Registered service: omega_service
+2026-07-08 19:08:42 | INFO     | core.container | Registered service: event_handlers
+2026-07-08 19:08:42 | INFO     | core.container | Registered service: kernel
+2026-07-08 19:08:42 | INFO     | core.container | Registered service: hardware_hal
+2026-07-08 19:08:42 | INFO     | core.container | Registered service: hardware_session_manager
+2026-07-08 19:08:42 | INFO     | core.container | Registered service: hardware_diagnostics
+2026-07-08 19:08:42 | INFO     | core.container | Registered service: hardware_recovery
+2026-07-08 19:08:42 | INFO     | core.container | Registered service: hardware_firmware
+2026-07-08 19:08:42 | INFO     | core.container | Registered service: security_authorizer
+2026-07-08 19:08:42 | INFO     | core.container | Registered service: security_audit
+2026-07-08 19:08:42 | INFO     | core.container | Registered service: security_integrity
+2026-07-08 19:08:42 | INFO     | core.container | Registered service: omega_agent_coordinator
+2026-07-08 19:08:42 | INFO     | core.container | Registered service: omega_task_planner
+2026-07-08 19:08:42 | INFO     | core.container | Registered service: omega_consensus
+2026-07-08 19:08:42 | INFO     | core.container | Registered service: omega_delegation
+2026-07-08 19:08:42 | INFO     | core.container | Registered service: omega_node_registry
+2026-07-08 19:08:42 | INFO     | core.container | Registered service: omega_distributed_runtime
+2026-07-08 19:08:42 | INFO     | core.container | Registered service: omega_knowledge_sync
+2026-07-08 19:08:42 | INFO     | core.container | Registered service: omega_capability_sync
+2026-07-08 19:08:42 | INFO     | core.container | Registered service: omega_policy_engine
+2026-07-08 19:08:42 | INFO     | core.container | Registered service: omega_permission_hierarchy
+2026-07-08 19:08:42 | INFO     | core.container | Registered service: omega_rule_engine
+2026-07-08 19:08:42 | INFO     | core.container | Registered service: omega_policy_audit
+2026-07-08 19:08:42 | INFO     | core.container | Registered service: omega_plugin_repo
+2026-07-08 19:08:42 | INFO     | core.container | Registered service: omega_capability_repo
+2026-07-08 19:08:42 | INFO     | core.container | Registered service: omega_driver_repo
+2026-07-08 19:08:42 | INFO     | core.container | Registered service: omega_agent_repo
+2026-07-08 19:08:42 | INFO     | core.container | Registered service: omega_org_registry
+2026-07-08 19:08:42 | INFO     | core.container | Registered service: omega_project_registry
+2026-07-08 19:08:42 | INFO     | core.container | Registered service: omega_user_registry
+2026-07-08 19:08:42 | INFO     | core.container | Registered service: omega_team_registry
+2026-07-08 19:08:42 | INFO     | core.container | Registered service: omega_role_registry
+2026-07-08 19:08:42 | INFO     | core.container | Registered service: omega_resource_manager
+2026-07-08 19:08:42 | INFO     | core.container | Registered service: omega_memory_manager
+2026-07-08 19:08:42 | INFO     | core.container | Registered service: omega_lifecycle_manager
+2026-07-08 19:08:42 | INFO     | core.container | Registered service: omega_dashboard
+2026-07-08 19:08:42 | INFO     | plugins.manager | Loaded plugin: echo v0.1.0
+2026-07-08 19:08:42 | INFO     | agents.manager | Registered agent: echo_agent
+2026-07-08 19:08:42 | INFO     | agents.manager | Registered agent: engineering_agent
+2026-07-08 19:08:42 | INFO     | core.scheduler | Scheduled job 'heartbeat' every 30s
+2026-07-08 19:08:42 | INFO     | core.scheduler | Scheduler started
+2026-07-08 19:08:42 | INFO     | core.bootstrap | Startup complete - Prometheus Core (Omega Olympus) runtime online
+2026-07-08 19:08:42 | INFO     | core.container | Registered service: config
+2026-07-08 19:08:42 | INFO     | core.container | Registered service: db_engine
+2026-07-08 19:08:42 | INFO     | core.event_bus | Subscribed handler for event: device.connected
+2026-07-08 19:08:42 | INFO     | core.event_bus | Subscribed handler for event: device.disconnected
+2026-07-08 19:08:42 | INFO     | core.event_bus | Subscribed handler for event: device.connect_failed
+2026-07-08 19:08:42 | INFO     | core.event_bus | Subscribed handler for event: device.wrote
+2026-07-08 19:08:42 | INFO     | core.event_bus | Subscribed handler for event: plugin.ran
+2026-07-08 19:08:42 | INFO     | core.event_bus | Subscribed handler for event: agent.dispatched
+2026-07-08 19:08:42 | INFO     | core.event_bus | Subscribed handler for event: memory.stored
+2026-07-08 19:08:42 | INFO     | core.event_bus | Subscribed handler for event: fact.asserted
+2026-07-08 19:08:42 | INFO     | core.event_bus | Subscribed handler for event: capability.executed
+2026-07-08 19:08:42 | INFO     | hardware.hal.registry | Registered driver: usb
+2026-07-08 19:08:42 | INFO     | hardware.hal.registry | Registered driver: adb
+2026-07-08 19:08:42 | INFO     | hardware.hal.registry | Registered driver: fastboot
+2026-07-08 19:08:42 | INFO     | hardware.hal.registry | Registered driver: network
+2026-07-08 19:08:42 | INFO     | hardware.hal.registry | Registered driver: virtual
+2026-07-08 19:08:42 | INFO     | core.container | Registered service: event_bus
+2026-07-08 19:08:42 | INFO     | core.container | Registered service: observability
+2026-07-08 19:08:42 | INFO     | core.container | Registered service: scheduler
+2026-07-08 19:08:42 | INFO     | core.container | Registered service: session_factory
+2026-07-08 19:08:42 | INFO     | core.container | Registered service: memory_api
+2026-07-08 19:08:42 | INFO     | core.container | Registered service: reasoning_api
+2026-07-08 19:08:42 | INFO     | core.container | Registered service: knowledge_engine
+2026-07-08 19:08:42 | INFO     | core.container | Registered service: plugin_api
+2026-07-08 19:08:42 | INFO     | core.container | Registered service: agent_api
+2026-07-08 19:08:42 | INFO     | core.container | Registered service: capability_api
+2026-07-08 19:08:42 | INFO     | core.container | Registered service: device_api
+2026-07-08 19:08:42 | INFO     | core.container | Registered service: platform_service
+2026-07-08 19:08:42 | INFO     | core.container | Registered service: delta_service
+2026-07-08 19:08:42 | INFO     | core.container | Registered service: epsilon_service
+2026-07-08 19:08:42 | INFO     | core.container | Registered service: omega_service
+2026-07-08 19:08:42 | INFO     | core.container | Registered service: event_handlers
+2026-07-08 19:08:42 | INFO     | core.container | Registered service: kernel
+2026-07-08 19:08:42 | INFO     | core.container | Registered service: hardware_hal
+2026-07-08 19:08:42 | INFO     | core.container | Registered service: hardware_session_manager
+2026-07-08 19:08:42 | INFO     | core.container | Registered service: hardware_diagnostics
+2026-07-08 19:08:42 | INFO     | core.container | Registered service: hardware_recovery
+2026-07-08 19:08:42 | INFO     | core.container | Registered service: hardware_firmware
+2026-07-08 19:08:42 | INFO     | core.container | Registered service: security_authorizer
+2026-07-08 19:08:42 | INFO     | core.container | Registered service: security_audit
+2026-07-08 19:08:42 | INFO     | core.container | Registered service: security_integrity
+2026-07-08 19:08:42 | INFO     | core.container | Registered service: omega_agent_coordinator
+2026-07-08 19:08:42 | INFO     | core.container | Registered service: omega_task_planner
+2026-07-08 19:08:42 | INFO     | core.container | Registered service: omega_consensus
+2026-07-08 19:08:42 | INFO     | core.container | Registered service: omega_delegation
+2026-07-08 19:08:42 | INFO     | core.container | Registered service: omega_node_registry
+2026-07-08 19:08:42 | INFO     | core.container | Registered service: omega_distributed_runtime
+2026-07-08 19:08:42 | INFO     | core.container | Registered service: omega_knowledge_sync
+2026-07-08 19:08:42 | INFO     | core.container | Registered service: omega_capability_sync
+2026-07-08 19:08:42 | INFO     | core.container | Registered service: omega_policy_engine
+2026-07-08 19:08:42 | INFO     | core.container | Registered service: omega_permission_hierarchy
+2026-07-08 19:08:42 | INFO     | core.container | Registered service: omega_rule_engine
+2026-07-08 19:08:42 | INFO     | core.container | Registered service: omega_policy_audit
+2026-07-08 19:08:42 | INFO     | core.container | Registered service: omega_plugin_repo
+2026-07-08 19:08:42 | INFO     | core.container | Registered service: omega_capability_repo
+2026-07-08 19:08:42 | INFO     | core.container | Registered service: omega_driver_repo
+2026-07-08 19:08:42 | INFO     | core.container | Registered service: omega_agent_repo
+2026-07-08 19:08:42 | INFO     | core.container | Registered service: omega_org_registry
+2026-07-08 19:08:42 | INFO     | core.container | Registered service: omega_project_registry
+2026-07-08 19:08:42 | INFO     | core.container | Registered service: omega_user_registry
+2026-07-08 19:08:42 | INFO     | core.container | Registered service: omega_team_registry
+2026-07-08 19:08:42 | INFO     | core.container | Registered service: omega_role_registry
+2026-07-08 19:08:42 | INFO     | core.container | Registered service: omega_resource_manager
+2026-07-08 19:08:42 | INFO     | core.container | Registered service: omega_memory_manager
+2026-07-08 19:08:42 | INFO     | core.container | Registered service: omega_lifecycle_manager
+2026-07-08 19:08:42 | INFO     | core.container | Registered service: omega_dashboard
+2026-07-08 19:08:42 | INFO     | plugins.manager | Loaded plugin: echo v0.1.0
+2026-07-08 19:08:42 | INFO     | agents.manager | Registered agent: echo_agent
+2026-07-08 19:08:42 | INFO     | agents.manager | Registered agent: engineering_agent
+2026-07-08 19:08:42 | INFO     | core.scheduler | Scheduled job 'heartbeat' every 30s
+2026-07-08 19:08:42 | INFO     | core.scheduler | Scheduler started
+2026-07-08 19:08:42 | INFO     | core.bootstrap | Startup complete - Prometheus Core (Omega Olympus) runtime online
+2026-07-08 19:08:42 | INFO     | core.container | Registered service: config
+2026-07-08 19:08:42 | INFO     | core.container | Registered service: db_engine
+2026-07-08 19:08:42 | INFO     | core.event_bus | Subscribed handler for event: device.connected
+2026-07-08 19:08:42 | INFO     | core.event_bus | Subscribed handler for event: device.disconnected
+2026-07-08 19:08:42 | INFO     | core.event_bus | Subscribed handler for event: device.connect_failed
+2026-07-08 19:08:42 | INFO     | core.event_bus | Subscribed handler for event: device.wrote
+2026-07-08 19:08:42 | INFO     | core.event_bus | Subscribed handler for event: plugin.ran
+2026-07-08 19:08:42 | INFO     | core.event_bus | Subscribed handler for event: agent.dispatched
+2026-07-08 19:08:42 | INFO     | core.event_bus | Subscribed handler for event: memory.stored
+2026-07-08 19:08:42 | INFO     | core.event_bus | Subscribed handler for event: fact.asserted
+2026-07-08 19:08:42 | INFO     | core.event_bus | Subscribed handler for event: capability.executed
+2026-07-08 19:08:42 | INFO     | hardware.hal.registry | Registered driver: usb
+2026-07-08 19:08:42 | INFO     | hardware.hal.registry | Registered driver: adb
+2026-07-08 19:08:42 | INFO     | hardware.hal.registry | Registered driver: fastboot
+2026-07-08 19:08:42 | INFO     | hardware.hal.registry | Registered driver: network
+2026-07-08 19:08:42 | INFO     | hardware.hal.registry | Registered driver: virtual
+2026-07-08 19:08:42 | INFO     | core.container | Registered service: event_bus
+2026-07-08 19:08:42 | INFO     | core.container | Registered service: observability
+2026-07-08 19:08:42 | INFO     | core.container | Registered service: scheduler
+2026-07-08 19:08:42 | INFO     | core.container | Registered service: session_factory
+2026-07-08 19:08:42 | INFO     | core.container | Registered service: memory_api
+2026-07-08 19:08:42 | INFO     | core.container | Registered service: reasoning_api
+2026-07-08 19:08:42 | INFO     | core.container | Registered service: knowledge_engine
+2026-07-08 19:08:42 | INFO     | core.container | Registered service: plugin_api
+2026-07-08 19:08:42 | INFO     | core.container | Registered service: agent_api
+2026-07-08 19:08:42 | INFO     | core.container | Registered service: capability_api
+2026-07-08 19:08:42 | INFO     | core.container | Registered service: device_api
+2026-07-08 19:08:42 | INFO     | core.container | Registered service: platform_service
+2026-07-08 19:08:42 | INFO     | core.container | Registered service: delta_service
+2026-07-08 19:08:42 | INFO     | core.container | Registered service: epsilon_service
+2026-07-08 19:08:42 | INFO     | core.container | Registered service: omega_service
+2026-07-08 19:08:42 | INFO     | core.container | Registered service: event_handlers
+2026-07-08 19:08:42 | INFO     | core.container | Registered service: kernel
+2026-07-08 19:08:42 | INFO     | core.container | Registered service: hardware_hal
+2026-07-08 19:08:42 | INFO     | core.container | Registered service: hardware_session_manager
+2026-07-08 19:08:42 | INFO     | core.container | Registered service: hardware_diagnostics
+2026-07-08 19:08:42 | INFO     | core.container | Registered service: hardware_recovery
+2026-07-08 19:08:42 | INFO     | core.container | Registered service: hardware_firmware
+2026-07-08 19:08:42 | INFO     | core.container | Registered service: security_authorizer
+2026-07-08 19:08:42 | INFO     | core.container | Registered service: security_audit
+2026-07-08 19:08:42 | INFO     | core.container | Registered service: security_integrity
+2026-07-08 19:08:42 | INFO     | core.container | Registered service: omega_agent_coordinator
+2026-07-08 19:08:42 | INFO     | core.container | Registered service: omega_task_planner
+2026-07-08 19:08:42 | INFO     | core.container | Registered service: omega_consensus
+2026-07-08 19:08:42 | INFO     | core.container | Registered service: omega_delegation
+2026-07-08 19:08:42 | INFO     | core.container | Registered service: omega_node_registry
+2026-07-08 19:08:42 | INFO     | core.container | Registered service: omega_distributed_runtime
+2026-07-08 19:08:42 | INFO     | core.container | Registered service: omega_knowledge_sync
+2026-07-08 19:08:42 | INFO     | core.container | Registered service: omega_capability_sync
+2026-07-08 19:08:42 | INFO     | core.container | Registered service: omega_policy_engine
+2026-07-08 19:08:42 | INFO     | core.container | Registered service: omega_permission_hierarchy
+2026-07-08 19:08:42 | INFO     | core.container | Registered service: omega_rule_engine
+2026-07-08 19:08:42 | INFO     | core.container | Registered service: omega_policy_audit
+2026-07-08 19:08:42 | INFO     | core.container | Registered service: omega_plugin_repo
+2026-07-08 19:08:42 | INFO     | core.container | Registered service: omega_capability_repo
+2026-07-08 19:08:42 | INFO     | core.container | Registered service: omega_driver_repo
+2026-07-08 19:08:42 | INFO     | core.container | Registered service: omega_agent_repo
+2026-07-08 19:08:42 | INFO     | core.container | Registered service: omega_org_registry
+2026-07-08 19:08:42 | INFO     | core.container | Registered service: omega_project_registry
+2026-07-08 19:08:42 | INFO     | core.container | Registered service: omega_user_registry
+2026-07-08 19:08:42 | INFO     | core.container | Registered service: omega_team_registry
+2026-07-08 19:08:42 | INFO     | core.container | Registered service: omega_role_registry
+2026-07-08 19:08:42 | INFO     | core.container | Registered service: omega_resource_manager
+2026-07-08 19:08:42 | INFO     | core.container | Registered service: omega_memory_manager
+2026-07-08 19:08:42 | INFO     | core.container | Registered service: omega_lifecycle_manager
+2026-07-08 19:08:42 | INFO     | core.container | Registered service: omega_dashboard
+2026-07-08 19:08:42 | INFO     | plugins.manager | Loaded plugin: echo v0.1.0
+2026-07-08 19:08:42 | INFO     | agents.manager | Registered agent: echo_agent
+2026-07-08 19:08:42 | INFO     | agents.manager | Registered agent: engineering_agent
+2026-07-08 19:08:42 | INFO     | core.scheduler | Scheduled job 'heartbeat' every 30s
+2026-07-08 19:08:42 | INFO     | core.scheduler | Scheduler started
+2026-07-08 19:08:42 | INFO     | core.bootstrap | Startup complete - Prometheus Core (Omega Olympus) runtime online
+2026-07-08 19:08:42 | INFO     | core.container | Registered service: config
+2026-07-08 19:08:42 | INFO     | core.container | Registered service: db_engine
+2026-07-08 19:08:42 | INFO     | core.event_bus | Subscribed handler for event: device.connected
+2026-07-08 19:08:42 | INFO     | core.event_bus | Subscribed handler for event: device.disconnected
+2026-07-08 19:08:42 | INFO     | core.event_bus | Subscribed handler for event: device.connect_failed
+2026-07-08 19:08:42 | INFO     | core.event_bus | Subscribed handler for event: device.wrote
+2026-07-08 19:08:42 | INFO     | core.event_bus | Subscribed handler for event: plugin.ran
+2026-07-08 19:08:42 | INFO     | core.event_bus | Subscribed handler for event: agent.dispatched
+2026-07-08 19:08:42 | INFO     | core.event_bus | Subscribed handler for event: memory.stored
+2026-07-08 19:08:42 | INFO     | core.event_bus | Subscribed handler for event: fact.asserted
+2026-07-08 19:08:42 | INFO     | core.event_bus | Subscribed handler for event: capability.executed
+2026-07-08 19:08:42 | INFO     | hardware.hal.registry | Registered driver: usb
+2026-07-08 19:08:42 | INFO     | hardware.hal.registry | Registered driver: adb
+2026-07-08 19:08:42 | INFO     | hardware.hal.registry | Registered driver: fastboot
+2026-07-08 19:08:42 | INFO     | hardware.hal.registry | Registered driver: network
+2026-07-08 19:08:42 | INFO     | hardware.hal.registry | Registered driver: virtual
+2026-07-08 19:08:42 | INFO     | core.container | Registered service: event_bus
+2026-07-08 19:08:42 | INFO     | core.container | Registered service: observability
+2026-07-08 19:08:42 | INFO     | core.container | Registered service: scheduler
+2026-07-08 19:08:42 | INFO     | core.container | Registered service: session_factory
+2026-07-08 19:08:42 | INFO     | core.container | Registered service: memory_api
+2026-07-08 19:08:42 | INFO     | core.container | Registered service: reasoning_api
+2026-07-08 19:08:42 | INFO     | core.container | Registered service: knowledge_engine
+2026-07-08 19:08:42 | INFO     | core.container | Registered service: plugin_api
+2026-07-08 19:08:42 | INFO     | core.container | Registered service: agent_api
+2026-07-08 19:08:42 | INFO     | core.container | Registered service: capability_api
+2026-07-08 19:08:42 | INFO     | core.container | Registered service: device_api
+2026-07-08 19:08:42 | INFO     | core.container | Registered service: platform_service
+2026-07-08 19:08:42 | INFO     | core.container | Registered service: delta_service
+2026-07-08 19:08:42 | INFO     | core.container | Registered service: epsilon_service
+2026-07-08 19:08:42 | INFO     | core.container | Registered service: omega_service
+2026-07-08 19:08:42 | INFO     | core.container | Registered service: event_handlers
+2026-07-08 19:08:42 | INFO     | core.container | Registered service: kernel
+2026-07-08 19:08:42 | INFO     | core.container | Registered service: hardware_hal
+2026-07-08 19:08:42 | INFO     | core.container | Registered service: hardware_session_manager
+2026-07-08 19:08:42 | INFO     | core.container | Registered service: hardware_diagnostics
+2026-07-08 19:08:42 | INFO     | core.container | Registered service: hardware_recovery
+2026-07-08 19:08:42 | INFO     | core.container | Registered service: hardware_firmware
+2026-07-08 19:08:42 | INFO     | core.container | Registered service: security_authorizer
+2026-07-08 19:08:42 | INFO     | core.container | Registered service: security_audit
+2026-07-08 19:08:42 | INFO     | core.container | Registered service: security_integrity
+2026-07-08 19:08:42 | INFO     | core.container | Registered service: omega_agent_coordinator
+2026-07-08 19:08:42 | INFO     | core.container | Registered service: omega_task_planner
+2026-07-08 19:08:42 | INFO     | core.container | Registered service: omega_consensus
+2026-07-08 19:08:42 | INFO     | core.container | Registered service: omega_delegation
+2026-07-08 19:08:42 | INFO     | core.container | Registered service: omega_node_registry
+2026-07-08 19:08:42 | INFO     | core.container | Registered service: omega_distributed_runtime
+2026-07-08 19:08:42 | INFO     | core.container | Registered service: omega_knowledge_sync
+2026-07-08 19:08:42 | INFO     | core.container | Registered service: omega_capability_sync
+2026-07-08 19:08:42 | INFO     | core.container | Registered service: omega_policy_engine
+2026-07-08 19:08:42 | INFO     | core.container | Registered service: omega_permission_hierarchy
+2026-07-08 19:08:42 | INFO     | core.container | Registered service: omega_rule_engine
+2026-07-08 19:08:42 | INFO     | core.container | Registered service: omega_policy_audit
+2026-07-08 19:08:42 | INFO     | core.container | Registered service: omega_plugin_repo
+2026-07-08 19:08:42 | INFO     | core.container | Registered service: omega_capability_repo
+2026-07-08 19:08:42 | INFO     | core.container | Registered service: omega_driver_repo
+2026-07-08 19:08:42 | INFO     | core.container | Registered service: omega_agent_repo
+2026-07-08 19:08:42 | INFO     | core.container | Registered service: omega_org_registry
+2026-07-08 19:08:42 | INFO     | core.container | Registered service: omega_project_registry
+2026-07-08 19:08:42 | INFO     | core.container | Registered service: omega_user_registry
+2026-07-08 19:08:42 | INFO     | core.container | Registered service: omega_team_registry
+2026-07-08 19:08:42 | INFO     | core.container | Registered service: omega_role_registry
+2026-07-08 19:08:42 | INFO     | core.container | Registered service: omega_resource_manager
+2026-07-08 19:08:42 | INFO     | core.container | Registered service: omega_memory_manager
+2026-07-08 19:08:42 | INFO     | core.container | Registered service: omega_lifecycle_manager
+2026-07-08 19:08:42 | INFO     | core.container | Registered service: omega_dashboard
+2026-07-08 19:08:42 | INFO     | plugins.manager | Loaded plugin: echo v0.1.0
+2026-07-08 19:08:42 | INFO     | agents.manager | Registered agent: echo_agent
+2026-07-08 19:08:42 | INFO     | agents.manager | Registered agent: engineering_agent
+2026-07-08 19:08:42 | INFO     | core.scheduler | Scheduled job 'heartbeat' every 30s
+2026-07-08 19:08:42 | INFO     | core.scheduler | Scheduler started
+2026-07-08 19:08:42 | INFO     | core.bootstrap | Startup complete - Prometheus Core (Omega Olympus) runtime online
+2026-07-08 19:08:42 | INFO     | core.capabilities | Registered capability: device.dev1.status (target=device:dev1)
+2026-07-08 19:08:42 | INFO     | core.capabilities | Registered capability: device.dev1.read (target=device:dev1)
+2026-07-08 19:08:42 | INFO     | core.capabilities | Registered capability: device.dev1.write (target=device:dev1)
+2026-07-08 19:08:42 | INFO     | core.capabilities | Registered capability: device.dev1.status (target=device:dev1)
+2026-07-08 19:08:42 | INFO     | core.container | Registered service: foo
+2026-07-08 19:08:42 | INFO     | core.container | Registered service: a
+2026-07-08 19:08:42 | INFO     | core.container | Registered service: b
+2026-07-08 19:08:42 | INFO     | core.container | Registered service: foo
+2026-07-08 19:08:42 | INFO     | core.container | Registered service: foo
+2026-07-08 19:08:42 | INFO     | core.container | Registered service: foo
+2026-07-08 19:08:42 | INFO     | core.container | Registered service: foo
+2026-07-08 19:08:42 | INFO     | devices.registry | Registered device: dev1 (transport=simulated, ownership_declared=False)
+2026-07-08 19:08:42 | INFO     | devices.registry | Registered device: dev1 (transport=simulated, ownership_declared=False)
+2026-07-08 19:08:42 | INFO     | devices.registry | Unregistered device: dev1
+2026-07-08 19:08:42 | INFO     | devices.registry | Registered device: dev1 (transport=simulated, ownership_declared=False)
+2026-07-08 19:08:42 | INFO     | core.event_bus | Subscribed handler for event: device.connected
+2026-07-08 19:08:42 | INFO     | core.event_bus | Subscribed handler for event: device.disconnected
+2026-07-08 19:08:42 | INFO     | devices.registry | Registered device: dev1 (transport=simulated, ownership_declared=False)
+2026-07-08 19:08:42 | INFO     | devices.registry | Unregistered device: dev1
+2026-07-08 19:08:42 | INFO     | omega.distributed.node | Registered node: n1
+2026-07-08 19:08:42 | INFO     | omega.distributed.node | Registered node: a
+2026-07-08 19:08:42 | INFO     | omega.distributed.node | Registered node: b
+2026-07-08 19:08:42 | INFO     | omega.distributed.node | Registered node: n1
+2026-07-08 19:08:42 | INFO     | omega.distributed.node | Registered node: n1
+2026-07-08 19:08:42 | INFO     | omega.distributed.node | Registered node: n2
+2026-07-08 19:08:42 | INFO     | omega.distributed.node | Registered node: leader
+2026-07-08 19:08:42 | INFO     | omega.distributed.node | Registered node: follower
+2026-07-08 19:08:42 | INFO     | hardware.hal.registry | Registered driver: usb
+2026-07-08 19:08:42 | INFO     | hardware.hal.registry | Registered driver: adb
+2026-07-08 19:08:42 | INFO     | hardware.hal.registry | Registered driver: fastboot
+2026-07-08 19:08:42 | INFO     | hardware.hal.registry | Registered driver: network
+2026-07-08 19:08:42 | INFO     | hardware.hal.registry | Registered driver: virtual
+2026-07-08 19:08:42 | INFO     | hardware.hal.manager | Registered hardware interface: usb
+2026-07-08 19:08:42 | INFO     | core.event_bus | Subscribed handler for event: hardware.device.connected
+2026-07-08 19:08:42 | INFO     | devices.registry | Registered device: dev1 (transport=simulated, ownership_declared=True)
+2026-07-08 19:08:42 | INFO     | hardware.hal.registry | Registered driver: usb
+2026-07-08 19:08:42 | INFO     | hardware.hal.registry | Registered driver: adb
+2026-07-08 19:08:42 | INFO     | hardware.hal.registry | Registered driver: fastboot
+2026-07-08 19:08:42 | INFO     | hardware.hal.registry | Registered driver: network
+2026-07-08 19:08:42 | INFO     | hardware.hal.registry | Registered driver: virtual
+2026-07-08 19:08:42 | INFO     | hardware.session | Created session: virtual:dev1
+2026-07-08 19:08:42 | INFO     | devices.registry | Registered device: dev1 (transport=simulated, ownership_declared=True)
+2026-07-08 19:08:42 | INFO     | hardware.hal.registry | Registered driver: usb
+2026-07-08 19:08:42 | INFO     | hardware.hal.registry | Registered driver: adb
+2026-07-08 19:08:42 | INFO     | hardware.hal.registry | Registered driver: fastboot
+2026-07-08 19:08:42 | INFO     | hardware.hal.registry | Registered driver: network
+2026-07-08 19:08:42 | INFO     | hardware.hal.registry | Registered driver: virtual
+2026-07-08 19:08:42 | INFO     | hardware.hal.registry | Registered driver: usb
+2026-07-08 19:08:42 | INFO     | hardware.hal.registry | Registered driver: adb
+2026-07-08 19:08:42 | INFO     | hardware.hal.registry | Registered driver: fastboot
+2026-07-08 19:08:42 | INFO     | hardware.hal.registry | Registered driver: network
+2026-07-08 19:08:42 | INFO     | hardware.hal.registry | Registered driver: virtual
+2026-07-08 19:08:42 | INFO     | firmware.parser | Analyzed boot chain format=uefi chain_length=3
+2026-07-08 19:08:42 | INFO     | firmware.partitions | Simulating GPT parse over 1020 bytes
+2026-07-08 19:08:42 | INFO     | devices.registry | Registered device: dev1 (transport=simulated, ownership_declared=True)
+2026-07-08 19:08:42 | INFO     | hardware.hal.registry | Registered driver: usb
+2026-07-08 19:08:42 | INFO     | hardware.hal.registry | Registered driver: adb
+2026-07-08 19:08:42 | INFO     | hardware.hal.registry | Registered driver: fastboot
+2026-07-08 19:08:42 | INFO     | hardware.hal.registry | Registered driver: network
+2026-07-08 19:08:42 | INFO     | hardware.hal.registry | Registered driver: virtual
+2026-07-08 19:08:42 | INFO     | security.auditing | Audit: actor=user action=device.connect resource=dev1 result=denied
+2026-07-08 19:08:42 | INFO     | devices.registry | Registered device: dev1 (transport=simulated, ownership_declared=True)
+2026-07-08 19:08:42 | INFO     | hardware.hal.registry | Registered driver: usb
+2026-07-08 19:08:42 | INFO     | hardware.hal.registry | Registered driver: adb
+2026-07-08 19:08:42 | INFO     | hardware.hal.registry | Registered driver: fastboot
+2026-07-08 19:08:42 | INFO     | hardware.hal.registry | Registered driver: network
+2026-07-08 19:08:42 | INFO     | hardware.hal.registry | Registered driver: virtual
+2026-07-08 19:08:42 | INFO     | security.authorization | Authorized actor=user action=device.connect resource=dev1
+2026-07-08 19:08:42 | INFO     | hardware.session | Created session: virtual:dev1
+2026-07-08 19:08:42 | INFO     | security.auditing | Audit: actor=user action=device.connect resource=dev1 result=allowed
+2026-07-08 19:08:42 | INFO     | devices.registry | Registered device: d1 (transport=simulated, ownership_declared=True)
+2026-07-08 19:08:42 | INFO     | hardware.hal.registry | Registered driver: usb
+2026-07-08 19:08:42 | INFO     | hardware.hal.registry | Registered driver: adb
+2026-07-08 19:08:42 | INFO     | hardware.hal.registry | Registered driver: fastboot
+2026-07-08 19:08:42 | INFO     | hardware.hal.registry | Registered driver: network
+2026-07-08 19:08:42 | INFO     | hardware.hal.registry | Registered driver: virtual
+2026-07-08 19:08:42 | INFO     | hardware.hal.registry | Registered driver: usb
+2026-07-08 19:08:42 | INFO     | hardware.hal.registry | Registered driver: adb
+2026-07-08 19:08:42 | INFO     | hardware.hal.registry | Registered driver: fastboot
+2026-07-08 19:08:42 | INFO     | hardware.hal.registry | Registered driver: network
+2026-07-08 19:08:42 | INFO     | hardware.hal.registry | Registered driver: virtual
+2026-07-08 19:08:42 | INFO     | devices.registry | Registered device: d1 (transport=simulated, ownership_declared=True)
+2026-07-08 19:08:42 | INFO     | hardware.hal.registry | Registered driver: usb
+2026-07-08 19:08:42 | INFO     | hardware.hal.registry | Registered driver: adb
+2026-07-08 19:08:42 | INFO     | hardware.hal.registry | Registered driver: fastboot
+2026-07-08 19:08:42 | INFO     | hardware.hal.registry | Registered driver: network
+2026-07-08 19:08:42 | INFO     | hardware.hal.registry | Registered driver: virtual
+2026-07-08 19:08:42 | INFO     | devices.registry | Registered device: d1 (transport=simulated, ownership_declared=True)
+2026-07-08 19:08:42 | INFO     | hardware.hal.registry | Registered driver: usb
+2026-07-08 19:08:42 | INFO     | hardware.hal.registry | Registered driver: adb
+2026-07-08 19:08:42 | INFO     | hardware.hal.registry | Registered driver: fastboot
+2026-07-08 19:08:42 | INFO     | hardware.hal.registry | Registered driver: network
+2026-07-08 19:08:42 | INFO     | hardware.hal.registry | Registered driver: virtual
+2026-07-08 19:08:42 | INFO     | security.authorization | Authorized actor=user action=device.connect resource=d1
+2026-07-08 19:08:42 | INFO     | hardware.session | Created session: virtual:d1
+2026-07-08 19:08:42 | INFO     | security.auditing | Audit: actor=user action=device.connect resource=d1 result=allowed
+2026-07-08 19:08:42 | INFO     | security.authorization | Authorized actor=user action=device.disconnect resource=d1
+2026-07-08 19:08:42 | INFO     | hardware.session | Closed session: virtual:d1
+2026-07-08 19:08:42 | INFO     | security.auditing | Audit: actor=user action=device.disconnect resource=d1 result=allowed
+2026-07-08 19:08:42 | INFO     | devices.registry | Registered device: d1 (transport=simulated, ownership_declared=True)
+2026-07-08 19:08:42 | INFO     | hardware.hal.registry | Registered driver: usb
+2026-07-08 19:08:42 | INFO     | hardware.hal.registry | Registered driver: adb
+2026-07-08 19:08:42 | INFO     | hardware.hal.registry | Registered driver: fastboot
+2026-07-08 19:08:42 | INFO     | hardware.hal.registry | Registered driver: network
+2026-07-08 19:08:42 | INFO     | hardware.hal.registry | Registered driver: virtual
+2026-07-08 19:08:42 | INFO     | hardware.session | Created session: virtual:d1
+2026-07-08 19:08:42 | INFO     | hardware.hal.registry | Registered driver: usb
+2026-07-08 19:08:42 | INFO     | hardware.hal.registry | Registered driver: adb
+2026-07-08 19:08:42 | INFO     | hardware.hal.registry | Registered driver: fastboot
+2026-07-08 19:08:42 | INFO     | hardware.hal.registry | Registered driver: network
+2026-07-08 19:08:42 | INFO     | hardware.hal.registry | Registered driver: virtual
+2026-07-08 19:08:42 | INFO     | firmware.parser | Analyzed boot chain format=uefi chain_length=3
+2026-07-08 19:08:42 | INFO     | firmware.partitions | Simulating GPT parse over 1020 bytes
+2026-07-08 19:08:42 | INFO     | core.event_bus | Subscribed handler for event: plugin.ran
+2026-07-08 19:08:42 | INFO     | core.event_bus | Subscribed handler for event: plugin.ran
+2026-07-08 19:08:42 | INFO     | core.event_bus | Subscribed handler for event: device.connected
+2026-07-08 19:08:42 | INFO     | core.event_bus | Subscribed handler for event: device.disconnected
+2026-07-08 19:08:42 | INFO     | core.event_bus | Subscribed handler for event: device.connect_failed
+2026-07-08 19:08:42 | INFO     | core.event_bus | Subscribed handler for event: device.wrote
+2026-07-08 19:08:42 | INFO     | core.event_bus | Subscribed handler for event: plugin.ran
+2026-07-08 19:08:42 | INFO     | core.event_bus | Subscribed handler for event: agent.dispatched
+2026-07-08 19:08:42 | INFO     | core.event_bus | Subscribed handler for event: memory.stored
+2026-07-08 19:08:42 | INFO     | core.event_bus | Subscribed handler for event: fact.asserted
+2026-07-08 19:08:42 | INFO     | core.event_bus | Subscribed handler for event: capability.executed
+2026-07-08 19:08:42 | INFO     | reasoning.graph | Asserted fact: dev-1 -event-> connected
+2026-07-08 19:08:42 | INFO     | reasoning.graph | Asserted fact: dev-1 -wrote-> 42
+2026-07-08 19:08:42 | INFO     | services.event_handlers | Memory event observed: tag=plugin_event source=event_bus
+2026-07-08 19:08:42 | INFO     | memory.store | Stored memory [plugin_event] from event_bus: Plugin echo ran with result keys: ['ok']
+2026-07-08 19:08:43 | INFO     | firmware.metadata | Stored firmware metadata id=ba000966203b4fdcb6e19897015c7716 vendor=acme version=1.0
+2026-07-08 19:08:43 | INFO     | firmware.metadata | Stored firmware metadata id=02d118aebae94b8d812a3e918b2d3b41 vendor=acme version=1.0
+2026-07-08 19:08:43 | INFO     | firmware.metadata | Stored firmware metadata id=cf382053f29341d08f89a1a91075c6c5 vendor=acme version=2.0
+2026-07-08 19:08:43 | INFO     | firmware.partitions | Simulating GPT parse over 1020 bytes
+2026-07-08 19:08:43 | INFO     | firmware.partitions | Simulating MBR parse over 1012 bytes
+2026-07-08 19:08:43 | INFO     | firmware.partitions | Simulating GPT parse over 1020 bytes
+2026-07-08 19:08:43 | INFO     | firmware.partitions | Simulating GPT parse over 1020 bytes
+2026-07-08 19:08:43 | INFO     | firmware.compatibility | Registered compatibility uefi/model-x/1.0 compatible=True
+2026-07-08 19:08:43 | INFO     | firmware.parser | Could not detect structured format; reporting raw
+2026-07-08 19:08:43 | INFO     | firmware.parser | Extracted simulated metadata format=uefi size=1020
+2026-07-08 19:08:43 | INFO     | firmware.parser | Analyzed boot chain format=uefi chain_length=3
+2026-07-08 19:08:43 | INFO     | firmware.parser | Analyzed boot chain format=uboot chain_length=2
+2026-07-08 19:08:43 | INFO     | firmware.partitions | Simulating GPT parse over 1020 bytes
+2026-07-08 19:08:43 | INFO     | happy_path | === HAPPY PATH START ===
+2026-07-08 19:08:43 | INFO     | core.container | Registered service: config
+2026-07-08 19:08:43 | INFO     | core.container | Registered service: db_engine
+2026-07-08 19:08:43 | INFO     | core.event_bus | Subscribed handler for event: device.connected
+2026-07-08 19:08:43 | INFO     | core.event_bus | Subscribed handler for event: device.disconnected
+2026-07-08 19:08:43 | INFO     | core.event_bus | Subscribed handler for event: device.connect_failed
+2026-07-08 19:08:43 | INFO     | core.event_bus | Subscribed handler for event: device.wrote
+2026-07-08 19:08:43 | INFO     | core.event_bus | Subscribed handler for event: plugin.ran
+2026-07-08 19:08:43 | INFO     | core.event_bus | Subscribed handler for event: agent.dispatched
+2026-07-08 19:08:43 | INFO     | core.event_bus | Subscribed handler for event: memory.stored
+2026-07-08 19:08:43 | INFO     | core.event_bus | Subscribed handler for event: fact.asserted
+2026-07-08 19:08:43 | INFO     | core.event_bus | Subscribed handler for event: capability.executed
+2026-07-08 19:08:43 | INFO     | hardware.hal.registry | Registered driver: usb
+2026-07-08 19:08:43 | INFO     | hardware.hal.registry | Registered driver: adb
+2026-07-08 19:08:43 | INFO     | hardware.hal.registry | Registered driver: fastboot
+2026-07-08 19:08:43 | INFO     | hardware.hal.registry | Registered driver: network
+2026-07-08 19:08:43 | INFO     | hardware.hal.registry | Registered driver: virtual
+2026-07-08 19:08:43 | INFO     | core.container | Registered service: event_bus
+2026-07-08 19:08:43 | INFO     | core.container | Registered service: observability
+2026-07-08 19:08:43 | INFO     | core.container | Registered service: scheduler
+2026-07-08 19:08:43 | INFO     | core.container | Registered service: session_factory
+2026-07-08 19:08:43 | INFO     | core.container | Registered service: memory_api
+2026-07-08 19:08:43 | INFO     | core.container | Registered service: reasoning_api
+2026-07-08 19:08:43 | INFO     | core.container | Registered service: knowledge_engine
+2026-07-08 19:08:43 | INFO     | core.container | Registered service: plugin_api
+2026-07-08 19:08:43 | INFO     | core.container | Registered service: agent_api
+2026-07-08 19:08:43 | INFO     | core.container | Registered service: capability_api
+2026-07-08 19:08:43 | INFO     | core.container | Registered service: device_api
+2026-07-08 19:08:43 | INFO     | core.container | Registered service: platform_service
+2026-07-08 19:08:43 | INFO     | core.container | Registered service: delta_service
+2026-07-08 19:08:43 | INFO     | core.container | Registered service: epsilon_service
+2026-07-08 19:08:43 | INFO     | core.container | Registered service: omega_service
+2026-07-08 19:08:43 | INFO     | core.container | Registered service: event_handlers
+2026-07-08 19:08:43 | INFO     | core.container | Registered service: kernel
+2026-07-08 19:08:43 | INFO     | core.container | Registered service: hardware_hal
+2026-07-08 19:08:43 | INFO     | core.container | Registered service: hardware_session_manager
+2026-07-08 19:08:43 | INFO     | core.container | Registered service: hardware_diagnostics
+2026-07-08 19:08:43 | INFO     | core.container | Registered service: hardware_recovery
+2026-07-08 19:08:43 | INFO     | core.container | Registered service: hardware_firmware
+2026-07-08 19:08:43 | INFO     | core.container | Registered service: security_authorizer
+2026-07-08 19:08:43 | INFO     | core.container | Registered service: security_audit
+2026-07-08 19:08:43 | INFO     | core.container | Registered service: security_integrity
+2026-07-08 19:08:43 | INFO     | core.container | Registered service: omega_agent_coordinator
+2026-07-08 19:08:43 | INFO     | core.container | Registered service: omega_task_planner
+2026-07-08 19:08:43 | INFO     | core.container | Registered service: omega_consensus
+2026-07-08 19:08:43 | INFO     | core.container | Registered service: omega_delegation
+2026-07-08 19:08:43 | INFO     | core.container | Registered service: omega_node_registry
+2026-07-08 19:08:43 | INFO     | core.container | Registered service: omega_distributed_runtime
+2026-07-08 19:08:43 | INFO     | core.container | Registered service: omega_knowledge_sync
+2026-07-08 19:08:43 | INFO     | core.container | Registered service: omega_capability_sync
+2026-07-08 19:08:43 | INFO     | core.container | Registered service: omega_policy_engine
+2026-07-08 19:08:43 | INFO     | core.container | Registered service: omega_permission_hierarchy
+2026-07-08 19:08:43 | INFO     | core.container | Registered service: omega_rule_engine
+2026-07-08 19:08:43 | INFO     | core.container | Registered service: omega_policy_audit
+2026-07-08 19:08:43 | INFO     | core.container | Registered service: omega_plugin_repo
+2026-07-08 19:08:43 | INFO     | core.container | Registered service: omega_capability_repo
+2026-07-08 19:08:43 | INFO     | core.container | Registered service: omega_driver_repo
+2026-07-08 19:08:43 | INFO     | core.container | Registered service: omega_agent_repo
+2026-07-08 19:08:43 | INFO     | core.container | Registered service: omega_org_registry
+2026-07-08 19:08:43 | INFO     | core.container | Registered service: omega_project_registry
+2026-07-08 19:08:43 | INFO     | core.container | Registered service: omega_user_registry
+2026-07-08 19:08:43 | INFO     | core.container | Registered service: omega_team_registry
+2026-07-08 19:08:43 | INFO     | core.container | Registered service: omega_role_registry
+2026-07-08 19:08:43 | INFO     | core.container | Registered service: omega_resource_manager
+2026-07-08 19:08:43 | INFO     | core.container | Registered service: omega_memory_manager
+2026-07-08 19:08:43 | INFO     | core.container | Registered service: omega_lifecycle_manager
+2026-07-08 19:08:43 | INFO     | core.container | Registered service: omega_dashboard
+2026-07-08 19:08:43 | INFO     | plugins.manager | Loaded plugin: echo v0.1.0
+2026-07-08 19:08:43 | INFO     | agents.manager | Registered agent: echo_agent
+2026-07-08 19:08:43 | INFO     | agents.manager | Registered agent: engineering_agent
+2026-07-08 19:08:43 | INFO     | core.scheduler | Scheduled job 'heartbeat' every 30s
+2026-07-08 19:08:43 | INFO     | core.scheduler | Scheduler started
+2026-07-08 19:08:43 | INFO     | core.bootstrap | Startup complete - Prometheus Core (Omega Olympus) runtime online
+2026-07-08 19:08:43 | INFO     | memory.store | Stored memory [plugin_run] from echo: Echo plugin ran with: hello from happy path
+2026-07-08 19:08:43 | INFO     | services.event_handlers | Memory event observed: tag=plugin_event source=event_bus
+2026-07-08 19:08:43 | INFO     | memory.store | Stored memory [plugin_event] from event_bus: Plugin echo ran with result keys: ['echoed', 'plugin']
+2026-07-08 19:08:43 | INFO     | happy_path | [plugin] echo ran -> {'echoed': 'hello from happy path', 'plugin': 'echo'}
+2026-07-08 19:08:43 | INFO     | agents.manager | Dispatching task to agent 'echo_agent': {'device_id': 'happy_device', 'status': 'seen'}
+2026-07-08 19:08:43 | INFO     | reasoning.graph | Asserted fact: happy_device -status-> seen
+2026-07-08 19:08:43 | INFO     | reasoning.graph | Asserted fact: echo_agent -event-> dispatched
+2026-07-08 19:08:43 | INFO     | happy_path | [agent] echo_agent dispatched -> {'agent': 'echo_agent', 'device_id': 'happy_device', 'recorded_status': 'seen'}
+2026-07-08 19:08:43 | INFO     | reasoning.graph | Asserted fact: happy_device -event-> connected
+2026-07-08 19:08:43 | INFO     | devices.registry | Registered device: happy_device (transport=simulated, ownership_declared=True)
+2026-07-08 19:08:43 | INFO     | core.capabilities | Registered capability: device.happy_device.connect (target=device:happy_device)
+2026-07-08 19:08:43 | INFO     | core.capabilities | Registered capability: device.happy_device.disconnect (target=device:happy_device)
+2026-07-08 19:08:43 | INFO     | core.capabilities | Registered capability: device.happy_device.read (target=device:happy_device)
+2026-07-08 19:08:43 | INFO     | core.capabilities | Registered capability: device.happy_device.write (target=device:happy_device)
+2026-07-08 19:08:43 | INFO     | core.capabilities | Registered capability: device.happy_device.status (target=device:happy_device)
+2026-07-08 19:08:43 | INFO     | core.capabilities | Registered capability: device.happy_device.diagnose (target=device:happy_device)
+2026-07-08 19:08:43 | INFO     | core.capabilities | Registered capability: device.happy_device.recover (target=device:happy_device)
+2026-07-08 19:08:43 | INFO     | core.capabilities | Registered capability: device.happy_device.simulate (target=device:happy_device)
+2026-07-08 19:08:43 | INFO     | happy_path | [device] registered happy_device (transport=simulated)
+2026-07-08 19:08:43 | INFO     | services.event_handlers | Memory event observed: tag=happy_path source=demo
+2026-07-08 19:08:43 | INFO     | memory.store | Stored memory [happy_path] from demo: Happy path executed successfully
+2026-07-08 19:08:43 | INFO     | happy_path | [memory] stored entry 74
+2026-07-08 19:08:43 | INFO     | happy_path | [reasoning] found 44 fact(s) for happy_device
+2026-07-08 19:08:43 | INFO     | happy_path |   -> status: seen
+2026-07-08 19:08:43 | INFO     | happy_path |   -> event: connected
+2026-07-08 19:08:43 | INFO     | happy_path |   -> status: seen
+2026-07-08 19:08:43 | INFO     | happy_path |   -> event: connected
+2026-07-08 19:08:43 | INFO     | happy_path |   -> status: seen
+2026-07-08 19:08:43 | INFO     | happy_path |   -> event: connected
+2026-07-08 19:08:43 | INFO     | happy_path |   -> status: seen
+2026-07-08 19:08:43 | INFO     | happy_path |   -> event: connected
+2026-07-08 19:08:43 | INFO     | happy_path |   -> status: seen
+2026-07-08 19:08:43 | INFO     | happy_path |   -> event: connected
+2026-07-08 19:08:43 | INFO     | happy_path |   -> status: seen
+2026-07-08 19:08:43 | INFO     | happy_path |   -> event: connected
+2026-07-08 19:08:43 | INFO     | happy_path |   -> status: seen
+2026-07-08 19:08:43 | INFO     | happy_path |   -> event: connected
+2026-07-08 19:08:43 | INFO     | happy_path |   -> status: seen
+2026-07-08 19:08:43 | INFO     | happy_path |   -> event: connected
+2026-07-08 19:08:43 | INFO     | happy_path |   -> status: seen
+2026-07-08 19:08:43 | INFO     | happy_path |   -> event: connected
+2026-07-08 19:08:43 | INFO     | happy_path |   -> status: seen
+2026-07-08 19:08:43 | INFO     | happy_path |   -> event: connected
+2026-07-08 19:08:43 | INFO     | happy_path |   -> status: seen
+2026-07-08 19:08:43 | INFO     | happy_path |   -> event: connected
+2026-07-08 19:08:43 | INFO     | happy_path |   -> status: seen
+2026-07-08 19:08:43 | INFO     | happy_path |   -> event: connected
+2026-07-08 19:08:43 | INFO     | happy_path |   -> status: seen
+2026-07-08 19:08:43 | INFO     | happy_path |   -> event: connected
+2026-07-08 19:08:43 | INFO     | happy_path |   -> status: seen
+2026-07-08 19:08:43 | INFO     | happy_path |   -> event: connected
+2026-07-08 19:08:43 | INFO     | happy_path |   -> status: seen
+2026-07-08 19:08:43 | INFO     | happy_path |   -> event: connected
+2026-07-08 19:08:43 | INFO     | happy_path |   -> status: seen
+2026-07-08 19:08:43 | INFO     | happy_path |   -> event: connected
+2026-07-08 19:08:43 | INFO     | happy_path |   -> status: seen
+2026-07-08 19:08:43 | INFO     | happy_path |   -> event: connected
+2026-07-08 19:08:43 | INFO     | happy_path |   -> status: seen
+2026-07-08 19:08:43 | INFO     | happy_path |   -> event: connected
+2026-07-08 19:08:43 | INFO     | happy_path |   -> status: seen
+2026-07-08 19:08:43 | INFO     | happy_path |   -> event: connected
+2026-07-08 19:08:43 | INFO     | happy_path |   -> status: seen
+2026-07-08 19:08:43 | INFO     | happy_path |   -> event: connected
+2026-07-08 19:08:43 | INFO     | happy_path |   -> status: seen
+2026-07-08 19:08:43 | INFO     | happy_path |   -> event: connected
+2026-07-08 19:08:43 | INFO     | happy_path |   -> status: seen
+2026-07-08 19:08:43 | INFO     | happy_path |   -> event: connected
+2026-07-08 19:08:43 | INFO     | digital_twin.twin | Built twin for happy_device: state=online, health=1.0, 44 history entries
+2026-07-08 19:08:43 | INFO     | happy_path | [twin] built twin for happy_device: state=online, health=1.0
+2026-07-08 19:08:43 | INFO     | happy_path | [report] {'platform': 'Prometheus v0.6.0-omega', 'plugins_loaded': [{'name': 'echo', 'version': '0.1.0'}], 'agents_loaded': ['echo_agent', 'engineering_agent'], 'devices_registered': 1, 'services_registered': ['config', 'db_engine', 'event_bus', 'observability', 'scheduler', 'session_factory', 'memory_api', 'reasoning_api', 'knowledge_engine', 'plugin_api', 'agent_api', 'capability_api', 'device_api', 'platform_service', 'delta_service', 'epsilon_service', 'omega_service', 'event_handlers', 'kernel', 'hardware_hal', 'hardware_session_manager', 'hardware_diagnostics', 'hardware_recovery', 'hardware_firmware', 'security_authorizer', 'security_audit', 'security_integrity', 'omega_agent_coordinator', 'omega_task_planner', 'omega_consensus', 'omega_delegation', 'omega_node_registry', 'omega_distributed_runtime', 'omega_knowledge_sync', 'omega_capability_sync', 'omega_policy_engine', 'omega_permission_hierarchy', 'omega_rule_engine', 'omega_policy_audit', 'omega_plugin_repo', 'omega_capability_repo', 'omega_driver_repo', 'omega_agent_repo', 'omega_org_registry', 'omega_project_registry', 'omega_user_registry', 'omega_team_registry', 'omega_role_registry', 'omega_resource_manager', 'omega_memory_manager', 'omega_lifecycle_manager', 'omega_dashboard'], 'memory_entries': 74, 'knowledge_facts': 98, 'status': 'ok'}
+2026-07-08 19:08:43 | INFO     | happy_path | === HAPPY PATH COMPLETE ===
+2026-07-08 19:08:43 | INFO     | hardware.session | Created session: usb:dev1
+2026-07-08 19:08:43 | INFO     | hardware.session | Created session: adb:dev1
+2026-07-08 19:08:43 | INFO     | hardware.session | Created session: fastboot:dev1
+2026-07-08 19:08:43 | INFO     | hardware.session | Created session: network:dev1
+2026-07-08 19:08:43 | INFO     | hardware.drivers.virtual | Virtual device connected
+2026-07-08 19:08:43 | INFO     | hardware.drivers.virtual | Virtual device connected
+2026-07-08 19:08:43 | INFO     | hardware.drivers.virtual | Virtual device disconnected
+2026-07-08 19:08:43 | INFO     | hardware.drivers.virtual | Virtual device disconnected
+2026-07-08 19:08:43 | INFO     | hardware.hal.manager | Registered hardware interface: stub
+2026-07-08 19:08:43 | INFO     | hardware.hal.manager | Registered hardware interface: stub
+2026-07-08 19:08:43 | INFO     | hardware.hal.manager | Unregistered hardware interface: stub
+2026-07-08 19:08:43 | INFO     | hardware.hal.registry | Registered driver: usb
+2026-07-08 19:08:43 | INFO     | hardware.hal.registry | Registered driver: usb
+2026-07-08 19:08:43 | INFO     | hardware.hal.capability_mapper | Registered capability mapping for interface: usb
+2026-07-08 19:08:43 | INFO     | hardware.hal.capability_mapper | Registered capability mapping for interface: adb
+2026-07-08 19:08:43 | INFO     | hardware.session | Created session: usb:dev1
+2026-07-08 19:08:43 | INFO     | hardware.session | Created session: usb:dev1
+2026-07-08 19:08:43 | INFO     | hardware.session | Created session: usb:dev1
+2026-07-08 19:08:43 | INFO     | hardware.recovery | Planned recovery for dev1: risk=low
+2026-07-08 19:08:43 | INFO     | hardware.session | Created session: usb:dev1
+2026-07-08 19:08:43 | INFO     | hardware.session | Created session: usb:dev1
+2026-07-08 19:08:43 | INFO     | hardware.session | Created session: adb:dev2
+2026-07-08 19:08:43 | INFO     | hardware.session | Created session: usb:dev1
+2026-07-08 19:08:43 | INFO     | hardware.session | Closed session: usb:dev1
+2026-07-08 19:08:43 | INFO     | hardware.session | Created session: usb:dev1
+2026-07-08 19:08:43 | INFO     | hardware.session | Created session: usb:dev1
+2026-07-08 19:08:43 | INFO     | hardware.session | Expired session: usb:dev1
+2026-07-08 19:08:43 | INFO     | core.capabilities | Registered capability: device.dev-k.recover (target=device:dev-k)
+2026-07-08 19:08:43 | INFO     | main | Prometheus platform started
+2026-07-08 19:08:43 | INFO     | omega.marketplace.plugin_repo | Published plugin: weather@1.0.0
+2026-07-08 19:08:43 | INFO     | omega.marketplace.plugin_repo | Published plugin: weather@1.0.0
+2026-07-08 19:08:43 | INFO     | omega.marketplace.plugin_repo | Published plugin: battery@1.0.0
+2026-07-08 19:08:43 | INFO     | omega.marketplace.capability_repo | Registered capability: vision.detect@1.0.0
+2026-07-08 19:08:43 | INFO     | omega.marketplace.capability_repo | Registered capability: audio.transcribe@1.0.0
+2026-07-08 19:08:43 | INFO     | omega.marketplace.driver_repo | Registered driver: uart@1.0.0
+2026-07-08 19:08:43 | INFO     | omega.marketplace.driver_repo | Registered driver: spi@1.0.0
+2026-07-08 19:08:43 | INFO     | omega.marketplace.agent_repo | Registered agent: recovery@1.0.0
+2026-07-08 19:08:43 | INFO     | omega.marketplace.agent_repo | Registered agent: monitor@1.0.0
+2026-07-08 19:08:43 | INFO     | memory.store | Stored memory [test] from system: hello world
+2026-07-08 19:08:43 | INFO     | memory.store | Stored memory [general] from system: general memory
+2026-07-08 19:08:43 | INFO     | memory.store | Stored memory [other] from system: other memory
+2026-07-08 19:08:43 | INFO     | memory.store | Stored memory [limited] from system: memory 0
+2026-07-08 19:08:43 | INFO     | memory.store | Stored memory [limited] from system: memory 1
+2026-07-08 19:08:43 | INFO     | memory.store | Stored memory [limited] from system: memory 2
+2026-07-08 19:08:43 | INFO     | memory.store | Stored memory [limited] from system: memory 3
+2026-07-08 19:08:43 | INFO     | memory.store | Stored memory [limited] from system: memory 4
+2026-07-08 19:08:43 | INFO     | memory.store | Stored memory [limited] from system: memory 5
+2026-07-08 19:08:43 | INFO     | memory.store | Stored memory [limited] from system: memory 6
+2026-07-08 19:08:43 | INFO     | memory.store | Stored memory [limited] from system: memory 7
+2026-07-08 19:08:43 | INFO     | memory.store | Stored memory [limited] from system: memory 8
+2026-07-08 19:08:43 | INFO     | memory.store | Stored memory [limited] from system: memory 9
+2026-07-08 19:08:43 | INFO     | memory.store | Stored memory [alpha] from system: tagged
+2026-07-08 19:08:43 | INFO     | memory.store | Stored memory [beta] from system: tagged too
+2026-07-08 19:08:43 | INFO     | memory.store | Stored memory [compat] from system: backward compat test
+2026-07-08 19:08:43 | INFO     | core.event_bus | Subscribed handler for event: memory.stored
+2026-07-08 19:08:43 | INFO     | memory.store | Stored memory [events] from test: event memory
+2026-07-08 19:08:43 | INFO     | core.event_bus | Subscribed handler for event: device.wrote
+2026-07-08 19:08:43 | INFO     | devices.registry | Registered device: dev-2 (transport=simulated, ownership_declared=True)
+2026-07-08 19:08:43 | INFO     | devices.registry | Registered device: sim-1 (transport=simulated, ownership_declared=True)
+2026-07-08 19:08:43 | INFO     | core.capabilities | Registered capability: device.sim-1.connect (target=device:sim-1)
+2026-07-08 19:08:43 | INFO     | core.capabilities | Registered capability: device.sim-1.disconnect (target=device:sim-1)
+2026-07-08 19:08:43 | INFO     | core.capabilities | Registered capability: device.sim-1.read (target=device:sim-1)
+2026-07-08 19:08:43 | INFO     | core.capabilities | Registered capability: device.sim-1.write (target=device:sim-1)
+2026-07-08 19:08:43 | INFO     | core.capabilities | Registered capability: device.sim-1.status (target=device:sim-1)
+2026-07-08 19:08:43 | INFO     | core.capabilities | Registered capability: device.sim-1.diagnose (target=device:sim-1)
+2026-07-08 19:08:43 | INFO     | core.capabilities | Registered capability: device.sim-1.recover (target=device:sim-1)
+2026-07-08 19:08:43 | INFO     | core.capabilities | Registered capability: device.sim-1.simulate (target=device:sim-1)
+2026-07-08 19:08:43 | INFO     | devices.registry | Registered device: sim-beta (transport=simulated, ownership_declared=True)
+2026-07-08 19:08:43 | INFO     | core.capabilities | Registered capability: device.sim-beta.connect (target=device:sim-beta)
+2026-07-08 19:08:43 | INFO     | core.capabilities | Registered capability: device.sim-beta.disconnect (target=device:sim-beta)
+2026-07-08 19:08:43 | INFO     | core.capabilities | Registered capability: device.sim-beta.read (target=device:sim-beta)
+2026-07-08 19:08:43 | INFO     | core.capabilities | Registered capability: device.sim-beta.write (target=device:sim-beta)
+2026-07-08 19:08:43 | INFO     | core.capabilities | Registered capability: device.sim-beta.status (target=device:sim-beta)
+2026-07-08 19:08:43 | INFO     | core.capabilities | Registered capability: device.sim-beta.diagnose (target=device:sim-beta)
+2026-07-08 19:08:43 | INFO     | core.capabilities | Registered capability: device.sim-beta.recover (target=device:sim-beta)
+2026-07-08 19:08:43 | INFO     | core.capabilities | Registered capability: device.sim-beta.simulate (target=device:sim-beta)
+2026-07-08 19:08:43 | INFO     | digital_twin.twin | Built twin for sim-beta: state=unknown, health=1.0, 0 history entries
+2026-07-08 19:08:43 | INFO     | memory.store | Stored memory [sim-beta] from beta_workflow: Beta workflow simulation for sim-beta: failure=disconnect, r
+2026-07-08 19:08:43 | INFO     | reasoning.graph | Asserted fact: sim-beta -event-> beta_simulation:disconnect:high
+2026-07-08 19:08:43 | INFO     | devices.registry | Registered device: sim-gamma (transport=simulated, ownership_declared=True)
+2026-07-08 19:08:43 | INFO     | core.capabilities | Registered capability: device.sim-gamma.connect (target=device:sim-gamma)
+2026-07-08 19:08:43 | INFO     | core.capabilities | Registered capability: device.sim-gamma.disconnect (target=device:sim-gamma)
+2026-07-08 19:08:43 | INFO     | core.capabilities | Registered capability: device.sim-gamma.read (target=device:sim-gamma)
+2026-07-08 19:08:43 | INFO     | core.capabilities | Registered capability: device.sim-gamma.write (target=device:sim-gamma)
+2026-07-08 19:08:43 | INFO     | core.capabilities | Registered capability: device.sim-gamma.status (target=device:sim-gamma)
+2026-07-08 19:08:43 | INFO     | core.capabilities | Registered capability: device.sim-gamma.diagnose (target=device:sim-gamma)
+2026-07-08 19:08:43 | INFO     | core.capabilities | Registered capability: device.sim-gamma.recover (target=device:sim-gamma)
+2026-07-08 19:08:43 | INFO     | core.capabilities | Registered capability: device.sim-gamma.simulate (target=device:sim-gamma)
+2026-07-08 19:08:43 | INFO     | digital_twin.twin | Built twin for sim-gamma: state=unknown, health=1.0, 0 history entries
+2026-07-08 19:08:43 | INFO     | memory.store | Stored memory [sim-gamma] from beta_workflow: Beta workflow simulation for sim-gamma: failure=disconnect, 
+2026-07-08 19:08:43 | INFO     | reasoning.graph | Asserted fact: sim-gamma -event-> beta_simulation:disconnect:high
+2026-07-08 19:08:43 | INFO     | plugins.manager | Loaded plugin: fake_plugin v1.0.0
+2026-07-08 19:08:43 | INFO     | plugins.manager | Loaded plugin: fake_plugin v1.0.0
+2026-07-08 19:08:43 | WARNING  | plugins.manager | Plugin 'fake_plugin' already registered — overwriting
+2026-07-08 19:08:43 | INFO     | plugins.manager | Loaded plugin: fake_plugin v1.0.0
+2026-07-08 19:08:43 | INFO     | plugins.manager | Loaded plugin: fake_plugin v1.0.0
+2026-07-08 19:08:43 | INFO     | plugins.manager | Loaded plugin: fake_plugin v1.0.0
+2026-07-08 19:08:43 | INFO     | core.event_bus | Subscribed handler for event: plugin.ran
+2026-07-08 19:08:43 | INFO     | plugins.manager | Loaded plugin: fake_plugin v1.0.0
+2026-07-08 19:08:43 | INFO     | backend.main | Prometheus heartbeat — system alive
+2026-07-08 19:08:44 | INFO     | reasoning.graph | Asserted fact: device_1 -has_firmware-> v1.0
+2026-07-08 19:08:44 | INFO     | reasoning.graph | Asserted fact: dev1 -status-> online
+2026-07-08 19:08:44 | INFO     | reasoning.graph | Asserted fact: dev2 -status-> offline
+2026-07-08 19:08:44 | INFO     | reasoning.graph | Asserted fact: dev1 -rel-> obj1
+2026-07-08 19:08:44 | INFO     | reasoning.graph | Asserted fact: dev2 -rel-> obj2
+2026-07-08 19:08:44 | INFO     | reasoning.graph | Asserted fact: device_2 -status-> online
+2026-07-08 19:08:44 | INFO     | core.event_bus | Subscribed handler for event: fact.asserted
+2026-07-08 19:08:44 | INFO     | reasoning.graph | Asserted fact: devx -status-> online
+2026-07-08 19:08:44 | INFO     | omega.runtime_management.lifecycle_manager | Lifecycle transition: initializing -> running
+2026-07-08 19:08:44 | INFO     | omega.runtime_management.lifecycle_manager | Lifecycle transition: initializing -> running
+2026-07-08 19:08:44 | INFO     | sdk.plugin_sdk.lifecycle | Registered plugin: battery_analyzer
+2026-07-08 19:08:44 | INFO     | sdk.plugin_sdk.examples.battery_analyzer | BatteryAnalyzer initialized
+2026-07-08 19:08:44 | INFO     | sdk.plugin_sdk.lifecycle | Initialized plugin: battery_analyzer
+2026-07-08 19:08:44 | INFO     | sdk.plugin_sdk.lifecycle | Shut down plugin: battery_analyzer
+2026-07-08 19:08:44 | INFO     | sdk.plugin_sdk.testing | Loaded plugin battery_analyzer into harness
+2026-07-08 19:08:44 | INFO     | sdk.plugin_sdk.examples.battery_analyzer | BatteryAnalyzer initialized
+2026-07-08 19:08:44 | INFO     | sdk.plugin_sdk.examples.temperature_monitor | TemperatureMonitor initialized
+2026-07-08 19:08:44 | INFO     | security.authorization | Authorized actor=user1 action=device.connect resource=dev1
+2026-07-08 19:08:44 | INFO     | security.authorization | Authorized actor=user1 action=device.connect resource=dev1
+2026-07-08 19:08:44 | INFO     | security.permissions | Registered permission: test.perm
+2026-07-08 19:08:44 | INFO     | security.auditing | Audit: actor=actor1 action=action1 resource=res1 result=allowed
+2026-07-08 19:08:44 | INFO     | security.auditing | Audit: actor=a action=b resource=c result=ok
+2026-07-08 19:08:44 | INFO     | security.integrity | Integrity check 9133bf04-69f3-42bd-bbf1-f4eb36d54405: target=target passed=True
+2026-07-08 19:08:44 | INFO     | security.integrity | Attested data (hash=3a6eb0790f39ac87c94f3856b2dd2c5d110e6811602261a9a923d3bb23adc8b7)
+2026-07-08 19:09:14 | INFO     | backend.main | Prometheus heartbeat — system alive
+2026-07-08 19:09:19 | INFO     | security.permissions | Registered permission: device.connect
+2026-07-08 19:09:19 | INFO     | security.permissions | Registered permission: device.disconnect
+2026-07-08 19:09:19 | INFO     | security.permissions | Registered permission: device.read
+2026-07-08 19:09:19 | INFO     | security.permissions | Registered permission: device.write
+2026-07-08 19:09:19 | INFO     | security.permissions | Registered permission: device.diagnose
+2026-07-08 19:09:19 | INFO     | security.permissions | Registered permission: device.recover
+2026-07-08 19:09:19 | INFO     | security.permissions | Registered permission: device.flash
+2026-07-08 19:09:19 | INFO     | security.permissions | Registered permission: device.reboot
+2026-07-08 19:09:19 | INFO     | security.permissions | Registered permission: hardware.session.create
+2026-07-08 19:09:19 | INFO     | security.permissions | Registered permission: hardware.session.close
+2026-07-08 19:09:19 | INFO     | security.permissions | Registered permission: firmware.read
+2026-07-08 19:09:19 | INFO     | security.permissions | Registered permission: firmware.parse
+2026-07-08 19:09:19 | INFO     | security.permissions | Mapped action device.connect -> ['device.connect']
+2026-07-08 19:09:19 | INFO     | security.permissions | Mapped action device.disconnect -> ['device.disconnect']
+2026-07-08 19:09:19 | INFO     | security.permissions | Mapped action device.read -> ['device.read']
+2026-07-08 19:09:19 | INFO     | security.permissions | Mapped action device.write -> ['device.write']
+2026-07-08 19:09:19 | INFO     | security.permissions | Mapped action device.diagnose -> ['device.diagnose']
+2026-07-08 19:09:19 | INFO     | security.permissions | Mapped action device.recover -> ['device.recover', 'ownership_declared']
+2026-07-08 19:09:19 | INFO     | security.permissions | Mapped action device.flash -> ['device.flash', 'ownership_declared']
+2026-07-08 19:09:19 | INFO     | security.permissions | Mapped action device.reboot -> ['device.reboot', 'ownership_declared']
+2026-07-08 19:09:19 | INFO     | security.permissions | Mapped action hardware.session.create -> ['hardware.session.create']
+2026-07-08 19:09:19 | INFO     | security.permissions | Mapped action hardware.session.close -> ['hardware.session.close']
+2026-07-08 19:09:19 | INFO     | security.permissions | Mapped action firmware.read -> ['firmware.read']
+2026-07-08 19:09:19 | INFO     | security.permissions | Mapped action firmware.parse -> ['firmware.parse']
+2026-07-08 19:09:19 | INFO     | core.container | Registered service: config
+2026-07-08 19:09:19 | INFO     | core.container | Registered service: db_engine
+2026-07-08 19:09:19 | INFO     | core.event_bus | Subscribed handler for event: device.connected
+2026-07-08 19:09:19 | INFO     | core.event_bus | Subscribed handler for event: device.disconnected
+2026-07-08 19:09:19 | INFO     | core.event_bus | Subscribed handler for event: device.connect_failed
+2026-07-08 19:09:19 | INFO     | core.event_bus | Subscribed handler for event: device.wrote
+2026-07-08 19:09:19 | INFO     | core.event_bus | Subscribed handler for event: plugin.ran
+2026-07-08 19:09:19 | INFO     | core.event_bus | Subscribed handler for event: agent.dispatched
+2026-07-08 19:09:19 | INFO     | core.event_bus | Subscribed handler for event: memory.stored
+2026-07-08 19:09:19 | INFO     | core.event_bus | Subscribed handler for event: fact.asserted
+2026-07-08 19:09:19 | INFO     | core.event_bus | Subscribed handler for event: capability.executed
+2026-07-08 19:09:19 | INFO     | hardware.hal.registry | Registered driver: usb
+2026-07-08 19:09:19 | INFO     | hardware.hal.registry | Registered driver: adb
+2026-07-08 19:09:19 | INFO     | hardware.hal.registry | Registered driver: fastboot
+2026-07-08 19:09:19 | INFO     | hardware.hal.registry | Registered driver: network
+2026-07-08 19:09:19 | INFO     | hardware.hal.registry | Registered driver: virtual
+2026-07-08 19:09:19 | INFO     | core.container | Registered service: event_bus
+2026-07-08 19:09:19 | INFO     | core.container | Registered service: observability
+2026-07-08 19:09:19 | INFO     | core.container | Registered service: scheduler
+2026-07-08 19:09:19 | INFO     | core.container | Registered service: session_factory
+2026-07-08 19:09:19 | INFO     | core.container | Registered service: memory_api
+2026-07-08 19:09:19 | INFO     | core.container | Registered service: reasoning_api
+2026-07-08 19:09:19 | INFO     | core.container | Registered service: knowledge_engine
+2026-07-08 19:09:19 | INFO     | core.container | Registered service: plugin_api
+2026-07-08 19:09:19 | INFO     | core.container | Registered service: agent_api
+2026-07-08 19:09:19 | INFO     | core.container | Registered service: capability_api
+2026-07-08 19:09:19 | INFO     | core.container | Registered service: device_api
+2026-07-08 19:09:19 | INFO     | core.container | Registered service: platform_service
+2026-07-08 19:09:19 | INFO     | core.container | Registered service: delta_service
+2026-07-08 19:09:19 | INFO     | core.container | Registered service: epsilon_service
+2026-07-08 19:09:19 | INFO     | core.container | Registered service: omega_service
+2026-07-08 19:09:19 | INFO     | core.container | Registered service: event_handlers
+2026-07-08 19:09:19 | INFO     | core.container | Registered service: kernel
+2026-07-08 19:09:19 | INFO     | core.container | Registered service: hardware_hal
+2026-07-08 19:09:19 | INFO     | core.container | Registered service: hardware_session_manager
+2026-07-08 19:09:19 | INFO     | core.container | Registered service: hardware_diagnostics
+2026-07-08 19:09:19 | INFO     | core.container | Registered service: hardware_recovery
+2026-07-08 19:09:19 | INFO     | core.container | Registered service: hardware_firmware
+2026-07-08 19:09:19 | INFO     | core.container | Registered service: security_authorizer
+2026-07-08 19:09:19 | INFO     | core.container | Registered service: security_audit
+2026-07-08 19:09:19 | INFO     | core.container | Registered service: security_integrity
+2026-07-08 19:09:19 | INFO     | core.container | Registered service: omega_agent_coordinator
+2026-07-08 19:09:19 | INFO     | core.container | Registered service: omega_task_planner
+2026-07-08 19:09:19 | INFO     | core.container | Registered service: omega_consensus
+2026-07-08 19:09:19 | INFO     | core.container | Registered service: omega_delegation
+2026-07-08 19:09:19 | INFO     | core.container | Registered service: omega_node_registry
+2026-07-08 19:09:19 | INFO     | core.container | Registered service: omega_distributed_runtime
+2026-07-08 19:09:19 | INFO     | core.container | Registered service: omega_knowledge_sync
+2026-07-08 19:09:19 | INFO     | core.container | Registered service: omega_capability_sync
+2026-07-08 19:09:19 | INFO     | core.container | Registered service: omega_policy_engine
+2026-07-08 19:09:19 | INFO     | core.container | Registered service: omega_permission_hierarchy
+2026-07-08 19:09:19 | INFO     | core.container | Registered service: omega_rule_engine
+2026-07-08 19:09:19 | INFO     | core.container | Registered service: omega_policy_audit
+2026-07-08 19:09:19 | INFO     | core.container | Registered service: omega_plugin_repo
+2026-07-08 19:09:19 | INFO     | core.container | Registered service: omega_capability_repo
+2026-07-08 19:09:19 | INFO     | core.container | Registered service: omega_driver_repo
+2026-07-08 19:09:19 | INFO     | core.container | Registered service: omega_agent_repo
+2026-07-08 19:09:19 | INFO     | core.container | Registered service: omega_org_registry
+2026-07-08 19:09:19 | INFO     | core.container | Registered service: omega_project_registry
+2026-07-08 19:09:19 | INFO     | core.container | Registered service: omega_user_registry
+2026-07-08 19:09:19 | INFO     | core.container | Registered service: omega_team_registry
+2026-07-08 19:09:19 | INFO     | core.container | Registered service: omega_role_registry
+2026-07-08 19:09:19 | INFO     | core.container | Registered service: omega_resource_manager
+2026-07-08 19:09:19 | INFO     | core.container | Registered service: omega_memory_manager
+2026-07-08 19:09:19 | INFO     | core.container | Registered service: omega_lifecycle_manager
+2026-07-08 19:09:19 | INFO     | core.container | Registered service: omega_dashboard
+2026-07-08 19:09:19 | INFO     | plugins.manager | Loaded plugin: echo v0.1.0
+2026-07-08 19:09:19 | INFO     | agents.manager | Registered agent: echo_agent
+2026-07-08 19:09:19 | INFO     | agents.manager | Registered agent: engineering_agent
+2026-07-08 19:09:19 | INFO     | core.scheduler | Scheduled job 'heartbeat' every 30s
+2026-07-08 19:09:19 | INFO     | backend.main | Prometheus heartbeat — system alive
+2026-07-08 19:09:19 | INFO     | core.scheduler | Scheduler started
+2026-07-08 19:09:19 | INFO     | core.bootstrap | Startup complete - Prometheus Core (Omega Olympus) runtime online
+2026-07-08 19:09:19 | INFO     | backend.main | Backend ready — services available via app.state.container
+2026-07-08 19:09:44 | INFO     | backend.main | Prometheus heartbeat — system alive
+2026-07-08 19:10:14 | INFO     | backend.main | Prometheus heartbeat — system alive
+2026-07-08 19:10:44 | INFO     | backend.main | Prometheus heartbeat — system alive
+2026-07-08 19:11:05 | INFO     | security.permissions | Registered permission: device.connect
+2026-07-08 19:11:05 | INFO     | security.permissions | Registered permission: device.disconnect
+2026-07-08 19:11:05 | INFO     | security.permissions | Registered permission: device.read
+2026-07-08 19:11:05 | INFO     | security.permissions | Registered permission: device.write
+2026-07-08 19:11:05 | INFO     | security.permissions | Registered permission: device.diagnose
+2026-07-08 19:11:05 | INFO     | security.permissions | Registered permission: device.recover
+2026-07-08 19:11:05 | INFO     | security.permissions | Registered permission: device.flash
+2026-07-08 19:11:05 | INFO     | security.permissions | Registered permission: device.reboot
+2026-07-08 19:11:05 | INFO     | security.permissions | Registered permission: hardware.session.create
+2026-07-08 19:11:05 | INFO     | security.permissions | Registered permission: hardware.session.close
+2026-07-08 19:11:05 | INFO     | security.permissions | Registered permission: firmware.read
+2026-07-08 19:11:05 | INFO     | security.permissions | Registered permission: firmware.parse
+2026-07-08 19:11:05 | INFO     | security.permissions | Mapped action device.connect -> ['device.connect']
+2026-07-08 19:11:05 | INFO     | security.permissions | Mapped action device.disconnect -> ['device.disconnect']
+2026-07-08 19:11:05 | INFO     | security.permissions | Mapped action device.read -> ['device.read']
+2026-07-08 19:11:05 | INFO     | security.permissions | Mapped action device.write -> ['device.write']
+2026-07-08 19:11:05 | INFO     | security.permissions | Mapped action device.diagnose -> ['device.diagnose']
+2026-07-08 19:11:05 | INFO     | security.permissions | Mapped action device.recover -> ['device.recover', 'ownership_declared']
+2026-07-08 19:11:05 | INFO     | security.permissions | Mapped action device.flash -> ['device.flash', 'ownership_declared']
+2026-07-08 19:11:05 | INFO     | security.permissions | Mapped action device.reboot -> ['device.reboot', 'ownership_declared']
+2026-07-08 19:11:05 | INFO     | security.permissions | Mapped action hardware.session.create -> ['hardware.session.create']
+2026-07-08 19:11:05 | INFO     | security.permissions | Mapped action hardware.session.close -> ['hardware.session.close']
+2026-07-08 19:11:05 | INFO     | security.permissions | Mapped action firmware.read -> ['firmware.read']
+2026-07-08 19:11:05 | INFO     | security.permissions | Mapped action firmware.parse -> ['firmware.parse']
+2026-07-08 19:11:06 | INFO     | core.container | Registered service: config
+2026-07-08 19:11:06 | INFO     | core.container | Registered service: db_engine
+2026-07-08 19:11:06 | INFO     | core.event_bus | Subscribed handler for event: device.connected
+2026-07-08 19:11:06 | INFO     | core.event_bus | Subscribed handler for event: device.disconnected
+2026-07-08 19:11:06 | INFO     | core.event_bus | Subscribed handler for event: device.connect_failed
+2026-07-08 19:11:06 | INFO     | core.event_bus | Subscribed handler for event: device.wrote
+2026-07-08 19:11:06 | INFO     | core.event_bus | Subscribed handler for event: plugin.ran
+2026-07-08 19:11:06 | INFO     | core.event_bus | Subscribed handler for event: agent.dispatched
+2026-07-08 19:11:06 | INFO     | core.event_bus | Subscribed handler for event: memory.stored
+2026-07-08 19:11:06 | INFO     | core.event_bus | Subscribed handler for event: fact.asserted
+2026-07-08 19:11:06 | INFO     | core.event_bus | Subscribed handler for event: capability.executed
+2026-07-08 19:11:06 | INFO     | hardware.hal.registry | Registered driver: usb
+2026-07-08 19:11:06 | INFO     | hardware.hal.registry | Registered driver: adb
+2026-07-08 19:11:06 | INFO     | hardware.hal.registry | Registered driver: fastboot
+2026-07-08 19:11:06 | INFO     | hardware.hal.registry | Registered driver: network
+2026-07-08 19:11:06 | INFO     | hardware.hal.registry | Registered driver: virtual
+2026-07-08 19:11:06 | INFO     | core.container | Registered service: event_bus
+2026-07-08 19:11:06 | INFO     | core.container | Registered service: observability
+2026-07-08 19:11:06 | INFO     | core.container | Registered service: scheduler
+2026-07-08 19:11:06 | INFO     | core.container | Registered service: session_factory
+2026-07-08 19:11:06 | INFO     | core.container | Registered service: memory_api
+2026-07-08 19:11:06 | INFO     | core.container | Registered service: reasoning_api
+2026-07-08 19:11:06 | INFO     | core.container | Registered service: knowledge_engine
+2026-07-08 19:11:06 | INFO     | core.container | Registered service: plugin_api
+2026-07-08 19:11:06 | INFO     | core.container | Registered service: agent_api
+2026-07-08 19:11:06 | INFO     | core.container | Registered service: capability_api
+2026-07-08 19:11:06 | INFO     | core.container | Registered service: device_api
+2026-07-08 19:11:06 | INFO     | core.container | Registered service: platform_service
+2026-07-08 19:11:06 | INFO     | core.container | Registered service: delta_service
+2026-07-08 19:11:06 | INFO     | core.container | Registered service: epsilon_service
+2026-07-08 19:11:06 | INFO     | core.container | Registered service: omega_service
+2026-07-08 19:11:06 | INFO     | core.container | Registered service: event_handlers
+2026-07-08 19:11:06 | INFO     | core.container | Registered service: kernel
+2026-07-08 19:11:06 | INFO     | core.container | Registered service: hardware_hal
+2026-07-08 19:11:06 | INFO     | core.container | Registered service: hardware_session_manager
+2026-07-08 19:11:06 | INFO     | core.container | Registered service: hardware_diagnostics
+2026-07-08 19:11:06 | INFO     | core.container | Registered service: hardware_recovery
+2026-07-08 19:11:06 | INFO     | core.container | Registered service: hardware_firmware
+2026-07-08 19:11:06 | INFO     | core.container | Registered service: security_authorizer
+2026-07-08 19:11:06 | INFO     | core.container | Registered service: security_audit
+2026-07-08 19:11:06 | INFO     | core.container | Registered service: security_integrity
+2026-07-08 19:11:06 | INFO     | core.container | Registered service: omega_agent_coordinator
+2026-07-08 19:11:06 | INFO     | core.container | Registered service: omega_task_planner
+2026-07-08 19:11:06 | INFO     | core.container | Registered service: omega_consensus
+2026-07-08 19:11:06 | INFO     | core.container | Registered service: omega_delegation
+2026-07-08 19:11:06 | INFO     | core.container | Registered service: omega_node_registry
+2026-07-08 19:11:06 | INFO     | core.container | Registered service: omega_distributed_runtime
+2026-07-08 19:11:06 | INFO     | core.container | Registered service: omega_knowledge_sync
+2026-07-08 19:11:06 | INFO     | core.container | Registered service: omega_capability_sync
+2026-07-08 19:11:06 | INFO     | core.container | Registered service: omega_policy_engine
+2026-07-08 19:11:06 | INFO     | core.container | Registered service: omega_permission_hierarchy
+2026-07-08 19:11:06 | INFO     | core.container | Registered service: omega_rule_engine
+2026-07-08 19:11:06 | INFO     | core.container | Registered service: omega_policy_audit
+2026-07-08 19:11:06 | INFO     | core.container | Registered service: omega_plugin_repo
+2026-07-08 19:11:06 | INFO     | core.container | Registered service: omega_capability_repo
+2026-07-08 19:11:06 | INFO     | core.container | Registered service: omega_driver_repo
+2026-07-08 19:11:06 | INFO     | core.container | Registered service: omega_agent_repo
+2026-07-08 19:11:06 | INFO     | core.container | Registered service: omega_org_registry
+2026-07-08 19:11:06 | INFO     | core.container | Registered service: omega_project_registry
+2026-07-08 19:11:06 | INFO     | core.container | Registered service: omega_user_registry
+2026-07-08 19:11:06 | INFO     | core.container | Registered service: omega_team_registry
+2026-07-08 19:11:06 | INFO     | core.container | Registered service: omega_role_registry
+2026-07-08 19:11:06 | INFO     | core.container | Registered service: omega_resource_manager
+2026-07-08 19:11:06 | INFO     | core.container | Registered service: omega_memory_manager
+2026-07-08 19:11:06 | INFO     | core.container | Registered service: omega_lifecycle_manager
+2026-07-08 19:11:06 | INFO     | core.container | Registered service: omega_dashboard
+2026-07-08 19:11:06 | INFO     | plugins.manager | Loaded plugin: echo v0.1.0
+2026-07-08 19:11:06 | INFO     | agents.manager | Registered agent: echo_agent
+2026-07-08 19:11:06 | INFO     | agents.manager | Registered agent: engineering_agent
+2026-07-08 19:11:06 | INFO     | core.scheduler | Scheduled job 'heartbeat' every 30s
+2026-07-08 19:11:06 | INFO     | backend.main | Prometheus heartbeat — system alive
+2026-07-08 19:11:06 | INFO     | core.scheduler | Scheduler started
+2026-07-08 19:11:06 | INFO     | core.bootstrap | Startup complete - Prometheus Core (Omega Olympus) runtime online
+2026-07-08 19:11:06 | INFO     | backend.main | Backend ready — services available via app.state.container
+2026-07-08 19:11:36 | INFO     | backend.main | Prometheus heartbeat — system alive
+2026-07-08 19:12:07 | INFO     | backend.main | Prometheus heartbeat — system alive
+2026-07-08 19:12:10 | INFO     | security.permissions | Registered permission: device.connect
+2026-07-08 19:12:10 | INFO     | security.permissions | Registered permission: device.disconnect
+2026-07-08 19:12:10 | INFO     | security.permissions | Registered permission: device.read
+2026-07-08 19:12:10 | INFO     | security.permissions | Registered permission: device.write
+2026-07-08 19:12:10 | INFO     | security.permissions | Registered permission: device.diagnose
+2026-07-08 19:12:10 | INFO     | security.permissions | Registered permission: device.recover
+2026-07-08 19:12:10 | INFO     | security.permissions | Registered permission: device.flash
+2026-07-08 19:12:10 | INFO     | security.permissions | Registered permission: device.reboot
+2026-07-08 19:12:10 | INFO     | security.permissions | Registered permission: hardware.session.create
+2026-07-08 19:12:10 | INFO     | security.permissions | Registered permission: hardware.session.close
+2026-07-08 19:12:10 | INFO     | security.permissions | Registered permission: firmware.read
+2026-07-08 19:12:10 | INFO     | security.permissions | Registered permission: firmware.parse
+2026-07-08 19:12:10 | INFO     | security.permissions | Mapped action device.connect -> ['device.connect']
+2026-07-08 19:12:10 | INFO     | security.permissions | Mapped action device.disconnect -> ['device.disconnect']
+2026-07-08 19:12:10 | INFO     | security.permissions | Mapped action device.read -> ['device.read']
+2026-07-08 19:12:10 | INFO     | security.permissions | Mapped action device.write -> ['device.write']
+2026-07-08 19:12:10 | INFO     | security.permissions | Mapped action device.diagnose -> ['device.diagnose']
+2026-07-08 19:12:10 | INFO     | security.permissions | Mapped action device.recover -> ['device.recover', 'ownership_declared']
+2026-07-08 19:12:10 | INFO     | security.permissions | Mapped action device.flash -> ['device.flash', 'ownership_declared']
+2026-07-08 19:12:10 | INFO     | security.permissions | Mapped action device.reboot -> ['device.reboot', 'ownership_declared']
+2026-07-08 19:12:10 | INFO     | security.permissions | Mapped action hardware.session.create -> ['hardware.session.create']
+2026-07-08 19:12:10 | INFO     | security.permissions | Mapped action hardware.session.close -> ['hardware.session.close']
+2026-07-08 19:12:10 | INFO     | security.permissions | Mapped action firmware.read -> ['firmware.read']
+2026-07-08 19:12:10 | INFO     | security.permissions | Mapped action firmware.parse -> ['firmware.parse']
+2026-07-08 19:12:11 | INFO     | security.permissions | Registered permission: device.connect
+2026-07-08 19:12:11 | INFO     | security.permissions | Registered permission: device.disconnect
+2026-07-08 19:12:11 | INFO     | security.permissions | Registered permission: device.read
+2026-07-08 19:12:11 | INFO     | security.permissions | Registered permission: device.write
+2026-07-08 19:12:11 | INFO     | security.permissions | Registered permission: device.diagnose
+2026-07-08 19:12:11 | INFO     | security.permissions | Registered permission: device.recover
+2026-07-08 19:12:11 | INFO     | security.permissions | Registered permission: device.flash
+2026-07-08 19:12:11 | INFO     | security.permissions | Registered permission: device.reboot
+2026-07-08 19:12:11 | INFO     | security.permissions | Registered permission: hardware.session.create
+2026-07-08 19:12:11 | INFO     | security.permissions | Registered permission: hardware.session.close
+2026-07-08 19:12:11 | INFO     | security.permissions | Registered permission: firmware.read
+2026-07-08 19:12:11 | INFO     | security.permissions | Registered permission: firmware.parse
+2026-07-08 19:12:11 | INFO     | security.permissions | Mapped action device.connect -> ['device.connect']
+2026-07-08 19:12:11 | INFO     | security.permissions | Mapped action device.disconnect -> ['device.disconnect']
+2026-07-08 19:12:11 | INFO     | security.permissions | Mapped action device.read -> ['device.read']
+2026-07-08 19:12:11 | INFO     | security.permissions | Mapped action device.write -> ['device.write']
+2026-07-08 19:12:11 | INFO     | security.permissions | Mapped action device.diagnose -> ['device.diagnose']
+2026-07-08 19:12:11 | INFO     | security.permissions | Mapped action device.recover -> ['device.recover', 'ownership_declared']
+2026-07-08 19:12:11 | INFO     | security.permissions | Mapped action device.flash -> ['device.flash', 'ownership_declared']
+2026-07-08 19:12:11 | INFO     | security.permissions | Mapped action device.reboot -> ['device.reboot', 'ownership_declared']
+2026-07-08 19:12:11 | INFO     | security.permissions | Mapped action hardware.session.create -> ['hardware.session.create']
+2026-07-08 19:12:11 | INFO     | security.permissions | Mapped action hardware.session.close -> ['hardware.session.close']
+2026-07-08 19:12:11 | INFO     | security.permissions | Mapped action firmware.read -> ['firmware.read']
+2026-07-08 19:12:11 | INFO     | security.permissions | Mapped action firmware.parse -> ['firmware.parse']
+2026-07-08 19:12:11 | INFO     | agents.manager | Registered agent: fake_agent
+2026-07-08 19:12:11 | INFO     | agents.manager | Registered agent: fake_agent
+2026-07-08 19:12:11 | INFO     | agents.manager | Dispatching task to agent 'fake_agent': {}
+2026-07-08 19:12:11 | INFO     | core.event_bus | Subscribed handler for event: agent.dispatched
+2026-07-08 19:12:11 | INFO     | agents.manager | Registered agent: fake_agent
+2026-07-08 19:12:11 | INFO     | agents.manager | Dispatching task to agent 'fake_agent': {'task': 'x'}
+2026-07-08 19:12:11 | INFO     | core.container | Registered service: config
+2026-07-08 19:12:11 | INFO     | core.container | Registered service: db_engine
+2026-07-08 19:12:11 | INFO     | core.event_bus | Subscribed handler for event: device.connected
+2026-07-08 19:12:11 | INFO     | core.event_bus | Subscribed handler for event: device.disconnected
+2026-07-08 19:12:11 | INFO     | core.event_bus | Subscribed handler for event: device.connect_failed
+2026-07-08 19:12:11 | INFO     | core.event_bus | Subscribed handler for event: device.wrote
+2026-07-08 19:12:11 | INFO     | core.event_bus | Subscribed handler for event: plugin.ran
+2026-07-08 19:12:11 | INFO     | core.event_bus | Subscribed handler for event: agent.dispatched
+2026-07-08 19:12:11 | INFO     | core.event_bus | Subscribed handler for event: memory.stored
+2026-07-08 19:12:11 | INFO     | core.event_bus | Subscribed handler for event: fact.asserted
+2026-07-08 19:12:11 | INFO     | core.event_bus | Subscribed handler for event: capability.executed
+2026-07-08 19:12:11 | INFO     | hardware.hal.registry | Registered driver: usb
+2026-07-08 19:12:11 | INFO     | hardware.hal.registry | Registered driver: adb
+2026-07-08 19:12:11 | INFO     | hardware.hal.registry | Registered driver: fastboot
+2026-07-08 19:12:11 | INFO     | hardware.hal.registry | Registered driver: network
+2026-07-08 19:12:11 | INFO     | hardware.hal.registry | Registered driver: virtual
+2026-07-08 19:12:11 | INFO     | core.container | Registered service: event_bus
+2026-07-08 19:12:11 | INFO     | core.container | Registered service: observability
+2026-07-08 19:12:11 | INFO     | core.container | Registered service: scheduler
+2026-07-08 19:12:11 | INFO     | core.container | Registered service: session_factory
+2026-07-08 19:12:11 | INFO     | core.container | Registered service: memory_api
+2026-07-08 19:12:11 | INFO     | core.container | Registered service: reasoning_api
+2026-07-08 19:12:11 | INFO     | core.container | Registered service: knowledge_engine
+2026-07-08 19:12:11 | INFO     | core.container | Registered service: plugin_api
+2026-07-08 19:12:11 | INFO     | core.container | Registered service: agent_api
+2026-07-08 19:12:11 | INFO     | core.container | Registered service: capability_api
+2026-07-08 19:12:11 | INFO     | core.container | Registered service: device_api
+2026-07-08 19:12:11 | INFO     | core.container | Registered service: platform_service
+2026-07-08 19:12:11 | INFO     | core.container | Registered service: delta_service
+2026-07-08 19:12:11 | INFO     | core.container | Registered service: epsilon_service
+2026-07-08 19:12:11 | INFO     | core.container | Registered service: omega_service
+2026-07-08 19:12:11 | INFO     | core.container | Registered service: event_handlers
+2026-07-08 19:12:11 | INFO     | core.container | Registered service: kernel
+2026-07-08 19:12:11 | INFO     | core.container | Registered service: hardware_hal
+2026-07-08 19:12:11 | INFO     | core.container | Registered service: hardware_session_manager
+2026-07-08 19:12:11 | INFO     | core.container | Registered service: hardware_diagnostics
+2026-07-08 19:12:11 | INFO     | core.container | Registered service: hardware_recovery
+2026-07-08 19:12:11 | INFO     | core.container | Registered service: hardware_firmware
+2026-07-08 19:12:11 | INFO     | core.container | Registered service: security_authorizer
+2026-07-08 19:12:11 | INFO     | core.container | Registered service: security_audit
+2026-07-08 19:12:11 | INFO     | core.container | Registered service: security_integrity
+2026-07-08 19:12:11 | INFO     | core.container | Registered service: omega_agent_coordinator
+2026-07-08 19:12:11 | INFO     | core.container | Registered service: omega_task_planner
+2026-07-08 19:12:11 | INFO     | core.container | Registered service: omega_consensus
+2026-07-08 19:12:11 | INFO     | core.container | Registered service: omega_delegation
+2026-07-08 19:12:11 | INFO     | core.container | Registered service: omega_node_registry
+2026-07-08 19:12:11 | INFO     | core.container | Registered service: omega_distributed_runtime
+2026-07-08 19:12:11 | INFO     | core.container | Registered service: omega_knowledge_sync
+2026-07-08 19:12:11 | INFO     | core.container | Registered service: omega_capability_sync
+2026-07-08 19:12:11 | INFO     | core.container | Registered service: omega_policy_engine
+2026-07-08 19:12:11 | INFO     | core.container | Registered service: omega_permission_hierarchy
+2026-07-08 19:12:11 | INFO     | core.container | Registered service: omega_rule_engine
+2026-07-08 19:12:11 | INFO     | core.container | Registered service: omega_policy_audit
+2026-07-08 19:12:11 | INFO     | core.container | Registered service: omega_plugin_repo
+2026-07-08 19:12:11 | INFO     | core.container | Registered service: omega_capability_repo
+2026-07-08 19:12:11 | INFO     | core.container | Registered service: omega_driver_repo
+2026-07-08 19:12:11 | INFO     | core.container | Registered service: omega_agent_repo
+2026-07-08 19:12:11 | INFO     | core.container | Registered service: omega_org_registry
+2026-07-08 19:12:11 | INFO     | core.container | Registered service: omega_project_registry
+2026-07-08 19:12:11 | INFO     | core.container | Registered service: omega_user_registry
+2026-07-08 19:12:11 | INFO     | core.container | Registered service: omega_team_registry
+2026-07-08 19:12:11 | INFO     | core.container | Registered service: omega_role_registry
+2026-07-08 19:12:11 | INFO     | core.container | Registered service: omega_resource_manager
+2026-07-08 19:12:11 | INFO     | core.container | Registered service: omega_memory_manager
+2026-07-08 19:12:11 | INFO     | core.container | Registered service: omega_lifecycle_manager
+2026-07-08 19:12:11 | INFO     | core.container | Registered service: omega_dashboard
+2026-07-08 19:12:11 | INFO     | plugins.manager | Loaded plugin: echo v0.1.0
+2026-07-08 19:12:11 | INFO     | agents.manager | Registered agent: echo_agent
+2026-07-08 19:12:11 | INFO     | agents.manager | Registered agent: engineering_agent
+2026-07-08 19:12:11 | INFO     | core.scheduler | Scheduled job 'heartbeat' every 30s
+2026-07-08 19:12:11 | INFO     | core.scheduler | Scheduler started
+2026-07-08 19:12:11 | INFO     | core.bootstrap | Startup complete - Prometheus Core (Omega Olympus) runtime online
+2026-07-08 19:12:11 | INFO     | core.container | Registered service: config
+2026-07-08 19:12:11 | INFO     | core.container | Registered service: db_engine
+2026-07-08 19:12:11 | INFO     | core.event_bus | Subscribed handler for event: device.connected
+2026-07-08 19:12:11 | INFO     | core.event_bus | Subscribed handler for event: device.disconnected
+2026-07-08 19:12:11 | INFO     | core.event_bus | Subscribed handler for event: device.connect_failed
+2026-07-08 19:12:11 | INFO     | core.event_bus | Subscribed handler for event: device.wrote
+2026-07-08 19:12:11 | INFO     | core.event_bus | Subscribed handler for event: plugin.ran
+2026-07-08 19:12:11 | INFO     | core.event_bus | Subscribed handler for event: agent.dispatched
+2026-07-08 19:12:11 | INFO     | core.event_bus | Subscribed handler for event: memory.stored
+2026-07-08 19:12:11 | INFO     | core.event_bus | Subscribed handler for event: fact.asserted
+2026-07-08 19:12:11 | INFO     | core.event_bus | Subscribed handler for event: capability.executed
+2026-07-08 19:12:11 | INFO     | hardware.hal.registry | Registered driver: usb
+2026-07-08 19:12:11 | INFO     | hardware.hal.registry | Registered driver: adb
+2026-07-08 19:12:11 | INFO     | hardware.hal.registry | Registered driver: fastboot
+2026-07-08 19:12:11 | INFO     | hardware.hal.registry | Registered driver: network
+2026-07-08 19:12:11 | INFO     | hardware.hal.registry | Registered driver: virtual
+2026-07-08 19:12:11 | INFO     | core.container | Registered service: event_bus
+2026-07-08 19:12:11 | INFO     | core.container | Registered service: observability
+2026-07-08 19:12:11 | INFO     | core.container | Registered service: scheduler
+2026-07-08 19:12:11 | INFO     | core.container | Registered service: session_factory
+2026-07-08 19:12:11 | INFO     | core.container | Registered service: memory_api
+2026-07-08 19:12:11 | INFO     | core.container | Registered service: reasoning_api
+2026-07-08 19:12:11 | INFO     | core.container | Registered service: knowledge_engine
+2026-07-08 19:12:11 | INFO     | core.container | Registered service: plugin_api
+2026-07-08 19:12:11 | INFO     | core.container | Registered service: agent_api
+2026-07-08 19:12:11 | INFO     | core.container | Registered service: capability_api
+2026-07-08 19:12:11 | INFO     | core.container | Registered service: device_api
+2026-07-08 19:12:11 | INFO     | core.container | Registered service: platform_service
+2026-07-08 19:12:11 | INFO     | core.container | Registered service: delta_service
+2026-07-08 19:12:11 | INFO     | core.container | Registered service: epsilon_service
+2026-07-08 19:12:11 | INFO     | core.container | Registered service: omega_service
+2026-07-08 19:12:11 | INFO     | core.container | Registered service: event_handlers
+2026-07-08 19:12:11 | INFO     | core.container | Registered service: kernel
+2026-07-08 19:12:11 | INFO     | core.container | Registered service: hardware_hal
+2026-07-08 19:12:11 | INFO     | core.container | Registered service: hardware_session_manager
+2026-07-08 19:12:11 | INFO     | core.container | Registered service: hardware_diagnostics
+2026-07-08 19:12:11 | INFO     | core.container | Registered service: hardware_recovery
+2026-07-08 19:12:11 | INFO     | core.container | Registered service: hardware_firmware
+2026-07-08 19:12:11 | INFO     | core.container | Registered service: security_authorizer
+2026-07-08 19:12:11 | INFO     | core.container | Registered service: security_audit
+2026-07-08 19:12:11 | INFO     | core.container | Registered service: security_integrity
+2026-07-08 19:12:11 | INFO     | core.container | Registered service: omega_agent_coordinator
+2026-07-08 19:12:11 | INFO     | core.container | Registered service: omega_task_planner
+2026-07-08 19:12:11 | INFO     | core.container | Registered service: omega_consensus
+2026-07-08 19:12:11 | INFO     | core.container | Registered service: omega_delegation
+2026-07-08 19:12:11 | INFO     | core.container | Registered service: omega_node_registry
+2026-07-08 19:12:11 | INFO     | core.container | Registered service: omega_distributed_runtime
+2026-07-08 19:12:11 | INFO     | core.container | Registered service: omega_knowledge_sync
+2026-07-08 19:12:11 | INFO     | core.container | Registered service: omega_capability_sync
+2026-07-08 19:12:11 | INFO     | core.container | Registered service: omega_policy_engine
+2026-07-08 19:12:11 | INFO     | core.container | Registered service: omega_permission_hierarchy
+2026-07-08 19:12:11 | INFO     | core.container | Registered service: omega_rule_engine
+2026-07-08 19:12:11 | INFO     | core.container | Registered service: omega_policy_audit
+2026-07-08 19:12:11 | INFO     | core.container | Registered service: omega_plugin_repo
+2026-07-08 19:12:11 | INFO     | core.container | Registered service: omega_capability_repo
+2026-07-08 19:12:11 | INFO     | core.container | Registered service: omega_driver_repo
+2026-07-08 19:12:11 | INFO     | core.container | Registered service: omega_agent_repo
+2026-07-08 19:12:11 | INFO     | core.container | Registered service: omega_org_registry
+2026-07-08 19:12:11 | INFO     | core.container | Registered service: omega_project_registry
+2026-07-08 19:12:11 | INFO     | core.container | Registered service: omega_user_registry
+2026-07-08 19:12:11 | INFO     | core.container | Registered service: omega_team_registry
+2026-07-08 19:12:11 | INFO     | core.container | Registered service: omega_role_registry
+2026-07-08 19:12:11 | INFO     | core.container | Registered service: omega_resource_manager
+2026-07-08 19:12:11 | INFO     | core.container | Registered service: omega_memory_manager
+2026-07-08 19:12:11 | INFO     | core.container | Registered service: omega_lifecycle_manager
+2026-07-08 19:12:11 | INFO     | core.container | Registered service: omega_dashboard
+2026-07-08 19:12:11 | INFO     | plugins.manager | Loaded plugin: echo v0.1.0
+2026-07-08 19:12:11 | INFO     | agents.manager | Registered agent: echo_agent
+2026-07-08 19:12:11 | INFO     | agents.manager | Registered agent: engineering_agent
+2026-07-08 19:12:11 | INFO     | core.scheduler | Scheduled job 'heartbeat' every 30s
+2026-07-08 19:12:11 | INFO     | core.scheduler | Scheduler started
+2026-07-08 19:12:11 | INFO     | core.bootstrap | Startup complete - Prometheus Core (Omega Olympus) runtime online
+2026-07-08 19:12:11 | INFO     | core.container | Registered service: config
+2026-07-08 19:12:11 | INFO     | core.container | Registered service: db_engine
+2026-07-08 19:12:11 | INFO     | core.event_bus | Subscribed handler for event: device.connected
+2026-07-08 19:12:11 | INFO     | core.event_bus | Subscribed handler for event: device.disconnected
+2026-07-08 19:12:11 | INFO     | core.event_bus | Subscribed handler for event: device.connect_failed
+2026-07-08 19:12:11 | INFO     | core.event_bus | Subscribed handler for event: device.wrote
+2026-07-08 19:12:11 | INFO     | core.event_bus | Subscribed handler for event: plugin.ran
+2026-07-08 19:12:11 | INFO     | core.event_bus | Subscribed handler for event: agent.dispatched
+2026-07-08 19:12:11 | INFO     | core.event_bus | Subscribed handler for event: memory.stored
+2026-07-08 19:12:11 | INFO     | core.event_bus | Subscribed handler for event: fact.asserted
+2026-07-08 19:12:11 | INFO     | core.event_bus | Subscribed handler for event: capability.executed
+2026-07-08 19:12:11 | INFO     | hardware.hal.registry | Registered driver: usb
+2026-07-08 19:12:11 | INFO     | hardware.hal.registry | Registered driver: adb
+2026-07-08 19:12:11 | INFO     | hardware.hal.registry | Registered driver: fastboot
+2026-07-08 19:12:11 | INFO     | hardware.hal.registry | Registered driver: network
+2026-07-08 19:12:11 | INFO     | hardware.hal.registry | Registered driver: virtual
+2026-07-08 19:12:11 | INFO     | core.container | Registered service: event_bus
+2026-07-08 19:12:11 | INFO     | core.container | Registered service: observability
+2026-07-08 19:12:11 | INFO     | core.container | Registered service: scheduler
+2026-07-08 19:12:11 | INFO     | core.container | Registered service: session_factory
+2026-07-08 19:12:11 | INFO     | core.container | Registered service: memory_api
+2026-07-08 19:12:11 | INFO     | core.container | Registered service: reasoning_api
+2026-07-08 19:12:11 | INFO     | core.container | Registered service: knowledge_engine
+2026-07-08 19:12:11 | INFO     | core.container | Registered service: plugin_api
+2026-07-08 19:12:11 | INFO     | core.container | Registered service: agent_api
+2026-07-08 19:12:11 | INFO     | core.container | Registered service: capability_api
+2026-07-08 19:12:11 | INFO     | core.container | Registered service: device_api
+2026-07-08 19:12:11 | INFO     | core.container | Registered service: platform_service
+2026-07-08 19:12:11 | INFO     | core.container | Registered service: delta_service
+2026-07-08 19:12:11 | INFO     | core.container | Registered service: epsilon_service
+2026-07-08 19:12:11 | INFO     | core.container | Registered service: omega_service
+2026-07-08 19:12:11 | INFO     | core.container | Registered service: event_handlers
+2026-07-08 19:12:11 | INFO     | core.container | Registered service: kernel
+2026-07-08 19:12:11 | INFO     | core.container | Registered service: hardware_hal
+2026-07-08 19:12:11 | INFO     | core.container | Registered service: hardware_session_manager
+2026-07-08 19:12:11 | INFO     | core.container | Registered service: hardware_diagnostics
+2026-07-08 19:12:11 | INFO     | core.container | Registered service: hardware_recovery
+2026-07-08 19:12:11 | INFO     | core.container | Registered service: hardware_firmware
+2026-07-08 19:12:11 | INFO     | core.container | Registered service: security_authorizer
+2026-07-08 19:12:11 | INFO     | core.container | Registered service: security_audit
+2026-07-08 19:12:11 | INFO     | core.container | Registered service: security_integrity
+2026-07-08 19:12:11 | INFO     | core.container | Registered service: omega_agent_coordinator
+2026-07-08 19:12:11 | INFO     | core.container | Registered service: omega_task_planner
+2026-07-08 19:12:11 | INFO     | core.container | Registered service: omega_consensus
+2026-07-08 19:12:11 | INFO     | core.container | Registered service: omega_delegation
+2026-07-08 19:12:11 | INFO     | core.container | Registered service: omega_node_registry
+2026-07-08 19:12:11 | INFO     | core.container | Registered service: omega_distributed_runtime
+2026-07-08 19:12:11 | INFO     | core.container | Registered service: omega_knowledge_sync
+2026-07-08 19:12:11 | INFO     | core.container | Registered service: omega_capability_sync
+2026-07-08 19:12:11 | INFO     | core.container | Registered service: omega_policy_engine
+2026-07-08 19:12:11 | INFO     | core.container | Registered service: omega_permission_hierarchy
+2026-07-08 19:12:11 | INFO     | core.container | Registered service: omega_rule_engine
+2026-07-08 19:12:11 | INFO     | core.container | Registered service: omega_policy_audit
+2026-07-08 19:12:11 | INFO     | core.container | Registered service: omega_plugin_repo
+2026-07-08 19:12:11 | INFO     | core.container | Registered service: omega_capability_repo
+2026-07-08 19:12:11 | INFO     | core.container | Registered service: omega_driver_repo
+2026-07-08 19:12:11 | INFO     | core.container | Registered service: omega_agent_repo
+2026-07-08 19:12:11 | INFO     | core.container | Registered service: omega_org_registry
+2026-07-08 19:12:11 | INFO     | core.container | Registered service: omega_project_registry
+2026-07-08 19:12:11 | INFO     | core.container | Registered service: omega_user_registry
+2026-07-08 19:12:11 | INFO     | core.container | Registered service: omega_team_registry
+2026-07-08 19:12:11 | INFO     | core.container | Registered service: omega_role_registry
+2026-07-08 19:12:11 | INFO     | core.container | Registered service: omega_resource_manager
+2026-07-08 19:12:11 | INFO     | core.container | Registered service: omega_memory_manager
+2026-07-08 19:12:11 | INFO     | core.container | Registered service: omega_lifecycle_manager
+2026-07-08 19:12:11 | INFO     | core.container | Registered service: omega_dashboard
+2026-07-08 19:12:11 | INFO     | plugins.manager | Loaded plugin: echo v0.1.0
+2026-07-08 19:12:11 | INFO     | agents.manager | Registered agent: echo_agent
+2026-07-08 19:12:11 | INFO     | agents.manager | Registered agent: engineering_agent
+2026-07-08 19:12:11 | INFO     | core.scheduler | Scheduled job 'heartbeat' every 30s
+2026-07-08 19:12:11 | INFO     | core.scheduler | Scheduler started
+2026-07-08 19:12:11 | INFO     | core.bootstrap | Startup complete - Prometheus Core (Omega Olympus) runtime online
+2026-07-08 19:12:11 | INFO     | core.container | Registered service: config
+2026-07-08 19:12:11 | INFO     | core.container | Registered service: db_engine
+2026-07-08 19:12:11 | INFO     | core.event_bus | Subscribed handler for event: device.connected
+2026-07-08 19:12:11 | INFO     | core.event_bus | Subscribed handler for event: device.disconnected
+2026-07-08 19:12:11 | INFO     | core.event_bus | Subscribed handler for event: device.connect_failed
+2026-07-08 19:12:11 | INFO     | core.event_bus | Subscribed handler for event: device.wrote
+2026-07-08 19:12:11 | INFO     | core.event_bus | Subscribed handler for event: plugin.ran
+2026-07-08 19:12:11 | INFO     | core.event_bus | Subscribed handler for event: agent.dispatched
+2026-07-08 19:12:11 | INFO     | core.event_bus | Subscribed handler for event: memory.stored
+2026-07-08 19:12:11 | INFO     | core.event_bus | Subscribed handler for event: fact.asserted
+2026-07-08 19:12:11 | INFO     | core.event_bus | Subscribed handler for event: capability.executed
+2026-07-08 19:12:11 | INFO     | hardware.hal.registry | Registered driver: usb
+2026-07-08 19:12:11 | INFO     | hardware.hal.registry | Registered driver: adb
+2026-07-08 19:12:11 | INFO     | hardware.hal.registry | Registered driver: fastboot
+2026-07-08 19:12:11 | INFO     | hardware.hal.registry | Registered driver: network
+2026-07-08 19:12:11 | INFO     | hardware.hal.registry | Registered driver: virtual
+2026-07-08 19:12:11 | INFO     | core.container | Registered service: event_bus
+2026-07-08 19:12:11 | INFO     | core.container | Registered service: observability
+2026-07-08 19:12:11 | INFO     | core.container | Registered service: scheduler
+2026-07-08 19:12:11 | INFO     | core.container | Registered service: session_factory
+2026-07-08 19:12:11 | INFO     | core.container | Registered service: memory_api
+2026-07-08 19:12:11 | INFO     | core.container | Registered service: reasoning_api
+2026-07-08 19:12:11 | INFO     | core.container | Registered service: knowledge_engine
+2026-07-08 19:12:11 | INFO     | core.container | Registered service: plugin_api
+2026-07-08 19:12:11 | INFO     | core.container | Registered service: agent_api
+2026-07-08 19:12:11 | INFO     | core.container | Registered service: capability_api
+2026-07-08 19:12:11 | INFO     | core.container | Registered service: device_api
+2026-07-08 19:12:11 | INFO     | core.container | Registered service: platform_service
+2026-07-08 19:12:11 | INFO     | core.container | Registered service: delta_service
+2026-07-08 19:12:11 | INFO     | core.container | Registered service: epsilon_service
+2026-07-08 19:12:11 | INFO     | core.container | Registered service: omega_service
+2026-07-08 19:12:11 | INFO     | core.container | Registered service: event_handlers
+2026-07-08 19:12:11 | INFO     | core.container | Registered service: kernel
+2026-07-08 19:12:11 | INFO     | core.container | Registered service: hardware_hal
+2026-07-08 19:12:11 | INFO     | core.container | Registered service: hardware_session_manager
+2026-07-08 19:12:11 | INFO     | core.container | Registered service: hardware_diagnostics
+2026-07-08 19:12:11 | INFO     | core.container | Registered service: hardware_recovery
+2026-07-08 19:12:11 | INFO     | core.container | Registered service: hardware_firmware
+2026-07-08 19:12:11 | INFO     | core.container | Registered service: security_authorizer
+2026-07-08 19:12:11 | INFO     | core.container | Registered service: security_audit
+2026-07-08 19:12:11 | INFO     | core.container | Registered service: security_integrity
+2026-07-08 19:12:11 | INFO     | core.container | Registered service: omega_agent_coordinator
+2026-07-08 19:12:11 | INFO     | core.container | Registered service: omega_task_planner
+2026-07-08 19:12:11 | INFO     | core.container | Registered service: omega_consensus
+2026-07-08 19:12:11 | INFO     | core.container | Registered service: omega_delegation
+2026-07-08 19:12:11 | INFO     | core.container | Registered service: omega_node_registry
+2026-07-08 19:12:11 | INFO     | core.container | Registered service: omega_distributed_runtime
+2026-07-08 19:12:11 | INFO     | core.container | Registered service: omega_knowledge_sync
+2026-07-08 19:12:11 | INFO     | core.container | Registered service: omega_capability_sync
+2026-07-08 19:12:11 | INFO     | core.container | Registered service: omega_policy_engine
+2026-07-08 19:12:11 | INFO     | core.container | Registered service: omega_permission_hierarchy
+2026-07-08 19:12:11 | INFO     | core.container | Registered service: omega_rule_engine
+2026-07-08 19:12:11 | INFO     | core.container | Registered service: omega_policy_audit
+2026-07-08 19:12:11 | INFO     | core.container | Registered service: omega_plugin_repo
+2026-07-08 19:12:11 | INFO     | core.container | Registered service: omega_capability_repo
+2026-07-08 19:12:11 | INFO     | core.container | Registered service: omega_driver_repo
+2026-07-08 19:12:11 | INFO     | core.container | Registered service: omega_agent_repo
+2026-07-08 19:12:11 | INFO     | core.container | Registered service: omega_org_registry
+2026-07-08 19:12:11 | INFO     | core.container | Registered service: omega_project_registry
+2026-07-08 19:12:11 | INFO     | core.container | Registered service: omega_user_registry
+2026-07-08 19:12:11 | INFO     | core.container | Registered service: omega_team_registry
+2026-07-08 19:12:11 | INFO     | core.container | Registered service: omega_role_registry
+2026-07-08 19:12:11 | INFO     | core.container | Registered service: omega_resource_manager
+2026-07-08 19:12:11 | INFO     | core.container | Registered service: omega_memory_manager
+2026-07-08 19:12:11 | INFO     | core.container | Registered service: omega_lifecycle_manager
+2026-07-08 19:12:11 | INFO     | core.container | Registered service: omega_dashboard
+2026-07-08 19:12:11 | INFO     | plugins.manager | Loaded plugin: echo v0.1.0
+2026-07-08 19:12:11 | INFO     | agents.manager | Registered agent: echo_agent
+2026-07-08 19:12:11 | INFO     | agents.manager | Registered agent: engineering_agent
+2026-07-08 19:12:11 | INFO     | core.scheduler | Scheduled job 'heartbeat' every 30s
+2026-07-08 19:12:11 | INFO     | core.scheduler | Scheduler started
+2026-07-08 19:12:11 | INFO     | core.bootstrap | Startup complete - Prometheus Core (Omega Olympus) runtime online
+2026-07-08 19:12:11 | INFO     | core.capabilities | Registered capability: device.dev1.status (target=device:dev1)
+2026-07-08 19:12:11 | INFO     | core.capabilities | Registered capability: device.dev1.read (target=device:dev1)
+2026-07-08 19:12:11 | INFO     | core.capabilities | Registered capability: device.dev1.write (target=device:dev1)
+2026-07-08 19:12:12 | INFO     | core.capabilities | Registered capability: device.dev1.status (target=device:dev1)
+2026-07-08 19:12:12 | INFO     | core.container | Registered service: foo
+2026-07-08 19:12:12 | INFO     | core.container | Registered service: a
+2026-07-08 19:12:12 | INFO     | core.container | Registered service: b
+2026-07-08 19:12:12 | INFO     | core.container | Registered service: foo
+2026-07-08 19:12:12 | INFO     | core.container | Registered service: foo
+2026-07-08 19:12:12 | INFO     | core.container | Registered service: foo
+2026-07-08 19:12:12 | INFO     | core.container | Registered service: foo
+2026-07-08 19:12:12 | INFO     | devices.registry | Registered device: dev1 (transport=simulated, ownership_declared=False)
+2026-07-08 19:12:12 | INFO     | devices.registry | Registered device: dev1 (transport=simulated, ownership_declared=False)
+2026-07-08 19:12:12 | INFO     | devices.registry | Unregistered device: dev1
+2026-07-08 19:12:12 | INFO     | devices.registry | Registered device: dev1 (transport=simulated, ownership_declared=False)
+2026-07-08 19:12:12 | INFO     | core.event_bus | Subscribed handler for event: device.connected
+2026-07-08 19:12:12 | INFO     | core.event_bus | Subscribed handler for event: device.disconnected
+2026-07-08 19:12:12 | INFO     | devices.registry | Registered device: dev1 (transport=simulated, ownership_declared=False)
+2026-07-08 19:12:12 | INFO     | devices.registry | Unregistered device: dev1
+2026-07-08 19:12:12 | INFO     | omega.distributed.node | Registered node: n1
+2026-07-08 19:12:12 | INFO     | omega.distributed.node | Registered node: a
+2026-07-08 19:12:12 | INFO     | omega.distributed.node | Registered node: b
+2026-07-08 19:12:12 | INFO     | omega.distributed.node | Registered node: n1
+2026-07-08 19:12:12 | INFO     | omega.distributed.node | Registered node: n1
+2026-07-08 19:12:12 | INFO     | omega.distributed.node | Registered node: n2
+2026-07-08 19:12:12 | INFO     | omega.distributed.node | Registered node: leader
+2026-07-08 19:12:12 | INFO     | omega.distributed.node | Registered node: follower
+2026-07-08 19:12:12 | INFO     | hardware.hal.registry | Registered driver: usb
+2026-07-08 19:12:12 | INFO     | hardware.hal.registry | Registered driver: adb
+2026-07-08 19:12:12 | INFO     | hardware.hal.registry | Registered driver: fastboot
+2026-07-08 19:12:12 | INFO     | hardware.hal.registry | Registered driver: network
+2026-07-08 19:12:12 | INFO     | hardware.hal.registry | Registered driver: virtual
+2026-07-08 19:12:12 | INFO     | hardware.hal.manager | Registered hardware interface: usb
+2026-07-08 19:12:12 | INFO     | core.event_bus | Subscribed handler for event: hardware.device.connected
+2026-07-08 19:12:12 | INFO     | devices.registry | Registered device: dev1 (transport=simulated, ownership_declared=True)
+2026-07-08 19:12:12 | INFO     | hardware.hal.registry | Registered driver: usb
+2026-07-08 19:12:12 | INFO     | hardware.hal.registry | Registered driver: adb
+2026-07-08 19:12:12 | INFO     | hardware.hal.registry | Registered driver: fastboot
+2026-07-08 19:12:12 | INFO     | hardware.hal.registry | Registered driver: network
+2026-07-08 19:12:12 | INFO     | hardware.hal.registry | Registered driver: virtual
+2026-07-08 19:12:12 | INFO     | hardware.session | Created session: virtual:dev1
+2026-07-08 19:12:12 | INFO     | devices.registry | Registered device: dev1 (transport=simulated, ownership_declared=True)
+2026-07-08 19:12:12 | INFO     | hardware.hal.registry | Registered driver: usb
+2026-07-08 19:12:12 | INFO     | hardware.hal.registry | Registered driver: adb
+2026-07-08 19:12:12 | INFO     | hardware.hal.registry | Registered driver: fastboot
+2026-07-08 19:12:12 | INFO     | hardware.hal.registry | Registered driver: network
+2026-07-08 19:12:12 | INFO     | hardware.hal.registry | Registered driver: virtual
+2026-07-08 19:12:12 | INFO     | hardware.hal.registry | Registered driver: usb
+2026-07-08 19:12:12 | INFO     | hardware.hal.registry | Registered driver: adb
+2026-07-08 19:12:12 | INFO     | hardware.hal.registry | Registered driver: fastboot
+2026-07-08 19:12:12 | INFO     | hardware.hal.registry | Registered driver: network
+2026-07-08 19:12:12 | INFO     | hardware.hal.registry | Registered driver: virtual
+2026-07-08 19:12:12 | INFO     | firmware.parser | Analyzed boot chain format=uefi chain_length=3
+2026-07-08 19:12:12 | INFO     | firmware.partitions | Simulating GPT parse over 1020 bytes
+2026-07-08 19:12:12 | INFO     | devices.registry | Registered device: dev1 (transport=simulated, ownership_declared=True)
+2026-07-08 19:12:12 | INFO     | hardware.hal.registry | Registered driver: usb
+2026-07-08 19:12:12 | INFO     | hardware.hal.registry | Registered driver: adb
+2026-07-08 19:12:12 | INFO     | hardware.hal.registry | Registered driver: fastboot
+2026-07-08 19:12:12 | INFO     | hardware.hal.registry | Registered driver: network
+2026-07-08 19:12:12 | INFO     | hardware.hal.registry | Registered driver: virtual
+2026-07-08 19:12:12 | INFO     | security.auditing | Audit: actor=user action=device.connect resource=dev1 result=denied
+2026-07-08 19:12:12 | INFO     | devices.registry | Registered device: dev1 (transport=simulated, ownership_declared=True)
+2026-07-08 19:12:12 | INFO     | hardware.hal.registry | Registered driver: usb
+2026-07-08 19:12:12 | INFO     | hardware.hal.registry | Registered driver: adb
+2026-07-08 19:12:12 | INFO     | hardware.hal.registry | Registered driver: fastboot
+2026-07-08 19:12:12 | INFO     | hardware.hal.registry | Registered driver: network
+2026-07-08 19:12:12 | INFO     | hardware.hal.registry | Registered driver: virtual
+2026-07-08 19:12:12 | INFO     | security.authorization | Authorized actor=user action=device.connect resource=dev1
+2026-07-08 19:12:12 | INFO     | hardware.session | Created session: virtual:dev1
+2026-07-08 19:12:12 | INFO     | security.auditing | Audit: actor=user action=device.connect resource=dev1 result=allowed
+2026-07-08 19:12:12 | INFO     | devices.registry | Registered device: d1 (transport=simulated, ownership_declared=True)
+2026-07-08 19:12:12 | INFO     | hardware.hal.registry | Registered driver: usb
+2026-07-08 19:12:12 | INFO     | hardware.hal.registry | Registered driver: adb
+2026-07-08 19:12:12 | INFO     | hardware.hal.registry | Registered driver: fastboot
+2026-07-08 19:12:12 | INFO     | hardware.hal.registry | Registered driver: network
+2026-07-08 19:12:12 | INFO     | hardware.hal.registry | Registered driver: virtual
+2026-07-08 19:12:12 | INFO     | hardware.hal.registry | Registered driver: usb
+2026-07-08 19:12:12 | INFO     | hardware.hal.registry | Registered driver: adb
+2026-07-08 19:12:12 | INFO     | hardware.hal.registry | Registered driver: fastboot
+2026-07-08 19:12:12 | INFO     | hardware.hal.registry | Registered driver: network
+2026-07-08 19:12:12 | INFO     | hardware.hal.registry | Registered driver: virtual
+2026-07-08 19:12:12 | INFO     | devices.registry | Registered device: d1 (transport=simulated, ownership_declared=True)
+2026-07-08 19:12:12 | INFO     | hardware.hal.registry | Registered driver: usb
+2026-07-08 19:12:12 | INFO     | hardware.hal.registry | Registered driver: adb
+2026-07-08 19:12:12 | INFO     | hardware.hal.registry | Registered driver: fastboot
+2026-07-08 19:12:12 | INFO     | hardware.hal.registry | Registered driver: network
+2026-07-08 19:12:12 | INFO     | hardware.hal.registry | Registered driver: virtual
+2026-07-08 19:12:12 | INFO     | devices.registry | Registered device: d1 (transport=simulated, ownership_declared=True)
+2026-07-08 19:12:12 | INFO     | hardware.hal.registry | Registered driver: usb
+2026-07-08 19:12:12 | INFO     | hardware.hal.registry | Registered driver: adb
+2026-07-08 19:12:12 | INFO     | hardware.hal.registry | Registered driver: fastboot
+2026-07-08 19:12:12 | INFO     | hardware.hal.registry | Registered driver: network
+2026-07-08 19:12:12 | INFO     | hardware.hal.registry | Registered driver: virtual
+2026-07-08 19:12:12 | INFO     | security.authorization | Authorized actor=user action=device.connect resource=d1
+2026-07-08 19:12:12 | INFO     | hardware.session | Created session: virtual:d1
+2026-07-08 19:12:12 | INFO     | security.auditing | Audit: actor=user action=device.connect resource=d1 result=allowed
+2026-07-08 19:12:12 | INFO     | security.authorization | Authorized actor=user action=device.disconnect resource=d1
+2026-07-08 19:12:12 | INFO     | hardware.session | Closed session: virtual:d1
+2026-07-08 19:12:12 | INFO     | security.auditing | Audit: actor=user action=device.disconnect resource=d1 result=allowed
+2026-07-08 19:12:12 | INFO     | devices.registry | Registered device: d1 (transport=simulated, ownership_declared=True)
+2026-07-08 19:12:12 | INFO     | hardware.hal.registry | Registered driver: usb
+2026-07-08 19:12:12 | INFO     | hardware.hal.registry | Registered driver: adb
+2026-07-08 19:12:12 | INFO     | hardware.hal.registry | Registered driver: fastboot
+2026-07-08 19:12:12 | INFO     | hardware.hal.registry | Registered driver: network
+2026-07-08 19:12:12 | INFO     | hardware.hal.registry | Registered driver: virtual
+2026-07-08 19:12:12 | INFO     | hardware.session | Created session: virtual:d1
+2026-07-08 19:12:12 | INFO     | hardware.hal.registry | Registered driver: usb
+2026-07-08 19:12:12 | INFO     | hardware.hal.registry | Registered driver: adb
+2026-07-08 19:12:12 | INFO     | hardware.hal.registry | Registered driver: fastboot
+2026-07-08 19:12:12 | INFO     | hardware.hal.registry | Registered driver: network
+2026-07-08 19:12:12 | INFO     | hardware.hal.registry | Registered driver: virtual
+2026-07-08 19:12:12 | INFO     | firmware.parser | Analyzed boot chain format=uefi chain_length=3
+2026-07-08 19:12:12 | INFO     | firmware.partitions | Simulating GPT parse over 1020 bytes
+2026-07-08 19:12:12 | INFO     | core.event_bus | Subscribed handler for event: plugin.ran
+2026-07-08 19:12:12 | INFO     | core.event_bus | Subscribed handler for event: plugin.ran
+2026-07-08 19:12:12 | INFO     | core.event_bus | Subscribed handler for event: device.connected
+2026-07-08 19:12:12 | INFO     | core.event_bus | Subscribed handler for event: device.disconnected
+2026-07-08 19:12:12 | INFO     | core.event_bus | Subscribed handler for event: device.connect_failed
+2026-07-08 19:12:12 | INFO     | core.event_bus | Subscribed handler for event: device.wrote
+2026-07-08 19:12:12 | INFO     | core.event_bus | Subscribed handler for event: plugin.ran
+2026-07-08 19:12:12 | INFO     | core.event_bus | Subscribed handler for event: agent.dispatched
+2026-07-08 19:12:12 | INFO     | core.event_bus | Subscribed handler for event: memory.stored
+2026-07-08 19:12:12 | INFO     | core.event_bus | Subscribed handler for event: fact.asserted
+2026-07-08 19:12:12 | INFO     | core.event_bus | Subscribed handler for event: capability.executed
+2026-07-08 19:12:12 | INFO     | reasoning.graph | Asserted fact: dev-1 -event-> connected
+2026-07-08 19:12:12 | INFO     | reasoning.graph | Asserted fact: dev-1 -wrote-> 42
+2026-07-08 19:12:12 | INFO     | services.event_handlers | Memory event observed: tag=plugin_event source=event_bus
+2026-07-08 19:12:12 | INFO     | memory.store | Stored memory [plugin_event] from event_bus: Plugin echo ran with result keys: ['ok']
+2026-07-08 19:12:12 | INFO     | firmware.metadata | Stored firmware metadata id=f94ada449b564a3096b29c9ff1bb052f vendor=acme version=1.0
+2026-07-08 19:12:12 | INFO     | firmware.metadata | Stored firmware metadata id=32022d0bd3044c65a6cdfb032e8be124 vendor=acme version=1.0
+2026-07-08 19:12:12 | INFO     | firmware.metadata | Stored firmware metadata id=f04bd12d4250413790ead26defcd906f vendor=acme version=2.0
+2026-07-08 19:12:12 | INFO     | firmware.partitions | Simulating GPT parse over 1020 bytes
+2026-07-08 19:12:12 | INFO     | firmware.partitions | Simulating MBR parse over 1012 bytes
+2026-07-08 19:12:12 | INFO     | firmware.partitions | Simulating GPT parse over 1020 bytes
+2026-07-08 19:12:12 | INFO     | firmware.partitions | Simulating GPT parse over 1020 bytes
+2026-07-08 19:12:12 | INFO     | firmware.compatibility | Registered compatibility uefi/model-x/1.0 compatible=True
+2026-07-08 19:12:12 | INFO     | firmware.parser | Could not detect structured format; reporting raw
+2026-07-08 19:12:12 | INFO     | firmware.parser | Extracted simulated metadata format=uefi size=1020
+2026-07-08 19:12:12 | INFO     | firmware.parser | Analyzed boot chain format=uefi chain_length=3
+2026-07-08 19:12:12 | INFO     | firmware.parser | Analyzed boot chain format=uboot chain_length=2
+2026-07-08 19:12:12 | INFO     | firmware.partitions | Simulating GPT parse over 1020 bytes
+2026-07-08 19:12:12 | INFO     | happy_path | === HAPPY PATH START ===
+2026-07-08 19:12:12 | INFO     | core.container | Registered service: config
+2026-07-08 19:12:12 | INFO     | core.container | Registered service: db_engine
+2026-07-08 19:12:12 | INFO     | core.event_bus | Subscribed handler for event: device.connected
+2026-07-08 19:12:12 | INFO     | core.event_bus | Subscribed handler for event: device.disconnected
+2026-07-08 19:12:12 | INFO     | core.event_bus | Subscribed handler for event: device.connect_failed
+2026-07-08 19:12:12 | INFO     | core.event_bus | Subscribed handler for event: device.wrote
+2026-07-08 19:12:12 | INFO     | core.event_bus | Subscribed handler for event: plugin.ran
+2026-07-08 19:12:12 | INFO     | core.event_bus | Subscribed handler for event: agent.dispatched
+2026-07-08 19:12:12 | INFO     | core.event_bus | Subscribed handler for event: memory.stored
+2026-07-08 19:12:12 | INFO     | core.event_bus | Subscribed handler for event: fact.asserted
+2026-07-08 19:12:12 | INFO     | core.event_bus | Subscribed handler for event: capability.executed
+2026-07-08 19:12:12 | INFO     | hardware.hal.registry | Registered driver: usb
+2026-07-08 19:12:12 | INFO     | hardware.hal.registry | Registered driver: adb
+2026-07-08 19:12:12 | INFO     | hardware.hal.registry | Registered driver: fastboot
+2026-07-08 19:12:12 | INFO     | hardware.hal.registry | Registered driver: network
+2026-07-08 19:12:12 | INFO     | hardware.hal.registry | Registered driver: virtual
+2026-07-08 19:12:12 | INFO     | core.container | Registered service: event_bus
+2026-07-08 19:12:12 | INFO     | core.container | Registered service: observability
+2026-07-08 19:12:12 | INFO     | core.container | Registered service: scheduler
+2026-07-08 19:12:12 | INFO     | core.container | Registered service: session_factory
+2026-07-08 19:12:12 | INFO     | core.container | Registered service: memory_api
+2026-07-08 19:12:12 | INFO     | core.container | Registered service: reasoning_api
+2026-07-08 19:12:12 | INFO     | core.container | Registered service: knowledge_engine
+2026-07-08 19:12:12 | INFO     | core.container | Registered service: plugin_api
+2026-07-08 19:12:12 | INFO     | core.container | Registered service: agent_api
+2026-07-08 19:12:12 | INFO     | core.container | Registered service: capability_api
+2026-07-08 19:12:12 | INFO     | core.container | Registered service: device_api
+2026-07-08 19:12:12 | INFO     | core.container | Registered service: platform_service
+2026-07-08 19:12:12 | INFO     | core.container | Registered service: delta_service
+2026-07-08 19:12:12 | INFO     | core.container | Registered service: epsilon_service
+2026-07-08 19:12:12 | INFO     | core.container | Registered service: omega_service
+2026-07-08 19:12:12 | INFO     | core.container | Registered service: event_handlers
+2026-07-08 19:12:12 | INFO     | core.container | Registered service: kernel
+2026-07-08 19:12:12 | INFO     | core.container | Registered service: hardware_hal
+2026-07-08 19:12:12 | INFO     | core.container | Registered service: hardware_session_manager
+2026-07-08 19:12:12 | INFO     | core.container | Registered service: hardware_diagnostics
+2026-07-08 19:12:12 | INFO     | core.container | Registered service: hardware_recovery
+2026-07-08 19:12:12 | INFO     | core.container | Registered service: hardware_firmware
+2026-07-08 19:12:12 | INFO     | core.container | Registered service: security_authorizer
+2026-07-08 19:12:12 | INFO     | core.container | Registered service: security_audit
+2026-07-08 19:12:12 | INFO     | core.container | Registered service: security_integrity
+2026-07-08 19:12:12 | INFO     | core.container | Registered service: omega_agent_coordinator
+2026-07-08 19:12:12 | INFO     | core.container | Registered service: omega_task_planner
+2026-07-08 19:12:12 | INFO     | core.container | Registered service: omega_consensus
+2026-07-08 19:12:12 | INFO     | core.container | Registered service: omega_delegation
+2026-07-08 19:12:12 | INFO     | core.container | Registered service: omega_node_registry
+2026-07-08 19:12:12 | INFO     | core.container | Registered service: omega_distributed_runtime
+2026-07-08 19:12:12 | INFO     | core.container | Registered service: omega_knowledge_sync
+2026-07-08 19:12:12 | INFO     | core.container | Registered service: omega_capability_sync
+2026-07-08 19:12:12 | INFO     | core.container | Registered service: omega_policy_engine
+2026-07-08 19:12:12 | INFO     | core.container | Registered service: omega_permission_hierarchy
+2026-07-08 19:12:12 | INFO     | core.container | Registered service: omega_rule_engine
+2026-07-08 19:12:12 | INFO     | core.container | Registered service: omega_policy_audit
+2026-07-08 19:12:12 | INFO     | core.container | Registered service: omega_plugin_repo
+2026-07-08 19:12:12 | INFO     | core.container | Registered service: omega_capability_repo
+2026-07-08 19:12:12 | INFO     | core.container | Registered service: omega_driver_repo
+2026-07-08 19:12:12 | INFO     | core.container | Registered service: omega_agent_repo
+2026-07-08 19:12:12 | INFO     | core.container | Registered service: omega_org_registry
+2026-07-08 19:12:12 | INFO     | core.container | Registered service: omega_project_registry
+2026-07-08 19:12:12 | INFO     | core.container | Registered service: omega_user_registry
+2026-07-08 19:12:12 | INFO     | core.container | Registered service: omega_team_registry
+2026-07-08 19:12:12 | INFO     | core.container | Registered service: omega_role_registry
+2026-07-08 19:12:12 | INFO     | core.container | Registered service: omega_resource_manager
+2026-07-08 19:12:12 | INFO     | core.container | Registered service: omega_memory_manager
+2026-07-08 19:12:12 | INFO     | core.container | Registered service: omega_lifecycle_manager
+2026-07-08 19:12:12 | INFO     | core.container | Registered service: omega_dashboard
+2026-07-08 19:12:12 | INFO     | plugins.manager | Loaded plugin: echo v0.1.0
+2026-07-08 19:12:12 | INFO     | agents.manager | Registered agent: echo_agent
+2026-07-08 19:12:12 | INFO     | agents.manager | Registered agent: engineering_agent
+2026-07-08 19:12:12 | INFO     | core.scheduler | Scheduled job 'heartbeat' every 30s
+2026-07-08 19:12:12 | INFO     | core.scheduler | Scheduler started
+2026-07-08 19:12:12 | INFO     | core.bootstrap | Startup complete - Prometheus Core (Omega Olympus) runtime online
+2026-07-08 19:12:12 | INFO     | memory.store | Stored memory [plugin_run] from echo: Echo plugin ran with: hello from happy path
+2026-07-08 19:12:12 | INFO     | services.event_handlers | Memory event observed: tag=plugin_event source=event_bus
+2026-07-08 19:12:12 | INFO     | memory.store | Stored memory [plugin_event] from event_bus: Plugin echo ran with result keys: ['echoed', 'plugin']
+2026-07-08 19:12:12 | INFO     | happy_path | [plugin] echo ran -> {'echoed': 'hello from happy path', 'plugin': 'echo'}
+2026-07-08 19:12:12 | INFO     | agents.manager | Dispatching task to agent 'echo_agent': {'device_id': 'happy_device', 'status': 'seen'}
+2026-07-08 19:12:12 | INFO     | reasoning.graph | Asserted fact: happy_device -status-> seen
+2026-07-08 19:12:12 | INFO     | reasoning.graph | Asserted fact: echo_agent -event-> dispatched
+2026-07-08 19:12:12 | INFO     | happy_path | [agent] echo_agent dispatched -> {'agent': 'echo_agent', 'device_id': 'happy_device', 'recorded_status': 'seen'}
+2026-07-08 19:12:12 | INFO     | reasoning.graph | Asserted fact: happy_device -event-> connected
+2026-07-08 19:12:12 | INFO     | devices.registry | Registered device: happy_device (transport=simulated, ownership_declared=True)
+2026-07-08 19:12:12 | INFO     | core.capabilities | Registered capability: device.happy_device.connect (target=device:happy_device)
+2026-07-08 19:12:12 | INFO     | core.capabilities | Registered capability: device.happy_device.disconnect (target=device:happy_device)
+2026-07-08 19:12:12 | INFO     | core.capabilities | Registered capability: device.happy_device.read (target=device:happy_device)
+2026-07-08 19:12:12 | INFO     | core.capabilities | Registered capability: device.happy_device.write (target=device:happy_device)
+2026-07-08 19:12:12 | INFO     | core.capabilities | Registered capability: device.happy_device.status (target=device:happy_device)
+2026-07-08 19:12:12 | INFO     | core.capabilities | Registered capability: device.happy_device.diagnose (target=device:happy_device)
+2026-07-08 19:12:12 | INFO     | core.capabilities | Registered capability: device.happy_device.recover (target=device:happy_device)
+2026-07-08 19:12:12 | INFO     | core.capabilities | Registered capability: device.happy_device.simulate (target=device:happy_device)
+2026-07-08 19:12:12 | INFO     | happy_path | [device] registered happy_device (transport=simulated)
+2026-07-08 19:12:12 | INFO     | services.event_handlers | Memory event observed: tag=happy_path source=demo
+2026-07-08 19:12:12 | INFO     | memory.store | Stored memory [happy_path] from demo: Happy path executed successfully
+2026-07-08 19:12:12 | INFO     | happy_path | [memory] stored entry 77
+2026-07-08 19:12:12 | INFO     | happy_path | [reasoning] found 46 fact(s) for happy_device
+2026-07-08 19:12:12 | INFO     | happy_path |   -> status: seen
+2026-07-08 19:12:12 | INFO     | happy_path |   -> event: connected
+2026-07-08 19:12:12 | INFO     | happy_path |   -> status: seen
+2026-07-08 19:12:12 | INFO     | happy_path |   -> event: connected
+2026-07-08 19:12:12 | INFO     | happy_path |   -> status: seen
+2026-07-08 19:12:12 | INFO     | happy_path |   -> event: connected
+2026-07-08 19:12:12 | INFO     | happy_path |   -> status: seen
+2026-07-08 19:12:12 | INFO     | happy_path |   -> event: connected
+2026-07-08 19:12:12 | INFO     | happy_path |   -> status: seen
+2026-07-08 19:12:12 | INFO     | happy_path |   -> event: connected
+2026-07-08 19:12:12 | INFO     | happy_path |   -> status: seen
+2026-07-08 19:12:12 | INFO     | happy_path |   -> event: connected
+2026-07-08 19:12:12 | INFO     | happy_path |   -> status: seen
+2026-07-08 19:12:12 | INFO     | happy_path |   -> event: connected
+2026-07-08 19:12:12 | INFO     | happy_path |   -> status: seen
+2026-07-08 19:12:12 | INFO     | happy_path |   -> event: connected
+2026-07-08 19:12:12 | INFO     | happy_path |   -> status: seen
+2026-07-08 19:12:12 | INFO     | happy_path |   -> event: connected
+2026-07-08 19:12:12 | INFO     | happy_path |   -> status: seen
+2026-07-08 19:12:12 | INFO     | happy_path |   -> event: connected
+2026-07-08 19:12:12 | INFO     | happy_path |   -> status: seen
+2026-07-08 19:12:12 | INFO     | happy_path |   -> event: connected
+2026-07-08 19:12:12 | INFO     | happy_path |   -> status: seen
+2026-07-08 19:12:12 | INFO     | happy_path |   -> event: connected
+2026-07-08 19:12:12 | INFO     | happy_path |   -> status: seen
+2026-07-08 19:12:12 | INFO     | happy_path |   -> event: connected
+2026-07-08 19:12:12 | INFO     | happy_path |   -> status: seen
+2026-07-08 19:12:12 | INFO     | happy_path |   -> event: connected
+2026-07-08 19:12:12 | INFO     | happy_path |   -> status: seen
+2026-07-08 19:12:12 | INFO     | happy_path |   -> event: connected
+2026-07-08 19:12:12 | INFO     | happy_path |   -> status: seen
+2026-07-08 19:12:12 | INFO     | happy_path |   -> event: connected
+2026-07-08 19:12:12 | INFO     | happy_path |   -> status: seen
+2026-07-08 19:12:12 | INFO     | happy_path |   -> event: connected
+2026-07-08 19:12:12 | INFO     | happy_path |   -> status: seen
+2026-07-08 19:12:12 | INFO     | happy_path |   -> event: connected
+2026-07-08 19:12:12 | INFO     | happy_path |   -> status: seen
+2026-07-08 19:12:12 | INFO     | happy_path |   -> event: connected
+2026-07-08 19:12:12 | INFO     | happy_path |   -> status: seen
+2026-07-08 19:12:12 | INFO     | happy_path |   -> event: connected
+2026-07-08 19:12:12 | INFO     | happy_path |   -> status: seen
+2026-07-08 19:12:12 | INFO     | happy_path |   -> event: connected
+2026-07-08 19:12:12 | INFO     | happy_path |   -> status: seen
+2026-07-08 19:12:12 | INFO     | happy_path |   -> event: connected
+2026-07-08 19:12:12 | INFO     | happy_path |   -> status: seen
+2026-07-08 19:12:12 | INFO     | happy_path |   -> event: connected
+2026-07-08 19:12:12 | INFO     | digital_twin.twin | Built twin for happy_device: state=online, health=1.0, 46 history entries
+2026-07-08 19:12:12 | INFO     | happy_path | [twin] built twin for happy_device: state=online, health=1.0
+2026-07-08 19:12:12 | INFO     | happy_path | [report] {'platform': 'Prometheus v0.6.0-omega', 'plugins_loaded': [{'name': 'echo', 'version': '0.1.0'}], 'agents_loaded': ['echo_agent', 'engineering_agent'], 'devices_registered': 1, 'services_registered': ['config', 'db_engine', 'event_bus', 'observability', 'scheduler', 'session_factory', 'memory_api', 'reasoning_api', 'knowledge_engine', 'plugin_api', 'agent_api', 'capability_api', 'device_api', 'platform_service', 'delta_service', 'epsilon_service', 'omega_service', 'event_handlers', 'kernel', 'hardware_hal', 'hardware_session_manager', 'hardware_diagnostics', 'hardware_recovery', 'hardware_firmware', 'security_authorizer', 'security_audit', 'security_integrity', 'omega_agent_coordinator', 'omega_task_planner', 'omega_consensus', 'omega_delegation', 'omega_node_registry', 'omega_distributed_runtime', 'omega_knowledge_sync', 'omega_capability_sync', 'omega_policy_engine', 'omega_permission_hierarchy', 'omega_rule_engine', 'omega_policy_audit', 'omega_plugin_repo', 'omega_capability_repo', 'omega_driver_repo', 'omega_agent_repo', 'omega_org_registry', 'omega_project_registry', 'omega_user_registry', 'omega_team_registry', 'omega_role_registry', 'omega_resource_manager', 'omega_memory_manager', 'omega_lifecycle_manager', 'omega_dashboard'], 'memory_entries': 77, 'knowledge_facts': 101, 'status': 'ok'}
+2026-07-08 19:12:12 | INFO     | happy_path | === HAPPY PATH COMPLETE ===
+2026-07-08 19:12:12 | INFO     | hardware.session | Created session: usb:dev1
+2026-07-08 19:12:12 | INFO     | hardware.session | Created session: adb:dev1
+2026-07-08 19:12:12 | INFO     | hardware.session | Created session: fastboot:dev1
+2026-07-08 19:12:12 | INFO     | hardware.session | Created session: network:dev1
+2026-07-08 19:12:12 | INFO     | hardware.drivers.virtual | Virtual device connected
+2026-07-08 19:12:12 | INFO     | hardware.drivers.virtual | Virtual device connected
+2026-07-08 19:12:12 | INFO     | hardware.drivers.virtual | Virtual device disconnected
+2026-07-08 19:12:12 | INFO     | hardware.drivers.virtual | Virtual device disconnected
+2026-07-08 19:12:12 | INFO     | hardware.hal.manager | Registered hardware interface: stub
+2026-07-08 19:12:12 | INFO     | hardware.hal.manager | Registered hardware interface: stub
+2026-07-08 19:12:12 | INFO     | hardware.hal.manager | Unregistered hardware interface: stub
+2026-07-08 19:12:12 | INFO     | hardware.hal.registry | Registered driver: usb
+2026-07-08 19:12:12 | INFO     | hardware.hal.registry | Registered driver: usb
+2026-07-08 19:12:12 | INFO     | hardware.hal.capability_mapper | Registered capability mapping for interface: usb
+2026-07-08 19:12:12 | INFO     | hardware.hal.capability_mapper | Registered capability mapping for interface: adb
+2026-07-08 19:12:12 | INFO     | hardware.session | Created session: usb:dev1
+2026-07-08 19:12:12 | INFO     | hardware.session | Created session: usb:dev1
+2026-07-08 19:12:12 | INFO     | hardware.session | Created session: usb:dev1
+2026-07-08 19:12:12 | INFO     | hardware.recovery | Planned recovery for dev1: risk=low
+2026-07-08 19:12:12 | INFO     | hardware.session | Created session: usb:dev1
+2026-07-08 19:12:12 | INFO     | hardware.session | Created session: usb:dev1
+2026-07-08 19:12:12 | INFO     | hardware.session | Created session: adb:dev2
+2026-07-08 19:12:12 | INFO     | hardware.session | Created session: usb:dev1
+2026-07-08 19:12:12 | INFO     | hardware.session | Closed session: usb:dev1
+2026-07-08 19:12:12 | INFO     | hardware.session | Created session: usb:dev1
+2026-07-08 19:12:12 | INFO     | hardware.session | Created session: usb:dev1
+2026-07-08 19:12:12 | INFO     | hardware.session | Expired session: usb:dev1
+2026-07-08 19:12:12 | INFO     | core.capabilities | Registered capability: device.dev-k.recover (target=device:dev-k)
+2026-07-08 19:12:12 | INFO     | main | Prometheus platform started
+2026-07-08 19:12:12 | INFO     | omega.marketplace.plugin_repo | Published plugin: weather@1.0.0
+2026-07-08 19:12:12 | INFO     | omega.marketplace.plugin_repo | Published plugin: weather@1.0.0
+2026-07-08 19:12:12 | INFO     | omega.marketplace.plugin_repo | Published plugin: battery@1.0.0
+2026-07-08 19:12:12 | INFO     | omega.marketplace.capability_repo | Registered capability: vision.detect@1.0.0
+2026-07-08 19:12:12 | INFO     | omega.marketplace.capability_repo | Registered capability: audio.transcribe@1.0.0
+2026-07-08 19:12:12 | INFO     | omega.marketplace.driver_repo | Registered driver: uart@1.0.0
+2026-07-08 19:12:12 | INFO     | omega.marketplace.driver_repo | Registered driver: spi@1.0.0
+2026-07-08 19:12:12 | INFO     | omega.marketplace.agent_repo | Registered agent: recovery@1.0.0
+2026-07-08 19:12:12 | INFO     | omega.marketplace.agent_repo | Registered agent: monitor@1.0.0
+2026-07-08 19:12:12 | INFO     | memory.store | Stored memory [test] from system: hello world
+2026-07-08 19:12:13 | INFO     | memory.store | Stored memory [general] from system: general memory
+2026-07-08 19:12:13 | INFO     | memory.store | Stored memory [other] from system: other memory
+2026-07-08 19:12:13 | INFO     | memory.store | Stored memory [limited] from system: memory 0
+2026-07-08 19:12:13 | INFO     | memory.store | Stored memory [limited] from system: memory 1
+2026-07-08 19:12:13 | INFO     | memory.store | Stored memory [limited] from system: memory 2
+2026-07-08 19:12:13 | INFO     | memory.store | Stored memory [limited] from system: memory 3
+2026-07-08 19:12:13 | INFO     | memory.store | Stored memory [limited] from system: memory 4
+2026-07-08 19:12:13 | INFO     | memory.store | Stored memory [limited] from system: memory 5
+2026-07-08 19:12:13 | INFO     | memory.store | Stored memory [limited] from system: memory 6
+2026-07-08 19:12:13 | INFO     | memory.store | Stored memory [limited] from system: memory 7
+2026-07-08 19:12:13 | INFO     | memory.store | Stored memory [limited] from system: memory 8
+2026-07-08 19:12:13 | INFO     | memory.store | Stored memory [limited] from system: memory 9
+2026-07-08 19:12:13 | INFO     | memory.store | Stored memory [alpha] from system: tagged
+2026-07-08 19:12:13 | INFO     | memory.store | Stored memory [beta] from system: tagged too
+2026-07-08 19:12:13 | INFO     | memory.store | Stored memory [compat] from system: backward compat test
+2026-07-08 19:12:13 | INFO     | core.event_bus | Subscribed handler for event: memory.stored
+2026-07-08 19:12:13 | INFO     | memory.store | Stored memory [events] from test: event memory
+2026-07-08 19:12:13 | INFO     | core.event_bus | Subscribed handler for event: device.wrote
+2026-07-08 19:12:13 | INFO     | devices.registry | Registered device: dev-2 (transport=simulated, ownership_declared=True)
+2026-07-08 19:12:13 | INFO     | devices.registry | Registered device: sim-1 (transport=simulated, ownership_declared=True)
+2026-07-08 19:12:13 | INFO     | core.capabilities | Registered capability: device.sim-1.connect (target=device:sim-1)
+2026-07-08 19:12:13 | INFO     | core.capabilities | Registered capability: device.sim-1.disconnect (target=device:sim-1)
+2026-07-08 19:12:13 | INFO     | core.capabilities | Registered capability: device.sim-1.read (target=device:sim-1)
+2026-07-08 19:12:13 | INFO     | core.capabilities | Registered capability: device.sim-1.write (target=device:sim-1)
+2026-07-08 19:12:13 | INFO     | core.capabilities | Registered capability: device.sim-1.status (target=device:sim-1)
+2026-07-08 19:12:13 | INFO     | core.capabilities | Registered capability: device.sim-1.diagnose (target=device:sim-1)
+2026-07-08 19:12:13 | INFO     | core.capabilities | Registered capability: device.sim-1.recover (target=device:sim-1)
+2026-07-08 19:12:13 | INFO     | core.capabilities | Registered capability: device.sim-1.simulate (target=device:sim-1)
+2026-07-08 19:12:13 | INFO     | devices.registry | Registered device: sim-beta (transport=simulated, ownership_declared=True)
+2026-07-08 19:12:13 | INFO     | core.capabilities | Registered capability: device.sim-beta.connect (target=device:sim-beta)
+2026-07-08 19:12:13 | INFO     | core.capabilities | Registered capability: device.sim-beta.disconnect (target=device:sim-beta)
+2026-07-08 19:12:13 | INFO     | core.capabilities | Registered capability: device.sim-beta.read (target=device:sim-beta)
+2026-07-08 19:12:13 | INFO     | core.capabilities | Registered capability: device.sim-beta.write (target=device:sim-beta)
+2026-07-08 19:12:13 | INFO     | core.capabilities | Registered capability: device.sim-beta.status (target=device:sim-beta)
+2026-07-08 19:12:13 | INFO     | core.capabilities | Registered capability: device.sim-beta.diagnose (target=device:sim-beta)
+2026-07-08 19:12:13 | INFO     | core.capabilities | Registered capability: device.sim-beta.recover (target=device:sim-beta)
+2026-07-08 19:12:13 | INFO     | core.capabilities | Registered capability: device.sim-beta.simulate (target=device:sim-beta)
+2026-07-08 19:12:13 | INFO     | digital_twin.twin | Built twin for sim-beta: state=unknown, health=1.0, 0 history entries
+2026-07-08 19:12:13 | INFO     | memory.store | Stored memory [sim-beta] from beta_workflow: Beta workflow simulation for sim-beta: failure=disconnect, r
+2026-07-08 19:12:13 | INFO     | reasoning.graph | Asserted fact: sim-beta -event-> beta_simulation:disconnect:high
+2026-07-08 19:12:13 | INFO     | devices.registry | Registered device: sim-gamma (transport=simulated, ownership_declared=True)
+2026-07-08 19:12:13 | INFO     | core.capabilities | Registered capability: device.sim-gamma.connect (target=device:sim-gamma)
+2026-07-08 19:12:13 | INFO     | core.capabilities | Registered capability: device.sim-gamma.disconnect (target=device:sim-gamma)
+2026-07-08 19:12:13 | INFO     | core.capabilities | Registered capability: device.sim-gamma.read (target=device:sim-gamma)
+2026-07-08 19:12:13 | INFO     | core.capabilities | Registered capability: device.sim-gamma.write (target=device:sim-gamma)
+2026-07-08 19:12:13 | INFO     | core.capabilities | Registered capability: device.sim-gamma.status (target=device:sim-gamma)
+2026-07-08 19:12:13 | INFO     | core.capabilities | Registered capability: device.sim-gamma.diagnose (target=device:sim-gamma)
+2026-07-08 19:12:13 | INFO     | core.capabilities | Registered capability: device.sim-gamma.recover (target=device:sim-gamma)
+2026-07-08 19:12:13 | INFO     | core.capabilities | Registered capability: device.sim-gamma.simulate (target=device:sim-gamma)
+2026-07-08 19:12:13 | INFO     | digital_twin.twin | Built twin for sim-gamma: state=unknown, health=1.0, 0 history entries
+2026-07-08 19:12:13 | INFO     | memory.store | Stored memory [sim-gamma] from beta_workflow: Beta workflow simulation for sim-gamma: failure=disconnect, 
+2026-07-08 19:12:13 | INFO     | reasoning.graph | Asserted fact: sim-gamma -event-> beta_simulation:disconnect:high
+2026-07-08 19:12:13 | INFO     | plugins.manager | Loaded plugin: fake_plugin v1.0.0
+2026-07-08 19:12:13 | INFO     | plugins.manager | Loaded plugin: fake_plugin v1.0.0
+2026-07-08 19:12:13 | WARNING  | plugins.manager | Plugin 'fake_plugin' already registered — overwriting
+2026-07-08 19:12:13 | INFO     | plugins.manager | Loaded plugin: fake_plugin v1.0.0
+2026-07-08 19:12:13 | INFO     | plugins.manager | Loaded plugin: fake_plugin v1.0.0
+2026-07-08 19:12:13 | INFO     | plugins.manager | Loaded plugin: fake_plugin v1.0.0
+2026-07-08 19:12:13 | INFO     | core.event_bus | Subscribed handler for event: plugin.ran
+2026-07-08 19:12:13 | INFO     | plugins.manager | Loaded plugin: fake_plugin v1.0.0
+2026-07-08 19:12:13 | INFO     | reasoning.graph | Asserted fact: device_1 -has_firmware-> v1.0
+2026-07-08 19:12:13 | INFO     | reasoning.graph | Asserted fact: dev1 -status-> online
+2026-07-08 19:12:13 | INFO     | reasoning.graph | Asserted fact: dev2 -status-> offline
+2026-07-08 19:12:13 | INFO     | reasoning.graph | Asserted fact: dev1 -rel-> obj1
+2026-07-08 19:12:13 | INFO     | reasoning.graph | Asserted fact: dev2 -rel-> obj2
+2026-07-08 19:12:13 | INFO     | reasoning.graph | Asserted fact: device_2 -status-> online
+2026-07-08 19:12:13 | INFO     | core.event_bus | Subscribed handler for event: fact.asserted
+2026-07-08 19:12:13 | INFO     | reasoning.graph | Asserted fact: devx -status-> online
+2026-07-08 19:12:13 | INFO     | omega.runtime_management.lifecycle_manager | Lifecycle transition: initializing -> running
+2026-07-08 19:12:13 | INFO     | omega.runtime_management.lifecycle_manager | Lifecycle transition: initializing -> running
+2026-07-08 19:12:13 | INFO     | sdk.plugin_sdk.lifecycle | Registered plugin: battery_analyzer
+2026-07-08 19:12:13 | INFO     | sdk.plugin_sdk.examples.battery_analyzer | BatteryAnalyzer initialized
+2026-07-08 19:12:13 | INFO     | sdk.plugin_sdk.lifecycle | Initialized plugin: battery_analyzer
+2026-07-08 19:12:13 | INFO     | sdk.plugin_sdk.lifecycle | Shut down plugin: battery_analyzer
+2026-07-08 19:12:13 | INFO     | sdk.plugin_sdk.testing | Loaded plugin battery_analyzer into harness
+2026-07-08 19:12:13 | INFO     | sdk.plugin_sdk.examples.battery_analyzer | BatteryAnalyzer initialized
+2026-07-08 19:12:13 | INFO     | sdk.plugin_sdk.examples.temperature_monitor | TemperatureMonitor initialized
+2026-07-08 19:12:13 | INFO     | security.authorization | Authorized actor=user1 action=device.connect resource=dev1
+2026-07-08 19:12:13 | INFO     | security.authorization | Authorized actor=user1 action=device.connect resource=dev1
+2026-07-08 19:12:13 | INFO     | security.permissions | Registered permission: test.perm
+2026-07-08 19:12:13 | INFO     | security.auditing | Audit: actor=actor1 action=action1 resource=res1 result=allowed
+2026-07-08 19:12:13 | INFO     | security.auditing | Audit: actor=a action=b resource=c result=ok
+2026-07-08 19:12:13 | INFO     | security.integrity | Integrity check 744e3cab-5eb3-45b7-ad0c-9460651ed829: target=target passed=True
+2026-07-08 19:12:13 | INFO     | security.integrity | Attested data (hash=3a6eb0790f39ac87c94f3856b2dd2c5d110e6811602261a9a923d3bb23adc8b7)
+2026-07-08 19:12:37 | INFO     | backend.main | Prometheus heartbeat — system alive
+2026-07-08 19:13:07 | INFO     | backend.main | Prometheus heartbeat — system alive
+2026-07-08 19:13:37 | INFO     | backend.main | Prometheus heartbeat — system alive
+2026-07-08 19:13:40 | INFO     | security.permissions | Registered permission: device.connect
+2026-07-08 19:13:40 | INFO     | security.permissions | Registered permission: device.disconnect
+2026-07-08 19:13:40 | INFO     | security.permissions | Registered permission: device.read
+2026-07-08 19:13:40 | INFO     | security.permissions | Registered permission: device.write
+2026-07-08 19:13:40 | INFO     | security.permissions | Registered permission: device.diagnose
+2026-07-08 19:13:40 | INFO     | security.permissions | Registered permission: device.recover
+2026-07-08 19:13:40 | INFO     | security.permissions | Registered permission: device.flash
+2026-07-08 19:13:40 | INFO     | security.permissions | Registered permission: device.reboot
+2026-07-08 19:13:40 | INFO     | security.permissions | Registered permission: hardware.session.create
+2026-07-08 19:13:40 | INFO     | security.permissions | Registered permission: hardware.session.close
+2026-07-08 19:13:40 | INFO     | security.permissions | Registered permission: firmware.read
+2026-07-08 19:13:40 | INFO     | security.permissions | Registered permission: firmware.parse
+2026-07-08 19:13:40 | INFO     | security.permissions | Mapped action device.connect -> ['device.connect']
+2026-07-08 19:13:40 | INFO     | security.permissions | Mapped action device.disconnect -> ['device.disconnect']
+2026-07-08 19:13:40 | INFO     | security.permissions | Mapped action device.read -> ['device.read']
+2026-07-08 19:13:40 | INFO     | security.permissions | Mapped action device.write -> ['device.write']
+2026-07-08 19:13:40 | INFO     | security.permissions | Mapped action device.diagnose -> ['device.diagnose']
+2026-07-08 19:13:40 | INFO     | security.permissions | Mapped action device.recover -> ['device.recover', 'ownership_declared']
+2026-07-08 19:13:40 | INFO     | security.permissions | Mapped action device.flash -> ['device.flash', 'ownership_declared']
+2026-07-08 19:13:40 | INFO     | security.permissions | Mapped action device.reboot -> ['device.reboot', 'ownership_declared']
+2026-07-08 19:13:40 | INFO     | security.permissions | Mapped action hardware.session.create -> ['hardware.session.create']
+2026-07-08 19:13:40 | INFO     | security.permissions | Mapped action hardware.session.close -> ['hardware.session.close']
+2026-07-08 19:13:40 | INFO     | security.permissions | Mapped action firmware.read -> ['firmware.read']
+2026-07-08 19:13:40 | INFO     | security.permissions | Mapped action firmware.parse -> ['firmware.parse']
+2026-07-08 19:13:41 | INFO     | prometheus | === STARTING PROMETHEUS at http://127.0.0.1:8000/dashboard ===
+2026-07-08 19:13:44 | INFO     | core.container | Registered service: config
+2026-07-08 19:13:44 | INFO     | core.container | Registered service: db_engine
+2026-07-08 19:13:44 | INFO     | core.event_bus | Subscribed handler for event: device.connected
+2026-07-08 19:13:44 | INFO     | core.event_bus | Subscribed handler for event: device.disconnected
+2026-07-08 19:13:44 | INFO     | core.event_bus | Subscribed handler for event: device.connect_failed
+2026-07-08 19:13:44 | INFO     | core.event_bus | Subscribed handler for event: device.wrote
+2026-07-08 19:13:44 | INFO     | core.event_bus | Subscribed handler for event: plugin.ran
+2026-07-08 19:13:44 | INFO     | core.event_bus | Subscribed handler for event: agent.dispatched
+2026-07-08 19:13:44 | INFO     | core.event_bus | Subscribed handler for event: memory.stored
+2026-07-08 19:13:44 | INFO     | core.event_bus | Subscribed handler for event: fact.asserted
+2026-07-08 19:13:44 | INFO     | core.event_bus | Subscribed handler for event: capability.executed
+2026-07-08 19:13:44 | INFO     | hardware.hal.registry | Registered driver: usb
+2026-07-08 19:13:44 | INFO     | hardware.hal.registry | Registered driver: adb
+2026-07-08 19:13:44 | INFO     | hardware.hal.registry | Registered driver: fastboot
+2026-07-08 19:13:44 | INFO     | hardware.hal.registry | Registered driver: network
+2026-07-08 19:13:44 | INFO     | hardware.hal.registry | Registered driver: virtual
+2026-07-08 19:13:44 | INFO     | core.container | Registered service: event_bus
+2026-07-08 19:13:44 | INFO     | core.container | Registered service: observability
+2026-07-08 19:13:44 | INFO     | core.container | Registered service: scheduler
+2026-07-08 19:13:44 | INFO     | core.container | Registered service: session_factory
+2026-07-08 19:13:44 | INFO     | core.container | Registered service: memory_api
+2026-07-08 19:13:44 | INFO     | core.container | Registered service: reasoning_api
+2026-07-08 19:13:44 | INFO     | core.container | Registered service: knowledge_engine
+2026-07-08 19:13:44 | INFO     | core.container | Registered service: plugin_api
+2026-07-08 19:13:44 | INFO     | core.container | Registered service: agent_api
+2026-07-08 19:13:44 | INFO     | core.container | Registered service: capability_api
+2026-07-08 19:13:44 | INFO     | core.container | Registered service: device_api
+2026-07-08 19:13:44 | INFO     | core.container | Registered service: platform_service
+2026-07-08 19:13:44 | INFO     | core.container | Registered service: delta_service
+2026-07-08 19:13:44 | INFO     | core.container | Registered service: epsilon_service
+2026-07-08 19:13:44 | INFO     | core.container | Registered service: omega_service
+2026-07-08 19:13:44 | INFO     | core.container | Registered service: event_handlers
+2026-07-08 19:13:44 | INFO     | core.container | Registered service: kernel
+2026-07-08 19:13:44 | INFO     | core.container | Registered service: hardware_hal
+2026-07-08 19:13:44 | INFO     | core.container | Registered service: hardware_session_manager
+2026-07-08 19:13:44 | INFO     | core.container | Registered service: hardware_diagnostics
+2026-07-08 19:13:44 | INFO     | core.container | Registered service: hardware_recovery
+2026-07-08 19:13:44 | INFO     | core.container | Registered service: hardware_firmware
+2026-07-08 19:13:44 | INFO     | core.container | Registered service: security_authorizer
+2026-07-08 19:13:44 | INFO     | core.container | Registered service: security_audit
+2026-07-08 19:13:44 | INFO     | core.container | Registered service: security_integrity
+2026-07-08 19:13:44 | INFO     | core.container | Registered service: omega_agent_coordinator
+2026-07-08 19:13:44 | INFO     | core.container | Registered service: omega_task_planner
+2026-07-08 19:13:44 | INFO     | core.container | Registered service: omega_consensus
+2026-07-08 19:13:44 | INFO     | core.container | Registered service: omega_delegation
+2026-07-08 19:13:44 | INFO     | core.container | Registered service: omega_node_registry
+2026-07-08 19:13:44 | INFO     | core.container | Registered service: omega_distributed_runtime
+2026-07-08 19:13:44 | INFO     | core.container | Registered service: omega_knowledge_sync
+2026-07-08 19:13:44 | INFO     | core.container | Registered service: omega_capability_sync
+2026-07-08 19:13:44 | INFO     | core.container | Registered service: omega_policy_engine
+2026-07-08 19:13:44 | INFO     | core.container | Registered service: omega_permission_hierarchy
+2026-07-08 19:13:44 | INFO     | core.container | Registered service: omega_rule_engine
+2026-07-08 19:13:44 | INFO     | core.container | Registered service: omega_policy_audit
+2026-07-08 19:13:44 | INFO     | core.container | Registered service: omega_plugin_repo
+2026-07-08 19:13:44 | INFO     | core.container | Registered service: omega_capability_repo
+2026-07-08 19:13:44 | INFO     | core.container | Registered service: omega_driver_repo
+2026-07-08 19:13:44 | INFO     | core.container | Registered service: omega_agent_repo
+2026-07-08 19:13:44 | INFO     | core.container | Registered service: omega_org_registry
+2026-07-08 19:13:44 | INFO     | core.container | Registered service: omega_project_registry
+2026-07-08 19:13:44 | INFO     | core.container | Registered service: omega_user_registry
+2026-07-08 19:13:44 | INFO     | core.container | Registered service: omega_team_registry
+2026-07-08 19:13:44 | INFO     | core.container | Registered service: omega_role_registry
+2026-07-08 19:13:44 | INFO     | core.container | Registered service: omega_resource_manager
+2026-07-08 19:13:44 | INFO     | core.container | Registered service: omega_memory_manager
+2026-07-08 19:13:44 | INFO     | core.container | Registered service: omega_lifecycle_manager
+2026-07-08 19:13:44 | INFO     | core.container | Registered service: omega_dashboard
+2026-07-08 19:13:44 | INFO     | plugins.manager | Loaded plugin: echo v0.1.0
+2026-07-08 19:13:44 | INFO     | agents.manager | Registered agent: echo_agent
+2026-07-08 19:13:44 | INFO     | agents.manager | Registered agent: engineering_agent
+2026-07-08 19:13:44 | INFO     | core.scheduler | Scheduled job 'heartbeat' every 30s
+2026-07-08 19:13:44 | INFO     | backend.main | Prometheus heartbeat — system alive
+2026-07-08 19:13:44 | INFO     | core.scheduler | Scheduler started
+2026-07-08 19:13:44 | INFO     | core.bootstrap | Startup complete - Prometheus Core (Omega Olympus) runtime online
+2026-07-08 19:13:44 | INFO     | backend.main | Backend ready — services available via app.state.container
+2026-07-08 19:14:07 | INFO     | backend.main | Prometheus heartbeat — system alive
+2026-07-08 19:14:38 | INFO     | backend.main | Prometheus heartbeat — system alive
+2026-07-08 19:14:39 | INFO     | core.event_bus | Subscribed handler for event: plugin.ran
+2026-07-08 19:14:39 | INFO     | core.event_bus | Subscribed handler for event: agent.dispatched
+2026-07-08 19:14:39 | INFO     | core.event_bus | Subscribed handler for event: device.connected
+2026-07-08 19:14:39 | INFO     | core.event_bus | Subscribed handler for event: device.disconnected
+2026-07-08 19:14:39 | INFO     | core.event_bus | Subscribed handler for event: device.connect_failed
+2026-07-08 19:14:39 | INFO     | core.event_bus | Subscribed handler for event: device.wrote
+2026-07-08 19:14:39 | INFO     | core.event_bus | Subscribed handler for event: memory.stored
+2026-07-08 19:14:39 | INFO     | core.event_bus | Subscribed handler for event: fact.asserted
+2026-07-08 19:14:39 | INFO     | core.event_bus | Subscribed handler for event: capability.executed
+2026-07-08 19:15:08 | INFO     | backend.main | Prometheus heartbeat — system alive
+2026-07-08 19:15:11 | INFO     | core.event_bus | Subscribed handler for event: plugin.ran
+2026-07-08 19:15:11 | INFO     | core.event_bus | Subscribed handler for event: agent.dispatched
+2026-07-08 19:15:11 | INFO     | core.event_bus | Subscribed handler for event: device.connected
+2026-07-08 19:15:11 | INFO     | core.event_bus | Subscribed handler for event: device.disconnected
+2026-07-08 19:15:11 | INFO     | core.event_bus | Subscribed handler for event: device.connect_failed
+2026-07-08 19:15:11 | INFO     | core.event_bus | Subscribed handler for event: device.wrote
+2026-07-08 19:15:11 | INFO     | core.event_bus | Subscribed handler for event: memory.stored
+2026-07-08 19:15:11 | INFO     | core.event_bus | Subscribed handler for event: fact.asserted
+2026-07-08 19:15:11 | INFO     | core.event_bus | Subscribed handler for event: capability.executed
