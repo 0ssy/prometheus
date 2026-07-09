@@ -1,0 +1,15 @@
+:root {
+  --bg: #0D1117;
+  --panel: #161B22;
+  --border: #2A3441;
+  --text: #F5F5F5;
+  --muted: #A8A8A8;
+  --yellow: #F2C230;
+  --orange: #F2911D;
+  --orange-red: #F24F13;
+  --steel: #8082A6;
+  --purple: #46334F;
+  --font-heading: "Press Start 2P", monospace;
+  --font-body: "VT323", "Departure Mono", "Px437", monospace;
+  --font-mono: "VT323", "Departure Mono", monospace;
+}

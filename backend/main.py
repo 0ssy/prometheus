@@ -11,9 +11,13 @@ direct imports.
 
 import asyncio
 import json
+import os
+import uuid
+from datetime import datetime, timezone
+from pathlib import Path
 from queue import Queue
 
-from fastapi import FastAPI, Depends
+from fastapi import FastAPI, Depends, Body
 from fastapi.responses import StreamingResponse
 from sqlalchemy.orm import Session
 
@@ -131,6 +135,13 @@ def _status_snapshot(container: ServiceContainer, db) -> dict:
     hardware_hal = container.get("hardware_hal")
     hardware_status = "Active" if (hardware_hal is not None and len(devices) > 0) else "Idle"
 
+    agents = container.get("agent_api")
+    agent_count = len(agents.list_agents()) if agents is not None else 0
+
+    agent_statuses = []
+    if agents is not None and hasattr(agents, "list_agent_statuses"):
+        agent_statuses = agents.list_agent_statuses()
+
     return {
         "kernel": kernel_status,
         "knowledge": knowledge_status,
@@ -138,7 +149,8 @@ def _status_snapshot(container: ServiceContainer, db) -> dict:
         "reasoning": reasoning_status,
         "hardware": hardware_status,
         "devices": len(devices),
-        "agents": len(agent_api.list_agents()) if agent_api is not None else 0,
+        "agents": agent_count,
+        "agent_statuses": agent_statuses,
         "plugins": len(plugin_api.list_plugins()) if plugin_api is not None else 0,
         "capabilities": len(capability_api.discover()) if capability_api is not None else 0,
         "knowledge_facts": int(db.query(func.count(KnowledgeFact.id)).scalar() or 0),
@@ -176,6 +188,7 @@ async def event_stream(container: ServiceContainer = Depends(get_container)):
     event_types = [
         "plugin.ran",
         "agent.dispatched",
+        "agent.status",
         "device.connected",
         "device.disconnected",
         "device.connect_failed",
@@ -881,6 +894,323 @@ def omega_distributed_sync(
     omega: OmegaService = Depends(get_omega_service),
 ):
     return omega._knowledge_sync.sync(source_node, target_node).to_dict()
+
+
+# ---------------------------------------------------------------------------
+# Agent Status & Knowledge Graph (Front-End Support)
+# ---------------------------------------------------------------------------
+
+
+@app.get("/agents")
+def list_agents_with_status(
+    container: ServiceContainer = Depends(get_container),
+):
+    agent_api = container.get("agent_api")
+    if hasattr(agent_api, "list_agent_statuses"):
+        return {"agents": agent_api.list_agent_statuses()}
+    names = agent_api.list_agents()
+    return {"agents": [{"name": n, "status": "idle", "updated_at": None} for n in names]}
+
+
+@app.get("/knowledge/graph")
+def knowledge_graph(
+    db: Session = Depends(get_db),
+    container: ServiceContainer = Depends(get_container),
+):
+    from knowledge.node import KnowledgeNode
+    from knowledge.edge import KnowledgeEdge
+
+    nodes = db.query(KnowledgeNode).order_by(KnowledgeNode.created_at.asc()).all()
+    edges = db.query(KnowledgeEdge).order_by(KnowledgeEdge.created_at.asc()).all()
+    return {
+        "nodes": [
+            {
+                "id": n.id,
+                "label": n.label,
+                "type": n.node_type,
+                "confidence": None,
+            }
+            for n in nodes
+        ],
+        "edges": [
+            {
+                "id": e.id,
+                "source": e.subject_node_id,
+                "target": e.object_node_id,
+                "relation": e.predicate,
+                "confidence": e.confidence,
+            }
+            for e in edges
+        ],
+    }
+
+
+@app.get("/knowledge/timeline")
+def knowledge_timeline(
+    db: Session = Depends(get_db),
+):
+    from reasoning.models import KnowledgeFact
+    from sqlalchemy import func
+    facts = db.query(KnowledgeFact).order_by(KnowledgeFact.created_at.desc()).limit(100).all()
+    return {
+        "facts": [
+            {
+                "id": f.id,
+                "subject": f.subject,
+                "predicate": f.predicate,
+                "object": f.object,
+                "confidence": f.confidence,
+                "created_at": f.created_at.isoformat(),
+            }
+            for f in facts
+        ]
+    }
+
+
+# ---------------------------------------------------------------------------
+# Simulation (Persistence)
+# ---------------------------------------------------------------------------
+
+
+import uuid
+from core.database import SimulationRun
+
+
+@app.post("/simulation/run")
+def run_simulation(
+    payload: dict = Body(...),
+    db: Session = Depends(get_db),
+    container: ServiceContainer = Depends(get_container),
+):
+    simulator = container.get("simulation_engine")
+    device_id = payload.get("device_id", "")
+    failure_mode = payload.get("failure_mode", "disconnect")
+    if simulator is None:
+        raise RuntimeError("SimulationEngine not registered")
+
+    device_api = container.get("device_api")
+    device_state = {}
+    if device_api is not None:
+        try:
+            device_state = device_api.get(device_id) or {}
+        except Exception:
+            device_state = {}
+
+    if failure_mode not in {"disconnect", "latency_spike", "write_failure"}:
+        failure_mode = "disconnect"
+
+    run_id = str(uuid.uuid4())
+    sim_run = SimulationRun(
+        id=run_id,
+        device_id=device_id,
+        failure_mode=failure_mode,
+        status="running",
+        progress="0%",
+    )
+    db.add(sim_run)
+    db.commit()
+
+    try:
+        result = simulator.simulate(device_id, device_state, failure_mode)
+        sim_run.status = "completed"
+        sim_run.progress = "100%"
+        sim_run.risk = result.get("risk", "unknown")
+        sim_run.confidence = "high" if result.get("verification", {}).get("passed") else "low"
+        sim_run.recovered = str(result.get("recovered", False)).lower()
+        sim_run.impact = result.get("impact", "unknown")
+        sim_run.result_json = json.dumps(result)
+        sim_run.completed_at = datetime.now(timezone.utc)
+        db.commit()
+        return {"run_id": run_id, **result}
+    except Exception as e:
+        sim_run.status = "failed"
+        sim_run.result_json = json.dumps({"error": str(e)})
+        db.commit()
+        raise
+
+
+@app.get("/simulation/list")
+def list_simulations(db: Session = Depends(get_db)):
+    runs = db.query(SimulationRun).order_by(SimulationRun.created_at.desc()).limit(50).all()
+    return {
+        "runs": [
+            {
+                "id": r.id,
+                "device_id": r.device_id,
+                "failure_mode": r.failure_mode,
+                "status": r.status,
+                "progress": r.progress,
+                "risk": r.risk,
+                "confidence": r.confidence,
+                "recovered": r.recovered,
+                "impact": r.impact,
+                "result": json.loads(r.result_json) if r.result_json else {},
+                "created_at": r.created_at.isoformat(),
+                "updated_at": r.updated_at.isoformat(),
+            }
+            for r in runs
+        ]
+    }
+
+
+# ---------------------------------------------------------------------------
+# Files Browser
+# ---------------------------------------------------------------------------
+
+
+import os as _os
+from pathlib import Path
+
+
+WORKSPACE_ROOT = Path(__file__).resolve().parent.parent / "workspace"
+SEED_DIRS = [
+    "Projects",
+    "Research",
+    "Datasets",
+    "Models",
+    "Plugins",
+    "Agents",
+    "Digital Twins",
+    "Simulations",
+    "Recovered Devices",
+    "Exports",
+]
+
+
+def _seed_workspace(root: Path) -> None:
+    root.mkdir(parents=True, exist_ok=True)
+    for d in SEED_DIRS:
+        (root / d).mkdir(exist_ok=True)
+
+
+_seed_workspace(WORKSPACE_ROOT)
+
+
+def _safe_path(root: Path, rel_path: str) -> Path:
+    if ".." in rel_path.split("/"):
+        raise RuntimeError("Path traversal is not allowed")
+    target = (root / rel_path).resolve()
+    if not str(target).startswith(str(root.resolve())):
+        raise RuntimeError("Path traversal is not allowed")
+    return target
+
+
+def _list_dir(dir_path: Path) -> list[dict]:
+    entries = []
+    for p in sorted(dir_path.iterdir(), key=lambda x: (x.is_file(), x.name.lower())):
+        try:
+            stat = p.stat()
+            entries.append(
+                {
+                    "name": p.name,
+                    "type": "file" if p.is_file() else "directory",
+                    "size": stat.st_size if p.is_file() else None,
+                    "modified": datetime.fromtimestamp(stat.st_mtime, tz=timezone.utc).isoformat(),
+                }
+            )
+        except PermissionError:
+            continue
+    return entries
+
+
+@app.get("/files")
+def list_files(path: str = ""):
+    target = _safe_path(WORKSPACE_ROOT, path)
+    if target.is_file():
+        rel = target.relative_to(WORKSPACE_ROOT)
+        return {"type": "file", "name": target.name, "path": str(rel), "size": target.stat().st_size}
+    if target.is_dir():
+        rel = target.relative_to(WORKSPACE_ROOT)
+        return {"type": "directory", "path": str(rel) if rel != Path(".") else "", "entries": _list_dir(target)}
+    return {"type": "directory", "path": "", "entries": _list_dir(WORKSPACE_ROOT)}
+
+
+# ---------------------------------------------------------------------------
+# Hardware HAL Snapshot
+# ---------------------------------------------------------------------------
+
+
+@app.get("/hardware")
+def hardware_snapshot(
+    epsilon: EpsilonService = Depends(get_epsilon_service),
+    platform: PlatformService = Depends(get_platform_service),
+):
+    try:
+        interfaces = epsilon.list_interfaces()
+    except Exception:
+        interfaces = {"interfaces": []}
+
+    devices_platform = []
+    try:
+        devices_platform = platform.list_devices()
+    except Exception:
+        pass
+
+    return {
+        "hal": interfaces,
+        "devices": devices_platform,
+        "timestamp": datetime.now(timezone.utc).isoformat(),
+    }
+
+
+# ---------------------------------------------------------------------------
+# Assistant
+# ---------------------------------------------------------------------------
+
+
+@app.post("/assistant")
+def assistant_query(
+    payload: dict,
+    db: Session = Depends(get_db),
+    container: ServiceContainer = Depends(get_container),
+):
+    prompt = payload.get("prompt", "")
+    if not prompt:
+        raise RuntimeError("prompt is required")
+    prompt_lower = prompt.lower().strip()
+    platform = container.resolve("platform_service", PlatformService)
+
+    if prompt_lower.startswith("dispatch "):
+        parts = prompt_lower.split(" ", 2)
+        agent_name = parts[1] if len(parts) > 1 else "echo"
+        task = {"description": parts[2]} if len(parts) > 2 else {"description": "assistant task"}
+        try:
+            result = platform.dispatch_agent(db=db, agent_name=agent_name, task=task)
+            return {"response": str(result)}
+        except Exception as e:
+            return {"response": f"Dispatch failed: {e}"}
+
+    if prompt_lower == "help":
+        return {
+            "response": "Available commands: help, dispatch <agent> <task>, show devices, show agents, show kernel, status"
+        }
+    if prompt_lower == "show devices":
+        return {"response": platform.list_devices()}
+    if prompt_lower == "show agents":
+        agent_api = container.get("agent_api")
+        return {"response": agent_api.list_agents()}
+    if prompt_lower == "show kernel":
+        kernel = container.get("kernel")
+        return {"response": kernel.status()}
+    if prompt_lower == "status":
+        return {"response": _status_snapshot(container, db)}
+
+    return {"response": f"Processed: {prompt}"}
+
+
+# ---------------------------------------------------------------------------
+# Version
+# ---------------------------------------------------------------------------
+
+
+@app.get("/version")
+def get_version():
+    return {"version": config.version, "app": config.app_name}
+
+
+# ---------------------------------------------------------------------------
+# Phase Omega - Olympus (existing)
+# ---------------------------------------------------------------------------
 
 
 @app.get("/omega/dashboard/{section}")

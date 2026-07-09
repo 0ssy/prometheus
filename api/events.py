@@ -93,3 +93,13 @@ class CapabilityExecutedEvent(Event):
 
     def __post_init__(self) -> None:
         self.event_type = "capability.executed"
+
+
+@dataclass
+class AgentStatusChangedEvent(Event):
+    agent_name: str
+    status: str
+    last_task: dict | None = None
+
+    def __post_init__(self) -> None:
+        self.event_type = "agent.status"

@@ -92,6 +92,9 @@ def _register_services(container: ServiceContainer) -> None:
         kernel=kernel,
     )
 
+    from simulation.engine import SimulationEngine
+    simulation_engine = SimulationEngine()
+
     container.register("event_bus", event_bus)
     container.register("observability", observability)
     container.register("scheduler", components.scheduler)
@@ -109,6 +112,7 @@ def _register_services(container: ServiceContainer) -> None:
     container.register("omega_service", omega_service)
     container.register("event_handlers", event_handlers)
     container.register("kernel", kernel)
+    container.register("simulation_engine", simulation_engine)
     container.register("hardware_hal", epsilon_service._hal)
     container.register("hardware_session_manager", epsilon_service._session_manager)
     container.register("hardware_diagnostics", epsilon_service._diagnostics)

@@ -41,6 +41,22 @@ source venv/bin/activate        # Windows: venv\Scripts\activate
 pip install -r requirements.txt
 ```
 
+## Frontend (Engineering Dashboard)
+
+The dashboard is a Vite + TypeScript SPA located in `web/`.
+
+```bash
+cd web
+npm install
+npm run typecheck
+npm run lint
+npm run build
+```
+
+Serve the built `web/dist/` alongside the FastAPI backend. The backend serves
+the SPA at `/dashboard` and keeps `/docs` and `/omega/dashboard/{section}`
+intact.
+
 ## Run it
 
 ```bash
@@ -60,9 +76,7 @@ Server comes up on `http://127.0.0.1:8000`. Interactive API docs (auto-generated
 by FastAPI) are at `http://127.0.0.1:8000/docs` — use this to click through
 every endpoint without writing curl commands.
 
-Engineering dashboard is at `http://127.0.0.1:8000/dashboard` — a single-page
-view of platform health, devices, knowledge, simulation, firmware, diagnostics,
-recovery, agents, plugins, metrics, logs, and policies.
+Engineering dashboard is at `http://127.0.0.1:8000/dashboard` — a pixel/CRT engineering workstation with an ASCII boot sequence, a windowed desktop (13 running applications), a persistent bottom terminal, and live activity feed.
 
 ## Verify the architecture vertical slice
 
@@ -245,8 +259,9 @@ prometheus/
 ├── marketplace/    # repositories (plugins, capabilities, drivers, agents)
 ├── enterprise/     # multi-tenancy (orgs, projects, users, teams, roles)
 ├── runtime_management/ # resource, memory, lifecycle management
-├── dashboard/      # unified engineering dashboard
+├── dashboard/      # unified engineering dashboard (JSON API)
 ├── backend/        # FastAPI app — the local API
+├── web/            # Vite + TypeScript engineering workstation SPA
 ├── tests/          # pytest coverage for managers/stores/bootstrap/happy path
 └── requirements.txt
 ```

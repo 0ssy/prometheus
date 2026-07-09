@@ -8,8 +8,9 @@ one-line change, not a rewrite.
 """
 
 import os
-from sqlalchemy import create_engine
+from sqlalchemy import create_engine, Column, String, DateTime, Text
 from sqlalchemy.orm import sessionmaker, declarative_base
+from datetime import datetime, timezone
 from .config import config
 
 os.makedirs(os.path.dirname(config.db_path), exist_ok=True)
@@ -22,6 +23,24 @@ engine = create_engine(
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 
 Base = declarative_base()
+
+
+class SimulationRun(Base):
+    __tablename__ = "simulation_runs"
+
+    id = Column(String, primary_key=True, index=True)
+    device_id = Column(String, index=True, nullable=False)
+    failure_mode = Column(String, nullable=False)
+    status = Column(String, default="running")
+    progress = Column(String, default="0%")
+    risk = Column(String, nullable=True)
+    confidence = Column(String, nullable=True)
+    recovered = Column(String, nullable=True)
+    impact = Column(String, nullable=True)
+    result_json = Column(Text, default="{}")
+    created_at = Column(DateTime, default=lambda: datetime.now(timezone.utc))
+    updated_at = Column(DateTime, default=lambda: datetime.now(timezone.utc), onupdate=lambda: datetime.now(timezone.utc))
+    completed_at = Column(DateTime, nullable=True)
 
 
 def get_db():
