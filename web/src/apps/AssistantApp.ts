@@ -1,11 +1,12 @@
 import { api } from "../api/client";
 
 export function mountAssistant(el: HTMLElement) {
-  el.innerHTML = `<div style="padding: 12px; font-family: var(--font-body); font-size: 16px; display: flex; flex-direction: column; height: 100%;">
-    <div style="font-family: var(--font-heading); color: var(--yellow); margin-bottom: 8px;">ASSISTANT</div>
-    <div id="assistant-output" style="flex: 1; overflow-y: auto; background: var(--bg); border: 1px solid var(--border); padding: 8px; white-space: pre-wrap;"></div>
+  el.innerHTML = `<div style="padding: 4px; display: flex; flex-direction: column; height: 100%; box-sizing: border-box;">
+    <div style="font-family: var(--font-heading); font-size: 12px; color: var(--yellow); margin-bottom: 8px;">ASSISTANT</div>
+    <div style="color: var(--muted); font-size: 15px; margin-bottom: 8px;">Ask me anything about the platform. I'm one application running inside Prometheus — not the operating environment itself.</div>
+    <div id="assistant-output" style="flex: 1; overflow-y: auto; background: var(--bg); border: 1px solid var(--border); padding: 8px; white-space: pre-wrap; font-size: 15px;"></div>
     <div style="display: flex; gap: 8px; margin-top: 8px;">
-      <input id="assistant-input" style="flex: 1; background: var(--bg); color: var(--text); border: 1px solid var(--border); padding: 6px; font-family: var(--font-body);" placeholder="Ask something..." />
+      <input id="assistant-input" style="flex: 1; background: var(--bg); color: var(--text); border: 1px solid var(--border); padding: 6px; font-family: var(--font-body); font-size: 16px;" placeholder="Ask something..." />
       <button id="assistant-send" style="background: var(--border); color: var(--text); border: 1px solid var(--yellow); padding: 4px 8px; cursor: pointer;">SEND</button>
     </div>
   </div>`;
@@ -18,7 +19,7 @@ export function mountAssistant(el: HTMLElement) {
     output.innerHTML += "\n> " + text + "\n";
     try {
       const res: any = await api.assistant(text);
-      output.innerHTML += res.response + "\n";
+      output.innerHTML += (res.response ?? "") + "\n";
     } catch (e: any) {
       output.innerHTML += "Error: " + e.message + "\n";
     }
@@ -26,5 +27,7 @@ export function mountAssistant(el: HTMLElement) {
     output.scrollTop = output.scrollHeight;
   }
   send.addEventListener("click", run);
-  input.addEventListener("keydown", (e) => { if (e.key === "Enter") run(); });
+  input.addEventListener("keydown", (e) => {
+    if (e.key === "Enter") run();
+  });
 }

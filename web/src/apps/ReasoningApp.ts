@@ -1,12 +1,21 @@
 import { api } from "../api/client";
 
 export function mountReasoning(el: HTMLElement) {
-  el.innerHTML = `<div style="padding: 12px; font-family: var(--font-body); font-size: 16px;">
-    <div style="font-family: var(--font-heading); color: var(--yellow); margin-bottom: 8px;">REASONING PIPELINE</div>
+  el.innerHTML = `<div style="padding: 4px;">
+    <div style="font-family: var(--font-heading); font-size: 12px; color: var(--yellow); margin-bottom: 8px;">REASONING</div>
     <div id="reasoning-content">Loading...</div>
   </div>`;
   const content = el.querySelector("#reasoning-content") as HTMLElement;
-  api.capabilities().then((c: any) => {
-    content.innerHTML = `<pre style="background: var(--bg); padding: 8px; border: 1px solid var(--border);">${JSON.stringify(c, null, 2)}</pre>`;
+  Promise.all([api.capabilities(), api.observability()]).then(([caps, obs]: any[]) => {
+    const rows: string[] = [];
+    rows.push(`<div class="node-row"><span>Pipeline</span><span class="tag">active</span></div>`);
+    if (obs && obs.last_recommendation) {
+      rows.push(`<div class="node-row"><span>Last recommendation</span><span class="tag">${obs.last_recommendation}</span></div>`);
+    }
+    rows.push(`<div class="node-row"><span>Risk</span><span class="tag">${obs?.risk ?? "low"}</span></div>`);
+    rows.push(`<div class="node-row"><span>Capabilities</span><span class="tag">${caps?.length ?? 0}</span></div>`);
+    content.innerHTML = rows.join("");
+  }).catch((e: any) => {
+    content.innerHTML = `<span style="color: var(--orange-red);">${e.message}</span>`;
   });
 }

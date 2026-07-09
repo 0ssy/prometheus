@@ -1,69 +1,120 @@
-const LINES = [
-  "PROMETHEUS Engineering Intelligence OS",
-  "(c) 2026 Prometheus Labs",
-  "",
-  "BOOT SEQUENCE INITIATED...",
-  "",
-  "[  OK  ] Load kernel runtime",
-  "[  OK  ] Mount hardware HAL",
-  "[  OK  ] Initialize knowledge graph",
-  "[  OK  ] Start reasoning pipeline",
-  "[  OK  ] Load plugin registry",
-  "[  OK  ] Register agent pool",
-  "[  OK  ] Warm memory store",
-  "[  OK  ] Open event bus",
-  "[  OK  ] Bind simulation engine",
-  "",
-  "ALL SYSTEMS NOMINAL.",
+const BOOT_LOGO = `██████╗ ██████╗  ██████╗ ███╗   ███╗███████╗
+██╔══██╗██╔══██╗██╔═══██╗████╗ ████║██╔════╝
+██████╔╝██████╔╝██║   ██║██╔████╔██║█████╗
+██╔═══╝ ██╔══██╗██║   ██║██║╚██╔╝██║██╔══╝
+██║     ██║  ██║╚██████╔╝██║ ╚═╝ ██║███████╗
+╚═╝     ╚═╝  ╚═╝ ╚═════╝ ╚═╝     ╚═╝╚══════╝`;
+
+const BOOT_LINES = [
+  "Initializing Kernel",
+  "Loading Knowledge Engine",
+  "Loading Simulation Engine",
+  "Loading Reasoning Engine",
+  "Loading Agent Runtime",
+  "Loading Hardware Layer",
+  "Loading Plugins",
+  "Loading User Workspace",
 ];
 
 export class BootSequence {
   private el: HTMLElement;
   private onComplete: () => void;
-  private idx = 0;
-  private queue: HTMLElement[] = [];
+  private bootSkipped = false;
+  private timers: number[] = [];
+  private log: HTMLElement;
+  private version = "0.6.0";
 
   constructor(onComplete: () => void) {
-    this.el = document.createElement("div");
-    this.el.className = "boot-screen";
-    this.el.id = "boot-screen";
     this.onComplete = onComplete;
-    for (let i = 0; i < LINES.length; i++) {
-      const line = document.createElement("div");
-      line.style.minHeight = LINES[i] === "" ? "18px" : "auto";
-      this.el.appendChild(line);
-      this.queue.push(line);
-    }
+    this.el = document.createElement("div");
+    this.el.id = "boot";
+    this.el.innerHTML = `
+      <pre class="logo">${BOOT_LOGO}</pre>
+      <div class="subtitle" id="boot-subtitle">ENGINEERING INTELLIGENCE OS &nbsp;·&nbsp; v${this.version}</div>
+      <div id="boot-log"></div>
+      <div id="boot-hint">press any key to skip<span class="cursor-blink">_</span></div>
+    `;
     document.body.appendChild(this.el);
+    this.log = this.el.querySelector("#boot-log") as HTMLElement;
+    document.addEventListener("keydown", this.onSkip, { once: true });
   }
 
+  private onSkip = () => {
+    this.bootSkipped = true;
+    this.skip();
+  };
+
   start() {
-    if (this.queue.length === 0) {
-      this.finish();
+    const done = () => this.schedule(() => this.runBoot(0), 400);
+    fetch("/version")
+      .then((r) => r.json())
+      .then((d) => {
+        if (d && d.version) {
+          this.version = String(d.version);
+          const sub = this.el.querySelector("#boot-subtitle");
+          if (sub) sub.textContent = `ENGINEERING INTELLIGENCE OS · v${this.version}`;
+        }
+      })
+      .catch(() => {})
+      .finally(done);
+  }
+
+  private schedule(fn: () => void, ms: number) {
+    this.timers.push(window.setTimeout(fn, ms));
+  }
+
+  private typeLine(text: string, cb: () => void) {
+    const div = document.createElement("div");
+    div.className = "line";
+    this.log.appendChild(div);
+    requestAnimationFrame(() => {
+      const dots = ".".repeat(Math.max(16 - text.length, 3));
+      div.innerHTML = `${text}${dots}<span class="ok">OK</span>`;
+    });
+    this.schedule(cb, 220);
+  }
+
+  private runBoot(i: number) {
+    if (this.bootSkipped) return;
+    if (i >= BOOT_LINES.length) {
+      const done = document.createElement("div");
+      done.className = "line prompt";
+      done.textContent = "System Ready.";
+      this.log.appendChild(done);
+      this.schedule(() => {
+        const launching = document.createElement("div");
+        launching.className = "line prompt";
+        launching.textContent = "Launching Workspace...";
+        this.log.appendChild(launching);
+        this.schedule(() => this.finish(), 700);
+      }, 400);
       return;
     }
-    const line = this.queue.shift()!;
-    const text = LINES[this.idx++];
-    if (text.startsWith("[  OK  ]")) {
-      line.style.color = "var(--text)";
-      line.textContent = text;
-    } else if (text === "") {
-      line.textContent = "";
-    } else {
-      line.style.color = "var(--yellow)";
-      line.textContent = text;
-    }
-    setTimeout(() => this.start(), 60 + Math.random() * 80);
+    this.typeLine(BOOT_LINES[i], () => this.runBoot(i + 1));
+  }
+
+  private skip() {
+    this.timers.forEach((t) => clearTimeout(t));
+    this.timers = [];
+    this.log.innerHTML = "";
+    const done = document.createElement("div");
+    done.className = "line prompt";
+    done.textContent = "System Ready.";
+    this.log.appendChild(done);
+    const launching = document.createElement("div");
+    launching.className = "line prompt";
+    launching.textContent = "Launching Workspace...";
+    this.log.appendChild(launching);
+    this.schedule(() => this.finish(), 500);
   }
 
   private finish() {
-    setTimeout(() => {
-      this.el.style.opacity = "0";
-      this.el.style.transition = "opacity 0.4s";
-      setTimeout(() => {
-        this.el.remove();
-        this.onComplete();
-      }, 400);
+    document.removeEventListener("keydown", this.onSkip);
+    this.el.style.opacity = "0";
+    this.el.style.transition = "opacity 0.3s";
+    this.schedule(() => {
+      this.el.remove();
+      this.onComplete();
     }, 300);
   }
 }

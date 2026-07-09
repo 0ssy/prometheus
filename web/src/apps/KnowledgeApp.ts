@@ -2,7 +2,7 @@ import { api } from "../api/client";
 import { store } from "../os/Store";
 
 export function mountKnowledge(el: HTMLElement) {
-  el.innerHTML = `<div id="knowledge-app" style="padding: 12px; position: relative; width: 100%; height: 100%; box-sizing: border-box;"></div>`;
+  el.innerHTML = `<div id="knowledge-app" style="padding: 4px; position: relative; width: 100%; height: 100%; box-sizing: border-box;"></div>`;
   const root = el.querySelector("#knowledge-app") as HTMLElement;
   if (!root) return;
   root.style.display = "flex";
@@ -13,12 +13,10 @@ export function mountKnowledge(el: HTMLElement) {
   header.style.fontFamily = "var(--font-heading)";
   header.style.fontSize = "12px";
   header.style.color = "var(--yellow)";
-  header.textContent = "KNOWLEDGE GRAPH";
+  header.textContent = "KNOWLEDGE";
   root.appendChild(header);
 
   const stats = document.createElement("div");
-  stats.style.display = "flex";
-  stats.style.gap = "16px";
   stats.style.fontSize = "16px";
   root.appendChild(stats);
 
@@ -26,12 +24,18 @@ export function mountKnowledge(el: HTMLElement) {
   canvas.style.cssText = "flex: 1; border: 1px solid var(--border); position: relative; overflow: hidden;";
   root.appendChild(canvas);
 
-  function load() {
+  const note = document.createElement("div");
+  note.style.cssText = "color: var(--muted); font-size: 14px;";
+  note.textContent = "Ontology + provenance browser — click a node to inspect lineage.";
+  root.appendChild(note);
+
+  const load = () => {
     api.knowledgeGraph().then((data: any) => {
-      stats.innerHTML = `nodes: ${data.nodes.length} | edges: ${data.edges.length}`;
+      const facts = (store.state.status as any)?.knowledge_facts ?? 0;
+      stats.innerHTML = `facts: ${facts} &nbsp; nodes: ${data.nodes.length} &nbsp; edges: ${data.edges.length}`;
       canvas.innerHTML = "";
-      const w = canvas.clientWidth || 400;
-      const h = canvas.clientHeight || 300;
+      const w = canvas.clientWidth || 380;
+      const h = canvas.clientHeight || 240;
       for (const n of data.nodes.slice(0, 40)) {
         const dot = document.createElement("div");
         dot.className = "knowledge-node";
@@ -50,7 +54,7 @@ export function mountKnowledge(el: HTMLElement) {
         canvas.appendChild(line);
       }
     });
-  }
+  };
   load();
   store.subscribe(load);
 }

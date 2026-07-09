@@ -35,6 +35,10 @@ export const api = {
   assistant: (prompt: string) => client.post("/assistant", { prompt }),
   devices: () => client.get<any>("/devices"),
   device: (id: string) => client.get<any>(`/devices/${id}`),
+  devicesSimulated: (deviceId: string) =>
+    client.post(`/devices/simulated?device_id=${encodeURIComponent(deviceId)}`),
+  gammaFirmware: (path: string) => client.get<any>(`/gamma/firmware?path=${encodeURIComponent(path)}`),
+  epsilonRecovery: (deviceId: string) => client.post(`/epsilon/recovery/${encodeURIComponent(deviceId)}`),
   memory: () => client.get<any>("/memory"),
   plugins: () => client.get<{ plugins: any[] }>("/omega/marketplace/plugins"),
   facts: () => client.get<any>("/knowledge"),
