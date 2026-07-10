@@ -60,13 +60,25 @@ intact.
 ## Run it
 
 ```bash
-# Unified entry point (runtime / api / demo / test):
-python prometheus.py runtime
-python prometheus.py api
+# Default: Desktop Mode — boots the kernel and opens the workspace in a browser.
+python prometheus.py
+
+# Startup modes (Phase Zeta — Genesis):
+python prometheus.py --terminal    # Terminal Only: live Prometheus shell, no GUI
+python prometheus.py --developer   # Developer Workspace: full system + service dump
+python prometheus.py --server      # Headless Server: API only, no browser
+python prometheus.py --safe-mode   # Minimal Services: kernel only, no plugins/agents
+
+# SDK (Phase Zeta Z16):
+python prometheus.py install robotics   # scaffold an SDK extension
+python prometheus.py extensions         # list installed SDK packages
+
+# Legacy subcommands (still supported):
+python prometheus.py status
 python prometheus.py demo
 python prometheus.py test
 
-# Legacy entry points (still supported):
+# Legacy entry points:
 python main.py
 uvicorn backend.main:app --reload
 python happy_path.py
@@ -76,7 +88,30 @@ Server comes up on `http://127.0.0.1:8000`. Interactive API docs (auto-generated
 by FastAPI) are at `http://127.0.0.1:8000/docs` — use this to click through
 every endpoint without writing curl commands.
 
-Engineering dashboard is at `http://127.0.0.1:8000/dashboard` — a pixel/CRT engineering workstation with an ASCII boot sequence, a windowed desktop (13 running applications), a persistent bottom terminal, and live activity feed.
+Engineering dashboard is at `http://127.0.0.1:8000/dashboard` — a pixel/CRT engineering workstation with an ASCII boot sequence, a windowed desktop (13 dockable applications), a persistent bottom terminal, a window taskbar, and live activity feed.
+
+### Native desktop window (Phase Zeta Z2)
+
+The browser is the dev surface. To ship Prometheus as a real desktop app
+(Terminal -> Python -> FastAPI -> **Tauri** -> React UI), build the Tauri
+shell in `src-tauri/`:
+
+```bash
+# prerequisites: Rust toolchain + WebView2 (Windows), Node 18+, Python 3.11+
+cd src-tauri && cargo tauri dev      # auto-starts the backend, opens the native window
+cd src-tauri && cargo tauri build    # produces an NSIS .exe installer
+```
+
+`beforeDevCommand` in `src-tauri/tauri.conf.json` already starts the FastAPI
+backend (`python ../../prometheus.py --server`), so `cargo tauri dev` is
+one command. App icons (`icons/32x32.png`, `128x128.png`, `icon.ico`) are
+committed — replace them with `cargo tauri icon path/to/logo.png` for branding.
+
+> The `src-tauri` scaffold (config + icons + NSIS bundle target) is committed
+> but not compiled here (no Rust toolchain in the dev sandbox). It is ready to
+> build once Rust is installed. For a fully self-contained installer that also
+> bundles the Python runtime, add a Tauri sidecar (`bundle.externalBin`) — see
+> `src-tauri/README.md`.
 
 ## Verify the architecture vertical slice
 

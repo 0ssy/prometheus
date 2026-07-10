@@ -166,11 +166,29 @@ body {
   border-bottom: 2px solid var(--purple);
 }
 .pwindow .titlebar .title { color: var(--yellow); }
-.pwindow .titlebar .close {
-  cursor: pointer; color: var(--muted); padding: 0 6px;
+.pwindow .titlebar .controls { display: flex; gap: 2px; }
+.pwindow .titlebar .ctrl {
+  cursor: pointer; color: var(--muted); padding: 0 7px; font-size: 14px; line-height: 1;
 }
-.pwindow .titlebar .close:hover { color: var(--orange-red); }
+.pwindow .titlebar .ctrl:hover { color: var(--yellow); }
+.pwindow .titlebar .ctrl.close:hover { color: var(--orange-red); }
 .pwindow .content { padding: 14px; overflow-y: auto; flex: 1; font-size: 16px; }
+
+/* ============ TASKBAR ============ */
+#taskbar {
+  position: absolute; bottom: 90px; left: 0; right: 0; height: 28px;
+  background: var(--bg); border-top: 2px solid var(--border);
+  display: flex; align-items: center; gap: 4px; padding: 0 8px;
+  z-index: 35; overflow-x: auto;
+}
+#taskbar .task {
+  background: var(--panel); border: 2px solid var(--border); color: var(--muted);
+  font-family: var(--font-body); font-size: 14px; padding: 2px 10px; cursor: pointer;
+  white-space: nowrap; letter-spacing: 1px;
+}
+#taskbar .task:hover { color: var(--text); border-color: var(--text); }
+#taskbar .task.minimized { opacity: 0.6; }
+#taskbar .task.maximized { color: var(--yellow); border-color: var(--yellow); }
 
 .node-row { display:flex; justify-content: space-between; padding: 4px 0; border-bottom: 1px solid var(--border); }
 .node-row .tag { color: var(--lavender); }
@@ -184,7 +202,7 @@ body {
 
 /* ============ DOCK ============ */
 #dock {
-  position: absolute; bottom: 90px; left: 50%; transform: translateX(-50%);
+  position: absolute; bottom: 124px; left: 50%; transform: translateX(-50%);
   background: var(--panel); border: 2px solid var(--border);
   display: flex; gap: 4px; padding: 6px;
   z-index: 40;
@@ -209,6 +227,7 @@ body {
 }
 #termlog .cmd { color: var(--text); }
 #termlog .resp { color: var(--muted); }
+#termlog .gui { color: var(--yellow); }
 #terminput-row { display: flex; align-items: center; color: var(--orange); font-size: 17px; }
 #terminput-row input {
   flex: 1; background: transparent; border: none; outline: none;
@@ -325,3 +344,61 @@ body {
   background: var(--border);
   border: 1px solid var(--bg);
 }
+
+/* ============ HELP BUTTON ============ */
+#topbar .status-group #help-btn {
+  cursor: pointer; color: var(--muted); border: 1px solid var(--border);
+  border-radius: 50%; width: 18px; height: 18px; line-height: 16px; text-align: center;
+  font-family: var(--font-body); font-size: 13px; margin-left: 8px;
+}
+#topbar .status-group #help-btn:hover { color: var(--yellow); border-color: var(--yellow); }
+
+/* ============ OVERLAYS (shortcuts + onboarding) ============ */
+#shortcuts, #onboarding {
+  position: absolute; inset: 0; z-index: 200;
+  display: flex; align-items: center; justify-content: center;
+  background: rgba(13, 17, 23, 0.82);
+  animation: fadeIn 0.18s ease-out;
+}
+@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+.ob-card {
+  background: var(--panel); border: 2px solid var(--yellow);
+  box-shadow: 0 12px 40px rgba(0,0,0,0.6);
+  width: min(560px, 92%); padding: 22px; color: var(--text);
+  font-family: var(--font-body);
+}
+.ob-title {
+  font-family: var(--font-heading); font-size: 14px; color: var(--yellow);
+  letter-spacing: 1px; margin-bottom: 12px;
+}
+.ob-body { font-size: 16px; line-height: 1.5; color: var(--text); }
+.ob-body p { margin: 0 0 10px; }
+.ob-body b { color: var(--yellow); }
+.ob-hl { color: var(--orange); }
+.ob-cmd, .ob-key {
+  color: var(--yellow); background: var(--bg); border: 1px solid var(--border);
+  padding: 0 6px; font-size: 14px;
+}
+.ob-rows { margin: 4px 0 14px; }
+.ob-row {
+  display: flex; justify-content: space-between; align-items: center;
+  padding: 6px 0; border-bottom: 1px solid var(--border); font-size: 15px;
+}
+.ob-row .ob-key { color: var(--yellow); }
+.ob-actions { display: flex; gap: 8px; align-items: center; }
+.ob-btn {
+  background: var(--yellow); color: var(--bg); border: 1px solid var(--yellow);
+  padding: 6px 16px; cursor: pointer; font-family: var(--font-heading); font-size: 11px;
+  letter-spacing: 1px;
+}
+.ob-btn:hover { background: var(--orange); border-color: var(--orange); }
+.ob-btn.ghost { background: transparent; color: var(--muted); border-color: var(--border); }
+.ob-btn.ghost:hover { color: var(--text); border-color: var(--text); }
+.ob-btn:disabled { opacity: 0.35; cursor: default; }
+.ob-steps { display: flex; gap: 6px; margin-bottom: 14px; }
+.ob-dot {
+  width: 10px; height: 10px; background: var(--border); border: 1px solid var(--border);
+}
+.ob-dot.active { background: var(--yellow); border-color: var(--yellow); }
+.ob-dot.done { background: var(--steel); border-color: var(--steel); }

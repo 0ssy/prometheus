@@ -172,15 +172,30 @@ def _start_scheduler(
     scheduler.start()
 
 
-def boot(heartbeat_job: Callable[[], None]) -> ServiceContainer:
+def boot(
+    heartbeat_job: Callable[[], None],
+    safe_mode: bool = False,
+) -> ServiceContainer:
+    """Boot the platform.
+
+    safe_mode skips plugins/agents and the periodic scheduler so the
+    kernel can come online with minimal services (used by
+    `prometheus --safe-mode` when the runtime must stay available but
+    non-essential subsystems are intentionally left dormant).
+    """
     container = ServiceContainer()
     container.register("config", config)
+    container.register("safe_mode", safe_mode)
 
     _load_database(container)
     _register_services(container)
-    _load_plugins(container)
-    _load_agents(container)
-    _start_scheduler(container, heartbeat_job)
+    if not safe_mode:
+        _load_plugins(container)
+        _load_agents(container)
+        _start_scheduler(container, heartbeat_job)
 
-    logger.info("Startup complete - Prometheus Core (Omega Olympus) runtime online")
+    logger.info(
+        "Startup complete - Prometheus Core (Omega Olympus) runtime online"
+        + (" [safe-mode: minimal services]" if safe_mode else "")
+    )
     return container

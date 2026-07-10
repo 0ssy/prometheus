@@ -37,26 +37,45 @@ export class Terminal {
     this.log.scrollTop = this.log.scrollHeight;
   }
 
+  /** Reflect a GUI-originated action into the terminal (two-way bridge). */
+  logGui(text: string) {
+    this.print(text, "gui");
+  }
+
   private async run(raw: string) {
     const val = raw.toLowerCase();
-    if (val.startsWith("open ")) {
-      const app = raw.slice(5).trim().toLowerCase();
+    const stripped = val.startsWith("prometheus ") ? val.slice("prometheus ".length) : val;
+
+    if (stripped.startsWith("open ")) {
+      const app = stripped.slice(5).trim().toLowerCase();
       this.ctx.openApp(app);
       this.print("opened " + app, "resp");
       return;
     }
     try {
-      switch (val) {
+      switch (stripped) {
         case "help":
           this.print(
-            "commands: connect phone, run simulation, show devices, search firmware, recover device, explain kernel, open <app>",
+            "commands: connect <device> · run simulation · show devices · list agents · " +
+            "search <query> · build digital-twin <device> · open <app> · help",
           );
           break;
         case "show devices":
+        case "list devices":
           this.ctx.openApp("devices");
           this.print("opened Devices", "resp");
           break;
+        case "list agents":
+          try {
+            const a: any = await api.agents();
+            const names = (a.agents ?? []).map((x: any) => x.name).join(", ") || "none";
+            this.print("agents: " + names, "resp");
+          } catch (e: any) {
+            this.print("agents lookup failed: " + e.message, "resp");
+          }
+          break;
         case "connect phone":
+        case "connect " + DEVICE:
           await api.devicesSimulated(DEVICE);
           this.ctx.logActivity("Device Connected");
           this.print(`connecting... ${DEVICE} linked over serial.`, "resp");
@@ -68,9 +87,9 @@ export class Terminal {
           this.print("scenario queued: phone boot loop", "resp");
           break;
         case "search firmware":
+        case 'search "firmware"':
           try {
             const fw: any = await api.gammaFirmware(DEVICE);
-            const fmt = fw.format ?? "bin";
             const sha = fw.sha256 ? String(fw.sha256).slice(0, 12) : "verified";
             const segs = fw.segment_count ?? (fw.segments ? fw.segments.length : 3);
             this.print(`firmware match: ${DEVICE}, sha256 ${sha} verified, segment_count=${segs}`, "resp");
@@ -94,7 +113,33 @@ export class Terminal {
             this.print(`core status: ${JSON.stringify(cs.status ?? cs)}`, "resp");
           } catch {}
           break;
+        case "build digital-twin":
+        case "build digital-twin " + DEVICE:
+          this.ctx.openApp("simulation");
+          this.ctx.logActivity("Digital Twin Built");
+          this.print(`digital twin built for ${DEVICE}.`, "resp");
+          break;
         default:
+          if (stripped.startsWith("connect ")) {
+            const dev = stripped.slice(8).trim();
+            await api.devicesSimulated(dev);
+            this.ctx.logActivity("Device Connected");
+            this.print(`connected ${dev} (simulated).`, "resp");
+            break;
+          }
+          if (stripped.startsWith("search ")) {
+            const q = stripped.slice(7).trim().replace(/^"|"$/g, "");
+            this.ctx.openApp("knowledge");
+            this.print(`searching knowledge for "${q}"...`, "resp");
+            break;
+          }
+          if (stripped.startsWith("build digital-twin ")) {
+            const dev = stripped.slice("build digital-twin ".length).trim();
+            this.ctx.openApp("simulation");
+            this.ctx.logActivity("Digital Twin Built");
+            this.print(`digital twin built for ${dev}.`, "resp");
+            break;
+          }
           this.print("unrecognized command. type 'help'.", "resp");
       }
     } catch (e: any) {

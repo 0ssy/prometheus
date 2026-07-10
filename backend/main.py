@@ -1066,14 +1066,14 @@ WORKSPACE_ROOT = Path(__file__).resolve().parent.parent / "workspace"
 SEED_DIRS = [
     "Projects",
     "Research",
-    "Datasets",
     "Models",
-    "Plugins",
     "Agents",
-    "Digital Twins",
+    "Datasets",
+    "Plugins",
+    "Firmware",
     "Simulations",
-    "Recovered Devices",
     "Exports",
+    "Recovery",
 ]
 
 

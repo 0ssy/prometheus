@@ -2,6 +2,7 @@ import { WindowManager } from "./WindowManager";
 import { store } from "./Store";
 import { api } from "../api/client";
 import { Terminal, TerminalContext } from "../terminal/Terminal";
+import { showOnboarding } from "./Onboarding";
 import {
   mountKernel,
   mountKnowledge,
@@ -86,6 +87,7 @@ export class Desktop {
   private dockButtons: Map<string, HTMLButtonElement> = new Map();
   private offset = 0;
   private terminalCtx: TerminalContext;
+  private terminal!: Terminal;
 
   constructor(container: HTMLElement) {
     this.el = container;
@@ -145,7 +147,9 @@ export class Desktop {
 
     this.buildDock(dock);
 
-    new Terminal(termbar, this.terminalCtx);
+    this.terminal = new Terminal(termbar, this.terminalCtx);
+
+    this.setupInteractions();
 
     this.initStore();
     this.startClock();
@@ -186,7 +190,7 @@ export class Desktop {
     }, 1000);
   }
 
-  openApp(key: string) {
+  openApp(key: string, silent = false) {
     const app = APPS[key];
     if (!app) {
       return;
@@ -208,8 +212,128 @@ export class Desktop {
     );
     this.offset++;
     btn?.classList.add("active");
+    if (!silent) this.terminal?.logGui("> open " + app.title);
     const handle = (this.wm as any).windows.get(id) as { onClose?: () => void } | undefined;
     if (handle) handle.onClose = () => btn?.classList.remove("active");
+  }
+
+  private setupInteractions() {
+    this.wm.onChange((wins) => {
+      try {
+        localStorage.setItem("prometheus_session_v1", JSON.stringify(wins));
+      } catch {}
+    });
+    document.addEventListener("keydown", (e) => this.onKey(e));
+    this.addHelpButton();
+    this.restoreSession();
+    showOnboarding(this.el);
+  }
+
+  private restoreSession() {
+    try {
+      const raw = localStorage.getItem("prometheus_session_v1");
+      if (!raw) return;
+      const wins: { id: string; minimized?: boolean; maximized?: boolean }[] = JSON.parse(raw);
+      for (const w of wins) {
+        if (!APPS[w.id]) continue;
+        this.openApp(w.id, true);
+        if (w.minimized) this.wm.minimize(w.id);
+        else if (w.maximized) this.wm.toggleMaximize(w.id);
+      }
+    } catch {}
+  }
+
+  private onKey(e: KeyboardEvent) {
+    const target = e.target as HTMLElement | null;
+    const typing =
+      !!target &&
+      (target.tagName === "INPUT" || target.tagName === "TEXTAREA" || target.isContentEditable);
+    const mod = e.ctrlKey || e.metaKey;
+
+    if (mod) {
+      const k = e.key.toLowerCase();
+      if (k === ",") {
+        e.preventDefault();
+        this.openApp("settings", true);
+      } else if (k === "/") {
+        e.preventDefault();
+        this.toggleShortcuts();
+      } else if (k === "w") {
+        e.preventDefault();
+        this.wm.closeTop();
+      } else if (k === "m") {
+        e.preventDefault();
+        this.wm.minimizeTop();
+      }
+      return;
+    }
+
+    if (e.key === "Escape") {
+      this.wm.closeTop();
+      return;
+    }
+    if (e.key === "F11") {
+      e.preventDefault();
+      this.wm.maximizeTop();
+      return;
+    }
+
+    if (typing) return;
+
+    if (e.key === "`" || e.key === "~") {
+      this.focusTerminal();
+      return;
+    }
+    if (/^[1-9]$/.test(e.key)) {
+      const idx = parseInt(e.key, 10) - 1;
+      if (DOCK_KEYS[idx]) this.openApp(DOCK_KEYS[idx], true);
+      return;
+    }
+    if (e.key === "0" && DOCK_KEYS[9]) {
+      this.openApp(DOCK_KEYS[9], true);
+    }
+  }
+
+  private focusTerminal() {
+    const inp = document.getElementById("terminput") as HTMLInputElement | null;
+    inp?.focus();
+  }
+
+  private addHelpButton() {
+    const group = this.el.querySelector("#topbar .status-group");
+    if (!group) return;
+    const help = document.createElement("span");
+    help.id = "help-btn";
+    help.textContent = "?";
+    help.title = "Keyboard shortcuts & help";
+    help.addEventListener("click", () => this.toggleShortcuts());
+    group.appendChild(help);
+  }
+
+  private toggleShortcuts() {
+    const existing = document.getElementById("shortcuts");
+    if (existing) {
+      existing.remove();
+      return;
+    }
+    const el = document.createElement("div");
+    el.id = "shortcuts";
+    el.innerHTML = `
+      <div class="ob-card">
+        <div class="ob-title">KEYBOARD SHORTCUTS</div>
+        <div class="ob-rows">
+          <div class="ob-row"><span>Open dock app</span><span class="ob-key">1&ndash;9 , 0</span></div>
+          <div class="ob-row"><span>Focus terminal</span><span class="ob-key">\`</span></div>
+          <div class="ob-row"><span>Close focused window</span><span class="ob-key">Esc / Ctrl+W</span></div>
+          <div class="ob-row"><span>Minimize focused window</span><span class="ob-key">Ctrl+M</span></div>
+          <div class="ob-row"><span>Maximize focused window</span><span class="ob-key">F11</span></div>
+          <div class="ob-row"><span>Open Settings</span><span class="ob-key">Ctrl+,</span></div>
+          <div class="ob-row"><span>Toggle this help</span><span class="ob-key">Ctrl+/</span></div>
+        </div>
+        <button class="ob-btn" id="shortcuts-close">GOT IT</button>
+      </div>`;
+    this.el.appendChild(el);
+    el.querySelector("#shortcuts-close")?.addEventListener("click", () => el.remove());
   }
 
   logActivity(text: string) {
