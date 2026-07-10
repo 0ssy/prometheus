@@ -23870,3 +23870,152 @@ live
 2026-07-10 16:38:24 | INFO     | core.scheduler | Scheduler started
 2026-07-10 16:38:24 | INFO     | core.bootstrap | Startup complete - Prometheus Core (Omega Olympus) runtime online
 2026-07-10 16:38:24 | INFO     | backend.main | Backend ready — services available via app.state.container
+2026-07-10 18:17:32 | INFO     | security.permissions | Registered permission: device.connect
+2026-07-10 18:17:32 | INFO     | security.permissions | Registered permission: device.disconnect
+2026-07-10 18:17:32 | INFO     | security.permissions | Registered permission: device.read
+2026-07-10 18:17:32 | INFO     | security.permissions | Registered permission: device.write
+2026-07-10 18:17:32 | INFO     | security.permissions | Registered permission: device.diagnose
+2026-07-10 18:17:32 | INFO     | security.permissions | Registered permission: device.recover
+2026-07-10 18:17:32 | INFO     | security.permissions | Registered permission: device.flash
+2026-07-10 18:17:32 | INFO     | security.permissions | Registered permission: device.reboot
+2026-07-10 18:17:32 | INFO     | security.permissions | Registered permission: hardware.session.create
+2026-07-10 18:17:32 | INFO     | security.permissions | Registered permission: hardware.session.close
+2026-07-10 18:17:32 | INFO     | security.permissions | Registered permission: firmware.read
+2026-07-10 18:17:32 | INFO     | security.permissions | Registered permission: firmware.parse
+2026-07-10 18:17:32 | INFO     | security.permissions | Mapped action device.connect -> ['device.connect']
+2026-07-10 18:17:32 | INFO     | security.permissions | Mapped action device.disconnect -> ['device.disconnect']
+2026-07-10 18:17:32 | INFO     | security.permissions | Mapped action device.read -> ['device.read']
+2026-07-10 18:17:32 | INFO     | security.permissions | Mapped action device.write -> ['device.write']
+2026-07-10 18:17:32 | INFO     | security.permissions | Mapped action device.diagnose -> ['device.diagnose']
+2026-07-10 18:17:32 | INFO     | security.permissions | Mapped action device.recover -> ['device.recover', 'ownership_declared']
+2026-07-10 18:17:32 | INFO     | security.permissions | Mapped action device.flash -> ['device.flash', 'ownership_declared']
+2026-07-10 18:17:32 | INFO     | security.permissions | Mapped action device.reboot -> ['device.reboot', 'ownership_declared']
+2026-07-10 18:17:32 | INFO     | security.permissions | Mapped action hardware.session.create -> ['hardware.session.create']
+2026-07-10 18:17:32 | INFO     | security.permissions | Mapped action hardware.session.close -> ['hardware.session.close']
+2026-07-10 18:17:32 | INFO     | security.permissions | Mapped action firmware.read -> ['firmware.read']
+2026-07-10 18:17:32 | INFO     | security.permissions | Mapped action firmware.parse -> ['firmware.parse']
+2026-07-10 18:17:33 | INFO     | __main__ | === STARTING PROMETHEUS at http://127.0.0.1:8000/dashboard ===
+2026-07-10 18:17:34 | INFO     | core.container | Registered service: config
+2026-07-10 18:17:34 | INFO     | core.container | Registered service: safe_mode
+2026-07-10 18:17:34 | INFO     | core.container | Registered service: db_engine
+2026-07-10 18:17:34 | INFO     | core.event_bus | Subscribed handler for event: device.connected
+2026-07-10 18:17:34 | INFO     | core.event_bus | Subscribed handler for event: device.disconnected
+2026-07-10 18:17:34 | INFO     | core.event_bus | Subscribed handler for event: device.connect_failed
+2026-07-10 18:17:34 | INFO     | core.event_bus | Subscribed handler for event: device.wrote
+2026-07-10 18:17:34 | INFO     | core.event_bus | Subscribed handler for event: plugin.ran
+2026-07-10 18:17:34 | INFO     | core.event_bus | Subscribed handler for event: agent.dispatched
+2026-07-10 18:17:34 | INFO     | core.event_bus | Subscribed handler for event: memory.stored
+2026-07-10 18:17:34 | INFO     | core.event_bus | Subscribed handler for event: fact.asserted
+2026-07-10 18:17:34 | INFO     | core.event_bus | Subscribed handler for event: capability.executed
+2026-07-10 18:17:34 | INFO     | hardware.hal.registry | Registered driver: usb
+2026-07-10 18:17:34 | INFO     | hardware.hal.registry | Registered driver: adb
+2026-07-10 18:17:34 | INFO     | hardware.hal.registry | Registered driver: fastboot
+2026-07-10 18:17:34 | INFO     | hardware.hal.registry | Registered driver: network
+2026-07-10 18:17:34 | INFO     | hardware.hal.registry | Registered driver: virtual
+2026-07-10 18:17:34 | INFO     | core.container | Registered service: event_bus
+2026-07-10 18:17:34 | INFO     | core.container | Registered service: observability
+2026-07-10 18:17:34 | INFO     | core.container | Registered service: scheduler
+2026-07-10 18:17:34 | INFO     | core.container | Registered service: session_factory
+2026-07-10 18:17:34 | INFO     | core.container | Registered service: memory_api
+2026-07-10 18:17:34 | INFO     | core.container | Registered service: reasoning_api
+2026-07-10 18:17:34 | INFO     | core.container | Registered service: knowledge_engine
+2026-07-10 18:17:34 | INFO     | core.container | Registered service: plugin_api
+2026-07-10 18:17:34 | INFO     | core.container | Registered service: agent_api
+2026-07-10 18:17:34 | INFO     | core.container | Registered service: capability_api
+2026-07-10 18:17:34 | INFO     | core.container | Registered service: device_api
+2026-07-10 18:17:34 | INFO     | core.container | Registered service: platform_service
+2026-07-10 18:17:34 | INFO     | core.container | Registered service: delta_service
+2026-07-10 18:17:34 | INFO     | core.container | Registered service: epsilon_service
+2026-07-10 18:17:34 | INFO     | core.container | Registered service: omega_service
+2026-07-10 18:17:34 | INFO     | core.container | Registered service: event_handlers
+2026-07-10 18:17:34 | INFO     | core.container | Registered service: kernel
+2026-07-10 18:17:34 | INFO     | core.container | Registered service: simulation_engine
+2026-07-10 18:17:34 | INFO     | core.container | Registered service: hardware_hal
+2026-07-10 18:17:34 | INFO     | core.container | Registered service: hardware_session_manager
+2026-07-10 18:17:34 | INFO     | core.container | Registered service: hardware_diagnostics
+2026-07-10 18:17:34 | INFO     | core.container | Registered service: hardware_recovery
+2026-07-10 18:17:34 | INFO     | core.container | Registered service: hardware_firmware
+2026-07-10 18:17:34 | INFO     | core.container | Registered service: security_authorizer
+2026-07-10 18:17:34 | INFO     | core.container | Registered service: security_audit
+2026-07-10 18:17:34 | INFO     | core.container | Registered service: security_integrity
+2026-07-10 18:17:34 | INFO     | core.container | Registered service: omega_agent_coordinator
+2026-07-10 18:17:34 | INFO     | core.container | Registered service: omega_task_planner
+2026-07-10 18:17:34 | INFO     | core.container | Registered service: omega_consensus
+2026-07-10 18:17:34 | INFO     | core.container | Registered service: omega_delegation
+2026-07-10 18:17:34 | INFO     | core.container | Registered service: omega_node_registry
+2026-07-10 18:17:34 | INFO     | core.container | Registered service: omega_distributed_runtime
+2026-07-10 18:17:34 | INFO     | core.container | Registered service: omega_knowledge_sync
+2026-07-10 18:17:34 | INFO     | core.container | Registered service: omega_capability_sync
+2026-07-10 18:17:34 | INFO     | core.container | Registered service: omega_policy_engine
+2026-07-10 18:17:34 | INFO     | core.container | Registered service: omega_permission_hierarchy
+2026-07-10 18:17:34 | INFO     | core.container | Registered service: omega_rule_engine
+2026-07-10 18:17:34 | INFO     | core.container | Registered service: omega_policy_audit
+2026-07-10 18:17:34 | INFO     | core.container | Registered service: omega_plugin_repo
+2026-07-10 18:17:34 | INFO     | core.container | Registered service: omega_capability_repo
+2026-07-10 18:17:34 | INFO     | core.container | Registered service: omega_driver_repo
+2026-07-10 18:17:34 | INFO     | core.container | Registered service: omega_agent_repo
+2026-07-10 18:17:34 | INFO     | core.container | Registered service: omega_org_registry
+2026-07-10 18:17:34 | INFO     | core.container | Registered service: omega_project_registry
+2026-07-10 18:17:34 | INFO     | core.container | Registered service: omega_user_registry
+2026-07-10 18:17:34 | INFO     | core.container | Registered service: omega_team_registry
+2026-07-10 18:17:34 | INFO     | core.container | Registered service: omega_role_registry
+2026-07-10 18:17:34 | INFO     | core.container | Registered service: omega_resource_manager
+2026-07-10 18:17:34 | INFO     | core.container | Registered service: omega_memory_manager
+2026-07-10 18:17:34 | INFO     | core.container | Registered service: omega_lifecycle_manager
+2026-07-10 18:17:34 | INFO     | core.container | Registered service: omega_dashboard
+2026-07-10 18:17:34 | INFO     | plugins.manager | Loaded plugin: echo v0.1.0
+2026-07-10 18:17:34 | INFO     | agents.manager | Registered agent: echo_agent
+2026-07-10 18:17:34 | INFO     | agents.manager | Registered agent: engineering_agent
+2026-07-10 18:17:34 | INFO     | core.scheduler | Scheduled job 'heartbeat' every 30s
+2026-07-10 18:17:34 | INFO     | core.scheduler | Scheduler started
+2026-07-10 18:17:34 | INFO     | backend.main | Prometheus heartbeat — system alive
+2026-07-10 18:17:34 | INFO     | core.bootstrap | Startup complete - Prometheus Core (Omega Olympus) runtime online
+2026-07-10 18:17:34 | INFO     | backend.main | Backend ready — services available via app.state.container
+2026-07-10 18:17:48 | INFO     | core.event_bus | Subscribed handler for event: plugin.ran
+2026-07-10 18:17:48 | INFO     | core.event_bus | Subscribed handler for event: agent.dispatched
+2026-07-10 18:17:48 | INFO     | core.event_bus | Subscribed handler for event: agent.status
+2026-07-10 18:17:48 | INFO     | core.event_bus | Subscribed handler for event: device.connected
+2026-07-10 18:17:48 | INFO     | core.event_bus | Subscribed handler for event: device.disconnected
+2026-07-10 18:17:48 | INFO     | core.event_bus | Subscribed handler for event: device.connect_failed
+2026-07-10 18:17:48 | INFO     | core.event_bus | Subscribed handler for event: device.wrote
+2026-07-10 18:17:48 | INFO     | core.event_bus | Subscribed handler for event: memory.stored
+2026-07-10 18:17:48 | INFO     | core.event_bus | Subscribed handler for event: fact.asserted
+2026-07-10 18:17:48 | INFO     | core.event_bus | Subscribed handler for event: capability.executed
+2026-07-10 18:18:04 | INFO     | backend.main | Prometheus heartbeat — system alive
+2026-07-10 18:18:35 | INFO     | backend.main | Prometheus heartbeat — system alive
+2026-07-10 18:19:05 | INFO     | backend.main | Prometheus heartbeat — system alive
+2026-07-10 18:19:36 | INFO     | backend.main | Prometheus heartbeat — system alive
+2026-07-10 18:20:07 | INFO     | backend.main | Prometheus heartbeat — system alive
+2026-07-10 18:20:37 | INFO     | backend.main | Prometheus heartbeat — system alive
+2026-07-10 18:21:07 | INFO     | backend.main | Prometheus heartbeat — system alive
+2026-07-10 18:21:37 | INFO     | backend.main | Prometheus heartbeat — system alive
+2026-07-10 18:22:07 | INFO     | backend.main | Prometheus heartbeat — system alive
+2026-07-10 18:22:38 | INFO     | backend.main | Prometheus heartbeat — system alive
+2026-07-10 18:23:08 | INFO     | backend.main | Prometheus heartbeat — system alive
+2026-07-10 18:23:38 | INFO     | backend.main | Prometheus heartbeat — system alive
+2026-07-10 18:24:09 | INFO     | backend.main | Prometheus heartbeat — system alive
+2026-07-10 18:24:30 | INFO     | reasoning.graph | Asserted fact: esp32_01 -event-> connected
+2026-07-10 18:24:30 | INFO     | devices.registry | Registered device: esp32_01 (transport=simulated, ownership_declared=True)
+2026-07-10 18:24:30 | INFO     | core.capabilities | Registered capability: device.esp32_01.connect (target=device:esp32_01)
+2026-07-10 18:24:30 | INFO     | core.capabilities | Registered capability: device.esp32_01.disconnect (target=device:esp32_01)
+2026-07-10 18:24:30 | INFO     | core.capabilities | Registered capability: device.esp32_01.read (target=device:esp32_01)
+2026-07-10 18:24:30 | INFO     | core.capabilities | Registered capability: device.esp32_01.write (target=device:esp32_01)
+2026-07-10 18:24:30 | INFO     | core.capabilities | Registered capability: device.esp32_01.status (target=device:esp32_01)
+2026-07-10 18:24:30 | INFO     | core.capabilities | Registered capability: device.esp32_01.diagnose (target=device:esp32_01)
+2026-07-10 18:24:30 | INFO     | core.capabilities | Registered capability: device.esp32_01.recover (target=device:esp32_01)
+2026-07-10 18:24:30 | INFO     | core.capabilities | Registered capability: device.esp32_01.simulate (target=device:esp32_01)
+2026-07-10 18:24:39 | INFO     | backend.main | Prometheus heartbeat — system alive
+2026-07-10 18:24:40 | INFO     | digital_twin.twin | Built twin for esp32_01: state=online, health=1.0, 1 history entries
+2026-07-10 18:25:09 | INFO     | backend.main | Prometheus heartbeat — system alive
+2026-07-10 18:25:39 | INFO     | backend.main | Prometheus heartbeat — system alive
+2026-07-10 18:26:10 | INFO     | backend.main | Prometheus heartbeat — system alive
+2026-07-10 18:26:40 | INFO     | backend.main | Prometheus heartbeat — system alive
+2026-07-10 18:27:10 | INFO     | backend.main | Prometheus heartbeat — system alive
+2026-07-10 18:27:41 | INFO     | backend.main | Prometheus heartbeat — system alive
+2026-07-10 18:28:11 | INFO     | backend.main | Prometheus heartbeat — system alive
+2026-07-10 18:28:42 | INFO     | backend.main | Prometheus heartbeat — system alive
+2026-07-10 18:29:12 | INFO     | backend.main | Prometheus heartbeat — system alive
+2026-07-10 18:29:43 | INFO     | backend.main | Prometheus heartbeat — system alive
+2026-07-10 18:30:13 | INFO     | backend.main | Prometheus heartbeat — system alive
+2026-07-10 18:30:43 | INFO     | backend.main | Prometheus heartbeat — system alive
+2026-07-10 18:31:13 | INFO     | backend.main | Prometheus heartbeat — system alive

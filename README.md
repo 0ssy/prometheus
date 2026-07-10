@@ -103,7 +103,7 @@ cd src-tauri && cargo tauri build    # produces an NSIS .exe installer
 ```
 
 `beforeDevCommand` in `src-tauri/tauri.conf.json` already starts the FastAPI
-backend (`python ../../prometheus.py --server`), so `cargo tauri dev` is
+backend (`python prometheus.py --server`), so `cargo tauri dev` is
 one command. App icons (`icons/32x32.png`, `128x128.png`, `icon.ico`) are
 committed — replace them with `cargo tauri icon path/to/logo.png` for branding.
 

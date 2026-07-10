@@ -17,7 +17,7 @@ from datetime import datetime, timezone
 from pathlib import Path
 from queue import Queue
 
-from fastapi import FastAPI, Depends, Body
+from fastapi import FastAPI, Depends, Body, HTTPException
 from fastapi.responses import StreamingResponse
 from sqlalchemy.orm import Session
 
@@ -498,20 +498,24 @@ def get_partitions(
     container: ServiceContainer = Depends(get_container),
 ):
     if not is_declared_owned(disk_path):
-        raise RuntimeError(
-            f"{disk_path} is not in your declared-owned devices list. "
-            f"Declare it first: POST /ownership/declare?target_id={disk_path}&note=..."
+        raise HTTPException(
+            status_code=403,
+            detail=(
+                f"{disk_path} is not in your declared-owned devices list. "
+                f"Declare it first: POST /ownership/declare?target_id={disk_path}&note=..."
+            ),
         )
     try:
         from engineering.partition_mapper import read_partition_table
 
         table = read_partition_table(disk_path, ownership_declared=True)
     except PermissionError:
-        raise RuntimeError(
-            "OS denied access to this disk — on Windows, try running your terminal as Administrator."
+        raise HTTPException(
+            status_code=403,
+            detail="OS denied access to this disk — on Windows, try running your terminal as Administrator.",
         )
     except FileNotFoundError:
-        raise RuntimeError(f"No such disk path: {disk_path}")
+        raise HTTPException(status_code=404, detail=f"No such disk path: {disk_path}")
 
     reasoning_api = container.get("reasoning_api")
     reasoning_api.assert_fact(
@@ -530,16 +534,19 @@ def get_firmware_report(
     container: ServiceContainer = Depends(get_container),
 ):
     if not is_declared_owned(path):
-        raise RuntimeError(
-            f"{path} is not in your declared-owned devices list. "
-            f"Declare it first: POST /ownership/declare?target_id={path}&note=..."
+        raise HTTPException(
+            status_code=403,
+            detail=(
+                f"{path} is not in your declared-owned devices list. "
+                f"Declare it first: POST /ownership/declare?target_id={path}&note=..."
+            ),
         )
     try:
         from engineering.firmware_inspector import inspect_firmware
 
         report = inspect_firmware(path, ownership_declared=True)
     except FileNotFoundError:
-        raise RuntimeError(f"No such file: {path}")
+        raise HTTPException(status_code=404, detail=f"No such file: {path}")
 
     reasoning_api = container.get("reasoning_api")
     reasoning_api.assert_fact(

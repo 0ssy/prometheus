@@ -83,14 +83,15 @@ export function mountHardware(el: HTMLElement) {
 
       const demoBtn = root.querySelector("#hw-demo") as HTMLElement | null;
       if (demoBtn) {
-        demoBtn.addEventListener("click", async () => {
-          try {
-            await api.devicesSimulated("esp32_01");
-            render();
-          } catch (e: any) {
-            alert(e?.message || "failed to register demo device");
-          }
-        });
+      demoBtn.addEventListener("click", async () => {
+        try {
+          await api.devicesSimulated("esp32_01");
+          await api.declareOwnership("esp32_01", "demo device");
+          render();
+        } catch (e: any) {
+          alert(e?.message || "failed to register demo device");
+        }
+      });
       }
 
       if (sel) {
@@ -100,7 +101,7 @@ export function mountHardware(el: HTMLElement) {
             const fw: any = await api.gammaFirmware(sel.device_id);
             fwRoot.innerHTML = `<div class="node-row"><span>firmware</span><span class="tag">${fw.format ?? "unknown"} · sha256 ${(fw.sha256 || "").slice(0, 8)}</span></div>`;
           } catch (e: any) {
-            fwRoot.innerHTML = `<div class="node-row"><span>firmware</span><span class="tag">secured / requires ownership</span></div>`;
+            fwRoot.innerHTML = `<div class="node-row"><span>firmware</span><span class="tag">${e?.message ?? "unavailable"}</span></div>`;
           }
         }
 

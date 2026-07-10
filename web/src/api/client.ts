@@ -38,6 +38,8 @@ export const api = {
   devicesSimulated: (deviceId: string) =>
     client.post(`/devices/simulated?device_id=${encodeURIComponent(deviceId)}`),
   gammaFirmware: (path: string) => client.get<any>(`/gamma/firmware?path=${encodeURIComponent(path)}`),
+  declareOwnership: (targetId: string, note?: string) =>
+    client.post(`/ownership/declare?target_id=${encodeURIComponent(targetId)}${note ? "&note=" + encodeURIComponent(note) : ""}`),
   epsilonRecovery: (deviceId: string) => client.post(`/epsilon/recovery/${encodeURIComponent(deviceId)}`),
   memory: () => client.get<any>("/memory"),
   plugins: () => client.get<{ plugins: any[] }>("/omega/marketplace/plugins"),
