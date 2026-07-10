@@ -11,3 +11,6 @@ export * from "./MemoryApp";
 export * from "./ActivityApp";
 export * from "./SettingsApp";
 export * from "./AssistantApp";
+export * from "./MonitorApp";
+export * from "./JobsApp";
+export * from "./WorkflowApp";

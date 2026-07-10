@@ -46,4 +46,13 @@ export const api = {
   facts: () => client.get<any>("/knowledge"),
   observability: () => client.get<any>("/observability"),
   capabilities: () => client.get<any>("/capabilities"),
+  systemResources: () => client.get<any>("/system/resources"),
+  systemJobs: () => client.get<any>("/system/jobs"),
+  jobAction: (name: string, action: string) => client.post(`/system/jobs/${encodeURIComponent(name)}/${encodeURIComponent(action)}`),
+  workflows: () => client.get<any>("/workflows"),
+  createWorkflow: (payload: { name: string; steps: any[] }) => client.post("/workflows", payload),
+  runWorkflow: (id: string) => client.post(`/workflows/${encodeURIComponent(id)}/run`),
+  getWorkflow: (id: string) => client.get<any>(`/workflows/${encodeURIComponent(id)}`),
+  baseline: () => client.get<any>("/system/baseline"),
+  baselineRefresh: () => client.post("/system/baseline/refresh"),
 };

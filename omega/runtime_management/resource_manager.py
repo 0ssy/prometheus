@@ -62,3 +62,23 @@ class ResourceManager:
 
     def release(self) -> None:
         self._limits = None
+        self._throttled = False
+        self._throttle_reason = None
+
+    def to_dict(self) -> dict[str, Any]:
+        usage = self.get_usage()
+        return {
+            "cpu_percent": usage.cpu_percent,
+            "memory_mb": usage.memory_mb,
+            "disk_mb": usage.disk_mb,
+            "network_mbps": usage.network_mbps,
+            "active_connections": usage.active_connections,
+            "limits": {
+                "max_cpu_percent": self._limits.max_cpu_percent if self._limits else 90.0,
+                "max_memory_mb": self._limits.max_memory_mb if self._limits else 4096.0,
+                "max_disk_mb": self._limits.max_disk_mb if self._limits else 10240.0,
+                "max_connections": self._limits.max_connections if self._limits else 1000,
+            },
+            "throttled": self._throttled,
+            "throttle_reason": self._throttle_reason,
+        }

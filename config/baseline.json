@@ -1,0 +1,15 @@
+{
+  "captured_at": 1783701191.117315,
+  "timings": {
+    "db_load": 0.009066500002518296,
+    "service_registration": 0.009401899995282292,
+    "plugin_load": 0.00017889999435283244,
+    "agent_load": 0.000308599992422387,
+    "scheduler_start": 0.0011833999888040125,
+    "total": 0.020148599985986948
+  },
+  "initial_memory_mb": 0.0,
+  "idle_cpu_percent": 0.0,
+  "plugin_count": 1,
+  "agent_count": 2
+}

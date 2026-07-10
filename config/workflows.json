@@ -1,0 +1,84 @@
+{
+  "workflows": [
+    {
+      "id": "9529a7fc-4c63-49c9-a9bb-6e5b6c0f4eac",
+      "name": "Device Lifecycle",
+      "status": "pending",
+      "created_at": 1783700612.3799462,
+      "last_run": null,
+      "results": [],
+      "steps": [
+        {
+          "step_id": "s1",
+          "description": "Connect Device",
+          "action": "capability:device.connect",
+          "status": "pending",
+          "result": {},
+          "started_at": null,
+          "finished_at": null,
+          "failed_at": null
+        },
+        {
+          "step_id": "s2",
+          "description": "Identify",
+          "action": "capability:device.status",
+          "status": "pending",
+          "result": {},
+          "started_at": null,
+          "finished_at": null,
+          "failed_at": null
+        },
+        {
+          "step_id": "s3",
+          "description": "Create Digital Twin",
+          "action": "agent:twin_builder",
+          "status": "pending",
+          "result": {},
+          "started_at": null,
+          "finished_at": null,
+          "failed_at": null
+        },
+        {
+          "step_id": "s4",
+          "description": "Run Diagnostics",
+          "action": "capability:device.diagnose",
+          "status": "pending",
+          "result": {},
+          "started_at": null,
+          "finished_at": null,
+          "failed_at": null
+        },
+        {
+          "step_id": "s5",
+          "description": "Store Knowledge",
+          "action": "memory:remember",
+          "status": "pending",
+          "result": {},
+          "started_at": null,
+          "finished_at": null,
+          "failed_at": null
+        },
+        {
+          "step_id": "s6",
+          "description": "Generate Report",
+          "action": "capability:device.read",
+          "status": "pending",
+          "result": {},
+          "started_at": null,
+          "finished_at": null,
+          "failed_at": null
+        },
+        {
+          "step_id": "s7",
+          "description": "Notify User",
+          "action": "notify",
+          "status": "pending",
+          "result": {},
+          "started_at": null,
+          "finished_at": null,
+          "failed_at": null
+        }
+      ]
+    }
+  ]
+}

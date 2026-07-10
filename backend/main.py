@@ -227,6 +227,36 @@ def list_services(container: ServiceContainer = Depends(get_container)):
     return {"services": container.list_services()}
 
 
+@app.get("/system/resources")
+def system_resources(container: ServiceContainer = Depends(get_container)):
+    resource_manager = container.get("omega_resource_manager")
+    return resource_manager.to_dict()
+
+
+@app.get("/system/jobs")
+def system_jobs(container: ServiceContainer = Depends(get_container)):
+    scheduler = container.get("scheduler")
+    return {"jobs": scheduler.jobs_detail()}
+
+
+@app.post("/system/jobs/{job_name}/{action}")
+def system_job_action(
+    job_name: str,
+    action: str,
+    container: ServiceContainer = Depends(get_container),
+):
+    scheduler = container.get("scheduler")
+    if action == "pause":
+        scheduler.pause(job_name)
+    elif action == "resume":
+        scheduler.resume(job_name)
+    elif action == "trigger":
+        scheduler.trigger(job_name)
+    else:
+        raise HTTPException(status_code=400, detail=f"Unknown action: {action}")
+    return {"job": job_name, "action": action}
+
+
 @app.get("/capabilities")
 def list_capabilities(
     prefix: str | None = None,
@@ -266,9 +296,51 @@ def core_status(container: ServiceContainer = Depends(get_container)):
 
 
 @app.get("/observability")
-def observability_snapshot(container: ServiceContainer = Depends(get_container)):
+def observability_snapshot(container: ServiceContainer = Depends(get_container), db: Session = Depends(get_db)):
     observability = container.get("observability")
-    return observability.snapshot()
+    status = _status_snapshot(container, db)
+    return observability.snapshot(status=status)
+
+
+@app.get("/workflows")
+def list_workflows(container: ServiceContainer = Depends(get_container)):
+    workflow_runtime = container.get("workflow_runtime")
+    return {"workflows": workflow_runtime.list_workflows()}
+
+
+@app.post("/workflows")
+def create_workflow(
+    payload: dict,
+    container: ServiceContainer = Depends(get_container),
+):
+    name = payload.get("name", "")
+    steps = payload.get("steps", [])
+    workflow_runtime = container.get("workflow_runtime")
+    return workflow_runtime.create_workflow(name=name, steps=steps)
+
+
+@app.post("/workflows/{workflow_id}/run")
+def run_workflow(
+    workflow_id: str,
+    container: ServiceContainer = Depends(get_container),
+):
+    workflow_runtime = container.get("workflow_runtime")
+    result = workflow_runtime.run(workflow_id)
+    if result is None:
+        raise HTTPException(status_code=404, detail="Workflow not found")
+    return result
+
+
+@app.get("/workflows/{workflow_id}")
+def get_workflow(
+    workflow_id: str,
+    container: ServiceContainer = Depends(get_container),
+):
+    workflow_runtime = container.get("workflow_runtime")
+    result = workflow_runtime.get_workflow(workflow_id)
+    if result is None:
+        raise HTTPException(status_code=404, detail="Workflow not found")
+    return result
 
 
 @app.post("/plugins/{plugin_name}/run")
@@ -1225,3 +1297,20 @@ def omega_dashboard_section(
     section: str, omega: OmegaService = Depends(get_omega_service)
 ):
     return omega.get_dashboard(section)
+
+
+@app.get("/system/baseline")
+def system_baseline():
+    from core.bootstrap import load_baseline
+    baseline = load_baseline()
+    if baseline is None:
+        raise HTTPException(status_code=404, detail="No baseline captured yet")
+    return baseline
+
+
+@app.post("/system/baseline/refresh")
+def system_baseline_refresh(container: ServiceContainer = Depends(get_container)):
+    from core.bootstrap import _capture_baseline, _save_baseline
+    baseline = _capture_baseline(container, {})
+    _save_baseline(baseline)
+    return baseline

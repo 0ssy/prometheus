@@ -13,7 +13,11 @@ Sequence:
   Load Plugins -> Load Agents -> Start Scheduler
 """
 
+import json
+import time
 from collections.abc import Callable
+from pathlib import Path
+from typing import Any
 
 from core.config import config
 from core.container import ServiceContainer
@@ -31,6 +35,8 @@ from services.platform_service import PlatformService
 
 logger = get_logger(__name__)
 
+BASELINE_FILE = Path(__file__).resolve().parent.parent / "config" / "baseline.json"
+
 
 def _load_database(container: ServiceContainer) -> None:
     init_db()
@@ -39,7 +45,7 @@ def _load_database(container: ServiceContainer) -> None:
     container.register("db_engine", engine)
 
 
-def _register_services(container: ServiceContainer) -> None:
+def _register_services(container: ServiceContainer, workflow_runtime: Any) -> None:
     from core.database import SessionLocal
 
     event_bus = InMemoryEventBus()
@@ -143,6 +149,7 @@ def _register_services(container: ServiceContainer) -> None:
     container.register("omega_team_registry", omega_service._team_registry)
     container.register("omega_role_registry", omega_service._role_registry)
     container.register("omega_resource_manager", omega_service._resource_manager)
+    container.register("workflow_runtime", workflow_runtime)
     container.register("omega_memory_manager", omega_service._memory_manager)
     container.register("omega_lifecycle_manager", omega_service._lifecycle_manager)
     container.register("omega_dashboard", omega_service._dashboard)
@@ -172,6 +179,40 @@ def _start_scheduler(
     scheduler.start()
 
 
+def _capture_baseline(container: ServiceContainer, timings: dict[str, float]) -> dict[str, Any]:
+    try:
+        resource_manager = container.get("omega_resource_manager")
+        usage = resource_manager.get_usage()
+        return {
+            "captured_at": time.time(),
+            "timings": timings,
+            "initial_memory_mb": usage.memory_mb,
+            "idle_cpu_percent": usage.cpu_percent,
+            "plugin_count": len(container.get("plugin_api").list_plugins()),
+            "agent_count": len(container.get("agent_api").list_agents()),
+        }
+    except Exception:
+        logger.exception("Failed to capture baseline")
+        return {"captured_at": time.time(), "timings": timings}
+
+
+def _save_baseline(baseline: dict[str, Any]) -> None:
+    try:
+        BASELINE_FILE.parent.mkdir(parents=True, exist_ok=True)
+        BASELINE_FILE.write_text(json.dumps(baseline, indent=2))
+    except Exception:
+        logger.exception("Failed to save baseline")
+
+
+def load_baseline() -> dict[str, Any] | None:
+    if not BASELINE_FILE.exists():
+        return None
+    try:
+        return json.loads(BASELINE_FILE.read_text())
+    except Exception:
+        return None
+
+
 def boot(
     heartbeat_job: Callable[[], None],
     safe_mode: bool = False,
@@ -183,16 +224,41 @@ def boot(
     `prometheus --safe-mode` when the runtime must stay available but
     non-essential subsystems are intentionally left dormant).
     """
+    from workflow.runtime import WorkflowRuntime
+    workflow_runtime = WorkflowRuntime()
+
     container = ServiceContainer()
     container.register("config", config)
     container.register("safe_mode", safe_mode)
 
+    timings: dict[str, float] = {}
+    t0 = time.perf_counter()
+
+    t_db = time.perf_counter()
     _load_database(container)
-    _register_services(container)
+    timings["db_load"] = time.perf_counter() - t_db
+
+    t_svc = time.perf_counter()
+    _register_services(container, workflow_runtime)
+    timings["service_registration"] = time.perf_counter() - t_svc
+
     if not safe_mode:
+        t_plg = time.perf_counter()
         _load_plugins(container)
+        timings["plugin_load"] = time.perf_counter() - t_plg
+
+        t_ag = time.perf_counter()
         _load_agents(container)
+        timings["agent_load"] = time.perf_counter() - t_ag
+
+        t_sch = time.perf_counter()
         _start_scheduler(container, heartbeat_job)
+        timings["scheduler_start"] = time.perf_counter() - t_sch
+
+    timings["total"] = time.perf_counter() - t0
+
+    baseline = _capture_baseline(container, timings)
+    _save_baseline(baseline)
 
     logger.info(
         "Startup complete - Prometheus Core (Omega Olympus) runtime online"

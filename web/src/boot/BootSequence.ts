@@ -22,6 +22,7 @@ interface SystemData {
   plugins: number;
   agents: number;
   kernel: string;
+  stage_timings: Record<string, number>;
 }
 
 export class BootSequence {
@@ -37,12 +38,14 @@ export class BootSequence {
   private version = "0.6.0";
   private startTime = 0;
   private timerHandle = 0;
+  private stageTimings: Record<string, number> = {};
   private data: SystemData = {
     version: "0.6.0",
     services: 0,
     plugins: 0,
     agents: 0,
     kernel: "Stopped",
+    stage_timings: {},
   };
 
   constructor(onComplete: () => void) {
@@ -143,6 +146,7 @@ export class BootSequence {
   }
 
   private typeLine(text: string, idx: number, cb: () => void) {
+    const t0 = performance.now();
     const div = document.createElement("div");
     div.className = "line";
     this.log.appendChild(div);
@@ -150,6 +154,7 @@ export class BootSequence {
       const dots = ".".repeat(Math.max(16 - text.length, 3));
       div.innerHTML = `${text}${dots}<span class="ok">OK</span>`;
       this.setProgress(((idx + 1) / BOOT_LINES.length) * 100);
+      this.data.stage_timings[text] = performance.now() - t0;
     });
     this.rafs.push(raf);
     this.schedule(cb, 90);
@@ -159,9 +164,14 @@ export class BootSequence {
     const running = /run/i.test(this.data.kernel);
     const kernelColor = running ? "#7CFC7C" : "var(--orange-red)";
     this.summaryEl.style.display = "block";
+    const timingLines = Object.entries(this.data.stage_timings)
+      .map(([k, v]) => `<div>${k}......... <span style="color:var(--text)">${v.toFixed(0)} ms</span></div>`)
+      .join("");
     this.summaryEl.innerHTML = [
       `<div style="color:var(--yellow);margin-bottom:4px;font-family:var(--font-heading);font-size:10px;">SYSTEM SUMMARY</div>`,
       `<div>Version......... <span style="color:var(--text)">${this.data.version}</span></div>`,
+      timingLines,
+      `<div>Total........... <span style="color:var(--text)">${(Object.values(this.data.stage_timings).reduce((a, b) => a + b, 0) / 1000).toFixed(2)}s</span></div>`,
       `<div>Loaded Services. <span style="color:var(--text)">${this.data.services}</span></div>`,
       `<div>Plugins......... <span style="color:var(--text)">${this.data.plugins}</span></div>`,
       `<div>Agents.......... <span style="color:var(--text)">${this.data.agents}</span></div>`,

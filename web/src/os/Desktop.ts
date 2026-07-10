@@ -4,7 +4,6 @@ import { api } from "../api/client";
 import { Terminal, TerminalContext } from "../terminal/Terminal";
 import { showOnboarding } from "./Onboarding";
 import {
-  mountKernel,
   mountKnowledge,
   mountSimulation,
   mountReasoning,
@@ -14,9 +13,11 @@ import {
   mountFiles,
   mountPlugins,
   mountMemory,
-  mountActivity,
   mountSettings,
   mountAssistant,
+  mountMonitor,
+  mountJobs,
+  mountWorkflow,
 } from "../apps";
 
 const BOOT_LOGO = `██████╗ ██████╗  ██████╗ ███╗   ███╗███████╗
@@ -35,7 +36,6 @@ interface AppDef {
 }
 
 const APPS: Record<string, AppDef> = {
-  kernel: { key: "kernel", title: "KERNEL", mount: mountKernel, w: 380, h: 260 },
   knowledge: { key: "knowledge", title: "KNOWLEDGE", mount: mountKnowledge, w: 420, h: 320 },
   simulation: { key: "simulation", title: "SIMULATION", mount: mountSimulation, w: 360, h: 300 },
   reasoning: { key: "reasoning", title: "REASONING", mount: mountReasoning, w: 360, h: 240 },
@@ -47,11 +47,12 @@ const APPS: Record<string, AppDef> = {
   memory: { key: "memory", title: "MEMORY", mount: mountMemory, w: 340, h: 260 },
   settings: { key: "settings", title: "SETTINGS", mount: mountSettings, w: 360, h: 280 },
   assistant: { key: "assistant", title: "ASSISTANT", mount: mountAssistant, w: 420, h: 340 },
-  activity: { key: "activity", title: "ACTIVITY FEED", mount: mountActivity, w: 360, h: 320 },
+  monitor: { key: "monitor", title: "MONITOR", mount: mountMonitor, w: 420, h: 360 },
+  jobs: { key: "jobs", title: "JOBS", mount: mountJobs, w: 400, h: 320 },
+  workflow: { key: "workflow", title: "WORKFLOWS", mount: mountWorkflow, w: 420, h: 360 },
 };
 
 const DOCK_KEYS = [
-  "kernel",
   "knowledge",
   "simulation",
   "reasoning",
@@ -63,10 +64,12 @@ const DOCK_KEYS = [
   "memory",
   "settings",
   "assistant",
+  "monitor",
+  "jobs",
+  "workflow",
 ];
 
 const DOCK_ICONS: Record<string, string> = {
-  kernel: '<rect x="2" y="2" width="8" height="8" fill="currentColor"/>',
   knowledge: '<circle cx="6" cy="6" r="4" fill="none" stroke="currentColor" stroke-width="1.5"/><circle cx="6" cy="6" r="1.2" fill="currentColor"/>',
   simulation: '<path d="M2 9 L4 5 L6 7 L10 2" stroke="currentColor" stroke-width="1.5" fill="none"/>',
   reasoning: '<path d="M6 1 L11 6 L6 11 L1 6 Z" fill="none" stroke="currentColor" stroke-width="1.5"/>',
@@ -78,6 +81,9 @@ const DOCK_ICONS: Record<string, string> = {
   memory: '<rect x="1.5" y="3" width="9" height="6" fill="none" stroke="currentColor" stroke-width="1.5"/><line x1="1.5" y1="6" x2="10.5" y2="6" stroke="currentColor" stroke-width="1"/>',
   settings: '<circle cx="6" cy="6" r="2" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="M6 1 V2.5 M6 9.5 V11 M1 6 H2.5 M9.5 6 H11 M2.6 2.6 L3.6 3.6 M8.4 8.4 L9.4 9.4 M2.6 9.4 L3.6 8.4 M8.4 3.6 L9.4 2.6" stroke="currentColor" stroke-width="1"/>',
   assistant: '<circle cx="6" cy="6" r="4.5" fill="none" stroke="currentColor" stroke-width="1.5"/><circle cx="4.3" cy="5.5" r="0.8" fill="currentColor"/><circle cx="7.7" cy="5.5" r="0.8" fill="currentColor"/>',
+  monitor: '<rect x="2" y="2" width="8" height="6" fill="none" stroke="currentColor" stroke-width="1.5"/><rect x="3.5" y="3.5" width="5" height="3" fill="currentColor"/><path d="M2 9 L6 7 L10 9" stroke="currentColor" stroke-width="1.2" fill="none"/>',
+  jobs: '<rect x="2" y="2" width="8" height="8" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="M4 5 L6 7 L9 4" stroke="currentColor" stroke-width="1.2" fill="none"/>',
+  workflow: '<circle cx="3" cy="6" r="1.5" fill="currentColor"/><circle cx="9" cy="6" r="1.5" fill="currentColor"/><path d="M4.5 6 L7.5 6 M4.5 6 L3 3 M7.5 6 L10 3 M4.5 6 L3 9 M7.5 6 L10 9" stroke="currentColor" stroke-width="1"/>',
 };
 
 export class Desktop {
@@ -174,9 +180,7 @@ export class Desktop {
   private initStore() {
     store.loadStatus();
     store.startSSE();
-    this.renderStatGrid(store.state.status);
     store.subscribe((s) => {
-      this.renderStatGrid(s.status);
       this.renderActivity(s.events);
     });
   }
@@ -338,32 +342,6 @@ export class Desktop {
 
   logActivity(text: string) {
     store.pushEvent({ type: "activity", timestamp: new Date().toISOString(), data: { message: text } });
-  }
-
-  private renderStatGrid(status: Record<string, unknown> | null) {
-    const grid = this.el.querySelector("#stat-grid");
-    if (!grid) return;
-    const s = (status || {}) as any;
-    const panels = [
-      { label: "Kernel", value: s.kernel === "Running" ? "ONLINE" : s.kernel || "--" },
-      { label: "Knowledge", value: `${s.knowledge_facts ?? 0} facts` },
-      { label: "Simulation", value: s.simulation || "IDLE" },
-      { label: "Reasoning", value: s.reasoning || "READY" },
-      { label: "Hardware", value: s.hardware || "IDLE" },
-      { label: "Agents", value: `${s.agents ?? 0} active` },
-      { label: "Plugins", value: `${s.plugins ?? 0} loaded` },
-      { label: "Connected Devices", value: String(s.devices ?? 0) },
-      { label: "Knowledge Facts", value: String(s.knowledge_facts ?? 0) },
-      { label: "Capabilities", value: String(s.capabilities ?? 0) },
-    ];
-    grid.innerHTML = "";
-    for (const p of panels) {
-      const div = document.createElement("div");
-      div.className = "stat-panel";
-      div.innerHTML = `<div class="label">${p.label}</div><div class="value">${p.value}</div>
-        <div class="pulse-bar"><div class="pulse-fill" style="animation-delay:${Math.random() * 2}s"></div></div>`;
-      grid.appendChild(div);
-    }
   }
 
   private renderActivity(events: any[]) {

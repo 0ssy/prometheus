@@ -166,6 +166,8 @@ class PlatformService:
         payload: dict[str, Any],
         granted_permissions: set[str],
     ) -> Any:
+        if self._observability is not None:
+            self._observability.record_command(capability_name)
         result = self._capability_api.execute(
             capability_name, payload=payload, granted_permissions=granted_permissions
         )
