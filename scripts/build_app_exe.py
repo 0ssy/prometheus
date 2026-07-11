@@ -11,6 +11,7 @@ Usage:
 
 from __future__ import annotations
 
+import os
 import shutil
 import subprocess
 import sys
@@ -51,6 +52,8 @@ def main() -> int:
     ]
     for pkg in FIRST_PARTY:
         args += ["--hidden-import", pkg]
+    # Bundle the built SPA so the frozen backend can serve it at /dashboard.
+    args += ["--add-data", f"{ROOT / 'web' / 'dist'}{os.pathsep}web/dist"]
     args.append(str(ROOT / "prometheus.py"))
 
     print("Building Prometheus backend executable...")

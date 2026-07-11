@@ -6,8 +6,8 @@
   "build": {
     "beforeDevCommand": "python prometheus.py --server",
     "devUrl": "http://localhost:8000/dashboard",
-    "beforeBuildCommand": "npm run build && ..\\venv\\Scripts\\python.exe ..\\scripts\\build_app_exe.py",
-    "frontendDist": "../web/dist"
+    "beforeBuildCommand": "cd /d C:\\Users\\josep\\Downloads\\prometheus && npm --prefix web run build && venv\\Scripts\\python.exe scripts\\build_app_exe.py",
+    "frontendDist": "http://127.0.0.1:8000/dashboard"
   },
   "app": {
     "windows": [

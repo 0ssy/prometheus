@@ -6,11 +6,16 @@ In development, Vite's dev server proxies API calls to this backend.
 """
 
 import os
+import sys
 
 from fastapi import FastAPI, Request
 from fastapi.responses import FileResponse, HTMLResponse
 
-DIST_DIR = os.path.join(os.path.dirname(__file__), "..", "web", "dist")
+if getattr(sys, "_MEIPASS", None):
+    # Running as a PyInstaller-frozen sidecar: web/dist is bundled next to the exe.
+    DIST_DIR = os.path.join(sys._MEIPASS, "web", "dist")
+else:
+    DIST_DIR = os.path.join(os.path.dirname(__file__), "..", "web", "dist")
 INDEX_HTML = os.path.join(DIST_DIR, "index.html")
 
 

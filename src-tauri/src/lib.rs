@@ -30,6 +30,16 @@ pub fn run() {
                             .unwrap()
                             .replace(child);
                         println!("Prometheus backend sidecar started");
+                        // Block window creation until the backend actually listens, so the
+                        // SPA never loads against a not-yet-ready server (blank window).
+                        let addr = "127.0.0.1:8000";
+                        for _ in 0..150 {
+                            if std::net::TcpStream::connect(addr).is_ok() {
+                                println!("Prometheus backend reachable at {addr}");
+                                break;
+                            }
+                            std::thread::sleep(std::time::Duration::from_millis(100));
+                        }
                     }
                     Err(e) => eprintln!("sidecar spawn failed (dev mode?): {e}"),
                 },
