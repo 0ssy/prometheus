@@ -991,6 +991,10 @@ def list_agents_with_status(
     return {"agents": [{"name": n, "status": "idle", "updated_at": None} for n in names]}
 
 
+_GRAPH_NODE_LIMIT = int(os.environ.get("PROMETHEUS_GRAPH_NODE_LIMIT", "10000"))
+_GRAPH_EDGE_LIMIT = int(os.environ.get("PROMETHEUS_GRAPH_EDGE_LIMIT", "10000"))
+
+
 @app.get("/knowledge/graph")
 def knowledge_graph(
     db: Session = Depends(get_db),
@@ -1001,6 +1005,14 @@ def knowledge_graph(
 
     nodes = db.query(KnowledgeNode).order_by(KnowledgeNode.created_at.asc()).all()
     edges = db.query(KnowledgeEdge).order_by(KnowledgeEdge.created_at.asc()).all()
+
+    node_total = len(nodes)
+    edge_total = len(edges)
+    truncated = node_total > _GRAPH_NODE_LIMIT or edge_total > _GRAPH_EDGE_LIMIT
+    if truncated:
+        nodes = nodes[:_GRAPH_NODE_LIMIT]
+        edges = edges[:_GRAPH_EDGE_LIMIT]
+
     return {
         "nodes": [
             {
@@ -1021,6 +1033,8 @@ def knowledge_graph(
             }
             for e in edges
         ],
+        "truncated": truncated,
+        "truncated_total": node_total,
     }
 
 

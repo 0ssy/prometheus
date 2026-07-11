@@ -1,7 +1,9 @@
+import time
+
 import pytest
 from plugins.manager import PluginManager
 from api.plugin_api import PluginApi
-from api.events import PluginRanEvent
+from api.events import PluginRanEvent, PluginErrorEvent
 from core.event_bus import InMemoryEventBus
 
 
@@ -14,6 +16,21 @@ class FakePlugin:
         pass
 
     def run(self, context: dict) -> dict:
+        return {"ok": True}
+
+
+class CrashPlugin(FakePlugin):
+    name = "crash_plugin"
+
+    def run(self, context: dict) -> dict:
+        raise RuntimeError("boom")
+
+
+class SlowPlugin(FakePlugin):
+    name = "slow_plugin"
+
+    def run(self, context: dict) -> dict:
+        time.sleep(10)
         return {"ok": True}
 
 
@@ -76,3 +93,33 @@ class TestPluginManager:
         manager = PluginManager()
         with pytest.raises(RuntimeError, match="Incompatible contract version"):
             manager.register(IncompatiblePlugin())
+
+    def test_run_isolates_plugin_exception(self):
+        manager = PluginManager()
+        manager.register(CrashPlugin())
+        result = manager.run("crash_plugin", {})
+        assert "error" in result
+        assert "boom" in result["error"]
+
+    def test_run_publishes_error_event_on_crash(self):
+        bus = InMemoryEventBus()
+        events: list[PluginErrorEvent] = []
+        bus.subscribe("plugin.error", lambda event: events.append(event))
+        manager = PluginManager(event_bus=bus)
+        manager.register(CrashPlugin())
+
+        manager.run("crash_plugin", {})
+
+        assert len(events) == 1
+        assert events[0].plugin_name == "crash_plugin"
+        assert "boom" in events[0].error
+
+    def test_run_timeout_aborts_hung_plugin(self):
+        manager = PluginManager()
+        manager.register(SlowPlugin())
+        start = time.monotonic()
+        result = manager.run("slow_plugin", {}, timeout=0.5)
+        elapsed = time.monotonic() - start
+        assert "error" in result
+        assert result["error"] == "timeout"
+        assert elapsed < 5

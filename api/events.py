@@ -22,6 +22,15 @@ class PluginRanEvent(Event):
 
 
 @dataclass
+class PluginErrorEvent(Event):
+    plugin_name: str
+    error: str
+
+    def __post_init__(self) -> None:
+        self.event_type = "plugin.error"
+
+
+@dataclass
 class AgentDispatchedEvent(Event):
     agent_name: str
     task: dict
@@ -93,6 +102,15 @@ class CapabilityExecutedEvent(Event):
 
     def __post_init__(self) -> None:
         self.event_type = "capability.executed"
+
+
+@dataclass
+class DatabaseCorruptedEvent(Event):
+    path: str
+    quarantined_to: str
+
+    def __post_init__(self) -> None:
+        self.event_type = "database.corrupted"
 
 
 @dataclass

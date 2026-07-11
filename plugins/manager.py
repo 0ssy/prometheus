@@ -12,9 +12,11 @@ from .base import PrometheusPlugin
 from contracts.plugin import PluginApi
 from contracts.event_bus import EventBus
 from contracts.versioning import CONTRACT_VERSION, validate_contract_compatibility
-from api.events import PluginRanEvent
+from api.events import PluginRanEvent, PluginErrorEvent
 from core.logger import get_logger
 from core.event_bus import event_bus as default_event_bus
+
+import concurrent.futures
 
 logger = get_logger(__name__)
 
@@ -38,11 +40,33 @@ class PluginManager(PluginApi):
     def list_plugins(self) -> list[dict]:
         return [{"name": p.name, "version": p.version} for p in self._plugins.values()]
 
-    def run(self, name: str, context: dict) -> dict:
+    def run(self, name: str, context: dict, timeout: float | None = None) -> dict:
         plugin = self.get(name)
         if plugin is None:
             raise ValueError(f"No such plugin: {name}")
-        result = plugin.run(context)
+        try:
+            if timeout is not None and timeout > 0:
+                executor = concurrent.futures.ThreadPoolExecutor(max_workers=1)
+                try:
+                    future = executor.submit(plugin.run, context)
+                    try:
+                        result = future.result(timeout=timeout)
+                    except concurrent.futures.TimeoutError:
+                        logger.warning("Plugin '%s' timed out after %.2fs; aborting", name, timeout)
+                        self._event_bus.publish(
+                            PluginErrorEvent(plugin_name=name, error="timeout")
+                        )
+                        return {"error": "timeout"}
+                finally:
+                    executor.shutdown(wait=False)
+            else:
+                result = plugin.run(context)
+        except Exception as exc:
+            logger.exception("Plugin '%s' raised an error", name)
+            self._event_bus.publish(
+                PluginErrorEvent(plugin_name=name, error=str(exc))
+            )
+            return {"error": str(exc)}
         self._event_bus.publish(PluginRanEvent(plugin_name=name, result=result))
         return result
 

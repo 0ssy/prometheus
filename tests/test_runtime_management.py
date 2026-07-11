@@ -21,6 +21,13 @@ def test_resource_manager_check_limits():
     assert result["violations"] == []
 
 
+def test_resource_manager_to_dict_no_attribute_error():
+    manager = ResourceManager()
+    data = manager.to_dict()
+    assert data["throttled"] is False
+    assert data["throttle_reason"] is None
+
+
 def test_memory_manager_get_stats():
     manager = MemoryManager()
     stats = manager.get_stats()

@@ -3,6 +3,7 @@ import { store } from "../os/Store";
 
 type KGNode = { id: string; label?: string; type?: string; confidence?: number };
 type KGEdge = { id: string; source: string; target: string; relation?: string; confidence?: number };
+type KGGraph = { nodes?: KGNode[]; edges?: KGEdge[]; truncated?: boolean; truncated_total?: number };
 type KGFact = {
   id?: string;
   subject: string;
@@ -41,6 +42,8 @@ function typeColor(type: string | undefined): string {
       return "var(--yellow)";
   }
 }
+
+const GRAPH_LIMIT = 10000;
 
 export function mountKnowledge(el: HTMLElement) {
   el.innerHTML = `<div id="knowledge-app" style="padding:4px; position:relative; width:100%; height:100%; box-sizing:border-box;"></div>`;
@@ -108,6 +111,7 @@ export function mountKnowledge(el: HTMLElement) {
   let facts: KGFact[] = [];
   let timelineFacts: KGFact[] = [];
   let selectedId: string | null = null;
+  let graphTruncatedTotal: number | null = null;
   const positions = new Map<string, { x: number; y: number }>();
 
   function computePositions() {
@@ -130,7 +134,13 @@ export function mountKnowledge(el: HTMLElement) {
 
   function renderStats() {
     const f = (store.state.status as any)?.knowledge_facts ?? facts.length;
-    stats.innerHTML = `facts: <span style="color:var(--text)">${f}</span> &nbsp; nodes: <span style="color:var(--text)">${nodes.length}</span> &nbsp; edges: <span style="color:var(--text)">${edges.length}</span>`;
+    let cap = "";
+    const total = graphTruncatedTotal ?? Math.max(nodes.length, edges.length);
+    if (nodes.length > GRAPH_LIMIT || edges.length > GRAPH_LIMIT) {
+      const more = Math.max(0, total - GRAPH_LIMIT);
+      cap = ` &nbsp; <span style="color:var(--orange-red)">+${(more || 0).toLocaleString()} more (capped at ${GRAPH_LIMIT.toLocaleString()})</span>`;
+    }
+    stats.innerHTML = `facts: <span style="color:var(--text)">${f}</span> &nbsp; nodes: <span style="color:var(--text)">${nodes.length}</span> &nbsp; edges: <span style="color:var(--text)">${edges.length}</span>${cap}`;
   }
 
   function renderGraph() {
@@ -270,8 +280,20 @@ export function mountKnowledge(el: HTMLElement) {
       api.facts().catch(() => []),
     ])
       .then(([graph, tl, fct]) => {
-        nodes = (graph.nodes || []) as KGNode[];
-        edges = (graph.edges || []) as KGEdge[];
+        const g = graph as KGGraph;
+        const rawNodes = (g.nodes || []) as KGNode[];
+        const rawEdges = (g.edges || []) as KGEdge[];
+        graphTruncatedTotal = typeof g.truncated_total === "number" ? g.truncated_total : null;
+        const overLimit =
+          (g.truncated === true) ||
+          rawNodes.length > GRAPH_LIMIT ||
+          rawEdges.length > GRAPH_LIMIT;
+        nodes = overLimit
+          ? rawNodes.slice(0, GRAPH_LIMIT)
+          : rawNodes;
+        edges = overLimit
+          ? rawEdges.slice(0, GRAPH_LIMIT)
+          : rawEdges;
         timelineFacts = ((tl && (tl as any).facts) || []) as KGFact[];
         facts = (Array.isArray(fct) ? fct : []) as KGFact[];
         computePositions();

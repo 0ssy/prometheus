@@ -28,6 +28,8 @@ class ResourceLimits:
 class ResourceManager:
     def __init__(self) -> None:
         self._limits: ResourceLimits | None = None
+        self._throttled: bool = False
+        self._throttle_reason: str | None = None
 
     def get_usage(self) -> ResourceUsage:
         try:
