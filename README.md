@@ -210,6 +210,13 @@ this skeleton first — that's the actual Phase Alpha goal.
 
 Roadmap changes are made deliberately through RFC updates.
 
+## Release candidate hardening
+
+Before beginning major post-omega architecture work, run the RC1 hardening
+checklist:
+
+- `docs/release/rc1-checklist.md`
+
 ## Gamma Helios knowledge workflow
 
 ```

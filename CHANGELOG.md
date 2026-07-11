@@ -8,6 +8,7 @@ Codename: **Olympus**
 Status: **IN_PROGRESS**
 
 ### Added
+- RC1 release hardening checklist: `docs/release/rc1-checklist.md`
 - Plugin SDK (`sdk/plugin_sdk/`):
   - `interfaces.py`, `decorators.py`, `lifecycle.py`, `testing.py`, `examples/`
 - Multi-Agent Coordination (`agents/`):
