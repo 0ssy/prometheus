@@ -4,4 +4,6 @@ sqlalchemy
 pydantic
 pyserial
 cryptography
+psutil
+httpx
 pytest

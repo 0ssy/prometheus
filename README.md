@@ -32,6 +32,24 @@ knowledge graph, ontology, provenance, confidence-based facts, query engine, lea
 
 Everything runs locally on SQLite — no cloud dependency.
 
+## Quickstart
+
+```bash
+# 1. Create an isolated environment and install dependencies
+python3 -m venv venv
+source venv/bin/activate        # Windows: venv\Scripts\activate
+pip install -r requirements.txt
+
+# 2. Start the platform (boots the kernel + opens the dashboard in a browser)
+python prometheus.py
+
+# 3. Confirm it is alive
+curl http://127.0.0.1:8000/health
+```
+
+The engineering dashboard is at <http://127.0.0.1:8000/dashboard> and the
+interactive API docs at <http://127.0.0.1:8000/docs>.
+
 ## Setup
 
 ```bash
@@ -107,11 +125,15 @@ backend (`python prometheus.py --server`), so `cargo tauri dev` is
 one command. App icons (`icons/32x32.png`, `128x128.png`, `icon.ico`) are
 committed — replace them with `cargo tauri icon path/to/logo.png` for branding.
 
-> The `src-tauri` scaffold (config + icons + NSIS bundle target) is committed
-> but not compiled here (no Rust toolchain in the dev sandbox). It is ready to
-> build once Rust is installed. For a fully self-contained installer that also
-> bundles the Python runtime, add a Tauri sidecar (`bundle.externalBin`) — see
-> `src-tauri/README.md`.
+> `src-tauri` builds a **fully self-contained** installer: `cargo tauri build`
+> produces `target/release/bundle/nsis/Prometheus_0.6.0_x64-setup.exe`, which
+> bundles the frozen Python backend as a Tauri `externalBin` sidecar so the
+> installed app needs **no system Python** on `PATH`. Host prerequisites:
+> Rust ≥ 1.77, WebView2 (Windows), Node 18+, Python 3.11+, NSIS
+> (`makensis` on `PATH`), and PyInstaller. One-time setup:
+> `python -m venv venv && venv\Scripts\activate && pip install -r requirements.txt pyinstaller`,
+> then `cargo tauri build` runs `beforeBuildCommand` to build the SPA and the
+> sidecar. See `src-tauri/README.md`.
 
 ## Verify the architecture vertical slice
 
@@ -146,7 +168,7 @@ curl "http://127.0.0.1:8000/gamma/knowledge/simulations-failed"
 curl "http://127.0.0.1:8000/gamma/learning"
 ```
 
-If all five return sensible JSON, the core platform orchestration is working end-to-end.
+If every call above returns sensible JSON, the core platform orchestration is working end-to-end.
 
 You can also run the full in-process demo:
 

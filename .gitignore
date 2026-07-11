@@ -6,3 +6,11 @@ __pycache__/
 .venv/
 venv/
 src-tauri/target/
+web/dist/
+prometheus_engineering_os.egg-info/
+.pytest_cache/
+.ruff_cache/
+src-tauri/binaries/
+dist/
+build/
+*.spec

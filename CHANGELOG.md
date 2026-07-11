@@ -2,6 +2,50 @@
 
 All notable changes to Prometheus are documented in this file.
 
+## [Unreleased] - RC1 Hardening
+
+Stability, crash-recovery, and install/onboarding work that precedes the
+`v1.0.0-rc1` tag. No new features — only reliability, packaging, and docs.
+
+### Added
+- Installer smoke test (`tests/test_installer_smoke.py`): verifies a clean
+  install boots and serves `/health`, `/status`, `/docs`, and that a
+  pre-existing corrupted DB still boots (quarantine + recreate).
+- Self-contained desktop installer: `cargo tauri build` now bundles the frozen
+  Python backend as a Tauri `externalBin` sidecar (`src-tauri/binaries/`, via
+  `scripts/build_app_exe.py` + PyInstaller) and launches it from `src/lib.rs`
+  with `tauri-plugin-shell`, so the installed app needs no system Python. See
+  `src-tauri/README.md`.
+
+### Fixed
+- `/knowledge/graph` no longer loads the entire graph into memory: it is
+  capped at `PROMETHEUS_GRAPH_NODE_LIMIT` / `PROMETHEUS_GRAPH_EDGE_LIMIT`
+  (default 10000) and reports `truncated` / `truncated_total` so the UI can
+  inform the user instead of locking the tab.
+- Corrupted SQLite databases no longer block boot: `init_db()` quarantines
+  the file to `<path>.corrupted.<timestamp>`, rebuilds the engine, and
+  recreates a fresh schema, then publishes a `DatabaseCorruptedEvent`.
+- `omega` `ResourceManager.to_dict()` no longer raises `AttributeError`:
+  `_throttled` / `_throttle_reason` are initialized in `__init__`.
+- Plugin failures are isolated: `PluginManager.run()` catches exceptions,
+  logs them, publishes a `PluginErrorEvent`, and returns `{"error": ...}`
+  instead of crashing the request. A `timeout` argument aborts hung
+  plugins via a worker-thread-safe `ThreadPoolExecutor` (returns
+  `{"error": "timeout"}`).
+
+### Changed
+- `requirements.txt`: added `httpx` (required by FastAPI's `TestClient`,
+  used across the test suite) and `psutil` (real resource usage in
+  `/system/resources` — previously silently zeroed when missing).
+- Frontend (`web/src/apps/KnowledgeApp.ts`): the graph renderer clamps
+  nodes/edges to the same cap before layout and shows a "+N more (capped)"
+  indicator, so a larger-than-expected payload can't freeze the tab.
+- `README.md`: added a Quickstart and corrected the install/verify steps;
+  `tests/README.md` updated to the actual flat test layout.
+- `prometheus.py` now imports the FastAPI app directly (`from backend.main import
+  app`) instead of a string `uvicorn.run("backend.main:app", ...)` import, which
+  is untraceable by PyInstaller — the backend is now freezable into a sidecar.
+
 ## [0.6.0-omega] - 2026-07-06
 
 Codename: **Olympus**  

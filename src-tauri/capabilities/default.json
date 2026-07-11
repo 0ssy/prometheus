@@ -3,5 +3,12 @@
   "identifier": "default",
   "description": "Default capabilities for the Prometheus main window.",
   "windows": ["main"],
-  "permissions": ["core:default", "core:webview:allow-internal-toggle-devtools"]
+  "permissions": [
+    "core:default",
+    "core:webview:allow-internal-toggle-devtools",
+    {
+      "identifier": "shell:allow-execute",
+      "allow": [{ "name": "prometheus", "args": ["--server"] }]
+    }
+  ]
 }

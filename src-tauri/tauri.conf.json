@@ -6,7 +6,7 @@
   "build": {
     "beforeDevCommand": "python prometheus.py --server",
     "devUrl": "http://localhost:8000/dashboard",
-    "beforeBuildCommand": "npm run build",
+    "beforeBuildCommand": "npm run build && ..\\venv\\Scripts\\python.exe ..\\scripts\\build_app_exe.py",
     "frontendDist": "../web/dist"
   },
   "app": {
@@ -31,6 +31,7 @@
   "bundle": {
     "active": true,
     "targets": ["nsis"],
+    "externalBin": ["binaries/prometheus"],
     "icon": [
       "icons/32x32.png",
       "icons/128x128.png",

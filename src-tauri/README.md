@@ -28,11 +28,19 @@ cd src-tauri && cargo tauri dev      # opens the native Prometheus window
 ## Build the installer
 
 ```bash
-cd C:\Users\josep\Downloads\prometheus\web && npm run build   # produces ../web/dist
-cd src-tauri && cargo tauri build                             # NSIS .exe installer
+# one-time: create the build venv and install the PyInstaller freezer
+python -m venv venv
+venv\Scripts\activate
+pip install -r requirements.txt pyinstaller
+
+# build the self-contained installer — beforeBuildCommand builds the SPA
+# and the frozen Python sidecar automatically
+cd src-tauri && cargo tauri build
 ```
 
-The output installer lands in `src-tauri/target/release/bundle/nsis/`.
+The output installer (`Prometheus_0.6.0_x64-setup.exe`) lands in
+`src-tauri/target/release/bundle/nsis/`. It bundles the frozen backend, so the
+installed app runs with **no system Python** on `PATH`.
 
 ## Icons
 
@@ -45,10 +53,24 @@ cargo tauri icon path/to/logo.png
 
 ## Shipping the backend with the installer (production)
 
-The web UI talks to the FastAPI backend at `http://localhost:8000`. For a
-fully self-contained installer you must bundle the Python runtime as a Tauri
-**sidecar** (`tauri.conf.json` → `bundle.externalBin`) and launch it from
-`src/lib.rs` with `tauri-plugin-shell`, OR document that `python prometheus.py`
-must run alongside the installed app. This step is environment-specific and is
-left as a documented follow-up (the sandbox has no Rust toolchain to verify a
-full `cargo tauri build`).
+The web UI talks to the FastAPI backend at `http://localhost:8000`. The installer
+is **fully self-contained**: the Python runtime is frozen into a single
+executable (`scripts/build_app_exe.py`, via PyInstaller) and bundled as a Tauri
+**sidecar** (`tauri.conf.json` → `bundle.externalBin` =
+`["binaries/prometheus"]`). `src/lib.rs` launches that sidecar with
+`tauri-plugin-shell` on startup and terminates it when the app exits, so the
+installed app needs **no system Python** on `PATH`.
+
+The freeze step is wired into the Tauri build: `tauri.conf.json` →
+`beforeBuildCommand` runs `npm run build && ..\venv\Scripts\python.exe
+..\scripts\build_app_exe.py`, which builds the SPA and writes the sidecar to
+`src-tauri/binaries/prometheus-x86_64-pc-windows-msvc.exe` (the target-triple
+suffix Tauri requires for an `externalBin` sidecar).
+
+> Build prerequisites on the host: Rust ≥ 1.77, Node 18+, Python 3.11+ on
+> `PATH`, Microsoft WebView2 (preinstalled on Windows 10/11), **NSIS**
+> (`makensis` on `PATH`) for the `nsis` bundle target, and a `venv` with
+> `pyinstaller` installed (created once: `python -m venv venv && pip install
+> -r requirements.txt pyinstaller`). The full `cargo tauri build` has been
+> verified end-to-end and produces
+> `target/release/bundle/nsis/Prometheus_0.6.0_x64-setup.exe`.

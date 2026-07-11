@@ -325,6 +325,7 @@ def _print_boot_logo(version: str) -> None:
 
 def run_full_system(open_browser: bool = True) -> None:
     import uvicorn
+    from backend.main import app
 
     url = f"http://{config.api_host}:{config.api_port}/dashboard"
     health_url = f"http://{config.api_host}:{config.api_port}/health"
@@ -350,7 +351,7 @@ def run_full_system(open_browser: bool = True) -> None:
     print("Press Ctrl+C to stop.\n")
 
     uvicorn.run(
-        "backend.main:app",
+        app,
         host=config.api_host,
         port=config.api_port,
         reload=False,

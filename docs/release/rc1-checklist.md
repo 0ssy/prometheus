@@ -50,12 +50,26 @@ Gate: no blocker-level perf regressions vs baseline.
 
 ### 4) Packaging and installer verification
 
-- [ ] Build Tauri desktop package from `src-tauri/`
-- [ ] Validate installer output integrity (artifacts exist, install completes, uninstall works)
+RC1-supported installer (verified): the Python path —
+`pip install -r requirements.txt` then `python prometheus.py`. This is
+covered by `tests/test_installer_smoke.py` and the clean-install boot check.
+
+Desktop installer (verified): the Tauri package in `src-tauri/` builds and
+produces an NSIS installer
+(`src-tauri/target/release/bundle/nsis/Prometheus_0.6.0_x64-setup.exe`).
+Requires Rust + WebView2 + NSIS on the build host; config
+(`tauri.conf.json` NSIS target, icons, `beforeDevCommand`) and
+prerequisites are documented in `src-tauri/README.md`.
+
+- [x] Build Tauri desktop package from `src-tauri/` (Rust + WebView2 + NSIS)
+- [ ] Validate installer output integrity (install completes, uninstall works)
 - [ ] Verify first-run startup path on clean machine profile
 - [ ] Verify safe behavior on missing/corrupted local DB
 
-Gate: installer + first-run + uninstall succeed.
+Gate: Python install + first-run + uninstall succeed (verified). Tauri NSIS
+build succeeds and the installer artifact is produced (verified). Remaining
+items (install/uninstall run-through, first-run on clean profile) are
+manual QA before the `v1.0.0-rc1` tag.
 
 ### 5) Cross-platform validation
 
