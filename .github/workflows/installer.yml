@@ -1,0 +1,63 @@
+name: Clean Install Test
+
+on:
+  push:
+    branches: ["main"]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  clean-install-windows:
+    runs-on: windows-latest
+    timeout-minutes: 25
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Python 3.11
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Create clean virtual environment
+        shell: pwsh
+        run: |
+          python -m venv .venv
+          .\.venv\Scripts\python.exe -m pip install --upgrade pip
+          .\.venv\Scripts\python.exe -m pip install -r requirements.txt
+
+      - name: Boot Prometheus from clean environment and check /health
+        shell: pwsh
+        run: |
+          $proc = Start-Process -FilePath ".\.venv\Scripts\python.exe" -ArgumentList "prometheus.py","--server" -PassThru
+          try {
+            $ok = $false
+            for ($i = 0; $i -lt 60; $i++) {
+              try {
+                $resp = Invoke-WebRequest -UseBasicParsing -Uri "http://127.0.0.1:8000/health" -TimeoutSec 2
+                if ($resp.StatusCode -eq 200) { $ok = $true; break }
+              } catch {}
+              Start-Sleep -Milliseconds 500
+            }
+            if (-not $ok) { throw "Server never reached healthy state in clean-install test." }
+          } finally {
+            if ($null -ne $proc -and -not $proc.HasExited) {
+              Stop-Process -Id $proc.Id
+            }
+          }
+
+      - name: Run installer smoke tests
+        shell: pwsh
+        run: .\.venv\Scripts\python.exe -m pytest tests/test_installer_smoke.py -q --junitxml=installer-smoke.xml
+
+      - name: Upload clean-install artifacts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: clean-install-artifacts
+          path: |
+            installer-smoke.xml
+            data/prometheus.log

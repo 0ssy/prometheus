@@ -233,11 +233,19 @@ this skeleton first — that's the actual Phase Alpha goal.
 Roadmap changes are made deliberately through RFC updates.
 
 ## Release candidate hardening
-
+ 
 Before beginning major post-omega architecture work, run the RC1 hardening
 checklist:
-
+ 
 - `docs/release/rc1-checklist.md`
+- GitHub Actions automation in `.github/workflows/`:
+ - `ci.yml` (backend tests + frontend typecheck/lint/build)
+ - `windows.yml` / `linux.yml` (OS verification)
+ - `installer.yml` (clean-install smoke path)
+ - `performance.yml` (startup/memory/latency regression gate)
+ - `security.yml` (pip-audit + bandit + dependency review)
+ - `docs.yml` (markdown links + docs entrypoint checks)
+ - `release.yml` (tag-triggered release verification + GitHub Release publish)
 
 ## Gamma Helios knowledge workflow
 

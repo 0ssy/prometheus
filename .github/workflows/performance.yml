@@ -1,0 +1,147 @@
+name: Performance Regression
+
+on:
+  push:
+    branches: ["main"]
+  pull_request:
+  workflow_dispatch:
+  schedule:
+    - cron: "0 6 * * *"
+
+permissions:
+  contents: read
+
+jobs:
+  perf-baseline:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    env:
+      MAX_BOOT_SECONDS: "5.0"
+      MAX_MEMORY_MB: "350"
+      MAX_HEALTH_P95_MS: "300"
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Python 3.11
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: "pip"
+          cache-dependency-path: requirements.txt
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: Measure startup, memory, and /health latency
+        run: |
+          python - <<'PY'
+          import json
+          import os
+          import statistics
+          import subprocess
+          import sys
+          import time
+          from pathlib import Path
+
+          import httpx
+          import psutil
+
+          report_json = Path("performance-report.json")
+          report_md = Path("performance-report.md")
+          proc = subprocess.Popen(
+              [sys.executable, "prometheus.py", "--server"],
+              stdout=subprocess.DEVNULL,
+              stderr=subprocess.DEVNULL,
+          )
+          client = httpx.Client(timeout=2.0)
+          try:
+              start = time.perf_counter()
+              healthy = False
+              for _ in range(120):
+                  try:
+                      r = client.get("http://127.0.0.1:8000/health")
+                      if r.status_code == 200:
+                          healthy = True
+                          break
+                  except Exception:
+                      pass
+                  time.sleep(0.25)
+              if not healthy:
+                  raise RuntimeError("Server did not reach /health in time")
+              boot_seconds = time.perf_counter() - start
+
+              latencies_ms = []
+              for _ in range(30):
+                  t0 = time.perf_counter()
+                  r = client.get("http://127.0.0.1:8000/health")
+                  r.raise_for_status()
+                  latencies_ms.append((time.perf_counter() - t0) * 1000.0)
+                  time.sleep(0.05)
+              p95_ms = statistics.quantiles(latencies_ms, n=100, method="inclusive")[94]
+
+              memory_mb = psutil.Process(proc.pid).memory_info().rss / (1024 * 1024)
+              metrics = {
+                  "boot_seconds": round(boot_seconds, 3),
+                  "memory_mb": round(memory_mb, 2),
+                  "health_latency_p95_ms": round(p95_ms, 2),
+                  "health_latency_avg_ms": round(sum(latencies_ms) / len(latencies_ms), 2),
+              }
+              report_json.write_text(json.dumps(metrics, indent=2), encoding="utf-8")
+              report_md.write_text(
+                  "\n".join(
+                      [
+                          "# Prometheus Performance Report",
+                          "",
+                          f"- Boot Time: **{metrics['boot_seconds']}s**",
+                          f"- Memory Usage: **{metrics['memory_mb']} MB**",
+                          f"- /health latency p95: **{metrics['health_latency_p95_ms']} ms**",
+                          f"- /health latency avg: **{metrics['health_latency_avg_ms']} ms**",
+                      ]
+                  )
+                  + "\n",
+                  encoding="utf-8",
+              )
+
+              failures = []
+              if metrics["boot_seconds"] > float(os.environ["MAX_BOOT_SECONDS"]):
+                  failures.append("boot time regression")
+              if metrics["memory_mb"] > float(os.environ["MAX_MEMORY_MB"]):
+                  failures.append("memory usage regression")
+              if metrics["health_latency_p95_ms"] > float(os.environ["MAX_HEALTH_P95_MS"]):
+                  failures.append("health latency regression")
+              if failures:
+                  raise RuntimeError(" ; ".join(failures))
+          finally:
+              client.close()
+              if proc.poll() is None:
+                  proc.terminate()
+                  try:
+                      proc.wait(timeout=10)
+                  except subprocess.TimeoutExpired:
+                      proc.kill()
+          PY
+
+      - name: Run targeted runtime benchmarks
+        run: |
+          pytest -q \
+            tests/test_knowledge_graph_scaling.py \
+            tests/test_simulation_engine.py \
+            tests/test_plugin_manager.py \
+            --junitxml=perf-targeted-tests.xml
+
+      - name: Upload performance artifacts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: performance-artifacts
+          path: |
+            performance-report.json
+            performance-report.md
+            perf-targeted-tests.xml
+
+      - name: Append performance summary
+        if: always()
+        run: cat performance-report.md >> "$GITHUB_STEP_SUMMARY"

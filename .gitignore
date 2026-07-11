@@ -7,6 +7,7 @@ __pycache__/
 venv/
 src-tauri/target/
 web/dist/
+web/node_modules/
 prometheus_engineering_os.egg-info/
 .pytest_cache/
 .ruff_cache/

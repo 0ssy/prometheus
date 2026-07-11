@@ -1,0 +1,54 @@
+name: Linux Verification
+
+on:
+  push:
+    branches: ["main"]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  verify-linux:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Python 3.11
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: "pip"
+          cache-dependency-path: requirements.txt
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: Run tests on Linux
+        run: pytest --junitxml=pytest-linux.xml
+
+      - name: Verify server health endpoint on Linux
+        run: |
+          python prometheus.py --server > prometheus-linux.log 2>&1 &
+          PID=$!
+          trap "kill $PID || true" EXIT
+          for i in {1..60}; do
+            if curl --silent --show-error --fail http://127.0.0.1:8000/health >/dev/null; then
+              exit 0
+            fi
+            sleep 0.5
+          done
+          echo "Server did not become healthy on Linux."
+          exit 1
+
+      - name: Upload Linux test report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: pytest-linux
+          path: pytest-linux.xml
