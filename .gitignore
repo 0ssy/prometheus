@@ -6,6 +6,8 @@ __pycache__/
 .venv/
 venv/
 src-tauri/target/
+crates/ai-runtime/target/
+crates/ai-runtime/Cargo.lock
 web/dist/
 web/node_modules/
 prometheus_engineering_os.egg-info/
