@@ -13,6 +13,7 @@ import asyncio
 import json
 import os
 import uuid
+from contextlib import asynccontextmanager
 from datetime import datetime, timezone
 from pathlib import Path
 from queue import Queue
@@ -39,8 +40,6 @@ from core.ownership_registry import (
 
 logger = get_logger(__name__)
 
-app = FastAPI(title=config.app_name, version=config.version)
-
 _container: ServiceContainer | None = None
 
 
@@ -52,6 +51,22 @@ def get_container() -> ServiceContainer:
 
 def _heartbeat_job():
     logger.info("Prometheus heartbeat — system alive")
+
+
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    global _container
+    _container = boot(_heartbeat_job)
+    app.state.container = _container
+    logger.info("Backend ready — services available via app.state.container")
+    yield
+
+
+app = FastAPI(
+    title=config.app_name,
+    version=config.version,
+    lifespan=lifespan,
+)
 
 
 def get_platform_service(
@@ -76,14 +91,6 @@ def get_omega_service(
     container: ServiceContainer = Depends(get_container),
 ) -> OmegaService:
     return container.resolve("omega_service", OmegaService)
-
-
-@app.on_event("startup")
-def startup():
-    global _container
-    _container = boot(_heartbeat_job)
-    app.state.container = _container
-    logger.info("Backend ready — services available via app.state.container")
 
 
 from backend.dashboard import mount_dashboard

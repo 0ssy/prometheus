@@ -4,9 +4,9 @@
   "version": "0.6.0",
   "identifier": "os.prometheus.engineering",
   "build": {
-    "beforeDevCommand": "python prometheus.py --server",
+    "beforeDevCommand": "python ../prometheus.py --server",
     "devUrl": "http://localhost:8000/dashboard",
-    "beforeBuildCommand": "cd /d C:\\Users\\josep\\Downloads\\prometheus && npm --prefix web run build && venv\\Scripts\\python.exe scripts\\build_app_exe.py",
+    "beforeBuildCommand": "python ../scripts/pre_tauri_build.py",
     "frontendDist": "http://127.0.0.1:8000/dashboard"
   },
   "app": {

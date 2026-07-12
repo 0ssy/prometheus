@@ -2,10 +2,15 @@
 
 All notable changes to Prometheus are documented in this file.
 
-## [Unreleased] - RC1 Hardening
+## [Unreleased] — RC1 Hardening (target: v1.0.0-rc1)
 
-Stability, crash-recovery, and install/onboarding work that precedes the
+Stability, crash-recovery, and install/onboarding work leading to the
 `v1.0.0-rc1` tag. No new features — only reliability, packaging, and docs.
+
+- Target tag: [`v1.0.0-rc1`](https://github.com/0ssy/prometheus/releases/tag/v1.0.0-rc1)
+  (cut at the final RC1 step — see `docs/release/rc1-checklist.md`)
+- Date stamp: 2026-07-12
+- Known limitations tracked in [`KNOWN_LIMITATIONS.md`](./KNOWN_LIMITATIONS.md)
 
 ### Added
 - Installer smoke test (`tests/test_installer_smoke.py`): verifies a clean

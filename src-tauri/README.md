@@ -23,7 +23,7 @@ cd src-tauri && cargo tauri dev      # opens the native Prometheus window
 ```
 
 `beforeDevCommand` in `tauri.conf.json` also auto-starts the backend
-(`python ../../prometheus.py --server`) when you run `cargo tauri dev`.
+(`python ../prometheus.py --server`) when you run `cargo tauri dev`.
 
 ## Build the installer
 
@@ -62,15 +62,20 @@ executable (`scripts/build_app_exe.py`, via PyInstaller) and bundled as a Tauri
 installed app needs **no system Python** on `PATH`.
 
 The freeze step is wired into the Tauri build: `tauri.conf.json` →
-`beforeBuildCommand` runs `npm run build && ..\venv\Scripts\python.exe
-..\scripts\build_app_exe.py`, which builds the SPA and writes the sidecar to
-`src-tauri/binaries/prometheus-x86_64-pc-windows-msvc.exe` (the target-triple
-suffix Tauri requires for an `externalBin` sidecar).
+`beforeBuildCommand` runs `python ../scripts/pre_tauri_build.py`, which builds
+the SPA and locates the project Python (preferring `venv`) to write the
+sidecar to `src-tauri/binaries/prometheus-x86_64-pc-windows-msvc.exe` (the
+target-triple suffix Tauri requires for an `externalBin` sidecar). The
+`pre_tauri_build.py` helper resolves the interpreter cross-platform so the same
+`beforeBuildCommand` works on Windows and Unix CI hosts.
 
-> Build prerequisites on the host: Rust ≥ 1.77, Node 18+, Python 3.11+ on
-> `PATH`, Microsoft WebView2 (preinstalled on Windows 10/11), **NSIS**
-> (`makensis` on `PATH`) for the `nsis` bundle target, and a `venv` with
-> `pyinstaller` installed (created once: `python -m venv venv && pip install
-> -r requirements.txt pyinstaller`). The full `cargo tauri build` has been
+> **Windows-only packaging.** The installed bundle target is `nsis`
+> (`tauri.conf.json` → `bundle.targets`), which is Windows-only. Building the
+> installer therefore requires a Windows host with Rust ≥ 1.77, Node 18+,
+> Python 3.11+ on `PATH`, Microsoft WebView2 (preinstalled on Windows
+> 10/11), **NSIS** (`makensis` on `PATH`), and a `venv` with `pyinstaller`
+> installed (created once: `python -m venv venv && pip install -r
+> requirements.txt pyinstaller`). The full `cargo tauri build` has been
 > verified end-to-end and produces
-> `target/release/bundle/nsis/Prometheus_0.6.0_x64-setup.exe`.
+> `target/release/bundle/nsis/Prometheus_0.6.0_x64-setup.exe`. Linux (AppImage)
+> and macOS (dmg) desktop packaging are deferred post-RC1.

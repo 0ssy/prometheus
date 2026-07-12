@@ -31,6 +31,21 @@ jobs:
       - name: Run backend tests
         run: pytest --junitxml=pytest-report.xml
 
+      - name: Verify server health endpoint
+        run: |
+          python prometheus.py --server > prometheus-ci.log 2>&1 &
+          PID=$!
+          trap "kill $PID || true" EXIT
+          for i in $(seq 1 60); do
+            if curl --silent --show-error --fail http://127.0.0.1:8000/health >/dev/null; then
+              exit 0
+            fi
+            sleep 0.5
+          done
+          echo "Server did not become healthy in CI."
+          cat prometheus-ci.log
+          exit 1
+
       - name: Set up Node 20
         uses: actions/setup-node@v4
         with:
