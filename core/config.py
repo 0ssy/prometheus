@@ -13,7 +13,7 @@ from dataclasses import dataclass, field
 @dataclass
 class PrometheusConfig:
     app_name: str = "Prometheus"
-    version: str = "0.6.0-omega"
+    version: str = "1.0.0-rc1"
 
     # Storage
     db_path: str = field(
@@ -45,6 +45,19 @@ class PrometheusConfig:
         default_factory=lambda: os.environ.get(
             "PROMETHEUS_PLUGINS_DIR", "./plugins/installed"
         )
+    )
+
+    # LLM / Assistant
+    llm_base_url: str = field(
+        default_factory=lambda: os.environ.get(
+            "PROMETHEUS_LLM_BASE_URL", "http://localhost:1234/v1"
+        )
+    )
+    llm_model: str = field(
+        default_factory=lambda: os.environ.get("PROMETHEUS_LLM_MODEL", "local-model")
+    )
+    llm_api_key: str = field(
+        default_factory=lambda: os.environ.get("PROMETHEUS_LLM_API_KEY", "")
     )
 
 

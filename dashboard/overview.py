@@ -3,6 +3,7 @@ from __future__ import annotations
 from dataclasses import dataclass, field
 from typing import Any
 
+from core.config import config
 from core.logger import get_logger
 
 logger = get_logger(__name__)
@@ -42,7 +43,7 @@ class OverviewDashboard:
         logger.debug("Computing platform overview")
         return PlatformOverview(
             platform_name="Prometheus",
-            version="0.9.0",
+            version=config.version,
             uptime_seconds=self._uptime_seconds(),
             status="operational",
             total_devices=0,

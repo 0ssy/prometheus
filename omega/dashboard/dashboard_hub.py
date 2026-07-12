@@ -4,6 +4,7 @@ from dataclasses import dataclass, field, asdict
 from datetime import datetime, timezone
 from typing import Any
 
+from core.config import config
 from core.logger import get_logger
 
 logger = get_logger(__name__)
@@ -30,7 +31,7 @@ class OverviewDashboard:
     def get_overview(self) -> PlatformOverview:
         return PlatformOverview(
             platform_name="Prometheus",
-            version="0.5.0-epsilon",
+            version=config.version,
             uptime_seconds=0.0,
             status="ok",
             total_devices=0,

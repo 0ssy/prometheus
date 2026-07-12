@@ -35,12 +35,12 @@ export class BootSequence {
   private progressFill: HTMLElement;
   private timerEl: HTMLElement;
   private summaryEl: HTMLElement;
-  private version = "0.6.0";
+  private version = "1.0.0-rc1";
   private startTime = 0;
   private timerHandle = 0;
   private stageTimings: Record<string, number> = {};
   private data: SystemData = {
-    version: "0.6.0",
+    version: "1.0.0-rc1",
     services: 0,
     plugins: 0,
     agents: 0,
