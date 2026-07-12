@@ -36,10 +36,12 @@ if _REPO_ROOT not in sys.path:
     sys.path.insert(0, _REPO_ROOT)
 
 from core.bootstrap import boot
+from core.commands import dispatch_command
 from core.config import config
 from core.container import ServiceContainer
-from core.database import SessionLocal
+from core.database import SessionLocal, create_engine, sessionmaker
 from core.logger import get_logger
+from services.llm_client import LLMClient
 from services.platform_service import PlatformService
 
 
@@ -219,12 +221,22 @@ def run_status() -> int:
         container.get("scheduler").stop()
 
 
-def run_demo() -> dict:
+def run_demo(db_path: str | None = None) -> dict:
     logger.info("=== HAPPY PATH START ===")
     container = boot(_heartbeat_job)
 
+    if db_path:
+        engine = create_engine(
+            f"sqlite:///{db_path}",
+            connect_args={"check_same_thread": False},
+        )
+        SessionFactory = sessionmaker(autocommit=False, autoflush=False, bind=engine)
+    else:
+        engine = None
+        SessionFactory = SessionLocal
+
     try:
-        with SessionLocal() as db:
+        with SessionFactory() as db:
             _run_plugin(container, db)
             _run_agent(container, db)
             _create_device(container, db)
@@ -232,8 +244,11 @@ def run_demo() -> dict:
             _query_knowledge_graph(container, db)
             _build_twin(container, db)
             report = _generate_report(container, db)
+            report["db_path"] = db_path or str(config.db_path)
     finally:
         container.get("scheduler").stop()
+        if engine is not None:
+            engine.dispose()
 
     logger.info("=== HAPPY PATH COMPLETE ===")
     return report
@@ -432,70 +447,11 @@ def run_terminal() -> None:
 
 
 def _terminal_command(container, platform, raw: str) -> None:
-    parts = raw.split()
-    cmd = parts[0].lower()
     try:
-        if cmd == "help":
-            print(
-                "commands: status | connect <device> | list devices|agents|plugins "
-                "| run simulation <device> | search <query> | build digital-twin <device> "
-                "| open <app> | exit"
-            )
-        elif cmd == "status":
-            with SessionLocal() as db:
-                snapshot = _status_snapshot(container, db)
-            _print_banner(snapshot)
-        elif cmd == "connect" and len(parts) >= 2:
-            device_id = parts[1]
-            result = platform.register_simulated_device(device_id=device_id)
-            print(f"connected {device_id} ({result.get('transport')})")
-        elif cmd == "list":
-            _terminal_list(container, platform, parts[1] if len(parts) > 1 else "")
-        elif cmd == "run" and len(parts) >= 3 and parts[1] == "simulation":
-            device_id = parts[2]
-            engine = container.get("simulation_engine")
-            result = engine.simulate(device_id, {}, "disconnect")
-            print(f"simulation {device_id}: risk={result.get('risk')} "
-                  f"recovered={result.get('recovered')}")
-        elif cmd == "search" and len(parts) >= 2:
-            query = " ".join(parts[1:])
-            with SessionLocal() as db:
-                facts = platform.get_facts(db, subject=query)
-            if facts:
-                for f in facts:
-                    print(f"  {f.subject} {f.predicate} {f.object}")
-            else:
-                print(f"no facts matching '{query}'")
-        elif cmd == "build" and len(parts) >= 3 and parts[1] == "digital-twin":
-            from digital_twin.twin import build_twin
-
-            device_id = parts[2]
-            with SessionLocal() as db:
-                twin = build_twin(db, device_id, device_api=container.get("device_api"))
-            print(f"digital twin {device_id}: state={twin.state} health={twin.health}")
-        elif cmd == "open":
-            print("'open' launches a desktop application — available in desktop mode "
-                  "(run `prometheus` without --terminal).")
-        else:
-            print("unrecognized command. type 'help'.")
+        response = dispatch_command(raw=raw, platform=platform, container=container)
+        print(response)
     except Exception as exc:  # noqa: BLE001
         print(f"error: {exc}")
-
-
-def _terminal_list(container, platform, what: str) -> None:
-    if what == "devices":
-        for d in platform.list_devices():
-            print(f"  - {d.get('device_id')} ({d.get('transport')})")
-    elif what == "agents":
-        agent_api = container.get("agent_api")
-        for a in agent_api.list_agents():
-            print(f"  - {a}")
-    elif what == "plugins":
-        plugin_api = container.get("plugin_api")
-        for p in plugin_api.list_plugins():
-            print(f"  - {p}")
-    else:
-        print("list what? try: devices | agents | plugins")
 
 
 def main() -> int:
@@ -523,8 +479,15 @@ def main() -> int:
     sub = parser.add_subparsers(dest="command")
 
     sub.add_parser("status", help="print branded platform status banner")
-    sub.add_parser("demo", help="run happy-path demo")
+    demo_parser = sub.add_parser("demo", help="run happy-path demo")
+    demo_parser.add_argument("--db", default=None, help="override database path (empty for ephemeral in-memory)")
     install_parser = sub.add_parser("install", help="install an SDK package (robotics/android/cad/vision/drone)")
+    install_parser.add_argument("package", help="SDK package name to install")
+    sub.add_parser("extensions", help="list installed SDK packages")
+    test_parser = sub.add_parser("test", help="run pytest suite")
+    test_parser.add_argument("--file", default=None, help="optional test file/directory")
+
+    args = parser.parse_args()
     install_parser.add_argument("package", help="SDK package name to install")
     sub.add_parser("extensions", help="list installed SDK packages")
     test_parser = sub.add_parser("test", help="run pytest suite")
@@ -556,7 +519,7 @@ def main() -> int:
     if args.command == "status":
         return run_status()
     if args.command == "demo":
-        run_demo()
+        run_demo(db_path=args.db)
         return 0
     if args.command == "test":
         return run_tests(args.file)

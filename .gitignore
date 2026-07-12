@@ -1,7 +1,5 @@
 __pycache__/
 *.py[cod]
-*.db
-*.log
 .env
 .venv/
 venv/
@@ -17,3 +15,8 @@ src-tauri/binaries/
 dist/
 build/
 *.spec
+
+# --- Runtime data (never track) ---
+data/prometheus.db
+data/prometheus.log
+data/prometheus.db.corrupted.*

@@ -57,7 +57,7 @@ export function mountSettings(el: HTMLElement) {
       api.coreStatus().catch(() => ({}) as any),
       api.hardware().catch(() => ({}) as any),
     ]).then(([health, status, plugins, memory, core, hardware]: any[]) => {
-      snap.version = health?.version ?? status?.version ?? "0.6.0-omega";
+      snap.version = health?.version ?? status?.version ?? "1.0.0-rc1";
       snap.status = status;
       snap.health = health;
       snap.plugins = plugins?.plugins ?? [];

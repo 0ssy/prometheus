@@ -27,7 +27,9 @@ from core.logger import get_logger
 from core.database import get_db
 from core.bootstrap import boot
 from core.container import ServiceContainer
+from core.commands import _status_snapshot, dispatch_command
 from services.platform_service import PlatformService
+from services.llm_client import LLMClient
 from services.delta_service import DeltaService
 from services.epsilon_service import EpsilonService
 from services.omega_service import OmegaService
@@ -112,55 +114,6 @@ def health(container: ServiceContainer = Depends(get_container)):
         "agents_loaded": agent_api.list_agents(),
         "capabilities_registered": len(capability_api.discover()),
         "kernel_health": kernel.health(),
-    }
-
-
-def _status_snapshot(container: ServiceContainer, db) -> dict:
-    from sqlalchemy import func
-    from knowledge.node import KnowledgeNode
-    from memory.models import MemoryEntry
-    from reasoning.models import KnowledgeFact
-
-    kernel = container.get("kernel")
-    knowledge_engine = container.get("knowledge_engine")
-    reasoning_api = container.get("reasoning_api")
-    device_api = container.get("device_api")
-    plugin_api = container.get("plugin_api")
-    agent_api = container.get("agent_api")
-    capability_api = container.get("capability_api")
-
-    kernel_status = "Running" if kernel.health().get("status") == "ok" else "Stopped"
-
-    knowledge_node_count = db.query(func.count(KnowledgeNode.id)).scalar()
-    knowledge_status = "Healthy" if (knowledge_engine is not None and int(knowledge_node_count or 0) > 0) else "Idle"
-
-    simulation_status = "Idle"
-
-    reasoning_status = "Healthy" if reasoning_api is not None else "Idle"
-
-    devices = device_api.list() if device_api is not None else []
-    hardware_hal = container.get("hardware_hal")
-    hardware_status = "Active" if (hardware_hal is not None and len(devices) > 0) else "Idle"
-
-    agents = container.get("agent_api")
-    agent_count = len(agents.list_agents()) if agents is not None else 0
-
-    agent_statuses = []
-    if agents is not None and hasattr(agents, "list_agent_statuses"):
-        agent_statuses = agents.list_agent_statuses()
-
-    return {
-        "kernel": kernel_status,
-        "knowledge": knowledge_status,
-        "simulation": simulation_status,
-        "reasoning": reasoning_status,
-        "hardware": hardware_status,
-        "devices": len(devices),
-        "agents": agent_count,
-        "agent_statuses": agent_statuses,
-        "plugins": len(plugin_api.list_plugins()) if plugin_api is not None else 0,
-        "capabilities": len(capability_api.discover()) if capability_api is not None else 0,
-        "knowledge_facts": int(db.query(func.count(KnowledgeFact.id)).scalar() or 0),
     }
 
 
@@ -1254,48 +1207,55 @@ def hardware_snapshot(
 
 
 # ---------------------------------------------------------------------------
-# Assistant
+# Assistant — LLM-backed conversational assistant
 # ---------------------------------------------------------------------------
 
 
 @app.post("/assistant")
 def assistant_query(
     payload: dict,
-    db: Session = Depends(get_db),
     container: ServiceContainer = Depends(get_container),
 ):
     prompt = payload.get("prompt", "")
     if not prompt:
         raise RuntimeError("prompt is required")
-    prompt_lower = prompt.lower().strip()
-    platform = container.resolve("platform_service", PlatformService)
 
-    if prompt_lower.startswith("dispatch "):
-        parts = prompt_lower.split(" ", 2)
-        agent_name = parts[1] if len(parts) > 1 else "echo"
-        task = {"description": parts[2]} if len(parts) > 2 else {"description": "assistant task"}
-        try:
-            result = platform.dispatch_agent(db=db, agent_name=agent_name, task=task)
-            return {"response": str(result)}
-        except Exception as e:
-            return {"response": f"Dispatch failed: {e}"}
-
-    if prompt_lower == "help":
+    llm = LLMClient()
+    if not llm.is_configured():
         return {
-            "response": "Available commands: help, dispatch <agent> <task>, show devices, show agents, show kernel, status"
+            "response": "No language model configured. Set PROMETHEUS_LLM_* env vars or run with an OpenAI-compatible provider (e.g. LM Studio)."
         }
-    if prompt_lower == "show devices":
-        return {"response": platform.list_devices()}
-    if prompt_lower == "show agents":
-        agent_api = container.get("agent_api")
-        return {"response": agent_api.list_agents()}
-    if prompt_lower == "show kernel":
-        kernel = container.get("kernel")
-        return {"response": kernel.status()}
-    if prompt_lower == "status":
-        return {"response": _status_snapshot(container, db)}
 
-    return {"response": f"Processed: {prompt}"}
+    system_prompt = (
+        "You are Prometheus — an engineering intelligence OS assistant. "
+        "You help with platform operations, analysis, and engineering workflows. "
+        "Be concise and technical."
+    )
+    try:
+        response = llm.chat(system=system_prompt, user=prompt)
+        return {"response": response}
+    except Exception as exc:
+        logger.exception("Assistant LLM request failed")
+        return {"response": f"Assistant error: {exc}"}
+
+
+# ---------------------------------------------------------------------------
+# Commands — deterministic command console (terminal grammar)
+# ---------------------------------------------------------------------------
+
+
+@app.post("/commands")
+def commands_endpoint(
+    payload: dict,
+    db: Session = Depends(get_db),
+    container: ServiceContainer = Depends(get_container),
+):
+    raw = payload.get("command", "")
+    if not raw:
+        raise RuntimeError("command is required")
+    platform = container.resolve("platform_service", PlatformService)
+    response = dispatch_command(raw=raw, platform=platform, container=container, db=db)
+    return {"response": response}
 
 
 # ---------------------------------------------------------------------------
