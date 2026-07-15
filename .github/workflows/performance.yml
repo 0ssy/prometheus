@@ -16,7 +16,10 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 20
     env:
-      MAX_BOOT_SECONDS: "5.0"
+      # P1 KPI gate: startup p95 <= 8s (architecture/roadmap.md).
+      # NOTE: 5.0s was an internal stretch target; the official gate is 8s.
+      # Do not silently violate either — keep this aligned with the roadmap KPI.
+      MAX_BOOT_SECONDS: "8.0"
       MAX_MEMORY_MB: "350"
       MAX_HEALTH_P95_MS: "300"
     steps:

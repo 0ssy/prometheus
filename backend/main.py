@@ -63,6 +63,12 @@ async def lifespan(app: FastAPI):
     app.state.container = _container
     logger.info("Backend ready — services available via app.state.container")
     yield
+    # P1 baseline observability: snapshot counters to the metrics table on
+    # graceful shutdown so they survive restarts.
+    try:
+        _container.get("observability").snapshot_to_db()
+    except Exception:
+        logger.exception("Failed to snapshot observability on shutdown")
 
 
 app = FastAPI(
@@ -109,8 +115,10 @@ def get_titan_service(
 
 
 from backend.dashboard import mount_dashboard
+from backend.phase_endpoints import phase_router
 
 mount_dashboard(app)
+app.include_router(phase_router)
 
 
 @app.get("/health")
@@ -290,7 +298,7 @@ def core_status(container: ServiceContainer = Depends(get_container)):
 def observability_snapshot(container: ServiceContainer = Depends(get_container), db: Session = Depends(get_db)):
     observability = container.get("observability")
     status = _status_snapshot(container, db)
-    return observability.snapshot(status=status)
+    return observability.snapshot(status=status, db_session=db)
 
 
 @app.get("/workflows")

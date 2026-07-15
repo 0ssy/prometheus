@@ -5,9 +5,28 @@ from collections import defaultdict
 from datetime import datetime, timezone
 from typing import Any
 
+from sqlalchemy import Column, String, Integer, DateTime
+from sqlalchemy.orm import Session
+
+from core.database import Base
+from core.logger import get_logger
+
+logger = get_logger(__name__)
+
 
 def _utc_now() -> datetime:
     return datetime.now(timezone.utc)
+
+
+class Metric(Base):
+    """Durable counter snapshot. Upserted on shutdown so counters
+    survive restarts (P1 baseline observability requirement)."""
+
+    __tablename__ = "metrics"
+
+    name = Column(String, primary_key=True)
+    value = Column(Integer, default=0, nullable=False)
+    updated_at = Column(DateTime, default=lambda: datetime.now(timezone.utc))
 
 
 class ObservabilityStore:
@@ -53,7 +72,11 @@ class ObservabilityStore:
             return 0.0
         return len(timestamps) / span
 
-    def snapshot(self, status: dict[str, Any] | None = None) -> dict[str, Any]:
+    def snapshot(
+        self,
+        status: dict[str, Any] | None = None,
+        db_session: Session | None = None,
+    ) -> dict[str, Any]:
         subsystems = {}
         if status:
             for key in (
@@ -70,7 +93,7 @@ class ObservabilityStore:
                 "storage",
             ):
                 subsystems[key] = status.get(key, "Idle")
-        return {
+        result: dict[str, Any] = {
             "metrics": dict(self._metrics),
             "traces": list(self._traces),
             "event_history": list(self._event_history),
@@ -78,3 +101,35 @@ class ObservabilityStore:
             "commands_per_sec": round(self._rate_per_sec(list(self._command_timestamps)), 2),
             "subsystems": subsystems,
         }
+        if db_session is not None:
+            result["persisted_metrics"] = self.load_persisted(db_session)
+        return result
+
+    def persist_metrics(self, session: Session) -> None:
+        """Upsert the current in-memory counters into the ``metrics`` table."""
+        now = _utc_now()
+        for name, value in self._metrics.items():
+            row = session.get(Metric, name)
+            if row is None:
+                session.add(Metric(name=name, value=value, updated_at=now))
+            else:
+                row.value = value
+                row.updated_at = now
+        session.commit()
+
+    def load_persisted(self, session: Session) -> dict[str, int]:
+        """Read the last persisted counter snapshot from the DB."""
+        return {m.name: m.value for m in session.query(Metric).all()}
+
+    def snapshot_to_db(self, session_factory=None) -> None:
+        """Best-effort persistence of counters on shutdown. Degrades
+        silently if the database is unavailable (e.g. unit tests)."""
+        if session_factory is None:
+            from core.database import SessionLocal
+
+            session_factory = SessionLocal
+        try:
+            with session_factory() as session:
+                self.persist_metrics(session)
+        except Exception:
+            logger.exception("Failed to persist observability metrics")

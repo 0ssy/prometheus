@@ -44,6 +44,18 @@ jobs:
           echo "bandit_exit=$BANDIT_EXIT" >> "$GITHUB_OUTPUT"
           exit 0
 
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: Run npm audit (frontend SBOM)
+        if: always()
+        working-directory: web
+        run: |
+          set +e
+          npm audit --json > ../npm-audit.json || true
+
       - name: Upload security reports
         if: always()
         uses: actions/upload-artifact@v4
@@ -52,6 +64,7 @@ jobs:
           path: |
             pip-audit.json
             bandit.json
+            npm-audit.json
 
       - name: Fail when security findings exist
         if: steps.scan.outputs.pip_audit_exit != '0' || steps.scan.outputs.bandit_exit != '0'

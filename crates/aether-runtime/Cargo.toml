@@ -1,0 +1,22 @@
+[package]
+name = "aether-runtime"
+version = "0.1.0"
+description = "P3 Aether AI Runtime — providers, routing, tool dispatch, context (Rust)"
+edition = "2021"
+rust-version = "1.77"
+license = "MIT"
+
+[dependencies]
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+thiserror = "1"
+
+[dependencies.pyo3]
+version = "0.21"
+optional = true
+
+[features]
+default = []
+python = ["pyo3"]
+
+[dev-dependencies]

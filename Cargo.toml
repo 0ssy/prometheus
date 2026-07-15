@@ -1,0 +1,12 @@
+[workspace]
+resolver = "2"
+members = [
+    "crates/hal-core",
+    "crates/aether-runtime",
+    "crates/tensor-engine",
+    "crates/ai-runtime",
+    "crates/titan-tokenizer",
+]
+# src-tauri is excluded: it pulls Tauri/WebView2/NSIS host deps and is
+# built separately via `cargo tauri build` (see src-tauri/README.md).
+exclude = ["src-tauri"]
