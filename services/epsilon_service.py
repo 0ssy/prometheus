@@ -39,12 +39,12 @@ class EpsilonService:
         knowledge_engine=None,
     ):
         self._device_api = device_api
-        self._hal = EpsilonHAL()
+        self._authorizer = Authorizer(registry=default_registry)
+        self._hal = EpsilonHAL(authorizer=self._authorizer)
         self._session_manager = DeviceSessionManager()
         self._diagnostics = EpsilonDiagnostics(event_bus=event_bus, knowledge_engine=knowledge_engine)
         self._recovery = EpsilonRecoveryPlanner(event_bus=event_bus, knowledge_engine=knowledge_engine)
         self._firmware = EpsilonFirmwareIntelligence()
-        self._authorizer = Authorizer(registry=default_registry)
         self._audit = AuditLogger()
         self._integrity = IntegrityVerifier()
         self._delta_service = delta_service
@@ -66,9 +66,9 @@ class EpsilonService:
             self._audit.record(actor, "device.connect", device_id, "denied", {"reason": auth.reason})
             raise RuntimeError(f"Authorization denied: {auth.reason}")
 
-        driver_cls = self._hal.get_interface(driver_name)
-        driver = driver_cls(name=device_id)
+        driver = self._hal.instantiate_driver(driver_name)
         result = driver.connect()
+        self._hal.store_driver(device_id, driver)
         session = self._session_manager.create_session(
             device_id=device_id,
             driver_name=driver_name,
@@ -86,6 +86,14 @@ class EpsilonService:
             self._audit.record(actor, "device.disconnect", device_id, "denied", {"reason": auth.reason})
             raise RuntimeError(f"Authorization denied: {auth.reason}")
 
+        driver = self._hal.get_driver(device_id)
+        if driver is not None:
+            try:
+                driver.disconnect()
+            except Exception:
+                pass
+            self._hal.remove_driver(device_id)
+
         sessions = [s for s in self._session_manager.list_sessions() if s.device_id == device_id]
         for session in sessions:
             self._session_manager.close_session(session.session_id)
@@ -95,10 +103,14 @@ class EpsilonService:
         return {"device_id": device_id, "disconnected": len(sessions) > 0}
 
     def diagnostics(self, device_id: str) -> dict:
-        device = self._device_api.get(device_id)
-        if device is None:
-            raise RuntimeError(f"No such device: {device_id}")
-        status = device.status()
+        driver = self._hal.get_driver(device_id)
+        if driver is not None:
+            status = driver.diagnostics()
+        else:
+            device = self._device_api.get(device_id)
+            if device is None:
+                raise RuntimeError(f"No such device: {device_id}")
+            status = device.status()
         snapshot = {
             "battery_health": status.get("battery_health", 1.0),
             "storage_health": status.get("storage_health", 1.0),
@@ -118,13 +130,8 @@ class EpsilonService:
 
     def recovery_plan(self, device_id: str, risk: str = "high") -> dict:
         device = self._device_api.get(device_id)
-        if device is None:
-            raise RuntimeError(f"No such device: {device_id}")
-        plan = self._recovery.plan(
-            device_id=device_id,
-            risk=risk,
-            ownership_declared=bool(device.ownership_declared),
-        )
+        ownership_declared = getattr(device, "ownership_declared", False) if device else False
+        plan = self._recovery.plan(device_id, risk=risk, ownership_declared=ownership_declared)
         if self._delta_service is not None and self._session_factory is not None:
             try:
                 twin = self._delta_service.build_twin(device_id)
@@ -134,14 +141,16 @@ class EpsilonService:
         return plan
 
     def full_diagnostics(self, device_id: str) -> dict:
-        device = self._device_api.get(device_id)
-        if device is None:
-            raise RuntimeError(f"No such device: {device_id}")
+        driver = self._hal.get_driver(device_id)
         sessions = [s for s in self._session_manager.list_sessions() if s.device_id == device_id]
         if not sessions:
             return {"error": "no active session", "device_id": device_id}
         session = sessions[0]
         report = self._diagnostics.full_report(session)
+        if driver is not None:
+            report["driver"] = driver.name
+        else:
+            report["driver"] = session.driver_name
         return report
 
     def firmware_parse(self, data: bytes) -> dict[str, Any]:

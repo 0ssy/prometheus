@@ -107,3 +107,55 @@ class HardwareRecovery:
                 }
             )
         return options
+
+    def backup(self, session: DeviceSession) -> dict[str, Any]:
+        """Backup device state before recovery.
+
+        Args:
+            session: The device session to backup.
+
+        Returns:
+            Backup metadata dictionary.
+        """
+        logger.info(f"Backup planned for {session.device_id}")
+        return {
+            "session_id": session.session_id,
+            "device_id": session.device_id,
+            "status": "backup_ready",
+            "backup_id": f"backup-{session.session_id}",
+        }
+
+    def restore(self, session: DeviceSession, backup_data: dict[str, Any]) -> dict[str, Any]:
+        """Restore device state from backup.
+
+        Args:
+            session: The device session to restore.
+            backup_data: Previously captured backup metadata.
+
+        Returns:
+            Restore result dictionary.
+        """
+        logger.info(f"Restore planned for {session.device_id}")
+        return {
+            "session_id": session.session_id,
+            "device_id": session.device_id,
+            "status": "restore_ready",
+            "backup_id": backup_data.get("backup_id"),
+        }
+
+    def factory_reset(self, session: DeviceSession) -> dict[str, Any]:
+        """Perform factory reset on the device.
+
+        Args:
+            session: The device session to reset.
+
+        Returns:
+            Factory reset result dictionary.
+        """
+        logger.info(f"Factory reset planned for {session.device_id}")
+        return {
+            "session_id": session.session_id,
+            "device_id": session.device_id,
+            "status": "factory_reset_ready",
+            "requires_approval": True,
+        }

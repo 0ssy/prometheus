@@ -10,6 +10,58 @@ from hardware.drivers.adb import ADBDriver
 from hardware.drivers.fastboot import FastbootDriver
 from hardware.drivers.network import NetworkDriver
 from hardware.drivers.virtual import VirtualDriver
+from hardware.drivers.serial import SerialDriver
+from hardware.drivers.bus import (
+    I2CDriver,
+    SPIDriver,
+    CANDriver,
+    LINDriver,
+    GPIODriver,
+    JTAGDriver,
+    SWDDriver,
+)
+from hardware.drivers.pcie import (
+    PCIeDriver,
+    SATADriver,
+    NVMeDriver,
+    SDDriver,
+    MicroSDDriver,
+)
+from hardware.drivers.iot_protocol import (
+    MQTTDriver,
+    ModbusDriver,
+    OPCUADriver,
+    BACnetDriver,
+)
+from hardware.drivers.mobile import ADBDriver, FastbootDriver
+from hardware.drivers.audio import I2SDriver, AudioJackDriver, MIDIDriver
+from hardware.drivers.video import (
+    MIPIDriver,
+    CSIDriver,
+    DSIDriver,
+    HDMIDriver,
+    DisplayPortDriver,
+)
+from hardware.drivers.nfc_rfid import NFCDriver, RFIDDriver
+from hardware.drivers.recovery import (
+    AndroidRecoveryDriver,
+    EDLDriver,
+    OdinDriver,
+    DFUDriver,
+    BIOSDriver,
+    UEFIDriver,
+    TPMDriver,
+    RouterDriver,
+    IoTDriver,
+    DroneDriver,
+    VehicleDriver,
+    ECUDriver,
+    EEPROMDriver,
+    NANDDriver,
+    NORDriver,
+    SPIFlashDriver,
+    EmbeddedLinuxDriver,
+)
 from hardware.session import DeviceSession, DeviceSessionManager
 from hardware.diagnostics import HardwareDiagnostics
 from hardware.recovery import HardwareRecovery
@@ -35,6 +87,50 @@ __all__ = [
     "FastbootDriver",
     "NetworkDriver",
     "VirtualDriver",
+    "SerialDriver",
+    "I2CDriver",
+    "SPIDriver",
+    "CANDriver",
+    "LINDriver",
+    "GPIODriver",
+    "JTAGDriver",
+    "SWDDriver",
+    "PCIeDriver",
+    "SATADriver",
+    "NVMeDriver",
+    "SDDriver",
+    "MicroSDDriver",
+    "MQTTDriver",
+    "ModbusDriver",
+    "OPCUADriver",
+    "BACnetDriver",
+    "I2SDriver",
+    "AudioJackDriver",
+    "MIDIDriver",
+    "MIPIDriver",
+    "CSIDriver",
+    "DSIDriver",
+    "HDMIDriver",
+    "DisplayPortDriver",
+    "NFCDriver",
+    "RFIDDriver",
+    "AndroidRecoveryDriver",
+    "EDLDriver",
+    "OdinDriver",
+    "DFUDriver",
+    "BIOSDriver",
+    "UEFIDriver",
+    "TPMDriver",
+    "RouterDriver",
+    "IoTDriver",
+    "DroneDriver",
+    "VehicleDriver",
+    "ECUDriver",
+    "EEPROMDriver",
+    "NANDDriver",
+    "NORDriver",
+    "SPIFlashDriver",
+    "EmbeddedLinuxDriver",
     "DeviceSession",
     "DeviceSessionManager",
     "HardwareDiagnostics",

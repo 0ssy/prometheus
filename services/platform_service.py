@@ -13,6 +13,7 @@ from contracts.plugin import PluginApi
 from contracts.reasoning import ReasoningApi
 from core.logger import get_logger
 from core.observability import ObservabilityStore
+from security.authorization import Authorizer
 from api.events import DeviceConnectionFailedEvent, DeviceWriteEvent
 from knowledge.engine import KnowledgeEngine
 from reasoning.pipeline import ReasoningPipeline
@@ -37,6 +38,7 @@ class PlatformService:
         simulation_engine: SimulationEngine | None = None,
         reasoning_pipeline: ReasoningPipeline | None = None,
         observability: ObservabilityStore | None = None,
+        authorizer: Authorizer | None = None,
     ):
         self._plugin_api = plugin_api
         self._agent_api = agent_api
@@ -50,6 +52,7 @@ class PlatformService:
         self._simulation_engine = simulation_engine or SimulationEngine()
         self._reasoning_pipeline = reasoning_pipeline or ReasoningPipeline()
         self._observability = observability
+        self._authorizer = authorizer
 
     def run_plugin(self, db: Session, plugin_name: str, payload: dict[str, Any]) -> dict[str, Any]:
         self._trace("plugin.run", {"plugin_name": plugin_name})
@@ -90,6 +93,16 @@ class PlatformService:
     ) -> dict[str, Any]:
         from devices.simulated import SimulatedDevice
 
+        if self._authorizer is not None:
+            result = self._authorizer.authorize(
+                actor="system",
+                action="device.connect",
+                resource=device_id,
+                permissions={"device.connect"},
+            )
+            if not result.allowed:
+                raise PermissionError(result.reason)
+
         device = SimulatedDevice(
             device_id=device_id,
             ownership_declared=ownership_declared,
@@ -111,6 +124,16 @@ class PlatformService:
         ownership_declared: bool = False,
     ) -> dict[str, Any]:
         from devices.serial_device import SerialDevice
+
+        if self._authorizer is not None:
+            result = self._authorizer.authorize(
+                actor="system",
+                action="device.connect",
+                resource=device_id,
+                permissions={"device.connect"},
+            )
+            if not result.allowed:
+                raise PermissionError(result.reason)
 
         device = SerialDevice(
             device_id=device_id,
@@ -141,6 +164,15 @@ class PlatformService:
         device = self._device_api.get(device_id)
         if device is None:
             raise RuntimeError(f"No such device: {device_id}")
+        if self._authorizer is not None:
+            result = self._authorizer.authorize(
+                actor="system",
+                action="device.write",
+                resource=device_id,
+                permissions={"device.write"},
+            )
+            if not result.allowed:
+                raise PermissionError(result.reason)
         device.write(value)
         self._event_bus.publish(DeviceWriteEvent(device_id=device_id, value=str(value)))
         self._trace("device.write", {"device_id": device_id})
@@ -150,6 +182,15 @@ class PlatformService:
         device = self._device_api.get(device_id)
         if device is None:
             raise RuntimeError(f"No such device: {device_id}")
+        if self._authorizer is not None:
+            result = self._authorizer.authorize(
+                actor="system",
+                action="device.disconnect",
+                resource=device_id,
+                permissions={"device.disconnect"},
+            )
+            if not result.allowed:
+                raise PermissionError(result.reason)
         device.disconnect()
         self._device_api.unregister(device_id)
         self._trace("device.disconnect", {"device_id": device_id})
@@ -295,21 +336,21 @@ class PlatformService:
             target=f"device:{device_id}",
             description="Connect to device",
             permissions={"device.connect"},
-            executor=lambda _: self._device_action(device_id, "connect"),
+            executor=lambda _: self._device_action(device_id, "connect", actor="system", permissions={"device.connect"}),
         )
         self._register_capability_if_missing(
             name=f"{prefix}.disconnect",
             target=f"device:{device_id}",
             description="Disconnect from device",
             permissions={"device.disconnect"},
-            executor=lambda _: self._device_action(device_id, "disconnect"),
+            executor=lambda _: self._device_action(device_id, "disconnect", actor="system", permissions={"device.disconnect"}),
         )
         self._register_capability_if_missing(
             name=f"{prefix}.read",
             target=f"device:{device_id}",
             description="Read current value from device",
             permissions={"device.read"},
-            executor=lambda _: {"value": self._device_action(device_id, "read")},
+            executor=lambda _: {"value": self._device_action(device_id, "read", actor="system", permissions={"device.read"})},
         )
         self._register_capability_if_missing(
             name=f"{prefix}.write",
@@ -323,21 +364,21 @@ class PlatformService:
             target=f"device:{device_id}",
             description="Get current device status",
             permissions={"device.status"},
-            executor=lambda _: self._device_action(device_id, "status"),
+            executor=lambda _: self._device_action(device_id, "status", actor="system", permissions={"device.status"}),
         )
         self._register_capability_if_missing(
             name=f"{prefix}.diagnose",
             target=f"device:{device_id}",
             description="Run device diagnostics",
             permissions={"device.diagnose"},
-            executor=lambda _: self._device_action(device_id, "diagnose"),
+            executor=lambda _: self._device_action(device_id, "diagnose", actor="system", permissions={"device.diagnose"}),
         )
         self._register_capability_if_missing(
             name=f"{prefix}.recover",
             target=f"device:{device_id}",
             description="Run device recovery routine",
             permissions={"device.recover"},
-            executor=lambda _: self._device_action(device_id, "recover"),
+            executor=lambda _: self._device_action(device_id, "recover", actor="system", permissions={"device.recover", "ownership_declared"}),
         )
         self._register_capability_if_missing(
             name=f"{prefix}.simulate",
@@ -376,7 +417,12 @@ class PlatformService:
                     db=db, device_id=device_id, capability_name=capability["name"]
                 )
 
-    def _device_action(self, device_id: str, action: str) -> Any:
+    def _device_action(self, device_id: str, action: str, actor: str = "system", permissions: set[str] | None = None) -> Any:
+        if self._authorizer is not None:
+            perm_action = f"device.{action}" if not action.startswith("device.") else action
+            result = self._authorizer.authorize(actor, perm_action, device_id, permissions or set())
+            if not result.allowed:
+                raise PermissionError(result.reason)
         device = self._device_api.get(device_id)
         if device is None:
             raise RuntimeError(f"No such device: {device_id}")

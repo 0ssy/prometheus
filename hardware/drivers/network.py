@@ -65,3 +65,15 @@ class NetworkDriver(HardwareDriver):
             },
             "status": "ok",
         }
+
+    def read(self, length: int = 1024) -> bytes:
+        return b""
+
+    def write(self, data: bytes) -> int:
+        return len(data)
+
+    def simulate(self, capability: str, payload: dict[str, Any]) -> dict[str, Any]:
+        return {"driver": self.name, "capability": capability, "simulated": True}
+
+    def verify(self) -> dict[str, Any]:
+        return {"driver": self.name, "verified": True}

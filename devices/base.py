@@ -1,80 +1,53 @@
-"""
-Prometheus Device — Base Contract (RFC 0001)
------------------------------------------
-Every transport (simulated, serial, later Wi-Fi/GPIO/USB/Bluetooth)
-implements this same shape. Agents and plugins go through the
-DeviceRegistry and this interface only — they never import pyserial,
-bleak, or any transport-specific library directly. That's what lets
-a plugin written against a SimulatedDevice keep working unchanged
-once a real ESP32 shows up.
+from __future__ import annotations
 
-Deviation from RFC 0001's sketch: the RFC wrote this as async. Phase
-Alpha's scheduler is a plain background thread, not asyncio, and
-pyserial itself is blocking — so v0.1 keeps this synchronous to match
-the rest of the codebase's actual concurrency model. Revisit async
-if/when Wi-Fi or multi-device polling actually needs it.
+import warnings
 
-ownership_declared exists because of RFC 0000: for v0.1 this is an
-honor-system flag the caller sets at registration time, NOT a verified
-guarantee. Every place this field is surfaced (API, logs) must call it
-"declared", not "verified" — see RFC 0000 for why that distinction
-matters.
-"""
+warnings.warn(
+    "devices.base is deprecated. Import HardwareInterface from hardware.hal.interface instead. "
+    "This module will be removed in a future release.",
+    DeprecationWarning,
+    stacklevel=2,
+)
 
 from abc import ABC, abstractmethod
-from typing import Any
+from dataclasses import dataclass, field
+from typing import Any, Optional
 
 
+@dataclass
 class Device(ABC):
     device_id: str
-    transport: str  # "simulated" | "serial" | "wifi" | "gpio" | "usb" | "bluetooth"
+    transport: str = ""
     ownership_declared: bool = False
+    latency_seconds: float = 0.0
+    failure_rate: float = 0.0
+    _connected: bool = field(default=False, repr=False)
 
     @abstractmethod
     def connect(self) -> None:
-        """Open the connection. Idempotent — safe to call if already connected."""
         ...
 
     @abstractmethod
     def disconnect(self) -> None:
-        """Close the connection. Idempotent — safe to call if already disconnected."""
         ...
 
     @abstractmethod
     def read(self) -> Any:
-        """Read the latest available data from the device."""
         ...
 
     @abstractmethod
     def write(self, payload: Any) -> None:
-        """Send data to the device."""
         ...
 
     @abstractmethod
-    def status(self) -> dict:
-        """Return current connection/state info. Must be JSON-serializable."""
+    def status(self) -> dict[str, Any]:
         ...
 
-    def diagnose(self) -> dict:
-        """
-        Optional device-local diagnostics hook.
-        Defaults to unsupported because real diagnostics currently live in
-        engineering modules operating on firmware/disk artifacts.
-        """
-        return {"supported": False, "reason": "diagnose_not_implemented"}
+    def diagnose(self) -> dict[str, Any]:
+        return {"supported": False}
 
-    def verify(self) -> dict:
-        """
-        Optional device-local verification hook.
-        Defaults to unsupported to avoid claiming capabilities that do not
-        exist on all transports yet.
-        """
-        return {"supported": False, "reason": "verify_not_implemented"}
+    def verify(self) -> dict[str, Any]:
+        return {"supported": False}
 
-    def recover(self) -> dict:
-        """
-        Optional device-local recovery hook.
-        Defaults to unsupported; recovery planning is currently handled in
-        engineering.recovery_planner.
-        """
-        return {"supported": False, "reason": "recover_not_implemented"}
+    def recover(self) -> dict[str, Any]:
+        return {"supported": False}

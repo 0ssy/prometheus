@@ -3,6 +3,7 @@ from __future__ import annotations
 from typing import Any
 
 from hardware.session import DeviceSession
+from hardware.drivers.base import HardwareDriver
 from hardware.diagnostics import HardwareDiagnostics
 from core.logger import get_logger
 
@@ -47,4 +48,11 @@ class EpsilonDiagnostics:
                 )
             except Exception:
                 pass
+        return report
+
+    def driver_report(self, driver: HardwareDriver) -> dict[str, Any]:
+        """Run diagnostics against a live driver instance."""
+        report = self._hardware_diagnostics.driver_diagnostics(driver)
+        transport_probe = self._hardware_diagnostics.transport_probe(driver)
+        report["transport_probe"] = transport_probe
         return report

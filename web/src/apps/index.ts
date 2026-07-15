@@ -14,3 +14,4 @@ export * from "./AssistantApp";
 export * from "./MonitorApp";
 export * from "./JobsApp";
 export * from "./WorkflowApp";
+export * from "./EngineeringStudioApp";

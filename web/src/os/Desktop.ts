@@ -18,6 +18,7 @@ import {
   mountMonitor,
   mountJobs,
   mountWorkflow,
+  mountEngineeringStudio,
 } from "../apps";
 
 const BOOT_LOGO = `██████╗ ██████╗  ██████╗ ███╗   ███╗███████╗
@@ -50,6 +51,7 @@ const APPS: Record<string, AppDef> = {
   monitor: { key: "monitor", title: "MONITOR", mount: mountMonitor, w: 420, h: 360 },
   jobs: { key: "jobs", title: "JOBS", mount: mountJobs, w: 400, h: 320 },
   workflow: { key: "workflow", title: "WORKFLOWS", mount: mountWorkflow, w: 420, h: 360 },
+  engineering: { key: "engineering", title: "ENGINEERING", mount: mountEngineeringStudio, w: 420, h: 360 },
 };
 
 const DOCK_KEYS = [
@@ -67,6 +69,7 @@ const DOCK_KEYS = [
   "monitor",
   "jobs",
   "workflow",
+  "engineering",
 ];
 
 const DOCK_ICONS: Record<string, string> = {
@@ -84,6 +87,7 @@ const DOCK_ICONS: Record<string, string> = {
   monitor: '<rect x="2" y="2" width="8" height="6" fill="none" stroke="currentColor" stroke-width="1.5"/><rect x="3.5" y="3.5" width="5" height="3" fill="currentColor"/><path d="M2 9 L6 7 L10 9" stroke="currentColor" stroke-width="1.2" fill="none"/>',
   jobs: '<rect x="2" y="2" width="8" height="8" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="M4 5 L6 7 L9 4" stroke="currentColor" stroke-width="1.2" fill="none"/>',
   workflow: '<circle cx="3" cy="6" r="1.5" fill="currentColor"/><circle cx="9" cy="6" r="1.5" fill="currentColor"/><path d="M4.5 6 L7.5 6 M4.5 6 L3 3 M7.5 6 L10 3 M4.5 6 L3 9 M7.5 6 L10 9" stroke="currentColor" stroke-width="1"/>',
+  engineering: '<path d="M2 10 L6 2 L10 10" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="M4 10 L6 6 L8 10" fill="none" stroke="currentColor" stroke-width="1.5"/>',
 };
 
 export class Desktop {

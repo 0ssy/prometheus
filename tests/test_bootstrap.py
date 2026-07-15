@@ -25,6 +25,7 @@ class TestBootstrap:
         assert container.get("platform_service") is not None
         assert container.get("delta_service") is not None
         assert container.get("epsilon_service") is not None
+        assert container.get("engineering_service") is not None
         assert container.get("omega_service") is not None
         assert container.get("event_handlers") is not None
         assert container.get("observability") is not None

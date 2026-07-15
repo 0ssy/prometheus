@@ -41,3 +41,19 @@ class HardwareInterface(ABC):
     def diagnostics(self) -> dict[str, Any]:
         """Run diagnostics on the connected device."""
         ...
+
+    def read(self, length: int = 1024) -> bytes:
+        """Read data from the device."""
+        raise NotImplementedError(f"{self.__class__.__name__} does not support read")
+
+    def write(self, data: bytes) -> int:
+        """Write data to the device."""
+        raise NotImplementedError(f"{self.__class__.__name__} does not support write")
+
+    def simulate(self, capability: str, payload: dict[str, Any]) -> dict[str, Any]:
+        """Simulate a capability execution without side effects."""
+        raise NotImplementedError(f"{self.__class__.__name__} does not support simulate")
+
+    def verify(self) -> dict[str, Any]:
+        """Verify device integrity and authenticity."""
+        raise NotImplementedError(f"{self.__class__.__name__} does not support verify")

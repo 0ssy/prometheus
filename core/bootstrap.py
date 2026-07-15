@@ -29,9 +29,11 @@ from implementations.platform_components import build_platform_components
 from kernel.runtime import PrometheusCoreKernel
 from services.delta_service import DeltaService
 from services.epsilon_service import EpsilonService
+from services.engineering_service import EngineeringService
 from services.event_handlers import PlatformEventHandlers
 from services.omega_service import OmegaService
 from services.platform_service import PlatformService
+from titan.service import TitanService
 
 logger = get_logger(__name__)
 
@@ -51,26 +53,7 @@ def _register_services(container: ServiceContainer, workflow_runtime: Any) -> No
     event_bus = InMemoryEventBus()
     observability = ObservabilityStore()
     components = build_platform_components(event_bus=event_bus)
-    platform_service = PlatformService(
-        plugin_api=components.plugin_api,
-        agent_api=components.agent_api,
-        capability_api=components.capability_api,
-        device_api=components.device_api,
-        memory_api=components.memory_api,
-        reasoning_api=components.reasoning_api,
-        event_bus=event_bus,
-        knowledge_engine=components.knowledge_engine,
-        session_factory=SessionLocal,
-        observability=observability,
-    )
-    event_handlers = PlatformEventHandlers(
-        event_bus=event_bus,
-        session_factory=SessionLocal,
-        memory_api=components.memory_api,
-        reasoning_api=components.reasoning_api,
-        observability=observability,
-    )
-    event_handlers.bind()
+
     kernel = PrometheusCoreKernel(
         capability_api=components.capability_api,
         scheduler=components.scheduler,
@@ -81,6 +64,7 @@ def _register_services(container: ServiceContainer, workflow_runtime: Any) -> No
     kernel.grant_permission("system", "device.diagnose")
     kernel.grant_permission("system", "hardware.session.create")
     kernel.grant_permission("system", "firmware.read")
+
     delta_service = DeltaService(
         knowledge_engine=components.knowledge_engine,
         device_api=components.device_api,
@@ -93,6 +77,35 @@ def _register_services(container: ServiceContainer, workflow_runtime: Any) -> No
         event_bus=event_bus,
         knowledge_engine=components.knowledge_engine,
     )
+
+    from services.capability_registry import register_default_hardware_capabilities
+
+    register_default_hardware_capabilities(
+        components.capability_api, epsilon_service
+    )
+
+    platform_service = PlatformService(
+        plugin_api=components.plugin_api,
+        agent_api=components.agent_api,
+        capability_api=components.capability_api,
+        device_api=components.device_api,
+        memory_api=components.memory_api,
+        reasoning_api=components.reasoning_api,
+        event_bus=event_bus,
+        knowledge_engine=components.knowledge_engine,
+        session_factory=SessionLocal,
+        observability=observability,
+        authorizer=epsilon_service._authorizer,
+    )
+    event_handlers = PlatformEventHandlers(
+        event_bus=event_bus,
+        session_factory=SessionLocal,
+        memory_api=components.memory_api,
+        reasoning_api=components.reasoning_api,
+        observability=observability,
+    )
+    event_handlers.bind()
+
     omega_service = OmegaService(
         epsilon_service=epsilon_service,
         kernel=kernel,
@@ -127,6 +140,8 @@ def _register_services(container: ServiceContainer, workflow_runtime: Any) -> No
     container.register("security_authorizer", epsilon_service._authorizer)
     container.register("security_audit", epsilon_service._audit)
     container.register("security_integrity", epsilon_service._integrity)
+    container.register("engineering_service", EngineeringService())
+    container.register("titan_service", TitanService())
     container.register("omega_agent_coordinator", omega_service._agent_coordinator)
     container.register("omega_task_planner", omega_service._task_planner)
     container.register("omega_consensus", omega_service._consensus)

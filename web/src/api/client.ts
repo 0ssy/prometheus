@@ -46,6 +46,42 @@ export const api = {
   facts: () => client.get<any>("/knowledge"),
   observability: () => client.get<any>("/observability"),
   capabilities: () => client.get<any>("/capabilities"),
+  executeCapability: (
+    name: string,
+    payload: Record<string, unknown>,
+    grantedPermissions?: string[],
+  ) =>
+    client.post<{ ok: boolean; data?: any; error?: string }>(
+      "/capabilities/execute",
+      { name, payload, granted_permissions: grantedPermissions ?? [] },
+    ),
+  executeEngineering: (
+    moduleName: string,
+    workflow: string,
+    payload?: Record<string, unknown>,
+  ) =>
+    client.post<{ ok: boolean; data?: any; error?: string }>(
+      "/engineering/execute",
+      { module_name: moduleName, workflow, payload },
+    ),
+  engineeringModules: () => client.get<{ modules: string[] }>("/engineering/modules"),
+  titanModules: () => client.get<{ modules: string[] }>("/titan/modules"),
+  executeTitan: (
+    moduleName: string,
+    workflow: string,
+    payload?: Record<string, unknown>,
+  ) =>
+    client.post<{ ok: boolean; data?: any; error?: string }>(
+      "/titan/execute",
+      { module_name: moduleName, workflow, payload },
+    ),
+  createDataset: (payload: Record<string, unknown>) => client.post("/titan/datasets", payload),
+  getDataset: (id: string) => client.get<any>(`/titan/datasets/${id}`),
+  submitFinetune: (payload: Record<string, unknown>) => client.post("/titan/finetune", payload),
+  getFinetuneJob: (id: string) => client.get<any>(`/titan/finetune/${id}`),
+  registerModel: (payload: Record<string, unknown>) => client.post("/titan/models", payload),
+  listModels: (tag?: string) =>
+    tag ? client.get<any>(`/titan/models?tag=${encodeURIComponent(tag)}`) : client.get<any>("/titan/models"),
   systemResources: () => client.get<any>("/system/resources"),
   systemJobs: () => client.get<any>("/system/jobs"),
   jobAction: (name: string, action: string) => client.post(`/system/jobs/${encodeURIComponent(name)}/${encodeURIComponent(action)}`),
