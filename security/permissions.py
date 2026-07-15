@@ -69,6 +69,7 @@ def _build_default_registry() -> PermissionRegistry:
         Permission("device.disconnect", "disconnect from device", "device"),
         Permission("device.read", "read from device", "device"),
         Permission("device.write", "write to device", "device"),
+        Permission("device.status", "get device status", "device"),
         Permission("device.diagnose", "run diagnostics", "device"),
         Permission(
             "device.recover", "recovery planning", "device", requires_ownership=True
@@ -77,6 +78,8 @@ def _build_default_registry() -> PermissionRegistry:
             "device.flash", "flash firmware", "device", requires_ownership=True
         ),
         Permission("device.reboot", "reboot device", "device", requires_ownership=True),
+        Permission("device.simulate", "simulate device operation", "device"),
+        Permission("ownership_declared", "ownership declared for resource", "hardware"),
         Permission("hardware.session.create", "create hardware session", "hardware"),
         Permission("hardware.session.close", "close hardware session", "hardware"),
         Permission("firmware.read", "read firmware metadata", "firmware"),
@@ -90,10 +93,12 @@ def _build_default_registry() -> PermissionRegistry:
         ("device.disconnect", {"device.disconnect"}),
         ("device.read", {"device.read"}),
         ("device.write", {"device.write"}),
+        ("device.status", {"device.status"}),
         ("device.diagnose", {"device.diagnose"}),
         ("device.recover", {"device.recover", "ownership_declared"}),
         ("device.flash", {"device.flash", "ownership_declared"}),
         ("device.reboot", {"device.reboot", "ownership_declared"}),
+        ("device.simulate", {"device.simulate"}),
         ("hardware.session.create", {"hardware.session.create"}),
         ("hardware.session.close", {"hardware.session.close"}),
         ("firmware.read", {"firmware.read"}),

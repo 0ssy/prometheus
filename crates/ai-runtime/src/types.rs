@@ -117,8 +117,9 @@ impl ProviderHealth {
     }
 }
 
-/// The kind of AI provider. Only [`ProviderKind::LmStudio`] is implemented in
-/// Milestone 1; the rest are reserved for later stages.
+/// The kind of AI provider. `LmStudio` is the local default; the HTTP-backed
+/// providers (`OpenAi`, `Anthropic`, `Gemini`, `OpenRouter`, `Ollama`,
+/// `LlamaCpp`, `Vllm`, `CustomHttp`) are served by the shared `HttpProvider`.
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize)]
 #[serde(rename_all = "lowercase")]
 pub enum ProviderKind {
@@ -127,6 +128,9 @@ pub enum ProviderKind {
     Anthropic,
     Gemini,
     OpenRouter,
+    Ollama,
+    LlamaCpp,
+    Vllm,
     CustomHttp,
 }
 
@@ -138,6 +142,9 @@ impl ProviderKind {
             ProviderKind::Anthropic => "anthropic",
             ProviderKind::Gemini => "gemini",
             ProviderKind::OpenRouter => "openrouter",
+            ProviderKind::Ollama => "ollama",
+            ProviderKind::LlamaCpp => "llamacpp",
+            ProviderKind::Vllm => "vllm",
             ProviderKind::CustomHttp => "customhttp",
         }
     }

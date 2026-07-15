@@ -32,6 +32,7 @@ from services.platform_service import PlatformService
 from services.llm_client import LLMClient
 from services.delta_service import DeltaService
 from services.epsilon_service import EpsilonService
+from services.engineering_service import EngineeringService
 from services.omega_service import OmegaService
 from core.ownership_registry import (
     declare_owned,
@@ -93,6 +94,18 @@ def get_omega_service(
     container: ServiceContainer = Depends(get_container),
 ) -> OmegaService:
     return container.resolve("omega_service", OmegaService)
+
+
+def get_engineering_service(
+    container: ServiceContainer = Depends(get_container),
+) -> EngineeringService:
+    return container.resolve("engineering_service", EngineeringService)
+
+
+def get_titan_service(
+    container: ServiceContainer = Depends(get_container),
+):
+    return container.get("titan_service")
 
 
 from backend.dashboard import mount_dashboard
@@ -228,17 +241,35 @@ def list_capabilities(
 
 @app.post("/capabilities/execute")
 def execute_capability(
-    name: str,
-    payload: dict | None = None,
-    permissions: list[str] | None = None,
+    req: dict = Body(...),
     platform: PlatformService = Depends(get_platform_service),
 ):
-    result = platform.execute_capability(
-        capability_name=name,
-        payload=payload or {},
-        granted_permissions=set(permissions or []),
-    )
-    return {"capability": name, "result": result}
+    """Execute a registered capability.
+
+    Body contract consumed by the Rust Aether ``ToolDispatcher``::
+
+        {"name": "hardware.diagnose",
+         "payload": {"device_id": "..."},
+         "granted_permissions": ["device.diagnose"]}
+
+    Returns the standardized ``{"ok": true, "data": ...}`` /
+    ``{"ok": false, "error": "..."}`` shape.
+    """
+    name = req.get("name", "")
+    payload = req.get("payload") or {}
+    granted = set(req.get("granted_permissions") or [])
+    if not name:
+        return {"ok": False, "error": "capability 'name' is required"}
+    try:
+        result = platform.execute_capability(
+            capability_name=name,
+            payload=payload,
+            granted_permissions=granted,
+        )
+    except Exception as exc:
+        logger.warning("Capability %s failed: %s", name, exc)
+        return {"ok": False, "error": str(exc)}
+    return {"ok": True, "data": result}
 
 
 @app.get("/capabilities/history")
@@ -718,6 +749,121 @@ def gamma_learning(
     platform: PlatformService = Depends(get_platform_service),
 ):
     return {"learning": platform.learning_history(scenario_key=scenario_key)}
+
+
+# ---------------------------------------------------------------------------
+# Phase 4 — Engineering Intelligence
+# ---------------------------------------------------------------------------
+
+
+@app.get("/engineering/modules")
+def list_engineering_modules(
+    engineering: EngineeringService = Depends(get_engineering_service),
+):
+    return {"modules": engineering.list_modules()}
+
+
+@app.post("/engineering/execute")
+def execute_engineering_workflow(
+    req: dict = Body(...),
+    engineering: EngineeringService = Depends(get_engineering_service),
+):
+    module_name = req.get("module_name", "")
+    workflow = req.get("workflow", "")
+    payload = req.get("payload") or {}
+    if not module_name or not workflow:
+        raise HTTPException(status_code=400, detail="module_name and workflow are required")
+    result = engineering.execute_workflow(
+        module_name=module_name,
+        workflow=workflow,
+        payload=payload,
+    )
+    return {"ok": True, "data": result}
+
+
+# ---------------------------------------------------------------------------
+# Phase 5 — Titan AI Platform
+# ---------------------------------------------------------------------------
+
+
+@app.get("/titan/modules")
+def list_titan_modules(
+    titan=Depends(get_titan_service),
+):
+    return {"modules": titan.list_modules()}
+
+
+@app.post("/titan/execute")
+def execute_titan_workflow(
+    req: dict = Body(...),
+    titan=Depends(get_titan_service),
+):
+    module_name = req.get("module_name", "")
+    workflow = req.get("workflow", "")
+    payload = req.get("payload") or {}
+    if not module_name or not workflow:
+        raise HTTPException(status_code=400, detail="module_name and workflow are required")
+    result = titan.execute_workflow(
+        module_name=module_name,
+        workflow=workflow,
+        payload=payload,
+    )
+    return {"ok": True, "data": result}
+
+
+@app.post("/titan/datasets")
+def create_dataset(
+    payload: dict = Body(...),
+    titan=Depends(get_titan_service),
+):
+    result = titan.execute_workflow("dataset_builder", "prepare", payload)
+    return {"ok": True, "data": result}
+
+
+@app.get("/titan/datasets/{dataset_id}")
+def get_dataset(
+    dataset_id: str,
+    titan=Depends(get_titan_service),
+):
+    result = titan.execute_workflow("dataset_builder", "get", {"dataset_id": dataset_id})
+    return {"ok": True, "data": result}
+
+
+@app.post("/titan/finetune")
+def submit_finetune(
+    payload: dict = Body(...),
+    titan=Depends(get_titan_service),
+):
+    result = titan.execute_workflow("finetune", "submit", payload)
+    return {"ok": True, "data": result}
+
+
+@app.get("/titan/finetune/{job_id}")
+def get_finetune_job(
+    job_id: str,
+    titan=Depends(get_titan_service),
+):
+    result = titan.execute_workflow("finetune", "get", {"job_id": job_id})
+    return {"ok": True, "data": result}
+
+
+@app.post("/titan/models")
+def register_model(
+    payload: dict = Body(...),
+    titan=Depends(get_titan_service),
+):
+    result = titan.execute_workflow("registry", "register", payload)
+    return {"ok": True, "data": result}
+
+
+@app.get("/titan/models")
+def list_models(
+    tag: str | None = None,
+    titan=Depends(get_titan_service),
+):
+    payload = {"tag": tag} if tag else {}
+    result = titan.execute_workflow("registry", "list", payload)
+    return {"ok": True, "data": result}
 
 
 # ---------------------------------------------------------------------------
