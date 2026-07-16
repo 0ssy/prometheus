@@ -47,19 +47,41 @@ class Router:
     def __init__(self, providers: list[Provider] | None = None, budget_cap: float = 1.0):
         self._providers = providers or list(DEFAULT_PROVIDERS)
         self._budget_cap = budget_cap
+        self._rust = None
+        try:
+            import aether_runtime as _ar
+            self._rust = _ar
+        except ImportError:
+            pass
 
     def route(self, budget: float | None = None) -> Provider:
+        if self._rust is not None:
+            import json
+            providers_json = json.dumps([
+                {"name": p.name, "model": p.model, "cost_per_1k": p.cost_per_1k, "latency_score": p.latency_score, "available": p.available}
+                for p in self._providers
+            ])
+            selected_json = self._rust.route_py(providers_json, budget)
+            selected = json.loads(selected_json)
+            return Provider(**selected)
         cap = self._budget_cap if budget is None else budget
         available = [p for p in self._providers if p.available]
         if not available:
             raise RuntimeError("No providers available")
-        # Prefer cheapest provider within budget; otherwise lowest latency.
         within = [p for p in available if p.cost_per_1k <= cap]
         pool = within if within else available
         pool.sort(key=lambda p: (p.cost_per_1k, p.latency_score))
         return pool[0]
 
     def fallback_chain(self, preferred: Provider) -> list[Provider]:
+        if self._rust is not None:
+            import json
+            providers_json = json.dumps([
+                {"name": p.name, "model": p.model, "cost_per_1k": p.cost_per_1k, "latency_score": p.latency_score, "available": p.available}
+                for p in self._providers
+            ])
+            chain = self._rust.fallback_chain_py(providers_json, preferred.name)
+            return [Provider(**c) for c in chain]
         others = [p for p in self._providers if p.available and p.name != preferred.name]
         others.sort(key=lambda p: (p.cost_per_1k, p.latency_score))
         return others

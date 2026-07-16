@@ -10,17 +10,9 @@ or failures so you can test how an agent handles a flaky device
 
 import time
 import random
-import warnings
 from typing import Any
 
-warnings.warn(
-    "devices.simulated is deprecated. Import VirtualDriver from hardware.drivers.virtual instead. "
-    "This module will be removed in a future release.",
-    DeprecationWarning,
-    stacklevel=2,
-)
-
-from .base import Device
+from .base import Device  # noqa: E402
 
 
 class SimulatedDevice(Device):

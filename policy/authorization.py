@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from dataclasses import dataclass, field
+from dataclasses import dataclass
 from typing import Any
 
 from core.logger import get_logger
@@ -35,7 +35,7 @@ class PolicyEngine:
 
     def evaluate(self, context: PolicyContext) -> PolicyDecision:
         effective = self._permission_hierarchy.effective_permissions(context.actor)
-        context_permissions = context.permissions | effective
+        _context_permissions = context.permissions | effective
         matching_rules = self._rule_engine.evaluate(context)
         for rule in matching_rules:
             if rule.actions and context.action not in rule.actions:

@@ -3,6 +3,7 @@ from __future__ import annotations
 from dataclasses import dataclass, field
 from datetime import datetime, timezone
 from typing import Any
+import threading
 
 from core.logger import get_logger
 
@@ -67,4 +68,3 @@ class PolicyEngine:
         return True
 
 
-import threading

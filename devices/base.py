@@ -1,17 +1,8 @@
 from __future__ import annotations
 
-import warnings
-
-warnings.warn(
-    "devices.base is deprecated. Import HardwareInterface from hardware.hal.interface instead. "
-    "This module will be removed in a future release.",
-    DeprecationWarning,
-    stacklevel=2,
-)
-
 from abc import ABC, abstractmethod
 from dataclasses import dataclass, field
-from typing import Any, Optional
+from typing import Any
 
 
 @dataclass

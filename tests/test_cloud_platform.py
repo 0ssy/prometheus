@@ -6,7 +6,7 @@ from sqlalchemy.orm import sessionmaker
 
 import core.database as cd
 from enterprise.cloud import AuthService, BillingService
-from enterprise.models import Tenant, Role, User, UsageEvent, Invoice
+from enterprise.models import User
 
 
 @pytest.fixture

@@ -68,7 +68,6 @@ def test_signed_flash_enforced_rejects_unsigned(session):
 
 
 def test_signed_flash_verified_succeeds(session):
-    from cryptography.hazmat.primitives.asymmetric.ed25519 import Ed25519PrivateKey
 
     priv, pub = _keypair()
     svc = FlashService(verifier=SigningVerifier(public_key_pem=pub))

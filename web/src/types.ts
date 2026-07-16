@@ -1,6 +1,7 @@
 export interface ApiClient {
   get<T>(path: string): Promise<T>;
   post<T>(path: string, body?: Record<string, unknown>): Promise<T>;
+  delete<T>(path: string): Promise<T>;
 }
 
 export interface StatusSnapshot {

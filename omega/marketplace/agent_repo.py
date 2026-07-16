@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from dataclasses import dataclass, field
-from typing import Any
+import threading
 
 from core.logger import get_logger
 
@@ -47,6 +47,3 @@ class AgentRepository:
     def list_available(self) -> list[AgentPackage]:
         with self._lock:
             return list(self._agents.values())
-
-
-import threading

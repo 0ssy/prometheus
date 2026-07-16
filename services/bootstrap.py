@@ -9,6 +9,6 @@ warnings.warn(
     stacklevel=2,
 )
 
-from core.bootstrap import boot, load_baseline
+from core.bootstrap import boot, load_baseline  # noqa: E402
 
 __all__ = ["boot", "load_baseline"]

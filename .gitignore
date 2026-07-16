@@ -3,7 +3,9 @@ __pycache__/
 .env
 .venv/
 venv/
+**/.venv*/
 src-tauri/target/
+**/target/
 crates/ai-runtime/target/
 crates/ai-runtime/Cargo.lock
 web/dist/
@@ -15,6 +17,10 @@ src-tauri/binaries/
 dist/
 build/
 *.spec
+
+# --- Build artifacts ---
+go/*.exe
+cpp/build/
 
 # --- Runtime data (never track) ---
 data/prometheus.db

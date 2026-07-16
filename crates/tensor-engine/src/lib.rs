@@ -79,6 +79,47 @@ impl Tensor {
     }
 }
 
+#[cfg(feature = "python")]
+mod pybind {
+    use pyo3::prelude::*;
+
+    #[pyfunction]
+    fn zeros(shape: Vec<usize>) -> PyResult<Vec<f32>> {
+        let t = crate::Tensor::zeros(shape);
+        Ok(t.data)
+    }
+
+    #[pyfunction]
+    fn add(a_data: Vec<f32>, a_shape: Vec<usize>, b_data: Vec<f32>, b_shape: Vec<usize>) -> PyResult<Vec<f32>> {
+        let a = crate::Tensor::new(a_shape, a_data);
+        let b = crate::Tensor::new(b_shape, b_data);
+        Ok(a.add(&b).data)
+    }
+
+    #[pyfunction]
+    fn dot(a_data: Vec<f32>, b_data: Vec<f32>) -> PyResult<f32> {
+        let a = crate::Tensor::new(vec![a_data.len()], a_data);
+        let b = crate::Tensor::new(vec![b_data.len()], b_data);
+        Ok(a.dot(&b))
+    }
+
+    #[pyfunction]
+    fn matmul(a_data: Vec<f32>, a_shape: Vec<usize>, b_data: Vec<f32>, b_shape: Vec<usize>) -> PyResult<Vec<f32>> {
+        let a = crate::Tensor::new(a_shape, a_data);
+        let b = crate::Tensor::new(b_shape, b_data);
+        Ok(a.matmul(&b).data)
+    }
+
+    #[pymodule]
+    fn tensor_engine(_py: Python<'_>, m: &PyModule) -> PyResult<()> {
+        m.add_function(wrap_pyfunction!(zeros, m)?)?;
+        m.add_function(wrap_pyfunction!(add, m)?)?;
+        m.add_function(wrap_pyfunction!(dot, m)?)?;
+        m.add_function(wrap_pyfunction!(matmul, m)?)?;
+        Ok(())
+    }
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;

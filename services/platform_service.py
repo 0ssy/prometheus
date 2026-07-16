@@ -91,7 +91,7 @@ class PlatformService:
         failure_rate: float = 0.0,
         ownership_declared: bool = True,
     ) -> dict[str, Any]:
-        from devices.simulated import SimulatedDevice
+        from hardware.drivers.virtual import VirtualDriver
 
         if self._authorizer is not None:
             result = self._authorizer.authorize(
@@ -103,12 +103,11 @@ class PlatformService:
             if not result.allowed:
                 raise PermissionError(result.reason)
 
-        device = SimulatedDevice(
-            device_id=device_id,
-            ownership_declared=ownership_declared,
-            latency_seconds=latency_seconds,
-            failure_rate=failure_rate,
-        )
+        device = VirtualDriver()
+        device.device_id = device_id
+        device.ownership_declared = ownership_declared
+        device.latency_seconds = latency_seconds
+        device.failure_rate = failure_rate
         device.connect()
         self._device_api.register(device)
         self._register_device_capabilities(device_id)
@@ -123,7 +122,7 @@ class PlatformService:
         baudrate: int = 115200,
         ownership_declared: bool = False,
     ) -> dict[str, Any]:
-        from devices.serial_device import SerialDevice
+        from hardware.drivers.serial import SerialDriver
 
         if self._authorizer is not None:
             result = self._authorizer.authorize(
@@ -135,12 +134,13 @@ class PlatformService:
             if not result.allowed:
                 raise PermissionError(result.reason)
 
-        device = SerialDevice(
+        device = SerialDriver(
             device_id=device_id,
             port=port,
             baudrate=baudrate,
-            ownership_declared=ownership_declared,
+            timeout=1.0,
         )
+        device.ownership_declared = ownership_declared
         try:
             device.connect()
         except Exception as exc:

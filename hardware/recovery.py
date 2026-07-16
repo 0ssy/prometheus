@@ -3,7 +3,6 @@ from __future__ import annotations
 from typing import Any
 
 from hardware.session import DeviceSession
-from hardware.diagnostics import HardwareDiagnostics
 from core.logger import get_logger
 
 logger = get_logger(__name__)

@@ -3,6 +3,8 @@ from __future__ import annotations
 from dataclasses import dataclass, field
 from datetime import datetime, timezone
 from typing import Any
+import threading
+import uuid
 
 from core.logger import get_logger
 
@@ -23,7 +25,6 @@ class OrganizationRegistry:
         self._lock = threading.RLock()
 
     def create(self, name: str, metadata: dict[str, Any] | None = None) -> Organization:
-        import uuid
         org_id = str(uuid.uuid4())
         org = Organization(org_id=org_id, name=name, metadata=metadata or {})
         with self._lock:
@@ -48,6 +49,3 @@ class OrganizationRegistry:
             if metadata is not None:
                 org.metadata = metadata
             return org
-
-
-import threading

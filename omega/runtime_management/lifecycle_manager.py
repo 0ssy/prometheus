@@ -4,6 +4,8 @@ from dataclasses import dataclass, field
 from datetime import datetime, timezone
 from enum import Enum
 from typing import Any, Callable
+import threading
+import uuid
 
 from core.logger import get_logger
 
@@ -76,7 +78,3 @@ class LifecycleManager:
     def hot_reload(self, component_name: str) -> bool:
         logger.info("Hot reload requested for: %s", component_name)
         return True
-
-
-import threading
-import uuid

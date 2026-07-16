@@ -1,6 +1,5 @@
 from __future__ import annotations
 
-import hashlib
 from dataclasses import dataclass, asdict
 from typing import Any
 
@@ -8,7 +7,6 @@ from core.logger import get_logger
 
 from .metadata import FirmwareMetadata, FirmwareMetadataStore, compute_sha256
 from .partitions import PartitionParser, PartitionTable, PartitionMapper
-from .compatibility import CompatibilityMatrix, CompatibilityChecker
 
 logger = get_logger(__name__)
 

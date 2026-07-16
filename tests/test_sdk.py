@@ -6,7 +6,6 @@ from sqlalchemy.orm import sessionmaker
 
 import core.database as cd
 from sdk.registry import SdkRegistry, is_compatible, PublishedSdk
-from sdk.models import SdkVersion
 
 
 @pytest.fixture

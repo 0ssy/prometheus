@@ -3,7 +3,8 @@ from __future__ import annotations
 from typing import Any
 
 from contracts.device import DeviceApi
-from devices.registry import DeviceRegistry, device_registry
+from contracts.event_bus import EventBus
+from devices.registry import DeviceRegistry
 from core.logger import get_logger
 
 logger = get_logger(__name__)
@@ -17,8 +18,8 @@ class DeviceRegistryAdapter(DeviceApi):
     while the migration to ``hardware/`` proceeds.
     """
 
-    def __init__(self, registry: DeviceRegistry | None = None) -> None:
-        self._registry = registry or device_registry
+    def __init__(self, registry: DeviceRegistry | None = None, event_bus: EventBus | None = None) -> None:
+        self._registry = registry or DeviceRegistry(event_bus=event_bus)
 
     def register(self, device: Any) -> None:
         self._registry.register(device)

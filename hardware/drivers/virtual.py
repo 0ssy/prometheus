@@ -40,6 +40,10 @@ class VirtualDriver(HardwareDriver):
         logger.info("Virtual device disconnected")
         return {"status": "disconnected"}
 
+    def status(self) -> dict[str, Any]:
+        """Return current virtual device status."""
+        return {"connected": self.connected}
+
     def identify(self) -> dict[str, Any]:
         """Return mock virtual device information."""
         return {

@@ -34,8 +34,16 @@ class SigningVerifier:
 
     def verify(self, payload: bytes, signature: bytes) -> bool:
         if self._public_key_pem is None:
-            # Enforcement disabled (e.g. dev mode) — treat as unsigned-allowed.
             return True
+        try:
+            import hal_core as _hal_core
+            return _hal_core.verify_signature(
+                self._public_key_pem.hex(),
+                payload,
+                signature,
+            )
+        except ImportError:
+            pass
         try:
             from cryptography.hazmat.primitives.asymmetric.ed25519 import (
                 Ed25519PublicKey,

@@ -5,6 +5,7 @@ from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 
 import core.database as cd
+from core.native_runtime import create_http_cluster_submit
 from distributed.scheduler import DistributedScheduler, ClusterUnavailable
 from distributed.models import DistributedTask, DistributedRecovery
 
@@ -63,3 +64,9 @@ def test_success_rate(session):
     sched.submit(session, {"op": "a"})
     sched.submit(session, {"op": "b"})
     assert sched.success_rate(session) == pytest.approx(1.0)
+
+
+def test_http_cluster_submit_raises_when_control_plane_unreachable():
+    submit = create_http_cluster_submit("http://127.0.0.1:9", timeout_seconds=0.1)
+    with pytest.raises(ClusterUnavailable):
+        submit({"op": "train"})

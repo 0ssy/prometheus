@@ -1,7 +1,7 @@
 [package]
 name = "prometheus-src"
 version = "0.6.0"
-description = "Prometheus Engineering Intelligence OS — native window"
+description = "Prometheus Engineering Intelligence Platform — native window"
 edition = "2021"
 rust-version = "1.77.2"
 
@@ -11,7 +11,8 @@ tauri-build = { version = "2", features = [] }
 [dependencies]
 tauri = { version = "2", features = [] }
 tauri-plugin-shell = "2"
-ai-runtime = { path = "../crates/ai-runtime" }
+aether-runtime = { path = "../crates/aether-runtime" }
+prometheus-kernel = { path = "../crates/prometheus-kernel" }
 
 [profile.release]
 panic = "abort"

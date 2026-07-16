@@ -7,7 +7,6 @@ from hardware.drivers.adb import ADBDriver
 from hardware.drivers.fastboot import FastbootDriver
 from hardware.drivers.network import NetworkDriver
 from hardware.drivers.virtual import VirtualDriver
-from hardware.drivers.base import HardwareDriver
 
 
 def test_usb_driver_capabilities():

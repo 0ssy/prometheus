@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from hardware.session import DeviceSession, DeviceSessionManager
+from hardware.session import DeviceSessionManager
 from hardware.diagnostics import HardwareDiagnostics
 
 

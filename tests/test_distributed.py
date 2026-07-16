@@ -6,7 +6,7 @@ from omega.distributed import (
     KnowledgeSynchronizer,
     NodeRegistry,
 )
-from omega.distributed.node import NodeInfo, NodeStatus
+from omega.distributed.node import NodeInfo
 from omega.distributed.sync import SyncDirection
 
 

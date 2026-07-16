@@ -8,7 +8,12 @@ license = "MIT"
 
 [dependencies]
 
+[dependencies.pyo3]
+version = "0.21"
+optional = true
+
 [features]
 default = []
+python = ["pyo3"]
 
 [dev-dependencies]

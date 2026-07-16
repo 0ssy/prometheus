@@ -1,0 +1,13 @@
+[build-system]
+requires = ["maturin>=1.0,<2.0"]
+build-backend = "maturin"
+
+[project]
+name = "aether-runtime"
+version = "0.1.0"
+description = "P3 Aether AI Runtime — providers, routing, tool dispatch, context"
+requires-python = ">=3.11"
+license = { text = "MIT" }
+
+[tool.maturin]
+module-name = "aether_runtime"

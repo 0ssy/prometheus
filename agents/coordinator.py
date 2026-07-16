@@ -99,7 +99,6 @@ class AgentCoordinator:
                 return task.result or {"status": task.status.value}
             if task.assigned_agent is None:
                 raise ValueError(f"Task {task_id} has no assigned agent")
-            previous = task.status
             task.status = TaskStatus.RUNNING
 
         logger.info(f"Running task {task_id} on agent '{task.assigned_agent}'")

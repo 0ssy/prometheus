@@ -95,7 +95,7 @@ class ModelRegistry:
             "model_id": model_id,
             "status": "deployed",
             "provider_id": record.provider_id,
-            "endpoint": f"/v1/chat/completions",
+            "endpoint": "/v1/chat/completions",
         }
 
     def register_as_provider(self, model_id: str) -> dict[str, Any]:

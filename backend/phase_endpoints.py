@@ -21,6 +21,13 @@ from core.database import get_db
 phase_router = APIRouter()
 
 
+def _container_dep():
+    # Lazily import to avoid backend.main <-> phase_endpoints import cycle.
+    from backend.main import get_container
+
+    return get_container()
+
+
 # --- P2 Hardware: signed flashing -----------------------------------------
 @phase_router.post("/epsilon/firmware/flash")
 def flash_firmware(
@@ -107,6 +114,59 @@ def register_dataset(payload: dict[str, Any], db: Session = Depends(get_db)):
     except LicenseError as exc:
         raise HTTPException(status_code=422, detail=str(exc))
     return {"id": ds.id, "license": ds.license, "source_hash": ds.source_hash}
+
+
+# --- P7 Distributed: cluster scheduler + fallback -------------------------
+@phase_router.post("/distributed/tasks")
+def submit_distributed_task(
+    payload: dict[str, Any],
+    db: Session = Depends(get_db),
+    container: Any = Depends(_container_dep),
+):
+    scheduler = container.get("distributed_scheduler")
+    task = scheduler.submit(
+        db,
+        payload=payload.get("payload", payload),
+        node_id=payload.get("node_id"),
+    )
+    return {
+        "id": task.id,
+        "status": task.status,
+        "node_id": task.node_id,
+        "created_at": task.created_at,
+    }
+
+
+@phase_router.get("/distributed/metrics")
+def distributed_metrics(
+    db: Session = Depends(get_db),
+    container: Any = Depends(_container_dep),
+):
+    scheduler = container.get("distributed_scheduler")
+    return {"success_rate": scheduler.success_rate(db)}
+
+
+@phase_router.post("/distributed/recover")
+def distributed_recover(
+    payload: dict[str, Any],
+    db: Session = Depends(get_db),
+    container: Any = Depends(_container_dep),
+):
+    scheduler = container.get("distributed_scheduler")
+    rec = scheduler.recover(
+        db,
+        task_id=payload.get("task_id"),
+        node_id=payload.get("node_id"),
+        reason=payload["reason"],
+        recovered=payload.get("recovered", True),
+    )
+    return {
+        "id": rec.id,
+        "task_id": rec.task_id,
+        "node_id": rec.node_id,
+        "recovered": rec.recovered,
+        "reason": rec.reason,
+    }
 
 
 # --- P8 Cloud: tenant + billing -------------------------------------------

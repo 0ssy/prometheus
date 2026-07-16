@@ -3,6 +3,8 @@ from __future__ import annotations
 from dataclasses import dataclass, field
 from datetime import datetime, timezone
 from typing import Any
+import threading
+import uuid
 
 from core.logger import get_logger
 
@@ -25,7 +27,6 @@ class ProjectRegistry:
         self._lock = threading.RLock()
 
     def create(self, org_id: str, name: str, description: str = "", settings: dict[str, Any] | None = None) -> Project:
-        import uuid
         project_id = str(uuid.uuid4())
         project = Project(project_id=project_id, org_id=org_id, name=name, description=description, settings=settings or {})
         with self._lock:
@@ -52,6 +53,3 @@ class ProjectRegistry:
             if settings is not None:
                 project.settings = settings
             return project
-
-
-import threading

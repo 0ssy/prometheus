@@ -12,7 +12,7 @@ from dataclasses import dataclass, field
 
 @dataclass
 class PrometheusConfig:
-    app_name: str = "Prometheus"
+    app_name: str = "Prometheus Engineering Intelligence Platform"
     version: str = "1.0.0-rc1"
 
     # Storage
@@ -58,6 +58,26 @@ class PrometheusConfig:
     )
     llm_api_key: str = field(
         default_factory=lambda: os.environ.get("PROMETHEUS_LLM_API_KEY", "")
+    )
+
+    # Native multi-language runtime orchestration (P2+)
+    native_runtime_mode: str = field(
+        default_factory=lambda: os.environ.get("PROMETHEUS_NATIVE_RUNTIME", "auto")
+    )  # off|auto|on
+    go_controlplane_url: str = field(
+        default_factory=lambda: os.environ.get(
+            "PROMETHEUS_GO_CONTROLPLANE_URL", "http://127.0.0.1:8080"
+        )
+    )
+    go_billing_url: str = field(
+        default_factory=lambda: os.environ.get(
+            "PROMETHEUS_GO_BILLING_URL", "http://127.0.0.1:8081"
+        )
+    )
+    native_runtime_health_timeout_seconds: float = field(
+        default_factory=lambda: float(
+            os.environ.get("PROMETHEUS_NATIVE_RUNTIME_HEALTH_TIMEOUT", "8")
+        )
     )
 
 

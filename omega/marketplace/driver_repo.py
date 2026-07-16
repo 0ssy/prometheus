@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from dataclasses import dataclass, field
-from typing import Any
+import threading
 
 from core.logger import get_logger
 
@@ -47,6 +47,3 @@ class DriverRepository:
     def list_by_transport(self, transport: str) -> list[DriverPackage]:
         with self._lock:
             return [d for d in self._drivers.values() if d.transport == transport]
-
-
-import threading

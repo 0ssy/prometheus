@@ -1,9 +1,10 @@
 from __future__ import annotations
 
-from dataclasses import dataclass, field
-from datetime import datetime, timezone
+from dataclasses import dataclass
 from enum import Enum
 from typing import Any
+import threading
+import uuid
 
 from core.logger import get_logger
 
@@ -79,8 +80,4 @@ class ConsensusEngine:
             participating_agents=[v.agent_name for v in votes],
         )
 
-    def requires_consensus(self, action: str) -> bool:
-        return action in ("recover", "flash", "reboot")
 
-import threading
-import uuid

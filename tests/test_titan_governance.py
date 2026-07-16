@@ -6,7 +6,7 @@ from sqlalchemy.orm import sessionmaker
 
 import core.database as cd
 from titan.governance import TitanGovernance, LicenseError, scan_license
-from titan.models import Dataset, Model
+from titan.models import Dataset
 
 
 @pytest.fixture

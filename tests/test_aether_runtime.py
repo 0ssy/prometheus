@@ -6,7 +6,7 @@ from sqlalchemy.orm import sessionmaker
 
 import core.database as cd
 from aether.runtime import AetherRuntime, Router, ToolDispatcher, Provider
-from aether.models import AetherContext, AetherToolCall
+from aether.models import AetherToolCall
 
 
 @pytest.fixture

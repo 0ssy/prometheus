@@ -1,8 +1,6 @@
 from __future__ import annotations
 
-import hashlib
 
-import pytest
 
 from firmware.metadata import FirmwareMetadata, FirmwareMetadataStore, compute_sha256
 from firmware.partitions import PartitionParser, PartitionTable, PartitionMapper, Partition

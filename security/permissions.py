@@ -7,7 +7,7 @@ operations. Hardware actions map to the permissions required to perform them.
 
 from __future__ import annotations
 
-from dataclasses import dataclass, field
+from dataclasses import dataclass
 from threading import Lock
 
 from core.logger import get_logger

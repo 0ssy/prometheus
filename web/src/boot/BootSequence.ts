@@ -6,7 +6,7 @@ const BOOT_LOGO = `██████╗ ██████╗  █████�
 ╚═╝     ╚═╝  ╚═╝ ╚═════╝ ╚═╝     ╚═╝╚══════╝`;
 
 const BOOT_LINES = [
-  "Initializing Kernel",
+  "Initializing Platform",
   "Loading Knowledge Engine",
   "Loading Simulation Engine",
   "Loading Reasoning Engine",
@@ -21,7 +21,7 @@ interface SystemData {
   services: number;
   plugins: number;
   agents: number;
-  kernel: string;
+  platform: string;
   stage_timings: Record<string, number>;
 }
 
@@ -44,7 +44,7 @@ export class BootSequence {
     services: 0,
     plugins: 0,
     agents: 0,
-    kernel: "Stopped",
+    platform: "Stopped",
     stage_timings: {},
   };
 
@@ -54,7 +54,7 @@ export class BootSequence {
     this.el.id = "boot";
     this.el.innerHTML = `
       <pre class="logo">${BOOT_LOGO}</pre>
-      <div class="subtitle" id="boot-subtitle">ENGINEERING INTELLIGENCE OS &nbsp;·&nbsp; v${this.version}</div>
+      <div class="subtitle" id="boot-subtitle">ENGINEERING INTELLIGENCE PLATFORM &nbsp;·&nbsp; v${this.version}</div>
       <div id="boot-log">
         <div id="boot-progress" style="height:10px;background:var(--border);border:1px solid var(--border);border-radius:2px;overflow:hidden;margin:8px 0 2px;"><div id="boot-progress-fill" style="height:100%;width:0%;background:var(--yellow);transition:width 0.2s ease-out;"></div></div>
         <div id="boot-timer" style="font-family:var(--font-mono);color:var(--muted);font-size:12px;margin:6px 0 10px;text-align:left;">boot: 0.00s</div>
@@ -86,7 +86,7 @@ export class BootSequence {
           this.version = String(d.version);
           this.data.version = this.version;
           const sub = this.el.querySelector("#boot-subtitle");
-          if (sub) sub.textContent = `ENGINEERING INTELLIGENCE OS · v${this.version}`;
+          if (sub) sub.textContent = `ENGINEERING INTELLIGENCE PLATFORM · v${this.version}`;
         }
       })
       .catch(() => {});
@@ -97,7 +97,7 @@ export class BootSequence {
         if (d) {
           if (typeof d.plugins === "number") this.data.plugins = d.plugins;
           if (typeof d.agents === "number") this.data.agents = d.agents;
-          if (d.kernel) this.data.kernel = String(d.kernel);
+          if (d.platform) this.data.platform = String(d.platform);
         }
       })
       .catch(() => {});
@@ -115,7 +115,7 @@ export class BootSequence {
         if (d) {
           if (typeof d.plugins_loaded === "number") this.data.plugins = d.plugins_loaded;
           if (typeof d.agents_loaded === "number") this.data.agents = d.agents_loaded;
-          if (d.kernel_health && !this.data.kernel) this.data.kernel = String(d.kernel_health);
+          if (d.platform_health && !this.data.platform) this.data.platform = String(d.platform_health);
         }
       })
       .catch(() => {});
@@ -161,8 +161,8 @@ export class BootSequence {
   }
 
   private renderSummary() {
-    const running = /run/i.test(this.data.kernel);
-    const kernelColor = running ? "#7CFC7C" : "var(--orange-red)";
+    const running = /run/i.test(this.data.platform);
+    const platformColor = running ? "#7CFC7C" : "var(--orange-red)";
     this.summaryEl.style.display = "block";
     const timingLines = Object.entries(this.data.stage_timings)
       .map(([k, v]) => `<div>${k}......... <span style="color:var(--text)">${v.toFixed(0)} ms</span></div>`)
@@ -175,7 +175,7 @@ export class BootSequence {
       `<div>Loaded Services. <span style="color:var(--text)">${this.data.services}</span></div>`,
       `<div>Plugins......... <span style="color:var(--text)">${this.data.plugins}</span></div>`,
       `<div>Agents.......... <span style="color:var(--text)">${this.data.agents}</span></div>`,
-      `<div>Kernel.......... <span style="color:${kernelColor}">${this.data.kernel}</span></div>`,
+      `<div>Kernel.......... <span style="color:${platformColor}">${this.data.platform}</span></div>`,
     ].join("");
   }
 

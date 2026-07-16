@@ -6,7 +6,7 @@ from sqlalchemy.orm import sessionmaker
 
 import core.database as cd
 from engineering.intelligence import EngineeringIntelligence, Suggestion
-from engineering.models import EngineeringReport, EngineeringFeedback
+from engineering.models import EngineeringReport
 
 
 @pytest.fixture

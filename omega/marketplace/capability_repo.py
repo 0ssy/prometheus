@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from dataclasses import dataclass, field
-from typing import Any
+import threading
 
 from core.logger import get_logger
 
@@ -49,6 +49,3 @@ class CapabilityRepository:
     def list_by_interface(self, interface_name: str) -> list[CapabilityPackage]:
         with self._lock:
             return [c for c in self._capabilities.values() if c.interface == interface_name]
-
-
-import threading

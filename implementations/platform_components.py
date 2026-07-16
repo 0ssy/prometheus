@@ -12,12 +12,12 @@ from contracts.device import DeviceApi
 from contracts.scheduler import SchedulerApi
 from core.capabilities import CapabilityManager
 from core.scheduler import TaskScheduler
+from hardware.compat.adapter import DeviceRegistryAdapter
 from knowledge.engine import KnowledgeEngine
 from memory.store import MemoryStore
 from reasoning.graph import ReasoningStore
 from plugins.manager import PluginManager
 from agents.manager import AgentManager
-from devices.registry import DeviceRegistry
 
 
 @dataclass
@@ -40,7 +40,7 @@ def build_platform_components(event_bus: EventBus) -> PlatformComponents:
     plugin_api = PluginManager(event_bus=event_bus)
     agent_api = AgentManager(event_bus=event_bus)
     capability_api = CapabilityManager(event_bus=event_bus)
-    device_api = DeviceRegistry(event_bus=event_bus)
+    device_api = DeviceRegistryAdapter()
     return PlatformComponents(
         scheduler=scheduler,
         memory_api=memory_api,

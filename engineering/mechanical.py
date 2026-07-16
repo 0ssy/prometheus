@@ -5,7 +5,7 @@ Simulated mechanical workflows: stress analysis, motion simulation,
 CAM toolpath generation, material checks.
 """
 
-from dataclasses import dataclass, field, asdict
+from dataclasses import dataclass, asdict
 from core.logger import get_logger
 
 logger = get_logger(__name__)
