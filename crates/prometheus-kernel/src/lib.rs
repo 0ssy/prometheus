@@ -16,6 +16,6 @@ pub mod kernel;
 
 pub use error::KernelError;
 pub use event_bus::{EventBus, KernelEvent};
-pub use kernel::Kernel;
+pub use kernel::{Kernel, KernelStatus};
 pub use session::{Session, SessionManager, WindowState};
 pub use terminal::{TerminalHandle, TerminalInfo, TerminalManager};

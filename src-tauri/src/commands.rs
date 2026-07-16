@@ -11,7 +11,7 @@ use std::path::PathBuf;
 use prometheus_kernel::{
     Kernel, KernelStatus, Session, WindowState,
 };
-use tauri::{AppHandle, Manager, State};
+use tauri::{AppHandle, Emitter, State};
 
 /// Tauri-managed kernel state. Constructed in `setup` once the app path is
 /// known, then shared with every command via `State`.
@@ -19,7 +19,8 @@ pub struct KernelState(Mutex<Kernel>);
 
 impl KernelState {
     pub fn new(session_db: PathBuf) -> KernelResult<Self> {
-        Ok(KernelState(Mutex::new(Kernel::new(&session_db)?)))
+        let kernel = Kernel::new(&session_db).map_err(|e| e.to_string())?;
+        Ok(KernelState(Mutex::new(kernel)))
     }
 }
 
@@ -138,8 +139,7 @@ pub fn session_restore(id: String, state: State<KernelState>) -> KernelResult<Op
 /// Bridge the kernel event bus into Tauri webview events. Call once during
 /// `setup`. Every kernel event becomes a Tauri event named after its topic;
 /// the frontend listens via `listen(topic, handler)`.
-pub fn bridge_kernel_events(app: &AppHandle, state: &KernelState) {
-    let app = app.clone();
+pub fn bridge_kernel_events(app: AppHandle, state: State<'_, KernelState>) {
     state.0.lock().unwrap().bus.subscribe(move |event| {
         let _ = app.emit(&event.topic, event.clone());
     });

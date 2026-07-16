@@ -68,7 +68,7 @@ pub fn run() {
             let kernel = KernelState::new(session_db)
                 .expect("failed to initialise Prometheus kernel");
             app.manage(kernel);
-            bridge_kernel_events(app.handle(), app.state::<KernelState>());
+            bridge_kernel_events(app.handle().clone(), app.state::<KernelState>());
 
             // Launch the bundled Python backend as a sidecar so the installed
             // app is fully self-contained (no external `python` on PATH needed).
