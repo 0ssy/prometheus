@@ -2,7 +2,8 @@ from __future__ import annotations
 
 from dataclasses import dataclass, field
 from datetime import datetime, timezone
-from typing import Any
+import threading
+import uuid
 
 from core.logger import get_logger
 
@@ -28,7 +29,6 @@ class UserRegistry:
         self._lock = threading.RLock()
 
     def create(self, email: str, name: str, org_id: str, team_ids: set[str] | None = None, roles: set[str] | None = None) -> User:
-        import uuid
         user_id = str(uuid.uuid4())
         user = User(user_id=user_id, email=email, name=name, org_id=org_id, team_ids=team_ids or set(), roles=roles or set())
         with self._lock:
@@ -64,6 +64,3 @@ class UserRegistry:
             user = self._users.get(user_id)
             if user:
                 user.roles.discard(role)
-
-
-import threading

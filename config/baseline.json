@@ -1,15 +1,15 @@
 {
-  "captured_at": 1784132383.4488034,
+  "captured_at": 1784216885.1286502,
   "timings": {
-    "db_load": 0.5533689000003505,
-    "service_registration": 0.012943699999595992,
-    "plugin_load": 0.0001773999974830076,
-    "agent_load": 0.00021130000095581636,
-    "scheduler_start": 0.0006805999983043876,
-    "total": 0.5673854000015126
+    "db_load": 0.0006409000052371994,
+    "service_registration": 0.02207339998858515,
+    "plugin_load": 0.000152299995534122,
+    "agent_load": 0.0004165999998804182,
+    "scheduler_start": 0.0008209000079659745,
+    "total": 0.024108500001602806
   },
-  "initial_memory_mb": 13935.43359375,
-  "idle_cpu_percent": 0.0,
+  "initial_memory_mb": 15121.8359375,
+  "idle_cpu_percent": 62.5,
   "plugin_count": 1,
   "agent_count": 2
 }

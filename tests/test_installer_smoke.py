@@ -11,9 +11,7 @@ regressions in the boot sequence that would block a clean install from
 ever coming online.
 """
 
-import os
 
-import pytest
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 
@@ -49,6 +47,7 @@ def test_installed_platform_boots_and_serves(tmp_path, monkeypatch):
         health = client.get("/health")
         assert health.status_code == 200
         assert health.json().get("status") == "ok"
+        assert "native_runtime" in health.json()
 
         assert client.get("/status").status_code == 200
         # Interactive API docs must be reachable after a clean install.

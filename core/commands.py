@@ -1,6 +1,5 @@
 from __future__ import annotations
 
-from typing import Any
 
 from core.database import SessionLocal
 from core.logger import get_logger
@@ -21,7 +20,6 @@ def _status_snapshot(container, db) -> dict:
     reasoning_api = container.get("reasoning_api")
     device_api = container.get("device_api")
     plugin_api = container.get("plugin_api")
-    agent_api = container.get("agent_api")
     capability_api = container.get("capability_api")
 
     kernel_status = "Running" if kernel.health().get("status") == "ok" else "Stopped"

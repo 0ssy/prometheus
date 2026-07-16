@@ -8,7 +8,7 @@ import tempfile
 
 import pytest
 
-from services.engineering_service import EngineeringService, EngineeringModule
+from services.engineering_service import EngineeringService
 
 
 @pytest.fixture

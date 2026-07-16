@@ -9,7 +9,7 @@ from __future__ import annotations
 
 import time
 
-from core.bootstrap import boot, load_baseline
+from core.bootstrap import boot
 from core.container import ServiceContainer
 from core.logger import get_logger
 

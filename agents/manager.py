@@ -64,7 +64,7 @@ class AgentManager(AgentApi):
             self._event_bus.publish(AgentDispatchedEvent(agent_name=agent_name, task=task))
             self._set_status(agent_name, "idle", task)
             return result
-        except Exception as e:
+        except Exception:
             self._set_status(agent_name, "error", task)
             raise
 

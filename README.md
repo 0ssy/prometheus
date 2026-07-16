@@ -15,7 +15,7 @@ knowledge graph, ontology, provenance, confidence-based facts, query engine, lea
 | Capability framework    | `core/capabilities.py`, `contracts/capability.py` |
 | Reasoning pipeline      | `reasoning/pipeline.py` |
 | Simulation engine       | `simulation/engine.py` |
-| Core kernel             | `kernel/runtime.py` |
+| Core runtime             | `kernel/runtime.py` |
 | Observability           | `core/observability.py` |
 | Knowledge engine        | `knowledge/engine.py`, `knowledge/graph.py`, `knowledge/query.py` |
 | Ontology + provenance   | `knowledge/ontology.py`, `knowledge/provenance.py` |
@@ -40,7 +40,7 @@ python3 -m venv venv
 source venv/bin/activate        # Windows: venv\Scripts\activate
 pip install -r requirements.txt
 
-# 2. Start the platform (boots the kernel + opens the dashboard in a browser)
+# 2. Start the platform (boots the platform + opens the dashboard in a browser)
 python prometheus.py
 
 # 3. Confirm it is alive
@@ -56,7 +56,7 @@ interactive API docs at <http://127.0.0.1:8000/docs>.
 python prometheus.py --terminal    # Terminal Only: live Prometheus shell, no GUI
 python prometheus.py --developer   # Developer Workspace: full system + service dump
 python prometheus.py --server      # Headless Server: API only, no browser
-python prometheus.py --safe-mode   # Minimal Services: kernel only, no plugins/agents
+python prometheus.py --safe-mode   # Minimal Services: platform only, no plugins/agents
 
 python prometheus.py status        # print branded status banner
 python prometheus.py demo --db     # run happy-path demo against ephemeral DB
@@ -64,6 +64,28 @@ python prometheus.py test          # run pytest suite
 python prometheus.py install robotics   # scaffold an SDK extension
 python prometheus.py extensions         # list installed SDK packages
 ```
+
+### Native runtime process mode (Go service boundaries)
+
+Prometheus can auto-start the non-Python runtime services (control-plane and
+billing) as isolated Go processes:
+
+```bash
+# off | auto | on
+set PROMETHEUS_NATIVE_RUNTIME=auto
+set PROMETHEUS_GO_CONTROLPLANE_URL=http://127.0.0.1:8080
+set PROMETHEUS_GO_BILLING_URL=http://127.0.0.1:8081
+set PROMETHEUS_EXTRA_PATHS=C:\msys64\ucrt64\bin
+```
+
+- `auto`: starts when toolchains are present, skips during pytest.
+- `on`: always attempts to start and reports missing toolchains.
+- `off`: disables native process startup.
+- `PROMETHEUS_EXTRA_PATHS`: optional `;`-separated extra toolchain paths
+  prepended at runtime (Windows default also auto-detects `C:\msys64\ucrt64\bin`
+  when present for `gcc`/`g++`).
+
+Runtime status: `GET /system/native-runtime`.
 
 ## Advanced
 

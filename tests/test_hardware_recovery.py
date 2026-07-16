@@ -1,7 +1,6 @@
 from __future__ import annotations
 
 from hardware.session import DeviceSession, DeviceSessionManager
-from hardware.diagnostics import HardwareDiagnostics
 from hardware.recovery import HardwareRecovery
 
 

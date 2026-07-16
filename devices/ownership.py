@@ -11,17 +11,8 @@ touching the device. This is the actual code-level gate RFC 0000 promised,
 not a comment telling some future version of you to add one later.
 """
 
-import warnings
+from devices.base import Device  # noqa: E402
 from core.logger import get_logger
-
-warnings.warn(
-    "devices.ownership is deprecated. Ownership checks are handled by security.authorization instead. "
-    "This module will be removed in a future release.",
-    DeprecationWarning,
-    stacklevel=2,
-)
-
-from devices.base import Device
 
 logger = get_logger(__name__)
 

@@ -5,7 +5,7 @@ Simulated electrical workflows: circuit simulation, power analysis,
 oscilloscope capture, PCB routing, signal integrity checks.
 """
 
-from dataclasses import dataclass, field, asdict
+from dataclasses import dataclass, asdict
 from core.logger import get_logger
 
 logger = get_logger(__name__)

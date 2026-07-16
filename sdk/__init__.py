@@ -39,5 +39,4 @@ __all__ = [
     "plugin",
     "plugin_hook",
     "requires_permission",
-    "plugin_sdk",
 ]

@@ -10,9 +10,8 @@ from __future__ import annotations
 import hashlib
 import json
 import random
-import re
 import uuid
-from dataclasses import dataclass, field, asdict
+from dataclasses import dataclass, asdict
 from pathlib import Path
 from typing import Any
 

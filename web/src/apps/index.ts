@@ -15,3 +15,6 @@ export * from "./MonitorApp";
 export * from "./JobsApp";
 export * from "./WorkflowApp";
 export * from "./EngineeringStudioApp";
+export * from "./StatusApp";
+export * from "./GovernanceApp";
+export * from "./OSApp";

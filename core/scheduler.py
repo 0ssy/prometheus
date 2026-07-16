@@ -12,7 +12,7 @@ distributed workers.
 import threading
 import time
 from collections.abc import Callable
-from dataclasses import dataclass, field
+from dataclasses import dataclass
 from typing import Any
 
 from contracts.scheduler import SchedulerApi

@@ -24,7 +24,9 @@ from core.container import ServiceContainer
 from core.database import init_db
 from core.event_bus import InMemoryEventBus
 from core.logger import get_logger
+from core.native_runtime import create_http_cluster_submit
 from core.observability import ObservabilityStore
+from distributed.scheduler import DistributedScheduler
 from implementations.platform_components import build_platform_components
 from kernel.runtime import PrometheusCoreKernel
 from services.delta_service import DeltaService
@@ -113,6 +115,9 @@ def _register_services(container: ServiceContainer, workflow_runtime: Any) -> No
 
     from simulation.engine import SimulationEngine
     simulation_engine = SimulationEngine()
+    distributed_scheduler = DistributedScheduler(
+        cluster_submit=create_http_cluster_submit(config.go_controlplane_url)
+    )
 
     container.register("event_bus", event_bus)
     container.register("observability", observability)
@@ -132,6 +137,7 @@ def _register_services(container: ServiceContainer, workflow_runtime: Any) -> No
     container.register("event_handlers", event_handlers)
     container.register("kernel", kernel)
     container.register("simulation_engine", simulation_engine)
+    container.register("distributed_scheduler", distributed_scheduler)
     container.register("hardware_hal", epsilon_service._hal)
     container.register("hardware_session_manager", epsilon_service._session_manager)
     container.register("hardware_diagnostics", epsilon_service._diagnostics)

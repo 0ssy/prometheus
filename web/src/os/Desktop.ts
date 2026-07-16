@@ -19,6 +19,9 @@ import {
   mountJobs,
   mountWorkflow,
   mountEngineeringStudio,
+  mountStatus,
+  mountGovernance,
+  mountOS,
 } from "../apps";
 
 const BOOT_LOGO = `██████╗ ██████╗  ██████╗ ███╗   ███╗███████╗
@@ -52,6 +55,9 @@ const APPS: Record<string, AppDef> = {
   jobs: { key: "jobs", title: "JOBS", mount: mountJobs, w: 400, h: 320 },
   workflow: { key: "workflow", title: "WORKFLOWS", mount: mountWorkflow, w: 420, h: 360 },
   engineering: { key: "engineering", title: "ENGINEERING", mount: mountEngineeringStudio, w: 420, h: 360 },
+  status: { key: "status", title: "STATUS", mount: mountStatus, w: 420, h: 320 },
+  governance: { key: "governance", title: "GOVERNANCE", mount: mountGovernance, w: 420, h: 360 },
+  os: { key: "os", title: "PROMETHEUS OS", mount: mountOS, w: 460, h: 400 },
 };
 
 const DOCK_KEYS = [
@@ -70,6 +76,9 @@ const DOCK_KEYS = [
   "jobs",
   "workflow",
   "engineering",
+  "status",
+  "governance",
+  "os",
 ];
 
 const DOCK_ICONS: Record<string, string> = {
@@ -88,6 +97,9 @@ const DOCK_ICONS: Record<string, string> = {
   jobs: '<rect x="2" y="2" width="8" height="8" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="M4 5 L6 7 L9 4" stroke="currentColor" stroke-width="1.2" fill="none"/>',
   workflow: '<circle cx="3" cy="6" r="1.5" fill="currentColor"/><circle cx="9" cy="6" r="1.5" fill="currentColor"/><path d="M4.5 6 L7.5 6 M4.5 6 L3 3 M7.5 6 L10 3 M4.5 6 L3 9 M7.5 6 L10 9" stroke="currentColor" stroke-width="1"/>',
   engineering: '<path d="M2 10 L6 2 L10 10" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="M4 10 L6 6 L8 10" fill="none" stroke="currentColor" stroke-width="1.5"/>',
+  status: '<rect x="2" y="3" width="8" height="6" rx="1" fill="none" stroke="currentColor" stroke-width="1.5"/><circle cx="6" cy="6" r="1.6" fill="currentColor"/>',
+  governance: '<rect x="2" y="2" width="8" height="8" rx="1" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="M4 6 L5.5 7.5 L8 4.5" stroke="currentColor" stroke-width="1.2" fill="none"/>',
+  os: '<rect x="1.5" y="2" width="9" height="8" rx="1" fill="none" stroke="currentColor" stroke-width="1.5"/><circle cx="6" cy="6" r="1.6" fill="currentColor"/><path d="M3 9 H9" stroke="currentColor" stroke-width="1"/>',
 };
 
 export class Desktop {

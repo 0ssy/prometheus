@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from dataclasses import dataclass, field
-from typing import Any
+import threading
 
 from core.logger import get_logger
 
@@ -58,6 +58,3 @@ class PluginRepository:
                 del self._plugins[package_id]
                 return True
             return False
-
-
-import threading

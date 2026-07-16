@@ -1,6 +1,5 @@
 from __future__ import annotations
 
-from core.event_bus import InMemoryEventBus
 
 from hardware.events import (
     DeviceConnectedEvent,

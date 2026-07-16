@@ -5,7 +5,7 @@ Simulated robotics workflows: SLAM, path planning, motor control,
 vision capture, physics simulation.
 """
 
-from dataclasses import dataclass, field, asdict
+from dataclasses import dataclass, asdict
 from core.logger import get_logger
 
 logger = get_logger(__name__)

@@ -18,6 +18,7 @@ from sqlalchemy.orm import sessionmaker, declarative_base
 from .config import config
 from core.logger import get_logger
 from core.event_bus import event_bus
+from api.events import DatabaseCorruptedEvent
 
 logger = get_logger(__name__)
 
@@ -74,6 +75,18 @@ def init_db():
     from knowledge.node import KnowledgeNode  # noqa
     from knowledge.edge import KnowledgeEdge  # noqa
     from knowledge.learning import LearningExperience  # noqa
+    from core.observability import Metric  # noqa
+    from security.auditing import AuditLog  # noqa
+    from plugins.manager import PluginRun  # noqa
+    from hardware.hal_models import HALProtocolTest, FirmwareFlashLog  # noqa
+    from aether.models import AetherContext, AetherToolCall  # noqa
+    from engineering.models import EngineeringReport, EngineeringFeedback  # noqa
+    from titan.models import Dataset, Model  # noqa
+    from benchmarks.perf_models import PerfMetric  # noqa
+    from distributed.models import DistributedTask, DistributedRecovery  # noqa
+    from enterprise.models import Tenant, Role, User, Permission, UsageEvent, Invoice  # noqa
+    from marketplace.models import MarketplaceApproval  # noqa
+    from core.enterprise_workflow import EnterpriseWorkflow  # noqa
 
     try:
         Base.metadata.create_all(bind=engine)

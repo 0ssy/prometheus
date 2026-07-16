@@ -18,7 +18,7 @@ from sqlalchemy.orm import Session
 
 from reasoning.graph import query_facts
 from contracts.device import DeviceApi
-from devices.registry import device_registry
+from hardware.compat.adapter import DeviceRegistryAdapter
 from core.ownership_registry import is_declared_owned
 from engineering.recovery_planner import plan_recovery
 from core.logger import get_logger
@@ -120,7 +120,7 @@ def build_twin(db: Session, device_id: str, device_api: DeviceApi | None = None)
         partition_events[-1].split(":", 1)[1] if partition_events else "unknown"
     )
 
-    registry = device_api or device_registry
+    registry = device_api or DeviceRegistryAdapter()
     live_device = registry.get(device_id)
     if live_device:
         hardware = {"transport": live_device.transport, **live_device.status()}

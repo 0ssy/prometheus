@@ -1,9 +1,11 @@
 from __future__ import annotations
 
-from dataclasses import dataclass, field, asdict
+from dataclasses import dataclass, field
 from datetime import datetime, timezone
 from enum import Enum
 from typing import Any
+import threading
+import uuid
 
 from core.logger import get_logger
 
@@ -67,7 +69,3 @@ class AgentCoordinator:
         with self._lock:
             self._tasks[task_id] = task
         return task
-
-
-import threading
-import uuid

@@ -2,7 +2,6 @@ from __future__ import annotations
 
 from sdk.plugin_sdk import (
     BasePlugin,
-    PluginCapability,
     PluginContext,
     PluginLifecycleManager,
     PluginManifest,
@@ -11,7 +10,6 @@ from sdk.plugin_sdk import (
     MockPluginContext,
     capability,
     plugin,
-    plugin_hook,
     requires_permission,
 )
 from sdk.plugin_sdk.examples import BatteryAnalyzer, TemperatureMonitor

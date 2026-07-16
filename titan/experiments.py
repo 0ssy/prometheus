@@ -6,7 +6,6 @@ Logs metrics, checkpoints, and comparisons for fine-tuning runs.
 
 from __future__ import annotations
 
-import dataclasses
 import random
 import uuid
 from dataclasses import dataclass, field, asdict

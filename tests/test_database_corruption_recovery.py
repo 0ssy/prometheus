@@ -5,7 +5,7 @@ from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 
 import core.database as cd
-from core.database import Base, init_db
+from core.database import init_db
 
 
 def test_init_db_recovers_from_corruption(tmp_path):

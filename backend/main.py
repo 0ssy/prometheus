@@ -18,12 +18,13 @@ from datetime import datetime, timezone
 from pathlib import Path
 from queue import Queue
 
-from fastapi import FastAPI, Depends, Body, HTTPException
+from fastapi import FastAPI, Depends, Body, HTTPException, Request
 from fastapi.responses import StreamingResponse
 from sqlalchemy.orm import Session
 
 from core.config import config
 from core.logger import get_logger
+from core.native_runtime import NativeRuntimeManager
 from core.database import get_db
 from core.bootstrap import boot
 from core.container import ServiceContainer
@@ -60,9 +61,21 @@ def _heartbeat_job():
 async def lifespan(app: FastAPI):
     global _container
     _container = boot(_heartbeat_job)
+    native_runtime = NativeRuntimeManager(mode=config.native_runtime_mode)
+    native_runtime.start()
+    _container.register("native_runtime", native_runtime)
     app.state.container = _container
     logger.info("Backend ready — services available via app.state.container")
     yield
+    # P1 baseline observability: snapshot counters to the metrics table on
+    # graceful shutdown so they survive restarts.
+    try:
+        _container.get("observability").snapshot_to_db()
+    except Exception:
+        logger.exception("Failed to snapshot observability on shutdown")
+    finally:
+        native = _container.get("native_runtime")
+        native.stop()
 
 
 app = FastAPI(
@@ -70,6 +83,14 @@ app = FastAPI(
     version=config.version,
     lifespan=lifespan,
 )
+
+
+@app.middleware("http")
+async def api_prefix_middleware(request: Request, call_next):
+    path = request.url.path
+    if path.startswith("/api/v1/"):
+        request.scope["path"] = "/" + path[len("/api/v1/"):]
+    return await call_next(request)
 
 
 def get_platform_service(
@@ -108,9 +129,11 @@ def get_titan_service(
     return container.get("titan_service")
 
 
-from backend.dashboard import mount_dashboard
+from backend.dashboard import mount_dashboard  # noqa: E402
+from backend.phase_endpoints import phase_router  # noqa: E402
 
 mount_dashboard(app)
+app.include_router(phase_router)
 
 
 @app.get("/health")
@@ -119,6 +142,7 @@ def health(container: ServiceContainer = Depends(get_container)):
     agent_api = container.get("agent_api")
     capability_api = container.get("capability_api")
     kernel = container.get("kernel")
+    native_runtime = container.get("native_runtime")
     return {
         "status": "ok",
         "app": config.app_name,
@@ -127,6 +151,7 @@ def health(container: ServiceContainer = Depends(get_container)):
         "agents_loaded": agent_api.list_agents(),
         "capabilities_registered": len(capability_api.discover()),
         "kernel_health": kernel.health(),
+        "native_runtime": native_runtime.status(),
     }
 
 
@@ -204,6 +229,11 @@ def list_services(container: ServiceContainer = Depends(get_container)):
 def system_resources(container: ServiceContainer = Depends(get_container)):
     resource_manager = container.get("omega_resource_manager")
     return resource_manager.to_dict()
+
+
+@app.get("/system/native-runtime")
+def system_native_runtime(container: ServiceContainer = Depends(get_container)):
+    return container.get("native_runtime").status()
 
 
 @app.get("/system/jobs")
@@ -290,7 +320,7 @@ def core_status(container: ServiceContainer = Depends(get_container)):
 def observability_snapshot(container: ServiceContainer = Depends(get_container), db: Session = Depends(get_db)):
     observability = container.get("observability")
     status = _status_snapshot(container, db)
-    return observability.snapshot(status=status)
+    return observability.snapshot(status=status, db_session=db)
 
 
 @app.get("/workflows")
@@ -1149,7 +1179,6 @@ def knowledge_timeline(
     db: Session = Depends(get_db),
 ):
     from reasoning.models import KnowledgeFact
-    from sqlalchemy import func
     facts = db.query(KnowledgeFact).order_by(KnowledgeFact.created_at.desc()).limit(100).all()
     return {
         "facts": [
@@ -1171,8 +1200,7 @@ def knowledge_timeline(
 # ---------------------------------------------------------------------------
 
 
-import uuid
-from core.database import SimulationRun
+from core.database import SimulationRun  # noqa: E402
 
 
 @app.post("/simulation/run")
@@ -1257,8 +1285,6 @@ def list_simulations(db: Session = Depends(get_db)):
 # ---------------------------------------------------------------------------
 
 
-import os as _os
-from pathlib import Path
 
 
 WORKSPACE_ROOT = Path(__file__).resolve().parent.parent / "workspace"

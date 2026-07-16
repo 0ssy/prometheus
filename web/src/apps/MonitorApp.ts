@@ -39,12 +39,22 @@ export function mountMonitor(el: HTMLElement) {
   const renderObservability = (o: any) => {
     const subs = o.subsystems || {};
     const rows = Object.entries(subs).map(([k, v]) => `<div class="node-row"><span>${k}</span><span class="tag">${v}</span></div>`).join("");
+    const persisted = o.persisted_metrics || {};
+    const persistedKeys = Object.keys(persisted);
+    const persistedRows = persistedKeys.length
+      ? persistedKeys
+          .slice(0, 8)
+          .map((k) => `<div class="node-row"><span>${k}</span><span class="tag">${persisted[k]}</span></div>`)
+          .join("")
+      : '<div style="color: var(--muted);">no persisted metrics</div>';
     observabilityEl.innerHTML = `
       <div style="font-family: var(--font-heading); color: var(--yellow); font-size: 11px; margin-bottom: 4px;">OBSERVABILITY</div>
       <div class="node-row"><span>Events/sec</span><span class="tag">${o.events_per_sec ?? 0}</span></div>
       <div class="node-row"><span>Commands/sec</span><span class="tag">${o.commands_per_sec ?? 0}</span></div>
       <div style="margin-top: 4px; font-family: var(--font-heading); color: var(--yellow); font-size: 11px; margin-bottom: 4px;">SUBSYSTEMS</div>
       ${rows || '<div style="color: var(--muted);">loading...</div>'}
+      <div style="margin-top: 4px; font-family: var(--font-heading); color: var(--yellow); font-size: 11px; margin-bottom: 4px;">PERSISTED (DB)</div>
+      ${persistedRows}
     `;
   };
 

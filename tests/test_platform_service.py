@@ -1,10 +1,10 @@
+from hardware.compat.adapter import DeviceRegistryAdapter
 from core.event_bus import InMemoryEventBus
 from core.capabilities import CapabilityManager
 from core.observability import ObservabilityStore
 from core.database import Base as PrometheusBase
 from memory.store import MemoryStore
 from reasoning.graph import ReasoningStore
-from devices.registry import DeviceRegistry
 from agents.manager import AgentManager
 from plugins.manager import PluginManager
 from services.platform_service import PlatformService
@@ -37,7 +37,7 @@ class FakeDevice:
 
 def test_platform_service_write_device_publishes_event():
     bus = InMemoryEventBus()
-    device_api = DeviceRegistry(event_bus=bus)
+    device_api = DeviceRegistryAdapter(event_bus=bus)
     service = PlatformService(
         plugin_api=PluginManager(event_bus=bus),
         agent_api=AgentManager(event_bus=bus),
@@ -65,7 +65,7 @@ def test_platform_service_registers_device_capabilities():
         plugin_api=PluginManager(event_bus=bus),
         agent_api=AgentManager(event_bus=bus),
         capability_api=capability_api,
-        device_api=DeviceRegistry(event_bus=bus),
+        device_api=DeviceRegistryAdapter(event_bus=bus),
         memory_api=MemoryStore(event_bus=bus),
         reasoning_api=ReasoningStore(event_bus=bus),
         event_bus=bus,
@@ -92,7 +92,7 @@ def test_platform_service_beta_workflow_records_result(db_session):
         plugin_api=PluginManager(event_bus=bus),
         agent_api=AgentManager(event_bus=bus),
         capability_api=capability_api,
-        device_api=DeviceRegistry(event_bus=bus),
+        device_api=DeviceRegistryAdapter(event_bus=bus),
         memory_api=memory_api,
         reasoning_api=reasoning_api,
         event_bus=bus,
@@ -119,7 +119,7 @@ def test_platform_service_gamma_queries():
         plugin_api=PluginManager(event_bus=bus),
         agent_api=AgentManager(event_bus=bus),
         capability_api=capability_api,
-        device_api=DeviceRegistry(event_bus=bus),
+        device_api=DeviceRegistryAdapter(event_bus=bus),
         memory_api=MemoryStore(event_bus=bus),
         reasoning_api=ReasoningStore(event_bus=bus),
         event_bus=bus,

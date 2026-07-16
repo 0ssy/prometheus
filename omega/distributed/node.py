@@ -4,6 +4,7 @@ from dataclasses import dataclass, field
 from datetime import datetime, timezone
 from enum import Enum
 from typing import Any
+import threading
 
 from core.logger import get_logger
 
@@ -66,6 +67,3 @@ class NodeRegistry:
     def find_by_capability(self, capability: str) -> list[NodeInfo]:
         with self._lock:
             return [n for n in self._nodes.values() if capability in n.capabilities]
-
-
-import threading

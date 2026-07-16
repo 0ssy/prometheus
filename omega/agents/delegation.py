@@ -1,8 +1,9 @@
 from __future__ import annotations
 
-from dataclasses import dataclass, field
-from datetime import datetime, timezone
+from dataclasses import dataclass
 from typing import Any
+import threading
+import uuid
 
 from core.logger import get_logger
 
@@ -50,9 +51,5 @@ class DelegationRouter:
     def get_delegation_chain(self, task_id: str) -> list[str]:
         with self._lock:
             return list(self._chains.get(task_id, []))
-
     def route(self, task: dict, available_agents: list[str], capabilities: dict) -> str:
         return available_agents[0] if available_agents else ""
-
-import threading
-import uuid

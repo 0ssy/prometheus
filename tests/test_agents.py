@@ -3,7 +3,7 @@ from __future__ import annotations
 import pytest
 
 from omega.agents import AgentCoordinator, ConsensusEngine, DelegationRouter, TaskPlanner
-from omega.agents.coordinator import AgentTask, TaskStatus
+from omega.agents.coordinator import TaskStatus
 from omega.agents.consensus import VoteChoice
 
 

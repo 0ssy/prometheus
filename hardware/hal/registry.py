@@ -1,6 +1,5 @@
 from __future__ import annotations
 
-from typing import Any
 
 from hardware.hal.interface import HardwareInterface
 from core.logger import get_logger

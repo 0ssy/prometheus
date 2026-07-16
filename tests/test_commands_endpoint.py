@@ -18,7 +18,11 @@ def _make_container(mock_platform=None, mock_agent_api=None, mock_plugin_api=Non
         "capability_api": mock_capability_api or MagicMock(),
         "hardware_hal": mock_hardware_hal or MagicMock(),
     }
-    mock_container.get.side_effect = lambda key: mapping.get(key, MagicMock())
+
+    def _get_side_effect(key):
+        return mapping.get(key, MagicMock())
+
+    mock_container.get.side_effect = _get_side_effect
     return mock_container
 
 
@@ -73,7 +77,7 @@ def test_commands_list_agents():
 def test_commands_show_kernel():
     mock_kernel = MagicMock()
     mock_kernel.status.return_value = {"status": "alive"}
-    result = commands_endpoint(
+    _result = commands_endpoint(
         payload={"command": "show kernel"},
         db=MagicMock(),
         container=_make_container(mock_kernel=mock_kernel),

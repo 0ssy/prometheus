@@ -2,10 +2,13 @@
 
 use std::sync::Mutex;
 
-use ai_runtime::{AetherError, ChatRequest, ContextEngine, ProviderInfo, ProviderManager, RuntimeHealth, ToolDispatcher, DEFAULT_BACKEND_URL};
+use aether_runtime::{AetherError, ChatRequest, ContextEngine, ProviderInfo, ProviderManager, RuntimeHealth, ToolDispatcher, DEFAULT_BACKEND_URL};
 use tauri::Manager;
 use tauri_plugin_shell::process::CommandChild;
 use tauri_plugin_shell::ShellExt;
+
+mod commands;
+use commands::{bridge_kernel_events, KernelState};
 
 /// Handle to the bundled Python backend process, so we can terminate it
 /// when the desktop app exits.
@@ -27,7 +30,7 @@ struct AetherTools(Mutex<ToolDispatcher>);
 
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
 pub fn run() {
-    let runtime = ai_runtime::AetherRuntime::new();
+    let runtime = aether_runtime::AetherRuntime::new();
 
     let builder = tauri::Builder::default()
         .plugin(tauri_plugin_shell::init())
@@ -38,9 +41,35 @@ pub fn run() {
         .invoke_handler(tauri::generate_handler![
             aether_health,
             aether_list_providers,
-            aether_ask
+            aether_ask,
+            commands::terminal_spawn,
+            commands::terminal_write,
+            commands::terminal_resize,
+            commands::terminal_kill,
+            commands::terminal_record_command,
+            commands::terminal_history,
+            commands::kernel_status,
+            commands::session_save,
+            commands::session_save_window,
+            commands::session_restore,
         ])
         .setup(|app| {
+            // Build the kernel session DB path under the app's data dir
+            // (Tauri persists this across runs, satisfying Phase 1 session
+            // restore). Falls back to a temp dir if unavailable.
+            let session_db = app
+                .path()
+                .app_data_dir()
+                .map(|p| p.join("kernel_sessions.db"))
+                .unwrap_or_else(|_| std::env::temp_dir().join("prometheus_kernel_sessions.db"));
+            if let Some(parent) = session_db.parent() {
+                let _ = std::fs::create_dir_all(parent);
+            }
+            let kernel = KernelState::new(session_db)
+                .expect("failed to initialise Prometheus kernel");
+            app.manage(kernel);
+            bridge_kernel_events(app.handle(), app.state::<KernelState>());
+
             // Launch the bundled Python backend as a sidecar so the installed
             // app is fully self-contained (no external `python` on PATH needed).
             // In dev the sidecar binary is absent because `beforeDevCommand`
@@ -96,7 +125,7 @@ pub fn run() {
 #[tauri::command]
 async fn aether_health(manager: tauri::State<'_, AetherManager>) -> Result<RuntimeHealth, String> {
     let manager = manager.0.lock().unwrap().clone();
-    Ok(ai_runtime::check_runtime(&manager, DEFAULT_BACKEND_URL).await)
+    Ok(aether_runtime::check_runtime(&manager, DEFAULT_BACKEND_URL).await)
 }
 
 /// List registered providers (ids, kinds, default flag).

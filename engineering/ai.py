@@ -5,7 +5,7 @@ Simulated AI workflows: model management, prompt execution, evaluation,
 fine-tuning, inference, RAG index building.
 """
 
-from dataclasses import dataclass, field, asdict
+from dataclasses import dataclass, asdict
 from core.logger import get_logger
 
 logger = get_logger(__name__)

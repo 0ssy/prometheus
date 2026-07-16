@@ -1,8 +1,6 @@
 from __future__ import annotations
 
 import threading
-from collections.abc import Callable
-from typing import Any
 
 from hardware.hal.interface import HardwareInterface
 from core.logger import get_logger

@@ -12,18 +12,10 @@ import — the error only surfaces if you actually try to use a real
 serial device.
 """
 
-import warnings
 from typing import Any
 
-warnings.warn(
-    "devices.serial_device is deprecated. Import SerialDriver from hardware.drivers.serial instead. "
-    "This module will be removed in a future release.",
-    DeprecationWarning,
-    stacklevel=2,
-)
-
-from .base import Device
-from core.logger import get_logger
+from .base import Device  # noqa: E402
+from core.logger import get_logger  # noqa: E402
 
 logger = get_logger(__name__)
 

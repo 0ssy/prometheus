@@ -1,7 +1,6 @@
 from pathlib import Path
 from unittest.mock import MagicMock, patch
 
-import pytest
 
 
 def test_demo_with_custom_db_does_not_touch_default(tmp_path):

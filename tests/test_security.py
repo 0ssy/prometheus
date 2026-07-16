@@ -1,12 +1,10 @@
 from __future__ import annotations
 
-from datetime import datetime, timezone
 
-import pytest
 
-from security.authorization import Authorizer, AuthorizationResult
+from security.authorization import Authorizer
 from security.permissions import PermissionRegistry, default_registry
-from security.auditing import AuditLogger, AuditEntry
+from security.auditing import AuditLogger
 from security.integrity import IntegrityVerifier
 
 

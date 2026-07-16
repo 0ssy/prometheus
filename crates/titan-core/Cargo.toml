@@ -1,0 +1,21 @@
+[package]
+name = "titan-core"
+version = "0.1.0"
+description = "Titan core — tokenizer, encoder/decoder, special-tokens for fine-tuning pipelines"
+edition = "2021"
+rust-version = "1.77"
+license = "MIT"
+
+[dependencies]
+thiserror = "1"
+serde = { version = "1", features = ["derive"] }
+
+[dependencies.pyo3]
+version = "0.21"
+optional = true
+
+[features]
+python = ["pyo3"]
+
+[dev-dependencies]
+proptest = "1"

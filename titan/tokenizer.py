@@ -1,7 +1,7 @@
 """
 Tokenizer Engine — Phase 5.2
 -----------------------------------------
-Python wrapper for the Rust `titan-tokenizer` crate.
+Python wrapper for the Rust `titan-core` crate.
 
 Exposes encode/decode/special-token management to the Titan training
 pipeline. Falls back to a pure-Python word-level tokenizer if the Rust
@@ -36,7 +36,7 @@ class TokenizerEngine:
 
     def _check_rust(self) -> bool:
         try:
-            import titan_tokenizer  # noqa: F401
+            import titan_core  # noqa: F401
 
             return True
         except ImportError:
@@ -45,9 +45,9 @@ class TokenizerEngine:
     def encode(self, text: str, add_special: bool = True) -> dict[str, Any]:
         if self._rust_available:
             try:
-                import titan_tokenizer
+                import titan_core
 
-                ids = titan_tokenizer.encode(text)
+                ids = titan_core.encode(text)
                 return {"ids": ids, "vocab_size": self._vocab_size(), "backend": "rust"}
             except Exception:
                 pass
@@ -56,9 +56,9 @@ class TokenizerEngine:
     def decode(self, ids: list[int], skip_special: bool = True) -> dict[str, Any]:
         if self._rust_available:
             try:
-                import titan_tokenizer
+                import titan_core
 
-                text = titan_tokenizer.decode(ids)
+                text = titan_core.decode(ids)
                 return {"text": text, "backend": "rust"}
             except Exception:
                 pass

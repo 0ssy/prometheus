@@ -8,15 +8,6 @@ That's fine for v0.1 — don't add persistence before something
 actually needs devices to survive a restart.
 """
 
-import warnings
-
-warnings.warn(
-    "devices.registry is deprecated. Import from hardware.compat.adapter instead. "
-    "This module will be removed in a future release.",
-    DeprecationWarning,
-    stacklevel=2,
-)
-
 from .base import Device
 from contracts.device import DeviceApi
 from contracts.event_bus import EventBus

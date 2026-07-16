@@ -17,6 +17,11 @@ export const client: ApiClient = {
     if (!res.ok) throw new Error(`POST ${path} failed: ${res.status}`);
     return res.json();
   },
+  async delete<T>(path: string): Promise<T> {
+    const res = await fetch(API_BASE + path, { method: "DELETE" });
+    if (!res.ok) throw new Error(`DELETE ${path} failed: ${res.status}`);
+    return res.json();
+  },
 };
 
 export const api = {
@@ -91,4 +96,18 @@ export const api = {
   getWorkflow: (id: string) => client.get<any>(`/workflows/${encodeURIComponent(id)}`),
   baseline: () => client.get<any>("/system/baseline"),
   baselineRefresh: () => client.post("/system/baseline/refresh"),
+  systemServices: () => client.get<any>("/system/services"),
+  systemNativeRuntime: () => client.get<any>("/system/native-runtime"),
+  events: () => client.get<any>("/events"),
+  commands: (payload: Record<string, unknown>) => client.post<any>("/commands", payload),
+  capabilitiesHistory: () => client.get<any>("/capabilities/history"),
+  distributedNodes: () => client.get<any>("/omega/distributed/nodes"),
+  marketplacePluginsPost: (payload: Record<string, unknown>) =>
+    client.post("/omega/marketplace/plugins", payload),
+  ownership: () => client.get<any>("/ownership"),
+  ownershipDelete: (id: string) => client.delete<any>(`/ownership/${encodeURIComponent(id)}`),
+  deviceDisconnect: (id: string) => client.post(`/devices/${encodeURIComponent(id)}/disconnect`),
+  deviceWrite: (id: string, value: unknown) =>
+    client.post(`/devices/${encodeURIComponent(id)}/write`, { value }),
+  devicesSerial: (payload: Record<string, unknown>) => client.post("/devices/serial", payload),
 };

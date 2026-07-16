@@ -4,6 +4,8 @@ from dataclasses import dataclass, field
 from datetime import datetime, timezone
 from threading import Lock
 from typing import Any
+import json
+import uuid
 
 from core.logger import get_logger
 
@@ -77,9 +79,5 @@ class PolicyAuditLogger:
         with self._lock:
             entries = [entry.to_dict() for entry in self._entries]
         if format == "json":
-            import json
             return json.dumps(entries, indent=2)
         raise ValueError(f"Unsupported export format: {format!r}")
-
-
-import uuid

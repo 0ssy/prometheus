@@ -90,7 +90,7 @@ class RuleEngine:
             return matched
 
     def _evaluate_conditions(self, conditions: dict[str, Any], context: Any) -> bool:
-        for field, value in conditions.items():
-            if context.environment.get(field) != value:
+        for cond_field, value in conditions.items():
+            if context.environment.get(cond_field) != value:
                 return False
         return True

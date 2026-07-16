@@ -4,16 +4,10 @@ from unittest.mock import MagicMock
 
 import pytest
 
+from hardware.compat.adapter import DeviceRegistryAdapter
 from core.event_bus import InMemoryEventBus
-from devices.registry import DeviceRegistry
 from epsilon.hal import EpsilonHAL
-from epsilon.diagnostics import EpsilonDiagnostics
-from epsilon.recovery import EpsilonRecoveryPlanner
-from epsilon.firmware import EpsilonFirmwareIntelligence
 from services.epsilon_service import EpsilonService
-from hardware.session import DeviceSession, DeviceSessionManager
-from hardware.events import DeviceConnectedEvent
-from security.auditing import AuditLogger
 
 
 class FakeDevice:
@@ -56,7 +50,7 @@ def test_epsilon_service_diagnostics_with_event_bus():
     bus = InMemoryEventBus()
     events = []
     bus.subscribe("hardware.device.connected", lambda e: events.append(e))
-    registry = DeviceRegistry(event_bus=bus)
+    registry = DeviceRegistryAdapter(event_bus=bus)
     registry.register(FakeDevice())
     eps = EpsilonService(device_api=registry, event_bus=bus)
 
@@ -68,15 +62,19 @@ def test_epsilon_service_diagnostics_with_event_bus():
 
 
 def test_epsilon_service_recovery_plan_with_digital_twin():
-    registry = DeviceRegistry(event_bus=InMemoryEventBus())
+    registry = DeviceRegistryAdapter(event_bus=InMemoryEventBus())
     registry.register(FakeDevice())
     fake_delta = MagicMock()
     fake_delta.build_twin.return_value = {"twin": True}
-    fake_session_factory = lambda db: None
+
+
+    def _fake_session_factory(db):
+        return None
+
     eps = EpsilonService(
         device_api=registry,
         delta_service=fake_delta,
-        session_factory=fake_session_factory,
+        session_factory=_fake_session_factory,
     )
     plan = eps.recovery_plan("dev1", risk="high")
     assert plan["device_id"] == "dev1"
@@ -85,14 +83,14 @@ def test_epsilon_service_recovery_plan_with_digital_twin():
 
 
 def test_epsilon_service_firmware_parse():
-    eps = EpsilonService(device_api=DeviceRegistry(event_bus=InMemoryEventBus()))
+    eps = EpsilonService(device_api=DeviceRegistryAdapter(event_bus=InMemoryEventBus()))
     data = b"\x00" * 510 + b"\x55\xAA" + b"EFI PART" + b"\x00" * 500
     result = eps.firmware_parse(data)
     assert result["format"] == "uefi"
 
 
 def test_epsilon_service_authorization_denied():
-    registry = DeviceRegistry(event_bus=InMemoryEventBus())
+    registry = DeviceRegistryAdapter(event_bus=InMemoryEventBus())
     registry.register(FakeDevice())
     eps = EpsilonService(device_api=registry)
     eps._hal.get_interface = lambda name: StubDriver
@@ -104,7 +102,7 @@ def test_epsilon_service_authorization_denied():
 
 
 def test_epsilon_service_audit_logging():
-    registry = DeviceRegistry(event_bus=InMemoryEventBus())
+    registry = DeviceRegistryAdapter(event_bus=InMemoryEventBus())
     registry.register(FakeDevice())
     eps = EpsilonService(device_api=registry, event_bus=InMemoryEventBus())
     eps._hal.get_interface = lambda name: StubDriver

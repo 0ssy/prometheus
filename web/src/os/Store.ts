@@ -17,7 +17,6 @@ export class Store {
 
   private listeners: Set<(state: AppState) => void> = new Set();
   private eventSource: EventSource | null = null;
-  private pollInterval: number | null = null;
 
   subscribe(listener: (state: AppState) => void) {
     this.listeners.add(listener);
@@ -40,10 +39,14 @@ export class Store {
     }
   }
 
+  /// Wire the SSE stream from the Python backend. All live updates
+  /// (hardware, knowledge, agents, simulation) flow through `/events`
+  /// — no polling. Falls back to a one-shot status load if SSE is
+  /// unavailable.
   startSSE() {
     if (this.eventSource) return;
-    this.eventSource = new EventSource("/events");
-    if (this.eventSource.onmessage) {
+    try {
+      this.eventSource = new EventSource("/events");
       this.eventSource.onmessage = (e) => {
         try {
           const data = JSON.parse(e.data);
@@ -52,23 +55,19 @@ export class Store {
           this.notify();
         } catch {}
       };
+      this.eventSource.onerror = () => {
+        // SSE unavailable (e.g. older backend); degrade to a single load.
+        this.loadStatus();
+      };
+    } catch {
+      this.loadStatus();
     }
-    this.startPolling();
-  }
-
-  private startPolling() {
-    if (this.pollInterval) return;
-    this.pollInterval = window.setInterval(() => this.loadStatus(), 5000);
   }
 
   stop() {
     if (this.eventSource) {
       this.eventSource.close();
       this.eventSource = null;
-    }
-    if (this.pollInterval) {
-      clearInterval(this.pollInterval);
-      this.pollInterval = null;
     }
   }
 

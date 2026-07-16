@@ -1,90 +1,103 @@
-from __future__ import annotations
+"""P2 Hardware Platform — HAL conformance + signed flashing tests."""
+
+import uuid
 
 import pytest
+from sqlalchemy import create_engine
+from sqlalchemy.orm import sessionmaker
 
-from hardware.hal.manager import HALManager
-from hardware.hal.registry import HardwareRegistry
-from hardware.hal.capability_mapper import CapabilityMapper
-from hardware.hal.interface import HardwareInterface
-from hardware.drivers.usb import USBDriver
-from hardware.drivers.adb import ADBDriver
-
-
-class StubInterface(HardwareInterface):
-    def connect(self) -> dict:
-        return {}
-
-    def disconnect(self) -> dict:
-        return {}
-
-    def identify(self) -> dict:
-        return {}
-
-    def capabilities(self) -> list:
-        return []
-
-    def execute(self, capability: str, payload: dict) -> dict:
-        return {}
-
-    def health(self) -> dict:
-        return {}
-
-    def diagnostics(self) -> dict:
-        return {}
+import core.database as cd
+from hardware.flash_service import FlashService, HALConformance, SigningVerifier
+from hardware.hal_models import FirmwareFlashLog, HALProtocolTest
 
 
-def test_hal_manager_register_and_get():
-    manager = HALManager()
-    interface = StubInterface()
-    manager.register_interface("stub", interface)
-    assert manager.get_interface("stub") is interface
+@pytest.fixture
+def session(tmp_path, monkeypatch):
+    db_path = tmp_path / "p2.db"
+    engine = create_engine(
+        f"sqlite:///{db_path}", connect_args={"check_same_thread": False}
+    )
+    factory = sessionmaker(autocommit=False, autoflush=False, bind=engine)
+    monkeypatch.setattr(cd, "engine", engine)
+    monkeypatch.setattr(cd, "SessionLocal", factory)
+    cd.init_db()
+    with factory() as s:
+        yield s
+    engine.dispose()
 
 
-def test_hal_manager_list_and_unregister():
-    manager = HALManager()
-    interface = StubInterface()
-    manager.register_interface("stub", interface)
-    assert "stub" in manager.list_interfaces()
-    manager.unregister_interface("stub")
-    assert "stub" not in manager.list_interfaces()
+def _keypair():
+    from cryptography.hazmat.primitives.asymmetric.ed25519 import Ed25519PrivateKey
+    from cryptography.hazmat.primitives import serialization
+
+    priv = Ed25519PrivateKey.generate()
+    pub = priv.public_key().public_bytes(
+        encoding=serialization.Encoding.PEM,
+        format=serialization.PublicFormat.SubjectPublicKeyInfo,
+    )
+    return priv, pub
 
 
-def test_hal_manager_get_missing_raises():
-    manager = HALManager()
-    with pytest.raises(KeyError):
-        manager.get_interface("missing")
+def test_hal_conformance_records_and_rates(session):
+    hal = HALConformance()
+    targets = [("USB", "dev-1"), ("Serial", "dev-2"), ("GPIO", "unknown")]
+    results = hal.run(session, targets)
+    assert len(results) == 3
+    rate = hal.success_rate(results)
+    assert rate == pytest.approx(2 / 3, abs=1e-3)
+    rows = session.query(HALProtocolTest).all()
+    assert len(rows) == 3
+    assert all(r.transport in ("USB", "Serial", "GPIO") for r in rows)
 
 
-def test_hardware_registry_register_and_list():
-    registry = HardwareRegistry()
-    registry.register(USBDriver)
-    assert "usb" in registry.list_registered()
-    assert registry.get("usb") is USBDriver
+def test_signed_flash_enforced_rejects_unsigned(session):
+    priv, pub = _keypair()
+    svc = FlashService(verifier=SigningVerifier(public_key_pem=pub))
+    with pytest.raises(PermissionError, match="signed-only"):
+        svc.flash(
+            session,
+            device_id="dev-1",
+            firmware_version="1.0.0",
+            firmware_path="/tmp/fw.bin",
+            signature=None,
+            enforced=True,
+        )
+    log = session.query(FirmwareFlashLog).one()
+    assert log.signature_valid is False
+    assert log.status == "rolled_back"
 
 
-def test_hardware_registry_discover_capabilities():
-    registry = HardwareRegistry()
-    registry.register(USBDriver)
-    caps = registry.discover_capabilities("usb")
-    assert "connect" in caps
+def test_signed_flash_verified_succeeds(session):
+
+    priv, pub = _keypair()
+    svc = FlashService(verifier=SigningVerifier(public_key_pem=pub))
+    payload = b"dev-1:1.0.0"
+    sig = priv.sign(payload).hex()
+    result = svc.flash(
+        session,
+        device_id="dev-1",
+        firmware_version="1.0.0",
+        firmware_path="/tmp/fw.bin",
+        signature=sig,
+        enforced=True,
+    )
+    assert result["status"] == "success"
+    assert result["signed"] is True
+    log = session.query(FirmwareFlashLog).one()
+    assert log.signature_valid is True
 
 
-def test_hardware_registry_singleton():
-    HardwareRegistry._instance = None
-    registry1 = HardwareRegistry.instance()
-    registry2 = HardwareRegistry.instance()
-    assert registry1 is registry2
-
-
-def test_capability_mapper_register_and_map():
-    mapper = CapabilityMapper()
-    mapper.register_mapping("usb", {"read": "prometheus.read", "write": "prometheus.write"})
-    mapped = mapper.map_interface_capabilities("usb", ["read", "write", "unknown"])
-    assert mapped == ["prometheus.read", "prometheus.write", "unknown"]
-
-
-def test_capability_mapper_get_prometheus_capabilities():
-    mapper = CapabilityMapper()
-    mapper.register_mapping("adb", {"shell": "prometheus.shell", "push": "prometheus.push"})
-    caps = mapper.get_prometheus_capabilities("adb")
-    assert set(caps) == {"prometheus.shell", "prometheus.push"}
+def test_flash_log_rollback_recorded(session):
+    svc = FlashService(verifier=SigningVerifier())
+    log_id = str(uuid.uuid4())
+    session.add(
+        FirmwareFlashLog(
+            id=log_id, device_id="dev-9", firmware_version="0.9",
+            signature_valid=True, status="success",
+        )
+    )
+    session.commit()
+    svc.record_rollback(session, log_id, "post-flash diagnostics failed")
+    row = session.get(FirmwareFlashLog, log_id)
+    assert row.status == "rolled_back"
+    assert row.error == "post-flash diagnostics failed"

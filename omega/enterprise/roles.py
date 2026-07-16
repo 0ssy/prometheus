@@ -1,7 +1,8 @@
 from __future__ import annotations
 
 from dataclasses import dataclass, field
-from typing import Any
+import threading
+import uuid
 
 from core.logger import get_logger
 
@@ -23,7 +24,6 @@ class RoleRegistry:
         self._lock = threading.RLock()
 
     def create(self, org_id: str, name: str, permissions: set[str] | None = None, inherits: list[str] | None = None) -> Role:
-        import uuid
         role_id = str(uuid.uuid4())
         role = Role(role_id=role_id, org_id=org_id, name=name, permissions=permissions or set(), inherits=inherits or [])
         with self._lock:
@@ -61,6 +61,3 @@ class RoleRegistry:
                 if inherited:
                     perms.update(inherited.permissions)
             return perms
-
-
-import threading

@@ -1,5 +1,5 @@
+from hardware.compat.adapter import DeviceRegistryAdapter
 from core.event_bus import InMemoryEventBus
-from devices.registry import DeviceRegistry
 from services.epsilon_service import EpsilonService
 
 
@@ -13,7 +13,7 @@ class FakeDevice:
 
 
 def test_epsilon_service_interfaces_and_diagnostics():
-    registry = DeviceRegistry(event_bus=InMemoryEventBus())
+    registry = DeviceRegistryAdapter(event_bus=InMemoryEventBus())
     registry.register(FakeDevice())
     epsilon = EpsilonService(device_api=registry)
 
@@ -24,7 +24,7 @@ def test_epsilon_service_interfaces_and_diagnostics():
 
 
 def test_epsilon_service_recovery_and_firmware():
-    registry = DeviceRegistry(event_bus=InMemoryEventBus())
+    registry = DeviceRegistryAdapter(event_bus=InMemoryEventBus())
     registry.register(FakeDevice())
     epsilon = EpsilonService(device_api=registry)
 
@@ -52,7 +52,7 @@ class StubDriver:
 
 
 def test_epsilon_service_connect_disconnect():
-    registry = DeviceRegistry(event_bus=InMemoryEventBus())
+    registry = DeviceRegistryAdapter(event_bus=InMemoryEventBus())
     registry.register(FakeDevice())
     epsilon = EpsilonService(device_api=registry)
     epsilon._hal.get_interface = lambda name: StubDriver
@@ -66,10 +66,10 @@ def test_epsilon_service_connect_disconnect():
 
 
 def test_epsilon_service_full_diagnostics():
-    registry = DeviceRegistry(event_bus=InMemoryEventBus())
+    registry = DeviceRegistryAdapter(event_bus=InMemoryEventBus())
     registry.register(FakeDevice())
     epsilon = EpsilonService(device_api=registry)
-    session = epsilon._session_manager.create_session("d1", "virtual", transport="virtual")
+    _session = epsilon._session_manager.create_session("d1", "virtual", transport="virtual")
     report = epsilon.full_diagnostics("d1")
     assert report["device_id"] == "d1"
     assert report["driver"] == "virtual"
@@ -77,7 +77,7 @@ def test_epsilon_service_full_diagnostics():
 
 
 def test_epsilon_service_firmware_parse():
-    epsilon = EpsilonService(device_api=DeviceRegistry(event_bus=InMemoryEventBus()))
+    epsilon = EpsilonService(device_api=DeviceRegistryAdapter(event_bus=InMemoryEventBus()))
     data = b"\x00" * 510 + b"\x55\xAA" + b"EFI PART" + b"\x00" * 500
     result = epsilon.firmware_parse(data)
     assert result["format"] == "uefi"

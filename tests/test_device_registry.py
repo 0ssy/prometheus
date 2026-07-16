@@ -1,4 +1,4 @@
-from devices.registry import DeviceRegistry
+from hardware.compat.adapter import DeviceRegistryAdapter
 from api.device_api import DeviceApi
 from api.events import DeviceConnectedEvent, DeviceDisconnectedEvent
 from core.event_bus import InMemoryEventBus
@@ -27,28 +27,28 @@ class FakeDevice:
 
 class TestDeviceRegistry:
     def test_is_device_api(self):
-        registry = DeviceRegistry()
+        registry = DeviceRegistryAdapter()
         assert isinstance(registry, DeviceApi)
 
     def test_register_and_get(self):
-        registry = DeviceRegistry()
+        registry = DeviceRegistryAdapter()
         device = FakeDevice()
         registry.register(device)
         assert registry.get("dev1") is device
 
     def test_unregister(self):
-        registry = DeviceRegistry()
+        registry = DeviceRegistryAdapter()
         device = FakeDevice()
         registry.register(device)
         registry.unregister("dev1")
         assert registry.get("dev1") is None
 
     def test_unregister_missing_is_safe(self):
-        registry = DeviceRegistry()
+        registry = DeviceRegistryAdapter()
         registry.unregister("nonexistent")
 
     def test_list(self):
-        registry = DeviceRegistry()
+        registry = DeviceRegistryAdapter()
         device = FakeDevice()
         registry.register(device)
         result = registry.list()
@@ -62,7 +62,7 @@ class TestDeviceRegistry:
         disconnected: list[DeviceDisconnectedEvent] = []
         bus.subscribe("device.connected", lambda event: connected.append(event))
         bus.subscribe("device.disconnected", lambda event: disconnected.append(event))
-        registry = DeviceRegistry(event_bus=bus)
+        registry = DeviceRegistryAdapter(event_bus=bus)
 
         registry.register(FakeDevice())
         registry.unregister("dev1")

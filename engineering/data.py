@@ -86,7 +86,6 @@ class DataModule:
 
     def _query_database(self, payload: dict) -> dict:
         database = payload.get("database", "prometheus")
-        query = payload.get("query", "SELECT 1")
         logger.info(f"Querying {database}")
         return QueryResult(
             database=database,
