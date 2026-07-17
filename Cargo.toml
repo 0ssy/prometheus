@@ -6,6 +6,7 @@ members = [
     "crates/tensor-engine",
     "crates/titan-core",
     "crates/prometheus-kernel",
+    "crates/titan-engine",
 ]
 # src-tauri is excluded: it pulls Tauri/WebView2/NSIS host deps and is
 # built separately via `cargo tauri build` (see src-tauri/README.md).

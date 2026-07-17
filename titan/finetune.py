@@ -120,12 +120,12 @@ class FineTuneOrchestrator:
 
     def _cuda_dispatch(self, kernel: str, payload: dict[str, Any]) -> dict[str, Any]:
         try:
-            import titan_engine  # noqa: F401
-
-            return {"kernel": kernel, "backend": "cuda"}
+            import titan_engine
+            backend = titan_engine.backend_info()
+            return {"kernel": kernel, "backend": backend, "payload": payload}
         except ImportError:
             logger.info("titan-engine stub: simulated CUDA dispatch for %s", kernel)
-            return {"kernel": kernel, "backend": "stub"}
+            return {"kernel": kernel, "backend": "stub", "payload": payload}
 
 
 finetune = FineTuneOrchestrator()

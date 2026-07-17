@@ -2477,6 +2477,7 @@ dependencies = [
 name = "tensor-engine"
 version = "0.1.0"
 dependencies = [
+ "cc",
  "pyo3",
 ]
 
@@ -2573,6 +2574,14 @@ dependencies = [
  "pyo3",
  "serde",
  "thiserror 1.0.69",
+]
+
+[[package]]
+name = "titan-engine"
+version = "0.1.0"
+dependencies = [
+ "pyo3",
+ "tensor-engine",
 ]
 
 [[package]]

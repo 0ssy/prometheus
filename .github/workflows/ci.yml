@@ -55,14 +55,24 @@ jobs:
           cmake --build . --config Release
 
       - name: Build Rust HAL with C bindings
-        run: |
-          cargo build --features python,c-hal --workspace
+        run: cargo build -p hal-core --features python,c-hal
         env:
           LIBUSB_1_0_LIBRARY_DIRS: /usr/lib/x86_64-linux-gnu
           LIBSERIALPORT_LIBRARY_DIRS: /usr/lib/x86_64-linux-gnu
 
+      - name: Build Rust tensor engine
+        run: cargo build -p tensor-engine --features python
+
+      - name: Build Rust Titan engine
+        run: cargo build -p titan-engine --features python
+
       - name: Run backend tests
         run: pytest --junitxml=pytest-report.xml
+
+      - name: Verify Triton installation
+        run: |
+          python -c "import triton; print('Triton', triton.__version__)"
+        continue-on-error: true
 
       - name: Verify server health endpoint
         run: |
