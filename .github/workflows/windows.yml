@@ -12,7 +12,7 @@ permissions:
 jobs:
   verify-windows:
     runs-on: windows-latest
-    timeout-minutes: 25
+    timeout-minutes: 35
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -28,6 +28,33 @@ jobs:
         run: |
           python -m pip install --upgrade pip
           pip install -r requirements.txt
+
+      - name: Set up Zig
+        uses: mlugg/setup-zig@v1
+        with:
+          version: "0.16.0"
+
+      - name: Set up Rust toolchain
+        uses: dtolnay/rust-toolchain@stable
+        with:
+          toolchain: "1.77.2"
+
+      - name: Build Zig hardware utilities
+        run: zig build
+        working-directory: zig
+
+      - name: Build C/C++ HAL libraries
+        shell: pwsh
+        run: |
+          New-Item -ItemType Directory -Path cpp/build -Force | Out-Null
+          Push-Location cpp/build
+          cmake .. -DBUILD_HAL_USB=ON -DBUILD_HAL_SERIAL=ON -DBUILD_HAL_GPIO=ON
+          cmake --build . --config Release
+          Pop-Location
+
+      - name: Build Rust HAL with C bindings
+        run: cargo build --features python,c-hal --workspace
+        shell: pwsh
 
       - name: Run tests on Windows
         run: pytest --junitxml=pytest-windows.xml

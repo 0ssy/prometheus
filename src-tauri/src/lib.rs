@@ -52,11 +52,15 @@ pub fn run() {
             commands::session_save,
             commands::session_save_window,
             commands::session_restore,
+            commands::hardware_probe,
+            commands::hardware_enumerate,
+            commands::hardware_connect,
+            commands::hardware_disconnect,
+            commands::hardware_read,
+            commands::hardware_write,
+            commands::hardware_diagnostics,
         ])
         .setup(|app| {
-            // Build the kernel session DB path under the app's data dir
-            // (Tauri persists this across runs, satisfying Phase 1 session
-            // restore). Falls back to a temp dir if unavailable.
             let session_db = app
                 .path()
                 .app_data_dir()
@@ -70,11 +74,6 @@ pub fn run() {
             app.manage(kernel);
             bridge_kernel_events(app.handle().clone(), app.state::<KernelState>());
 
-            // Launch the bundled Python backend as a sidecar so the installed
-            // app is fully self-contained (no external `python` on PATH needed).
-            // In dev the sidecar binary is absent because `beforeDevCommand`
-            // already started the Python server, so a spawn failure is expected
-            // and ignored here.
             match app.shell().sidecar("prometheus") {
                 Ok(command) => match command.args(["--server"]).spawn() {
                     Ok((_event_rx, child)) => {
@@ -84,8 +83,6 @@ pub fn run() {
                             .unwrap()
                             .replace(child);
                         println!("Prometheus backend sidecar started");
-                        // Block window creation until the backend actually listens, so the
-                        // SPA never loads against a not-yet-ready server (blank window).
                         let addr = "127.0.0.1:8000";
                         for _ in 0..150 {
                             if std::net::TcpStream::connect(addr).is_ok() {

@@ -11,7 +11,7 @@ permissions:
 jobs:
   backend-and-frontend:
     runs-on: ubuntu-latest
-    timeout-minutes: 20
+    timeout-minutes: 30
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -27,6 +27,39 @@ jobs:
         run: |
           python -m pip install --upgrade pip
           pip install -r requirements.txt
+
+      - name: Install native HAL dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y libusb-1.0-0-dev libserialport-dev libudev-dev
+
+      - name: Set up Zig
+        uses: mlugg/setup-zig@v1
+        with:
+          version: "0.16.0"
+
+      - name: Set up Rust toolchain
+        uses: dtolnay/rust-toolchain@stable
+        with:
+          toolchain: "1.77.2"
+
+      - name: Build Zig hardware utilities
+        run: zig build
+        working-directory: zig
+
+      - name: Build C/C++ HAL libraries
+        run: |
+          mkdir -p cpp/build
+          cd cpp/build
+          cmake .. -DBUILD_HAL_USB=ON -DBUILD_HAL_SERIAL=ON -DBUILD_HAL_GPIO=ON
+          cmake --build . --config Release
+
+      - name: Build Rust HAL with C bindings
+        run: |
+          cargo build --features python,c-hal --workspace
+        env:
+          LIBUSB_1_0_LIBRARY_DIRS: /usr/lib/x86_64-linux-gnu
+          LIBSERIALPORT_LIBRARY_DIRS: /usr/lib/x86_64-linux-gnu
 
       - name: Run backend tests
         run: pytest --junitxml=pytest-report.xml
