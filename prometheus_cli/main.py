@@ -17,6 +17,8 @@ from prometheus_cli.commands import (
     run_extensions,
     run_full_system,
     run_install,
+    run_new,
+    run_pack,
     run_safe,
     run_server,
     run_status,
@@ -57,6 +59,11 @@ def main() -> int:
     install_parser = sub.add_parser("install", help="install an SDK package (robotics/android/cad/vision/drone)")
     install_parser.add_argument("package", help="SDK package name to install")
     sub.add_parser("extensions", help="list installed SDK packages")
+    new_parser = sub.add_parser("new", help="scaffold a new plugin, agent, or driver")
+    new_parser.add_argument("kind", choices=["plugin", "agent", "driver"], help="type of scaffold")
+    new_parser.add_argument("name", help="name of the new component")
+    pack_parser = sub.add_parser("pack", help="package an SDK plugin for distribution")
+    pack_parser.add_argument("name", nargs="?", help="plugin name to pack")
     test_parser = sub.add_parser("test", help="run pytest suite")
     test_parser.add_argument("--file", default=None, help="optional test file/directory")
 
@@ -66,6 +73,10 @@ def main() -> int:
         return run_install(args.package)
     if args.command == "extensions":
         return run_extensions()
+    if args.command == "new":
+        return run_new(args.kind, args.name)
+    if args.command == "pack":
+        return run_pack(getattr(args, "name", None))
 
     if not args.command:
         if args.terminal:

@@ -8,6 +8,7 @@
 //! REST API.
 
 pub mod agent;
+pub mod agent_lifecycle;
 pub mod context;
 pub mod error;
 pub mod health;
@@ -22,6 +23,7 @@ pub mod tools;
 pub mod types;
 
 pub use agent::{Agent, AgentRole, registry as agent_registry};
+pub use agent_lifecycle::AgentCoordinator;
 pub use context::{Context, ContextEngine};
 pub use error::AetherError;
 pub use health::check_runtime;
@@ -33,8 +35,8 @@ pub use routing::{Capability, ModelRouter, RoutingPolicy};
 pub use titan_provider::TitanProvider;
 pub use tools::ToolDispatcher;
 pub use types::{
-    ChatMessage, ChatRequest, ChatResponse, ChatRole, ProviderHealth, ProviderInfo, ProviderKind,
-    RuntimeHealth,
+    AgentHeartbeat, AgentState, ChatMessage, ChatRequest, ChatResponse, ChatRole, CostAccumulator,
+    ProviderHealth, ProviderInfo, ProviderKind, RuntimeHealth,
 };
 
 /// Default Prometheus backend address the sidecar listens on.

@@ -1,5 +1,5 @@
+import { sdk } from "../sdk";
 import { kernel } from "../kernel/KernelClient";
-import { api } from "../api/client";
 
 export interface TerminalContext {
   openApp: (id: string) => void;
@@ -7,13 +7,37 @@ export interface TerminalContext {
 }
 
 interface TerminalSession {
-  id: string; // kernel PTY session id
+  id: string;
   tab: HTMLButtonElement;
-  view: HTMLDivElement; // scrollback <pre>
-  buffer: string; // raw accumulated text (for find/search)
+  view: HTMLDivElement;
+  buffer: string;
+  shell: string;
+  cols: number;
+  rows: number;
+  searchQuery: string;
 }
 
-/** Pick the first shell that is plausibly available on this platform. */
+const ANSI_8: Record<number, string> = {
+  0: "#000000",
+  1: "#cd3131",
+  2: "#0dbc79",
+  3: "#e5e510",
+  4: "#2472c8",
+  5: "#bc3fbc",
+  6: "#11a8cd",
+  7: "#e5e5e5",
+};
+const ANSI_16: Record<number, string> = {
+  0: "#666666",
+  1: "#f14c4c",
+  2: "#23d18b",
+  3: "#f5f543",
+  4: "#3b8eea",
+  5: "#d670d6",
+  6: "#29b8db",
+  7: "#ffffff",
+};
+
 function defaultShell(): string {
   if (typeof navigator !== "undefined" && /Win/i.test(navigator.platform)) {
     return "pwsh";
@@ -26,6 +50,7 @@ export class Terminal {
   private ctx: TerminalContext;
   private tabsEl!: HTMLDivElement;
   private viewsEl!: HTMLDivElement;
+  private toolbar!: HTMLDivElement;
   private input!: HTMLInputElement;
   private sessions: TerminalSession[] = [];
   private active: TerminalSession | null = null;
@@ -33,41 +58,84 @@ export class Terminal {
   private historyIdx = -1;
   private native = false;
   private unlisten: Array<() => void> = [];
+  private splitActive = false;
 
   constructor(termbar: HTMLElement, ctx: TerminalContext) {
     this.termbar = termbar;
     this.ctx = ctx;
     this.render();
-    this.native = kernel.isNative();
+    this.native = sdk.kernel.isNative();
     this.subscribeOutput();
     this.newTab();
   }
 
   private render() {
     this.termbar.innerHTML = `
-      <div id="term-tabs" class="term-tabs"></div>
-      <div id="term-views" class="term-views"></div>
-      <div id="terminput-row"><span class="prompt">&gt;</span><input id="terminput" type="text" autocomplete="off" spellcheck="false" placeholder="type a command, or a Prometheus shortcut (open <app>, show devices, run simulation, help)..."/></div>`;
+      <div id="term-toolbar" style="display:flex; gap:6px; align-items:center; padding:2px 4px; border-bottom:1px solid var(--border);">
+        <select id="term-shell" style="background:var(--bg); color:var(--text); border:1px solid var(--border); font-family:var(--font-mono); font-size:11px; padding:1px 4px;">
+          <option value="pwsh">PowerShell</option>
+          <option value="cmd">CMD</option>
+          <option value="bash">bash</option>
+          <option value="zsh">zsh</option>
+          <option value="sh">sh</option>
+        </select>
+        <button id="term-new" style="background:var(--bg); color:var(--text); border:1px solid var(--border); padding:1px 6px; cursor:pointer; font-size:11px;">+</button>
+        <button id="term-split" style="background:var(--bg); color:var(--text); border:1px solid var(--border); padding:1px 6px; cursor:pointer; font-size:11px;">Split</button>
+        <button id="term-find" style="background:var(--bg); color:var(--text); border:1px solid var(--border); padding:1px 6px; cursor:pointer; font-size:11px;">Find</button>
+        <input id="term-search" style="display:none; background:var(--bg); color:var(--text); border:1px solid var(--border); padding:1px 4px; font-family:var(--font-mono); font-size:11px;" placeholder="find..." />
+      </div>
+      <div id="term-tabs" class="term-tabs" style="display:flex; gap:2px; padding:2px 4px; border-bottom:1px solid var(--border);"></div>
+      <div id="term-views" class="term-views" style="flex:1; display:flex; min-height:0;"></div>
+      <div id="terminput-row" style="display:flex; gap:6px; padding:2px 4px; border-top:1px solid var(--border);">
+        <span class="prompt" style="color:var(--yellow); font-family:var(--font-mono); font-size:12px;">&gt;</span>
+        <input id="terminput" type="text" autocomplete="off" spellcheck="false" style="flex:1; background:transparent; color:var(--text); border:none; outline:none; font-family:var(--font-mono); font-size:12px;" placeholder="type a command, or a Prometheus shortcut (open <app>, show devices, run simulation, help)..." />
+      </div>`;
     this.tabsEl = this.termbar.querySelector("#term-tabs") as HTMLDivElement;
     this.viewsEl = this.termbar.querySelector("#term-views") as HTMLDivElement;
+    this.toolbar = this.termbar.querySelector("#term-toolbar") as HTMLDivElement;
     this.input = this.termbar.querySelector("#terminput") as HTMLInputElement;
 
     this.input.addEventListener("keydown", (e) => this.onInputKey(e));
 
+    (this.termbar.querySelector("#term-new") as HTMLElement).addEventListener("click", () => this.newTab());
+    (this.termbar.querySelector("#term-split") as HTMLElement).addEventListener("click", () => {
+      this.splitActive = !this.splitActive;
+      this.selectTab(this.active!);
+    });
+    (this.termbar.querySelector("#term-find") as HTMLElement).addEventListener("click", () => {
+      const search = this.termbar.querySelector("#term-search") as HTMLInputElement;
+      search.style.display = search.style.display === "none" ? "block" : "none";
+      if (search.style.display === "block") search.focus();
+    });
+
+    const searchInput = this.termbar.querySelector("#term-search") as HTMLInputElement;
+    searchInput.addEventListener("input", () => {
+      const query = searchInput.value.trim();
+      const sess = this.active;
+      if (sess) this.highlightSearch(sess, query);
+    });
+
+    (this.termbar.querySelector("#term-shell") as HTMLSelectElement).addEventListener("change", (e) => {
+      const sess = this.active;
+      if (sess && this.native) {
+        sdk.kernel.terminalKill(sess.id).then(() => {
+          const shell = (e.target as HTMLSelectElement).value;
+          sdk.kernel.terminalSpawn(shell, sess.cols, sess.rows).then((id) => {
+            sess.id = id;
+            sess.shell = shell;
+            sess.buffer = "";
+            this.renderInto(sess.view, `prometheus terminal — ${shell}\r\n`);
+          });
+        });
+      }
+    });
+
     if (!this.native) {
-      this.banner(
-        "Browser mode: terminal input is echoed locally. Run the desktop build for a real PTY (PowerShell/Bash).",
-      );
+      this.banner("Browser mode: terminal input is echoed locally. Run the desktop build for a real PTY (PowerShell/Bash).");
     }
   }
 
-  // --- Output streaming -------------------------------------------------------
-
   private subscribeOutput() {
-    // The kernel emits a `KernelEvent` { topic, target, payload: { data } };
-    // Tauri forwards it as the event payload, so the handler receives the
-    // KernelEvent directly. `target` is the session id; `payload.data` is the
-    // base64-encoded PTY bytes.
     kernel
       .listen<{ target?: string; payload?: { data?: string } }>("terminal-output", (ev) => {
         const b64 = ev?.payload?.data;
@@ -75,9 +143,7 @@ export class Terminal {
         const bytes = Uint8Array.from(atob(b64), (c) => c.charCodeAt(0));
         const text = new TextDecoder().decode(bytes);
         const sid = ev?.target;
-        const sess = sid
-          ? this.sessions.find((s) => s.id === sid)
-          : this.active;
+        const sess = sid ? this.sessions.find((s) => s.id === sid) : this.active;
         if (sess) this.appendOutput(sess, text);
       })
       .then((off) => this.unlisten.push(off))
@@ -86,49 +152,69 @@ export class Terminal {
 
   private appendOutput(sess: TerminalSession, text: string) {
     sess.buffer += text;
-    // Render incrementally: parse ANSI into styled spans.
     this.renderInto(sess.view, sess.buffer);
+    this.highlightSearch(sess, sess.searchQuery);
     sess.view.scrollTop = sess.view.scrollHeight;
   }
 
-  /** Render raw text (with ANSI escapes) into a <pre> using styled spans. */
-  private renderInto(view: HTMLElement, raw: string) {
-    view.textContent = "";
-    const lines = raw.split("\n");
-    let fg = "";
-    let bold = false;
-    let lineNo = 0;
-    for (const line of lines) {
-      if (lineNo++ > 0) view.appendChild(document.createTextNode("\n"));
-      const frag = this.parseAnsi(line, fg, bold, (n, b) => {
-        fg = n;
-        bold = b;
-      });
-      view.appendChild(frag);
+  private highlightSearch(sess: TerminalSession, query: string) {
+    sess.searchQuery = query;
+    sess.view.querySelectorAll(".search-match").forEach((el) => el.classList.remove("search-match"));
+    if (!query || !sess.buffer) return;
+    const lowerBuf = sess.buffer.toLowerCase();
+    const lowerQuery = query.toLowerCase();
+    let idx = lowerBuf.indexOf(lowerQuery);
+    while (idx !== -1) {
+      const range = document.createRange();
+      const walker = document.createTreeWalker(sess.view, NodeFilter.SHOW_TEXT, null);
+      let currentOffset = 0;
+      let node: Node | null = null;
+      while ((node = walker.nextNode())) {
+        const nodeLen = (node as Text).nodeValue?.length || 0;
+        if (currentOffset + nodeLen > idx) {
+          const startInNode = idx - currentOffset;
+          const endInNode = Math.min(startInNode + query.length, nodeLen);
+          try {
+            range.setStart(node, startInNode);
+            range.setEnd(node, endInNode);
+            const span = document.createElement("span");
+            span.className = "search-match";
+            span.style.background = "var(--yellow)";
+            span.style.color = "var(--bg)";
+            range.surroundContents(span);
+          } catch {}
+          break;
+        }
+        currentOffset += nodeLen;
+      }
+      idx = lowerBuf.indexOf(lowerQuery, idx + 1);
     }
   }
 
-  /** Minimal ANSI SGR parser -> DocumentFragment of styled spans.
-   *  `fg`/`bold` carry the current style into the line; the setter persists
-   *  style changes back to the caller across lines. */
-  private parseAnsi(
-    line: string,
-    fg: string,
-    bold: boolean,
-    setStyle: (fg: string, bold: boolean) => void,
-  ): DocumentFragment {
-    const frag = document.createDocumentFragment();
+  private renderInto(view: HTMLElement, raw: string) {
+    view.innerHTML = this.renderAnsiHtml(raw);
+  }
+
+  private renderAnsiHtml(raw: string): string {
+    const lines = raw.split("\n");
+    let html = "";
+    for (let lineIdx = 0; lineIdx < lines.length; lineIdx++) {
+      if (lineIdx > 0) html += "\n";
+      html += this.parseAnsiToHtml(lines[lineIdx]);
+    }
+    return html;
+  }
+
+  private parseAnsiToHtml(line: string): string {
     let i = 0;
     let buf = "";
-    let curFg = fg;
-    let curBold = bold;
+    let curFg = "";
+    let curBold = false;
+    let html = "";
     const flush = () => {
       if (!buf) return;
-      const span = document.createElement("span");
-      if (curFg) span.style.color = curFg;
-      if (curBold) span.style.fontWeight = "bold";
-      span.textContent = buf;
-      frag.appendChild(span);
+      const escaped = buf.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+      html += curFg || curBold ? `<span style="color:${curFg || "inherit"};${curBold ? "font-weight:bold;" : ""}">${escaped}</span>` : escaped;
       buf = "";
     };
     while (i < line.length) {
@@ -155,21 +241,17 @@ export class Terminal {
             } else if (n >= 90 && n <= 97) {
               curFg = ANSI_16[n - 90];
             }
-            // background codes (40-47/100-107) ignored for simplicity.
           }
-          setStyle(curFg, curBold);
+          i = j + 1;
+          continue;
         }
-        i = j + 1;
-        continue;
       }
       buf += line[i];
       i++;
     }
     flush();
-    return frag;
+    return html;
   }
-
-  // --- Input -----------------------------------------------------------------
 
   private onInputKey(e: KeyboardEvent) {
     if (e.key === "Enter") {
@@ -183,8 +265,10 @@ export class Terminal {
       e.preventDefault();
       this.historyNav(1);
     } else if (e.key === "c" && (e.ctrlKey || e.metaKey)) {
-      // Ctrl+C -> forward to PTY as ETX.
       this.sendRaw("\x03");
+    } else if (e.key === "l" && (e.ctrlKey || e.metaKey)) {
+      e.preventDefault();
+      this.clear();
     }
   }
 
@@ -204,22 +288,19 @@ export class Terminal {
     const line = val.replace(/\r?\n$/, "");
     if (line.trim()) {
       this.history.push(line);
-      kernel.terminalRecordCommand(this.activeId(), line).catch(() => {});
+      sdk.kernel.terminalRecordCommand(this.activeId(), line).catch(() => {});
     }
-    // Echo locally for immediate feedback.
     this.echo("> " + line);
-    // Try Prometheus command shortcuts first (GUI bridge).
     if (this.tryShortcut(line)) return;
-    // Otherwise send to the PTY.
     await this.sendRaw(line + "\n");
   }
 
   private async sendRaw(text: string) {
     if (!this.active) return;
     try {
-      await kernel.terminalWrite(this.active.id, text);
+      await sdk.kernel.terminalWrite(this.active.id, text);
     } catch {
-      // Browser mode: nothing to forward.
+      // Browser mode
     }
   }
 
@@ -227,12 +308,16 @@ export class Terminal {
     if (this.active) this.appendOutput(this.active, text + "\n");
   }
 
-  /** Prometheus desktop shortcuts that open GUI apps / run actions. */
+  private clear() {
+    if (this.active) {
+      this.active.buffer = "";
+      this.renderInto(this.active.view, "");
+    }
+  }
+
   private tryShortcut(raw: string): boolean {
     const val = raw.toLowerCase().trim();
-    const stripped = val.startsWith("prometheus ")
-      ? val.slice("prometheus ".length)
-      : val;
+    const stripped = val.startsWith("prometheus ") ? val.slice("prometheus ".length) : val;
 
     if (stripped.startsWith("open ")) {
       this.ctx.openApp(stripped.slice(5).trim().toLowerCase());
@@ -240,9 +325,7 @@ export class Terminal {
     }
     switch (stripped) {
       case "help":
-        this.echo(
-          "shortcuts: open <app> · show devices · list agents · run simulation · search <query> · build digital-twin <device> · explain kernel · help",
-        );
+        this.echo("shortcuts: open <app> · show devices · list agents · run simulation · search <query> · build digital-twin <device> · explain kernel · help");
         return true;
       case "show devices":
       case "list devices":
@@ -251,23 +334,16 @@ export class Terminal {
       case "run simulation":
         this.ctx.openApp("simulation");
         this.ctx.logActivity("Simulation Completed");
-        api
-          .simulationRun("esp32_01", "disconnect")
-          .catch(() => {});
+        sdk.simulation.run("esp32_01", "disconnect").catch(() => {});
         return true;
       case "list agents":
-        api
-          .agents()
-          .then((a: any) => {
-            const names = (a.agents ?? []).map((x: any) => x.name).join(", ") || "none";
-            this.echo("agents: " + names);
-          })
-          .catch((e: any) => this.echo("agents lookup failed: " + e.message));
+        sdk.agents.list().then((a: any) => {
+          const names = (a.agents ?? []).map((x: any) => x.name).join(", ") || "none";
+          this.echo("agents: " + names);
+        }).catch((e: any) => this.echo("agents lookup failed: " + (e?.message ?? e)));
         return true;
       case "explain kernel":
-        this.echo(
-          "kernel boots config -> plugins -> devices -> agents -> knowledge graph -> scheduler.",
-        );
+        this.echo("kernel boots config -> plugins -> devices -> agents -> knowledge graph -> scheduler.");
         return true;
     }
     if (stripped.startsWith("search ")) {
@@ -281,19 +357,15 @@ export class Terminal {
     }
     if (stripped.startsWith("connect ")) {
       const dev = stripped.slice(8).trim();
-      api
-        .devicesSimulated(dev)
-        .then(() => this.ctx.logActivity("Device Connected"))
-        .catch(() => {});
+      sdk.hardware.connect(dev, "usb").then(() => this.ctx.logActivity("Device Connected")).catch(() => {});
       return true;
     }
     return false;
   }
 
-  // --- Tabs ------------------------------------------------------------------
-
   private async newTab(shell?: string) {
-    const chosen = shell ?? defaultShell();
+    const shellSelect = this.termbar.querySelector("#term-shell") as HTMLSelectElement | null;
+    const chosen = shell ?? (shellSelect?.value || defaultShell());
 
     const tab = document.createElement("button");
     tab.className = "term-tab";
@@ -316,6 +388,10 @@ export class Terminal {
       tab,
       view,
       buffer: "",
+      shell: chosen,
+      cols: 80,
+      rows: 24,
+      searchQuery: "",
     };
 
     tab.addEventListener("click", () => this.selectTab(sess));
@@ -326,13 +402,13 @@ export class Terminal {
 
     if (this.native) {
       try {
-        const id = await kernel.terminalSpawn(chosen, 120, 30);
+        const id = await sdk.kernel.terminalSpawn(chosen, 80, 24);
         sess.id = id;
         label.textContent = chosen;
         this.appendOutput(sess, `prometheus terminal — ${chosen}\r\n`);
       } catch (e: any) {
         label.textContent = "error";
-        this.appendOutput(sess, "failed to spawn PTY: " + e.message + "\r\n");
+        this.appendOutput(sess, "failed to spawn PTY: " + (e?.message ?? String(e)) + "\r\n");
       }
     } else {
       sess.id = "local-" + Math.random().toString(36).slice(2, 8);
@@ -346,15 +422,19 @@ export class Terminal {
     this.active = sess;
     for (const s of this.sessions) {
       s.tab.classList.toggle("active", s === sess);
-      s.view.style.display = s === sess ? "block" : "none";
+      s.view.style.display = s === sess ? (this.splitActive ? "flex" : "block") : "none";
+      if (this.splitActive && s === sess) {
+        s.view.style.flex = "1";
+        s.view.style.flexDirection = "column";
+      }
     }
     this.input.focus();
   }
 
   private async closeTab(sess: TerminalSession) {
-    if (this.sessions.length <= 1) return; // keep at least one
+    if (this.sessions.length <= 1) return;
     try {
-      await kernel.terminalKill(sess.id);
+      await sdk.kernel.terminalKill(sess.id);
     } catch {}
     sess.tab.remove();
     sess.view.remove();
@@ -366,9 +446,6 @@ export class Terminal {
     return this.active?.id ?? "";
   }
 
-  // --- Public API used by Desktop -------------------------------------------
-
-  /** Reflect a GUI-originated action into the terminal (two-way bridge). */
   logGui(text: string) {
     this.echo(text);
   }
@@ -377,25 +454,3 @@ export class Terminal {
     if (this.sessions[0]) this.appendOutput(this.sessions[0], text + "\r\n");
   }
 }
-
-// 8/16-color ANSI palette (CSS hex) for lightweight rendering.
-const ANSI_8: Record<number, string> = {
-  0: "#000000",
-  1: "#cd3131",
-  2: "#0dbc79",
-  3: "#e5e510",
-  4: "#2472c8",
-  5: "#bc3fbc",
-  6: "#11a8cd",
-  7: "#e5e5e5",
-};
-const ANSI_16: Record<number, string> = {
-  0: "#666666",
-  1: "#f14c4c",
-  2: "#23d18b",
-  3: "#f5f543",
-  4: "#3b8eea",
-  5: "#d670d6",
-  6: "#29b8db",
-  7: "#ffffff",
-};

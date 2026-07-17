@@ -11,6 +11,9 @@ circular import at module load.
 
 from __future__ import annotations
 
+import json
+import uuid
+from datetime import datetime, timezone
 from typing import Any
 
 from fastapi import APIRouter, Depends, HTTPException
@@ -114,6 +117,62 @@ def register_dataset(payload: dict[str, Any], db: Session = Depends(get_db)):
     except LicenseError as exc:
         raise HTTPException(status_code=422, detail=str(exc))
     return {"id": ds.id, "license": ds.license, "source_hash": ds.source_hash}
+
+
+# --- P5 Titan: model registry + experiments -------------------------------
+@phase_router.post("/titan/models")
+def register_model(payload: dict[str, Any], db: Session = Depends(get_db)):
+    from titan.governance import TitanGovernance
+
+    m = TitanGovernance().register_model(
+        db,
+        name=payload["name"],
+        version=payload.get("version", "0.1.0"),
+        dataset_id=payload.get("dataset_id"),
+        eval_scores=payload.get("eval_scores", {}),
+        artifact_path=payload.get("artifact_path"),
+        dataset_hash=payload.get("dataset_hash", ""),
+        code_hash=payload.get("code_hash", ""),
+        config=payload.get("config", {}),
+    )
+    return {"id": m.id, "reproducibility_hash": m.reproducibility_hash}
+
+
+@phase_router.get("/titan/models")
+def list_models(db: Session = Depends(get_db)):
+    from titan.models import Model
+
+    rows = db.query(Model).all()
+    return {"models": [{"id": r.id, "name": r.name, "version": r.version} for r in rows]}
+
+
+@phase_router.post("/titan/experiments")
+def start_experiment(payload: dict[str, Any], db: Session = Depends(get_db)):
+    from titan.models import Experiment
+
+    exp = Experiment(
+        id=str(uuid.uuid4()),
+        name=payload.get("name", "unnamed"),
+        config_json=json.dumps(payload.get("config", {}), default=str),
+        status="running",
+        created_at=datetime.now(timezone.utc),
+    )
+    db.add(exp)
+    db.commit()
+    return {"id": exp.id, "status": exp.status}
+
+
+@phase_router.post("/titan/experiments/{exp_id}/complete")
+def complete_experiment(exp_id: str, payload: dict[str, Any], db: Session = Depends(get_db)):
+    from titan.models import Experiment
+
+    exp = db.get(Experiment, exp_id)
+    if exp is None:
+        raise HTTPException(status_code=404, detail="experiment not found")
+    exp.status = "completed"
+    exp.metrics_json = json.dumps(payload.get("metrics", {}), default=str)
+    db.commit()
+    return {"id": exp.id, "status": exp.status}
 
 
 # --- P7 Distributed: cluster scheduler + fallback -------------------------

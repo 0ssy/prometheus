@@ -3,6 +3,7 @@ import { store } from "./Store";
 import { api } from "../api/client";
 import { Terminal, TerminalContext } from "../terminal/Terminal";
 import { showOnboarding } from "./Onboarding";
+import { Dock, DockItem } from "./Dock";
 import {
   mountKnowledge,
   mountSimulation,
@@ -26,10 +27,10 @@ import {
 
 const BOOT_LOGO = `██████╗ ██████╗  ██████╗ ███╗   ███╗███████╗
 ██╔══██╗██╔══██╗██╔═══██╗████╗ ████║██╔════╝
-██████╔╝██████╔╝██║   ██║██╔████╔██║█████╗
-██╔═══╝ ██╔══██╗██║   ██║██║╚██╔╝██║██╔══╝
-██║     ██║  ██║╚██████╔╝██║ ╚═╝ ██║███████╗
-╚═╝     ╚═╝  ╚═╝ ╚═════╝ ╚═╝     ╚═╝╚══════╝`;
+███████║██████╔╝██║   ██║██╔████╔██║█████╗
+██╔═══██╗██╔══██╗██║   ██║██║╚██╔╝██║██╔══╝
+██║   ██║██║  ██║╚██████╔╝██║ ╚═╝ ██║███████╗
+╚═╝   ╚═╝╚═╝  ╚═╝ ╚═════╝ ╚═╝     ╚═╝╚══════╝`;
 
 interface AppDef {
   key: string;
@@ -107,6 +108,7 @@ export class Desktop {
   private wm: WindowManager;
   private activityFeed: HTMLElement;
   private dockButtons: Map<string, HTMLButtonElement> = new Map();
+  private dockItems: DockItem[] = [];
   private offset = 0;
   private terminalCtx: TerminalContext;
   private terminal!: Terminal;
@@ -184,14 +186,26 @@ export class Desktop {
   }
 
   private buildDock(dock: HTMLElement) {
-    for (const key of DOCK_KEYS) {
-      const btn = document.createElement("button");
-      btn.innerHTML = `<svg width="12" height="12" viewBox="0 0 12 12" style="vertical-align:-2px;margin-right:5px;">${DOCK_ICONS[key]}</svg>${key.toUpperCase()}`;
-      btn.addEventListener("click", () => this.openApp(key));
-      dock.appendChild(btn);
-      this.dockButtons.set(key, btn);
-    }
+    this.dockItems = DOCK_KEYS.map((key) => ({
+      id: key,
+      title: key.toUpperCase(),
+      icon: DOCK_ICONS[key],
+      running: false,
+      pinned: true,
+      badge: 0,
+    }));
+    const dockInstance = new Dock(dock);
+    dockInstance.setItems(this.dockItems);
+    dockInstance.addEventListener("dock:open", (e: any) => this.openApp(e.detail.id));
+    dockInstance.addEventListener("dock:focus", (e: any) => this.focusApp(e.detail.id));
+    dockInstance.addEventListener("dock:close", (e: any) => this.closeApp(e.detail.id));
+    dockInstance.addEventListener("dock:recent", (e: any) => {
+      this.ctxOpenRecent(e.detail.id);
+    });
+    this.dockInstance = dockInstance;
   }
+
+  private dockInstance: Dock | null = null;
 
   private initStore() {
     store.loadStatus();
@@ -212,10 +226,7 @@ export class Desktop {
 
   openApp(key: string, silent = false) {
     const app = APPS[key];
-    if (!app) {
-      return;
-    }
-    const btn = this.dockButtons.get(key);
+    if (!app) return;
     const content = document.createElement("div");
     content.style.height = "100%";
     const id = this.wm.open(
@@ -231,10 +242,30 @@ export class Desktop {
       (el) => app.mount(el),
     );
     this.offset++;
+    const btn = this.dockButtons.get(key);
     btn?.classList.add("active");
     if (!silent) this.terminal?.logGui("> open " + app.title);
     const handle = (this.wm as any).windows.get(id) as { onClose?: () => void } | undefined;
-    if (handle) handle.onClose = () => btn?.classList.remove("active");
+    if (handle) {
+      handle.onClose = () => {
+        btn?.classList.remove("active");
+        this.dockInstance?.setRunning(key, false);
+      };
+    }
+    this.dockInstance?.setRunning(key, true);
+  }
+
+  private focusApp(id: string) {
+    if (this.wm.isOpen(id)) this.wm.focus(id);
+  }
+
+  private closeApp(id: string) {
+    this.wm.close(id);
+    this.dockInstance?.setRunning(id, false);
+  }
+
+  private ctxOpenRecent(id: string) {
+    this.openApp(id, true);
   }
 
   private setupInteractions() {
@@ -284,6 +315,12 @@ export class Desktop {
       } else if (k === "m") {
         e.preventDefault();
         this.wm.minimizeTop();
+      } else if (k === "shift" && e.key.toLowerCase() === "w") {
+        e.preventDefault();
+        this.closeAll();
+      } else if (k === "shift" && e.key.toLowerCase() === "m") {
+        e.preventDefault();
+        this.minimizeAll();
       }
       return;
     }
@@ -311,6 +348,18 @@ export class Desktop {
     }
     if (e.key === "0" && DOCK_KEYS[9]) {
       this.openApp(DOCK_KEYS[9], true);
+    }
+  }
+
+  private closeAll() {
+    for (const [id] of (this.wm as any).windows) {
+      this.wm.close(id);
+    }
+  }
+
+  private minimizeAll() {
+    for (const [id] of (this.wm as any).windows) {
+      this.wm.minimize(id);
     }
   }
 
@@ -346,6 +395,8 @@ export class Desktop {
           <div class="ob-row"><span>Focus terminal</span><span class="ob-key">\`</span></div>
           <div class="ob-row"><span>Close focused window</span><span class="ob-key">Esc / Ctrl+W</span></div>
           <div class="ob-row"><span>Minimize focused window</span><span class="ob-key">Ctrl+M</span></div>
+          <div class="ob-row"><span>Close all windows</span><span class="ob-key">Ctrl+Shift+W</span></div>
+          <div class="ob-row"><span>Minimize all windows</span><span class="ob-key">Ctrl+Shift+M</span></div>
           <div class="ob-row"><span>Maximize focused window</span><span class="ob-key">F11</span></div>
           <div class="ob-row"><span>Open Settings</span><span class="ob-key">Ctrl+,</span></div>
           <div class="ob-row"><span>Toggle this help</span><span class="ob-key">Ctrl+/</span></div>

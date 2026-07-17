@@ -10,12 +10,14 @@
 
 pub mod error;
 pub mod event_bus;
+pub mod hardware;
 pub mod session;
 pub mod terminal;
 pub mod kernel;
 
 pub use error::KernelError;
 pub use event_bus::{EventBus, KernelEvent};
+pub use hardware::HardwareManager;
 pub use kernel::{Kernel, KernelStatus};
 pub use session::{Session, SessionManager, WindowState};
 pub use terminal::{TerminalHandle, TerminalInfo, TerminalManager};
