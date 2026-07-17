@@ -1,17 +1,4 @@
-import { api } from "../api/client";
-
-/**
- * Engineering Studio (Phase 4 / Phase 10).
- *
- * Wraps two surfaces:
- * 1. Hardware capabilities via POST /capabilities/execute (same endpoint the
- *    Rust Aether ToolDispatcher calls).
- * 2. Engineering workflows via POST /engineering/execute (Phase 4 discipline
- *    modules: embedded, robotics, mechanical, electrical, networking,
- *    cybersecurity, ai, data, cloud).
- *
- * Per the roadmap's first execution principle: simulation before action.
- */
+import { sdk } from "../sdk";
 
 const HARDWARE_CAPABILITIES: { name: string; permissions: string[]; mutating: boolean }[] = [
   { name: "hardware.connect", permissions: ["device.connect"], mutating: true },
@@ -159,11 +146,16 @@ export function mountEngineeringStudio(el: HTMLElement) {
     const permissions = permissionsFor(capName);
     line(`> ${simulate ? "simulate" : "execute"} ${capName} (perms: ${permissions.join(",") || "-"})`, "var(--muted)");
     try {
-      const res = await api.executeCapability(capName, payload, permissions);
-      if (res.ok) {
-        line("ok: " + JSON.stringify(res.data ?? null), "var(--green)");
+      const res = await sdk.commands.run({
+        capability: capName,
+        payload,
+        granted_permissions: permissions,
+        simulate,
+      });
+      if ((res as any).ok) {
+        line("ok: " + JSON.stringify((res as any).data ?? null), "var(--green)");
       } else {
-        line("denied: " + (res.error ?? "unknown"), "var(--red)");
+        line("denied: " + ((res as any).error ?? "unknown"), "var(--red)");
       }
     } catch (e: any) {
       line("error: " + e.message, "var(--red)");
@@ -173,11 +165,15 @@ export function mountEngineeringStudio(el: HTMLElement) {
   async function dispatchEngineering(moduleName: string, workflow: string, payload: Record<string, unknown>) {
     line(`> engineering ${moduleName}.${workflow}`, "var(--muted)");
     try {
-      const res = await api.executeEngineering(moduleName, workflow, payload);
-      if (res.ok) {
-        line("ok: " + JSON.stringify(res.data ?? null), "var(--green)");
+      const res = await sdk.commands.run({
+        module_name: moduleName,
+        workflow,
+        payload,
+      });
+      if ((res as any).ok) {
+        line("ok: " + JSON.stringify((res as any).data ?? null), "var(--green)");
       } else {
-        line("error: " + (res.error ?? "unknown"), "var(--red)");
+        line("error: " + ((res as any).error ?? "unknown"), "var(--red)");
       }
     } catch (e: any) {
       line("error: " + e.message, "var(--red)");
@@ -187,11 +183,16 @@ export function mountEngineeringStudio(el: HTMLElement) {
   async function dispatchTitan(moduleName: string, workflow: string, payload: Record<string, unknown>) {
     line(`> titan ${moduleName}.${workflow}`, "var(--muted)");
     try {
-      const res = await api.executeTitan(moduleName, workflow, payload);
-      if (res.ok) {
-        line("ok: " + JSON.stringify(res.data ?? null), "var(--green)");
+      const res = await sdk.commands.run({
+        module_name: moduleName,
+        workflow,
+        payload,
+        titan: true,
+      });
+      if ((res as any).ok) {
+        line("ok: " + JSON.stringify((res as any).data ?? null), "var(--green)");
       } else {
-        line("error: " + (res.error ?? "unknown"), "var(--red)");
+        line("error: " + ((res as any).error ?? "unknown"), "var(--red)");
       }
     } catch (e: any) {
       line("error: " + e.message, "var(--red)");

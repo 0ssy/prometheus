@@ -107,6 +107,73 @@ def run_extensions() -> int:
     return 0
 
 
+def run_new(kind: str, name: str) -> int:
+    name = name.lower().replace(" ", "-")
+    scaffold_dir = _EXTENSIONS_DIR / kind / name
+    scaffold_dir.mkdir(parents=True, exist_ok=True)
+
+    if kind == "plugin":
+        manifest = scaffold_dir / "plugin.json"
+        if not manifest.exists():
+            manifest.write_text(
+                json.dumps(
+                    {
+                        "name": name,
+                        "version": "0.1.0",
+                        "description": f"Prometheus plugin: {name}",
+                        "capabilities": [],
+                        "permissions": [],
+                    },
+                    indent=2,
+                ),
+                encoding="utf-8",
+            )
+        readme = scaffold_dir / "README.md"
+        if not readme.exists():
+            readme.write_text(
+                f"# Plugin: {name}\n\nScaffolded by `prometheus new plugin {name}`.\n",
+                encoding="utf-8",
+            )
+    elif kind == "agent":
+        agent_file = scaffold_dir / "agent.py"
+        if not agent_file.exists():
+            agent_file.write_text(
+                f'"""Agent: {name}"""\n\nfrom core.agent import Agent\n\nclass {name.title().replace("-", "")}(Agent):\n    pass\n',
+                encoding="utf-8",
+            )
+    elif kind == "driver":
+        driver_file = scaffold_dir / "driver.rs"
+        if not driver_file.exists():
+            driver_file.write_text(
+                f"// Driver: {name}\n\nuse hal_core::{{Hal, ProbeResult, Transport}};\n\npub struct {name.title().replace('-', '')}Driver;\n\nimpl Hal for {name.title().replace('-', '')}Driver {{\n    fn probe(&self, transport: Transport, target: &str) -> ProbeResult {{\n        todo!()\n    }}\n}}\n",
+                encoding="utf-8",
+            )
+    else:
+        print(f"unknown scaffold kind: {kind}")
+        return 1
+
+    print(f"scaffolded {kind}: {scaffold_dir}")
+    return 0
+
+
+def run_pack(name: str | None = None) -> int:
+    target = _EXTENSIONS_DIR / (name or "") if name else _EXTENSIONS_DIR
+    if not target.exists():
+        print(f"not found: {target}")
+        return 1
+
+    import tarfile
+
+    pack_path = Path("dist") / f"{name or 'extensions'}.tar.gz"
+    pack_path.parent.mkdir(parents=True, exist_ok=True)
+    with tarfile.open(pack_path, "w:gz") as tar:
+        for path in target.rglob("*"):
+            if path.is_file():
+                tar.add(path, arcname=path.relative_to(target.parent))
+    print(f"packed: {pack_path}")
+    return 0
+
+
 def _status_snapshot(container: ServiceContainer, db) -> dict:
     from sqlalchemy import func
     from knowledge.node import KnowledgeNode

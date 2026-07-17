@@ -29,4 +29,9 @@ pub trait Provider: Send + Sync {
 
     /// List the model identifiers exposed by the provider.
     async fn list_models(&self) -> Result<Vec<String>, AetherError>;
+
+    /// Estimated cost per 1K tokens for this provider (USD).
+    fn cost_per_1k(&self) -> f64 {
+        0.0
+    }
 }

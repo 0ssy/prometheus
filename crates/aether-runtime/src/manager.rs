@@ -5,7 +5,7 @@ use std::sync::Mutex;
 use crate::error::AetherError;
 use crate::provider::Provider;
 use crate::registry::ProviderRegistry;
-use crate::types::{ProviderHealth, ProviderInfo, ProviderKind};
+use crate::types::{CostAccumulator, ProviderHealth, ProviderInfo, ProviderKind};
 
 /// Wraps the [`ProviderRegistry`] with default selection and bulk operations.
 ///
@@ -15,6 +15,7 @@ use crate::types::{ProviderHealth, ProviderInfo, ProviderKind};
 pub struct ProviderManager {
     registry: ProviderRegistry,
     default_id: Mutex<Option<String>>,
+    costs: Mutex<CostAccumulator>,
 }
 
 impl Clone for ProviderManager {
@@ -25,6 +26,12 @@ impl Clone for ProviderManager {
                 self.default_id
                     .lock()
                     .expect("default lock poisoned")
+                    .clone(),
+            ),
+            costs: Mutex::new(
+                self.costs
+                    .lock()
+                    .expect("costs lock poisoned")
                     .clone(),
             ),
         }
@@ -42,6 +49,7 @@ impl ProviderManager {
         Self {
             registry: ProviderRegistry::new(),
             default_id: Mutex::new(None),
+            costs: Mutex::new(CostAccumulator::default()),
         }
     }
 
@@ -164,6 +172,18 @@ impl ProviderManager {
     pub fn default_kind(&self) -> Option<ProviderKind> {
         self.default_id()
             .and_then(|id| self.registry.get(&id).map(|p| p.kind()))
+    }
+
+    /// Record token usage and estimated cost for a completed request.
+    pub fn record_cost(&self, provider_id: &str, prompt_tokens: u64, completion_tokens: u64) {
+        let cost = self.registry.get(provider_id).map(|p| p.cost_per_1k()).unwrap_or(0.0);
+        let mut costs = self.costs.lock().expect("costs lock poisoned");
+        costs.record(prompt_tokens, completion_tokens, cost);
+    }
+
+    /// Snapshot of accumulated costs across all providers.
+    pub fn costs(&self) -> CostAccumulator {
+        self.costs.lock().expect("costs lock poisoned").clone()
     }
 }
 

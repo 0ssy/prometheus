@@ -1,4 +1,4 @@
-import { api } from "../api/client";
+import { sdk } from "../sdk";
 
 export function mountFiles(el: HTMLElement) {
   const workspaceFolders = [
@@ -14,18 +14,29 @@ export function mountFiles(el: HTMLElement) {
     "Recovery",
   ];
   el.innerHTML = `<div style="display:flex; flex-direction:column; height:300px; font-family: var(--font-body); color: var(--text); background: var(--bg);">
-    <div style="font-family: var(--font-heading); color: var(--yellow); font-size: 12px; margin-bottom: 6px; letter-spacing: 1px;">FILES</div>
+    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">
+      <div style="font-family: var(--font-heading); color: var(--yellow); font-size: 12px; letter-spacing: 1px;">FILES</div>
+      <div style="display:flex; gap:6px;">
+        <button id="files-upload" style="background:var(--bg); color:var(--text); border:1px solid var(--border); padding:2px 6px; cursor:pointer; font-size:11px;">Upload</button>
+        <button id="files-refresh" style="background:var(--bg); color:var(--text); border:1px solid var(--border); padding:2px 6px; cursor:pointer; font-size:11px;">Refresh</button>
+      </div>
+    </div>
     <div id="files-bc" style="display:flex; flex-wrap:wrap; gap:4px; margin-bottom:6px; font-size:11px;"></div>
+    <input id="files-search" type="text" placeholder="search files..." style="margin-bottom:6px; background:var(--bg); color:var(--text); border:1px solid var(--border); padding:2px 4px; font-family:var(--font-mono); font-size:11px;" />
     <div style="display:flex; flex:1; min-height:0; gap:8px;">
       <div id="files-sidebar" style="width:120px; border-right:1px solid var(--border); overflow-y:auto; padding-right:6px;"></div>
       <div id="files-main" style="flex:1; overflow-y:auto; padding-left:6px;"></div>
+      <div id="files-preview" style="width:160px; border-left:1px solid var(--border); overflow-y:auto; padding-left:6px; display:none;"></div>
     </div>
   </div>`;
 
   const bc = el.querySelector("#files-bc") as HTMLElement;
   const sidebar = el.querySelector("#files-sidebar") as HTMLElement;
   const main = el.querySelector("#files-main") as HTMLElement;
+  const preview = el.querySelector("#files-preview") as HTMLElement;
+  const searchInput = el.querySelector("#files-search") as HTMLInputElement;
   let currentPath = "";
+  let selectedFile: string | null = null;
 
   function renderBreadcrumb(path: string) {
     if (!path) {
@@ -56,16 +67,15 @@ export function mountFiles(el: HTMLElement) {
     if (!iso) return "";
     const d = new Date(iso);
     const pad = (n: number) => (n < 10 ? "0" + n : n);
-    return (
-      d.getFullYear() + "-" + pad(d.getMonth() + 1) + "-" + pad(d.getDate()) + " " + pad(d.getHours()) + ":" + pad(d.getMinutes())
-    );
+    return `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())} ${pad(d.getHours())}:${pad(d.getMinutes())}`;
   }
 
-  function load(path: string) {
+  async function load(path: string, query?: string) {
     currentPath = path;
     renderBreadcrumb(path);
-    main.innerHTML = "";
-    api.files(path).then((f: any) => {
+    main.innerHTML = '<div style="color:var(--muted); font-size:11px;">loading...</div>';
+    try {
+      const f: any = query ? await sdk.files.search(query) : await sdk.files.list(path);
       if (currentPath !== (f.path || "")) return;
       if (path) {
         const up = document.createElement("div");
@@ -79,14 +89,15 @@ export function mountFiles(el: HTMLElement) {
         });
         main.appendChild(up);
       }
-      if (!f.entries || f.entries.length === 0) {
+      const entries = query ? (f.results ?? f.entries ?? []) : (f.entries ?? []);
+      if (!entries || entries.length === 0) {
         const empty = document.createElement("div");
         empty.style.cssText = "color:var(--muted); padding:12px 4px; font-size:11px;";
-        empty.textContent = "Folder is empty";
+        empty.textContent = query ? "No matches" : "Folder is empty";
         main.appendChild(empty);
         return;
       }
-      for (const entry of f.entries) {
+      for (const entry of entries) {
         const row = document.createElement("div");
         row.className = "node-row";
         const isDir = entry.type === "directory";
@@ -107,12 +118,100 @@ export function mountFiles(el: HTMLElement) {
         row.appendChild(size);
         row.appendChild(mod);
         row.addEventListener("click", () => {
-          if (isDir) load(`${path ? path + "/" : ""}${entry.name}`);
+          const fileName = isDir ? `${path ? path + "/" : ""}${entry.name}` : entry.name;
+          selectedFile = fileName;
+          if (isDir) {
+            load(`${path ? path + "/" : ""}${entry.name}`);
+            preview.style.display = "none";
+          } else if (fileName) {
+            showPreview(fileName, entry);
+          }
         });
         main.appendChild(row);
       }
+    } catch (e) {
+      main.innerHTML = `<span style="color:var(--orange-red);">files unavailable (${(e as Error)?.message ?? e})</span>`;
+    }
+  }
+
+  async function showPreview(name: string, entry: any) {
+    preview.style.display = "block";
+    preview.innerHTML = `<div style="font-family:var(--font-heading); color:var(--yellow); font-size:11px; margin-bottom:4px;">PREVIEW</div>`;
+    const meta = document.createElement("div");
+    meta.style.cssText = "font-size:11px; color:var(--muted); margin-bottom:6px;";
+    meta.innerHTML = `<div>size: ${formatSize(entry.size)}</div><div>modified: ${formatDate(entry.modified)}</div>`;
+    preview.appendChild(meta);
+    const actions = document.createElement("div");
+    actions.style.cssText = "display:flex; flex-direction:column; gap:4px;";
+    actions.innerHTML = `
+      <button id="file-dl" style="background:var(--bg); color:var(--text); border:1px solid var(--border); padding:2px 4px; cursor:pointer; font-size:10px;">Download</button>
+      <button id="file-git" style="background:var(--bg); color:var(--text); border:1px solid var(--border); padding:2px 4px; cursor:pointer; font-size:10px;">Git Status</button>
+    `;
+    preview.appendChild(actions);
+    (preview.querySelector("#file-dl") as HTMLElement).addEventListener("click", () => {
+      if (!name) return;
+      const a = document.createElement("a");
+      a.href = sdk.files.download(name);
+      a.download = name.split("/").pop() || name;
+      a.click();
+    });
+    (preview.querySelector("#file-git") as HTMLElement).addEventListener("click", async () => {
+      if (!name) return;
+      try {
+        const status: any = await sdk.files.gitStatus(name);
+        meta.innerHTML += `<div style="margin-top:4px; color:var(--steel);">git: ${status?.status ?? "clean"}</div>`;
+      } catch {
+        meta.innerHTML += `<div style="margin-top:4px; color:var(--orange);">git: unavailable</div>`;
+      }
     });
   }
+
+  (el.querySelector("#files-upload") as HTMLElement).addEventListener("click", async () => {
+    const input = document.createElement("input");
+    input.type = "file";
+    input.multiple = true;
+    input.addEventListener("change", async () => {
+      for (const file of Array.from(input.files || [])) {
+        try {
+          await sdk.files.upload(currentPath, file);
+        } catch (e) {
+          console.error("upload failed", e);
+        }
+      }
+      load(currentPath);
+    });
+    input.click();
+  });
+
+  (el.querySelector("#files-refresh") as HTMLElement).addEventListener("click", () => {
+    load(currentPath);
+  });
+
+  searchInput.addEventListener("input", () => {
+    const q = searchInput.value.trim();
+    if (q) load("", q);
+  });
+
+  el.addEventListener("dragover", (e) => {
+    e.preventDefault();
+    el.style.border = "1px dashed var(--yellow)";
+  });
+  el.addEventListener("dragleave", () => {
+    el.style.border = "";
+  });
+  el.addEventListener("drop", async (e) => {
+    e.preventDefault();
+    el.style.border = "";
+    const files = Array.from(e.dataTransfer?.files || []);
+    for (const file of files) {
+      try {
+        await sdk.files.upload(currentPath, file);
+      } catch (err) {
+        console.error("drop upload failed", err);
+      }
+    }
+    load(currentPath);
+  });
 
   for (const folder of workspaceFolders) {
     const row = document.createElement("div");

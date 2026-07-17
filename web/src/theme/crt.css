@@ -217,22 +217,32 @@ body {
 
 /* ============ TERMINAL ============ */
 #termbar {
-  position: absolute; bottom: 0; left: 0; right: 0; height: 90px;
+  position: absolute; bottom: 0; left: 0; right: 0; height: 200px;
   background: #000; border-top: 2px solid var(--border);
   display: flex; flex-direction: column; padding: 6px 16px;
   z-index: 30;
 }
-#termlog {
-  flex: 1; overflow-y: auto; color: #7CFC7C; font-size: 15px; line-height: 1.4;
+.term-tabs { display: flex; gap: 4px; margin-bottom: 4px; flex: 0 0 auto; }
+.term-tab {
+  background: var(--panel); border: 1px solid var(--border); color: var(--muted);
+  font-family: var(--font-body); font-size: 13px; padding: 2px 8px; cursor: pointer;
+  display: flex; align-items: center; gap: 6px;
 }
-#termlog .cmd { color: var(--text); }
-#termlog .resp { color: var(--muted); }
-#termlog .gui { color: var(--yellow); }
-#terminput-row { display: flex; align-items: center; color: var(--orange); font-size: 17px; }
+.term-tab.active { color: var(--yellow); border-color: var(--yellow); }
+.term-tab-close { color: var(--muted); font-weight: bold; }
+.term-tab-close:hover { color: var(--orange); }
+.term-views { flex: 1; overflow: hidden; position: relative; }
+.term-view {
+  position: absolute; inset: 0; overflow-y: auto;
+  color: #7CFC7C; font-size: 14px; line-height: 1.4; white-space: pre-wrap;
+  font-family: var(--font-body); margin: 0;
+}
+#terminput-row { display: flex; align-items: center; color: var(--orange); font-size: 16px; flex: 0 0 auto; }
+#terminput-row .prompt { margin-right: 6px; }
 #terminput-row input {
   flex: 1; background: transparent; border: none; outline: none;
-  color: var(--text); font-family: var(--font-body); font-size: 17px;
-  margin-left: 6px;
+  color: var(--text); font-family: var(--font-body); font-size: 16px;
+  margin-left: 2px;
 }
 
 /* ============ ACTIVITY FEED (floating) ============ */

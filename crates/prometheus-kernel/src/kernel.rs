@@ -1,15 +1,14 @@
 use crate::error::KernelResult;
 use crate::event_bus::{EventBus, KernelEvent};
+use crate::hardware::HardwareManager;
 use crate::session::{Session, SessionManager, WindowState};
 use crate::terminal::{TerminalInfo, TerminalManager};
 
-/// Top-level facade the Tauri command surface talks to. Owns the terminal
-/// manager, session manager, and event bus. All three are independent; the
-/// kernel only wires them so callers get one object to manage.
 pub struct Kernel {
     pub terminals: TerminalManager,
     pub sessions: SessionManager,
     pub bus: EventBus,
+    pub hardware: HardwareManager,
 }
 
 impl Kernel {
@@ -18,15 +17,18 @@ impl Kernel {
         let bus = EventBus::new();
         let terminals = TerminalManager::new(bus.clone());
         let sessions = SessionManager::open(session_db_path)?;
+        let hardware = HardwareManager::new(bus.clone());
         Ok(Self {
             terminals,
             sessions,
             bus,
+            hardware,
         })
     }
 
     /// Health probe for `kernel_status()`.
     pub fn status(&self) -> KernelStatus {
+        let _hw = self.hardware.status();
         KernelStatus {
             healthy: true,
             terminals: self.terminals.list().len(),
@@ -78,6 +80,12 @@ impl Kernel {
         terminals: Vec<String>,
     ) -> KernelResult<Session> {
         self.sessions.snapshot_and_save(id, windows, terminals)
+    }
+
+    // --- Hardware passthrough -------------------------------------------------
+
+    pub fn hardware_probe(&self, transport: hal_core::Transport, target: &str) -> hal_core::ProbeResult {
+        self.hardware.probe(transport, target)
     }
 
     // --- Event bus passthrough ------------------------------------------------

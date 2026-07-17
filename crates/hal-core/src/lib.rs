@@ -1,7 +1,8 @@
 //! P2 Hardware Platform — unified HAL (Rust FFI boundary).
 //!
 //! Exposes a [`Hal`] trait over the supported transport families
-//! (USB, Serial, Network, GPIO), a conformance runner, and Ed25519
+//! (USB, Serial, Network, GPIO, SPI, I2C, CAN, Bluetooth, JTAG/SWD),
+//! a conformance runner, a driver registry, and Ed25519
 //! signed-flashing verification. When built with the `python` feature
 //! the same API is exposed to Python via PyO3; the Python side keeps a
 //! pure-Python fallback when this crate is absent.
@@ -9,6 +10,15 @@
 use ed25519_dalek::{Signature, Signer, SigningKey, Verifier, VerifyingKey};
 use serde::{Deserialize, Serialize};
 use thiserror::Error;
+
+mod registry;
+mod transports;
+
+pub use registry::HalRegistry;
+pub use transports::{
+    BluetoothTransport, CanTransport, GpioTransport, I2cTransport, JtagTransport, NetworkTransport,
+    SerialTransport, SpiTransport, UsbTransport,
+};
 
 #[derive(Debug, Error)]
 pub enum HalError {
@@ -31,6 +41,11 @@ pub enum Transport {
     Serial,
     Network,
     Gpio,
+    Spi,
+    I2c,
+    Can,
+    Bluetooth,
+    Jtag,
 }
 
 impl Transport {
@@ -40,6 +55,11 @@ impl Transport {
             Transport::Serial => "Serial",
             Transport::Network => "Network",
             Transport::Gpio => "GPIO",
+            Transport::Spi => "SPI",
+            Transport::I2c => "I2C",
+            Transport::Can => "CAN",
+            Transport::Bluetooth => "Bluetooth",
+            Transport::Jtag => "JTAG/SWD",
         }
     }
 
@@ -49,6 +69,11 @@ impl Transport {
             "SERIAL" => Ok(Transport::Serial),
             "NETWORK" => Ok(Transport::Network),
             "GPIO" => Ok(Transport::Gpio),
+            "SPI" => Ok(Transport::Spi),
+            "I2C" => Ok(Transport::I2c),
+            "CAN" => Ok(Transport::Can),
+            "BLUETOOTH" | "BT" => Ok(Transport::Bluetooth),
+            "JTAG" | "SWD" => Ok(Transport::Jtag),
             other => Err(HalError::UnsupportedTransport(other.to_string())),
         }
     }

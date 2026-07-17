@@ -13,6 +13,7 @@ serde_json = "1"
 thiserror = "1"
 tokio = { version = "1", features = ["rt-multi-thread", "macros", "sync", "time"] }
 uuid = { version = "1", features = ["v4", "serde"] }
+hal-core = { path = "../hal-core" }
 
 [dev-dependencies]
 tokio = { version = "1", features = ["rt-multi-thread", "macros", "test-util", "time"] }

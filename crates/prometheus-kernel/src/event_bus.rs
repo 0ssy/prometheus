@@ -148,3 +148,18 @@ mod tests {
         assert_eq!(back.target.as_deref(), Some("sess-1"));
     }
 }
+
+impl KernelEvent {
+    pub fn hardware_probe(result: &hal_core::ProbeResult) -> Self {
+        Self {
+            topic: "hardware.probe".into(),
+            target: Some(result.target.clone()),
+            payload: Some(serde_json::json!({
+                "transport": result.transport.as_str(),
+                "success": result.handshake_success,
+                "latency_ms": result.latency_ms,
+                "error": result.error,
+            })),
+        }
+    }
+}

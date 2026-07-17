@@ -38,3 +38,14 @@ class Model(Base):
     artifact_path = Column(String, nullable=True)
     reproducibility_hash = Column(String, nullable=True)
     created_at = Column(DateTime, default=lambda: datetime.now(timezone.utc))
+
+
+class Experiment(Base):
+    __tablename__ = "experiments"
+
+    id = Column(String, primary_key=True)
+    name = Column(String, nullable=False)
+    config_json = Column(Text, default="{}")
+    status = Column(String, default="running", nullable=False)
+    metrics_json = Column(Text, default="{}")
+    created_at = Column(DateTime, default=lambda: datetime.now(timezone.utc))

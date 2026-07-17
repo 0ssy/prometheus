@@ -1,5 +1,6 @@
 //! Core data types shared across the Aether AI Runtime.
 
+use crate::agent::AgentRole;
 use serde::{Deserialize, Serialize};
 
 /// The role of a participant in a chat conversation.
@@ -164,6 +165,46 @@ pub struct ProviderInfo {
 pub struct RuntimeHealth {
     pub providers: Vec<ProviderHealth>,
     pub backend: ProviderHealth,
+}
+
+/// Per-provider cost accumulator.
+#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+pub struct CostAccumulator {
+    pub total_tokens: u64,
+    pub prompt_tokens: u64,
+    pub completion_tokens: u64,
+    pub requests: u64,
+    pub total_cost_usd: f64,
+}
+
+impl CostAccumulator {
+    pub fn record(&mut self, prompt_tokens: u64, completion_tokens: u64, cost_per_1k: f64) {
+        self.prompt_tokens += prompt_tokens;
+        self.completion_tokens += completion_tokens;
+        self.total_tokens += prompt_tokens + completion_tokens;
+        self.requests += 1;
+        self.total_cost_usd += ((prompt_tokens + completion_tokens) as f64 / 1000.0) * cost_per_1k;
+    }
+}
+
+/// Agent lifecycle state.
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize)]
+#[serde(rename_all = "lowercase")]
+pub enum AgentState {
+    Idle,
+    Running,
+    Paused,
+    Failed,
+    Killed,
+}
+
+/// Agent heartbeat metadata.
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct AgentHeartbeat {
+    pub role: AgentRole,
+    pub state: AgentState,
+    pub last_seen: String,
+    pub task: Option<String>,
 }
 
 #[cfg(test)]
