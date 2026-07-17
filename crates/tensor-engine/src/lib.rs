@@ -5,8 +5,6 @@
 //! Production builds memory-map the buffer (see `Tensor::mmap`) for zero-copy
 //! large tensors; here we keep a portable, testable `Vec<f32>` implementation.
 
-mod cuda;
-
 use std::cmp::max;
 
 #[derive(Debug, Clone, PartialEq)]
@@ -171,12 +169,6 @@ impl Tensor {
             .collect();
         Ok(Tensor::new(shape, data))
     }
-}
-
-#[cfg(feature = "cuda")]
-pub mod backend {
-    //! GPU backend re-exported for `titan-engine`.
-    pub use crate::cuda::{add, matmul, softmax};
 }
 
 #[cfg(feature = "python")]

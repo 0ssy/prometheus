@@ -18,6 +18,5 @@ optional = true
 [features]
 default = []
 python = ["pyo3"]
-cuda = []
 
 [dev-dependencies]

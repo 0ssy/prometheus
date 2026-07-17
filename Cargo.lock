@@ -2580,6 +2580,7 @@ dependencies = [
 name = "titan-engine"
 version = "0.1.0"
 dependencies = [
+ "cc",
  "pyo3",
  "tensor-engine",
 ]

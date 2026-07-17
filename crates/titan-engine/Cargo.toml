@@ -6,6 +6,9 @@ edition = "2021"
 rust-version = "1.77"
 license = "MIT"
 
+[lib]
+crate-type = ["cdylib"]
+
 [dependencies]
 tensor-engine = { path = "../tensor-engine", features = ["python"] }
 
@@ -16,3 +19,7 @@ optional = true
 [features]
 default = []
 python = ["pyo3"]
+cuda = []
+
+[build-dependencies]
+cc = "1"
