@@ -1,4 +1,4 @@
-name: Linux Verification
+name: macOS Verification
 
 on:
   push:
@@ -10,9 +10,9 @@ permissions:
   contents: read
 
 jobs:
-  verify-linux:
-    runs-on: ubuntu-latest
-    timeout-minutes: 30
+  verify-macos:
+    runs-on: macos-latest
+    timeout-minutes: 35
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -28,11 +28,6 @@ jobs:
         run: |
           python -m pip install --upgrade pip
           pip install -r requirements.txt
-
-      - name: Install native HAL dependencies
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y libusb-1.0-0-dev libserialport-dev libudev-dev
 
       - name: Set up Zig
         uses: mlugg/setup-zig@v1
@@ -57,9 +52,6 @@ jobs:
 
       - name: Build Rust HAL with C bindings
         run: cargo build -p hal-core --features python,c-hal
-        env:
-          LIBUSB_1_0_LIBRARY_DIRS: /usr/lib/x86_64-linux-gnu
-          LIBSERIALPORT_LIBRARY_DIRS: /usr/lib/x86_64-linux-gnu
 
       - name: Build Rust tensor engine
         run: cargo build -p tensor-engine --features python
@@ -67,17 +59,12 @@ jobs:
       - name: Build Rust Titan engine
         run: cargo build -p titan-engine --features python
 
-      - name: Run tests on Linux
-        run: pytest --junitxml=pytest-linux.xml
+      - name: Run tests on macOS
+        run: pytest --junitxml=pytest-macos.xml
 
-      - name: Verify Triton installation
+      - name: Verify server health endpoint on macOS
         run: |
-          python -c "import triton; print('Triton', triton.__version__)"
-        continue-on-error: true
-
-      - name: Verify server health endpoint on Linux
-        run: |
-          python prometheus.py --server > prometheus-linux.log 2>&1 &
+          python prometheus.py --server > prometheus-ci.log 2>&1 &
           PID=$!
           trap "kill $PID || true" EXIT
           for i in $(seq 1 60); do
@@ -86,12 +73,13 @@ jobs:
             fi
             sleep 0.5
           done
-          echo "Server did not become healthy on Linux."
+          echo "Server did not become healthy on macOS."
+          cat prometheus-ci.log
           exit 1
 
-      - name: Upload Linux test report
+      - name: Upload macOS test report
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: pytest-linux
-          path: pytest-linux.xml
+          name: pytest-macos
+          path: pytest-macos.xml

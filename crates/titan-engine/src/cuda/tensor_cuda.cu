@@ -57,9 +57,9 @@ extern "C" {
 
 cudaError_t cuda_tensor_add(const float *h_a, const float *h_b, float *h_out, size_t n) {
     float *d_a, *d_b, *d_out;
-    CHECK(cudaMalloc(&d_a, n * sizeof(float)));
-    CHECK(cudaMalloc(&d_b, n * sizeof(float)));
-    CHECK(cudaMalloc(&d_out, n * sizeof(float)));
+    CHECK(cudaMalloc((void**)&d_a, n * sizeof(float)));
+    CHECK(cudaMalloc((void**)&d_b, n * sizeof(float)));
+    CHECK(cudaMalloc((void**)&d_out, n * sizeof(float)));
     CHECK(cudaMemcpy(d_a, h_a, n * sizeof(float), cudaMemcpyHostToDevice));
     CHECK(cudaMemcpy(d_b, h_b, n * sizeof(float), cudaMemcpyHostToDevice));
     int threads = 256;
@@ -73,9 +73,9 @@ cudaError_t cuda_tensor_add(const float *h_a, const float *h_b, float *h_out, si
 
 cudaError_t cuda_matmul(const float *h_a, const float *h_b, float *h_c, int M, int K, int N) {
     float *d_a, *d_b, *d_c;
-    CHECK(cudaMalloc(&d_a, M * K * sizeof(float)));
-    CHECK(cudaMalloc(&d_b, K * N * sizeof(float)));
-    CHECK(cudaMalloc(&d_c, M * N * sizeof(float)));
+    CHECK(cudaMalloc((void**)&d_a, M * K * sizeof(float)));
+    CHECK(cudaMalloc((void**)&d_b, K * N * sizeof(float)));
+    CHECK(cudaMalloc((void**)&d_c, M * N * sizeof(float)));
     CHECK(cudaMemcpy(d_a, h_a, M * K * sizeof(float), cudaMemcpyHostToDevice));
     CHECK(cudaMemcpy(d_b, h_b, K * N * sizeof(float), cudaMemcpyHostToDevice));
     dim3 threads(16, 16);
@@ -89,7 +89,7 @@ cudaError_t cuda_matmul(const float *h_a, const float *h_b, float *h_c, int M, i
 
 cudaError_t cuda_softmax(float *h_x, int rows, int cols) {
     float *d_x;
-    CHECK(cudaMalloc(&d_x, rows * cols * sizeof(float)));
+    CHECK(cudaMalloc((void**)&d_x, rows * cols * sizeof(float)));
     CHECK(cudaMemcpy(d_x, h_x, rows * cols * sizeof(float), cudaMemcpyHostToDevice));
     softmax_kernel<<<rows, cols>>>(d_x, rows, cols);
     CHECK(cudaDeviceSynchronize());

@@ -1,0 +1,25 @@
+[package]
+name = "titan-engine"
+version = "0.1.0"
+description = "P5 Titan AI Platform — CUDA kernel dispatch and training primitives (Rust)"
+edition = "2021"
+rust-version = "1.77"
+license = "MIT"
+
+[lib]
+crate-type = ["cdylib"]
+
+[dependencies]
+tensor-engine = { path = "../tensor-engine", features = ["python"] }
+
+[dependencies.pyo3]
+version = "0.21"
+optional = true
+
+[features]
+default = []
+python = ["pyo3"]
+cuda = []
+
+[build-dependencies]
+cc = "1"

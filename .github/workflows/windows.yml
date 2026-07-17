@@ -53,7 +53,15 @@ jobs:
           Pop-Location
 
       - name: Build Rust HAL with C bindings
-        run: cargo build --features python,c-hal --workspace
+        run: cargo build -p hal-core --features python,c-hal
+        shell: pwsh
+
+      - name: Build Rust tensor engine
+        run: cargo build -p tensor-engine --features python
+        shell: pwsh
+
+      - name: Build Rust Titan engine
+        run: cargo build -p titan-engine --features python
         shell: pwsh
 
       - name: Run tests on Windows
