@@ -1,7 +1,7 @@
 [package]
 name = "hal-core"
-version = "0.1.0"
-description = "P2 Hardware Platform — unified HAL trait, transports, signed flashing (Rust)"
+version = "0.2.0"
+description = "P2 Hardware Platform — unified HAL trait, transports, signed flashing (Rust + C/C++/Zig)"
 edition = "2021"
 rust-version = "1.77"
 license = "MIT"
@@ -12,12 +12,28 @@ hex = "0.4"
 thiserror = "1"
 serde = { version = "1", features = ["derive"] }
 
+[dependencies.cc]
+version = "1.0"
+optional = true
+
+[dependencies.libloading]
+version = "0.8"
+optional = true
+
 [dependencies.pyo3]
 version = "0.21"
 optional = true
 
 [features]
 default = []
-python = ["pyo3"]
+python = ["pyo3", "c-hal"]
+c-hal = ["cc"]
+dynamic-hal = ["libloading"]
+full = ["c-hal", "python"]
 
-[dev-dependencies]
+[build-dependencies]
+cc = "1.0"
+bindgen = "0.70"
+
+[lib]
+name = "hal_core"

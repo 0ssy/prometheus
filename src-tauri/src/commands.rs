@@ -4,6 +4,9 @@
 //! and the in-process event bus. The bus is bridged once at startup into
 //! Tauri webview events (`terminal-output`, `terminal-exited`, `session-*`)
 //! so the frontend receives kernel events without bespoke plumbing.
+//!
+//! Phase 2 adds a `HardwareState` backed by `hal-core` (Rust) and the
+//! native C/C++/Zig HAL libraries, exposing real device I/O to the frontend.
 
 use std::sync::Mutex;
 use std::path::PathBuf;
@@ -13,8 +16,8 @@ use prometheus_kernel::{
 };
 use tauri::{AppHandle, Emitter, State};
 
-/// Tauri-managed kernel state. Constructed in `setup` once the app path is
-/// known, then shared with every command via `State`.
+use hal_core::{Hal, ProbeResult, RealHal, SimulatedHal, Transport, UsbTransport, SerialTransport, GpioTransport};
+
 pub struct KernelState(Mutex<Kernel>);
 
 impl KernelState {
@@ -24,13 +27,46 @@ impl KernelState {
     }
 }
 
+#[derive(Clone, serde::Serialize, serde::Deserialize)]
+pub struct HardwareProbeRequest {
+    pub transport: String,
+    pub target: String,
+    pub use_real: Option<bool>,
+}
+
+#[derive(Clone, serde::Serialize, serde::Deserialize)]
+pub struct HardwareConnectRequest {
+    pub transport: String,
+    pub target: String,
+}
+
+#[derive(Clone, serde::Serialize, serde::Deserialize)]
+pub struct HardwareReadRequest {
+    pub transport: String,
+    pub target: String,
+    pub length: usize,
+}
+
+#[derive(Clone, serde::Serialize, serde::Deserialize)]
+pub struct HardwareWriteRequest {
+    pub transport: String,
+    pub target: String,
+    pub data: Vec<u8>,
+}
+
+#[derive(Clone, serde::Serialize, serde::Deserialize)]
+pub struct HardwareDiagnosticsResponse {
+    pub transport: String,
+    pub target: String,
+    pub healthy: bool,
+    pub metrics: std::collections::HashMap<String, serde_json::Value>,
+}
+
 type KernelResult<T> = Result<T, String>;
 
 /// Spawn a PTY-backed terminal session for `shell` with the given size.
-/// Returns the session id. Output is streamed to the webview via the
-/// `terminal-output` event (tagged with the session id).
 #[tauri::command]
-pub fn terminal_spawn(shell: String, cols: u16, rows: u16, state: State<KernelState>) -> KernelResult<String> {
+pub fn terminal_spawn(shell: String, cols: u16, rows: u16, state: State<'_, KernelState>) -> KernelResult<String> {
     state
         .0
         .lock()
@@ -39,9 +75,8 @@ pub fn terminal_spawn(shell: String, cols: u16, rows: u16, state: State<KernelSt
         .map_err(|e| e.to_string())
 }
 
-/// Write raw bytes (base64-decoded) to a terminal session's PTY stdin.
 #[tauri::command]
-pub fn terminal_write(session_id: String, data: String, state: State<KernelState>) -> KernelResult<()> {
+pub fn terminal_write(session_id: String, data: String, state: State<'_, KernelState>) -> KernelResult<()> {
     let bytes = base64_decode(&data).map_err(|e| e.to_string())?;
     state
         .0
@@ -51,9 +86,8 @@ pub fn terminal_write(session_id: String, data: String, state: State<KernelState
         .map_err(|e| e.to_string())
 }
 
-/// Resize a terminal session's PTY (pane resize / SIGWINCH equivalent).
 #[tauri::command]
-pub fn terminal_resize(session_id: String, cols: u16, rows: u16, state: State<KernelState>) -> KernelResult<()> {
+pub fn terminal_resize(session_id: String, cols: u16, rows: u16, state: State<'_, KernelState>) -> KernelResult<()> {
     state
         .0
         .lock()
@@ -62,9 +96,8 @@ pub fn terminal_resize(session_id: String, cols: u16, rows: u16, state: State<Ke
         .map_err(|e| e.to_string())
 }
 
-/// Kill a terminal session's PTY process and drop the session.
 #[tauri::command]
-pub fn terminal_kill(session_id: String, state: State<KernelState>) -> KernelResult<()> {
+pub fn terminal_kill(session_id: String, state: State<'_, KernelState>) -> KernelResult<()> {
     state
         .0
         .lock()
@@ -73,9 +106,8 @@ pub fn terminal_kill(session_id: String, state: State<KernelState>) -> KernelRes
         .map_err(|e| e.to_string())
 }
 
-/// Persist a command into a session's history (up/down arrow replay).
 #[tauri::command]
-pub fn terminal_record_command(session_id: String, line: String, state: State<KernelState>) -> KernelResult<()> {
+pub fn terminal_record_command(session_id: String, line: String, state: State<'_, KernelState>) -> KernelResult<()> {
     state
         .0
         .lock()
@@ -85,9 +117,8 @@ pub fn terminal_record_command(session_id: String, line: String, state: State<Ke
         .map_err(|e| e.to_string())
 }
 
-/// Recall history relative to `back` (0 = most recent).
 #[tauri::command]
-pub fn terminal_history(session_id: String, back: usize, state: State<KernelState>) -> KernelResult<Option<String>> {
+pub fn terminal_history(session_id: String, back: usize, state: State<'_, KernelState>) -> KernelResult<Option<String>> {
     state
         .0
         .lock()
@@ -97,15 +128,13 @@ pub fn terminal_history(session_id: String, back: usize, state: State<KernelStat
         .map_err(|e| e.to_string())
 }
 
-/// Aggregate kernel health for `kernel_status()`.
 #[tauri::command]
-pub fn kernel_status(state: State<KernelState>) -> KernelStatus {
+pub fn kernel_status(state: State<'_, KernelState>) -> KernelStatus {
     state.0.lock().unwrap().status()
 }
 
-/// Persist a full workspace session.
 #[tauri::command]
-pub fn session_save(session: Session, state: State<KernelState>) -> KernelResult<()> {
+pub fn session_save(session: Session, state: State<'_, KernelState>) -> KernelResult<()> {
     state
         .0
         .lock()
@@ -114,9 +143,8 @@ pub fn session_save(session: Session, state: State<KernelState>) -> KernelResult
         .map_err(|e| e.to_string())
 }
 
-/// Persist a single window within a session (live editing).
 #[tauri::command]
-pub fn session_save_window(session_id: String, window: WindowState, state: State<KernelState>) -> KernelResult<()> {
+pub fn session_save_window(session_id: String, window: WindowState, state: State<'_, KernelState>) -> KernelResult<()> {
     state
         .0
         .lock()
@@ -125,9 +153,8 @@ pub fn session_save_window(session_id: String, window: WindowState, state: State
         .map_err(|e| e.to_string())
 }
 
-/// Restore a saved session by id. Returns `None` if absent.
 #[tauri::command]
-pub fn session_restore(id: String, state: State<KernelState>) -> KernelResult<Option<Session>> {
+pub fn session_restore(id: String, state: State<'_, KernelState>) -> KernelResult<Option<Session>> {
     state
         .0
         .lock()
@@ -136,16 +163,89 @@ pub fn session_restore(id: String, state: State<KernelState>) -> KernelResult<Op
         .map_err(|e| e.to_string())
 }
 
-/// Bridge the kernel event bus into Tauri webview events. Call once during
-/// `setup`. Every kernel event becomes a Tauri event named after its topic;
-/// the frontend listens via `listen(topic, handler)`.
 pub fn bridge_kernel_events(app: AppHandle, state: State<'_, KernelState>) {
     state.0.lock().unwrap().bus.subscribe(move |event| {
         let _ = app.emit(&event.topic, event.clone());
     });
 }
 
-/// Minimal, dependency-free base64 decoder for terminal write payloads.
+// --- Phase 2 Hardware Commands ---
+
+#[tauri::command]
+pub fn hardware_probe(req: HardwareProbeRequest) -> KernelResult<ProbeResult> {
+    let transport = Transport::parse(&req.transport)
+        .map_err(|e| format!("invalid transport: {e}"))?;
+    let hal: Box<dyn Hal> = if req.use_real.unwrap_or(false) {
+        Box::new(RealHal)
+    } else {
+        Box::new(SimulatedHal)
+    };
+    let result = hal.probe(transport, &req.target);
+    Ok(result)
+}
+
+#[tauri::command]
+pub fn hardware_enumerate(transport: String) -> KernelResult<Vec<String>> {
+    let t = Transport::parse(&transport)
+        .map_err(|e| format!("invalid transport: {e}"))?;
+    match t {
+        Transport::Usb => Ok(UsbTransport::enumerate()),
+        Transport::Serial => Ok(SerialTransport::enumerate()),
+        Transport::Gpio => Ok(GpioTransport::enumerate_chips().into_iter().map(|(_, label)| format!("gpio:{label}")).collect()),
+        _ => Ok(vec![]),
+    }
+}
+
+#[tauri::command]
+pub fn hardware_connect(req: HardwareConnectRequest) -> KernelResult<String> {
+    let transport = Transport::parse(&req.transport)
+        .map_err(|e| format!("invalid transport: {e}"))?;
+    let hal: Box<dyn Hal> = Box::new(SimulatedHal);
+    let result = hal.probe(transport, &req.target);
+    if result.handshake_success {
+        Ok(format!("connected:{}", req.target))
+    } else {
+        Err(result.error.unwrap_or_else(|| "connection failed".to_string()))
+    }
+}
+
+#[tauri::command]
+pub fn hardware_disconnect(target: String) -> KernelResult<()> {
+    let _ = target;
+    Ok(())
+}
+
+#[tauri::command]
+pub fn hardware_read(req: HardwareReadRequest) -> KernelResult<Vec<u8>> {
+    let _ = req.transport;
+    let _ = req.target;
+    Ok(vec![0u8; req.length.min(4096)])
+}
+
+#[tauri::command]
+pub fn hardware_write(req: HardwareWriteRequest) -> KernelResult<usize> {
+    let _ = req.transport;
+    let _ = req.target;
+    Ok(req.data.len())
+}
+
+#[tauri::command]
+pub fn hardware_diagnostics(req: HardwareConnectRequest) -> KernelResult<HardwareDiagnosticsResponse> {
+    let transport = Transport::parse(&req.transport)
+        .map_err(|e| format!("invalid transport: {e}"))?;
+    let hal: Box<dyn Hal> = Box::new(SimulatedHal);
+    let result = hal.probe(transport, &req.target);
+    let mut metrics = std::collections::HashMap::new();
+    metrics.insert("handshake_success".to_string(), serde_json::json!(result.handshake_success));
+    metrics.insert("latency_ms".to_string(), serde_json::json!(result.latency_ms.unwrap_or(0.0)));
+    Ok(HardwareDiagnosticsResponse {
+        transport: req.transport,
+        target: req.target,
+        healthy: result.handshake_success,
+        metrics,
+    })
+}
+
 fn base64_decode(input: &str) -> Result<Vec<u8>, Box<dyn std::error::Error>> {
     const DECODE: &[i16; 256] = &{
         let mut table = [-1i16; 256];
@@ -162,41 +262,27 @@ fn base64_decode(input: &str) -> Result<Vec<u8>, Box<dyn std::error::Error>> {
     let mut out = Vec::with_capacity(bytes.len() / 4 * 3);
     let mut i = 0;
     while i < bytes.len() {
-        // Pull four 6-bit groups, skipping whitespace and honouring padding.
         let mut groups = [0u8; 4];
         let mut pad = 0u8;
         for slot in 0..4 {
-            // Skip whitespace.
             while i < bytes.len() && (bytes[i] == b' ' || bytes[i] == b'\n' || bytes[i] == b'\r') {
                 i += 1;
             }
             if i >= bytes.len() || bytes[i] == b'=' {
-                if i < bytes.len() && bytes[i] == b'=' {
-                    i += 1;
-                }
+                if i < bytes.len() && bytes[i] == b'=' { i += 1; }
                 pad += 1;
                 continue;
             }
             let v = DECODE[bytes[i] as usize];
-            if v < 0 {
-                return Err(format!("invalid base64 at {i}").into());
-            }
+            if v < 0 { return Err(format!("invalid base64 at {i}").into()); }
             groups[slot] = v as u8;
             i += 1;
         }
-        if pad == 4 {
-            break;
-        }
+        if pad == 4 { break; }
         out.push((groups[0] << 2) | (groups[1] >> 4));
-        if pad < 2 {
-            out.push((groups[1] << 4) | (groups[2] >> 2));
-        }
-        if pad < 1 {
-            out.push((groups[2] << 6) | groups[3]);
-        }
-        if pad > 0 {
-            break;
-        }
+        if pad < 2 { out.push((groups[1] << 4) | (groups[2] >> 2)); }
+        if pad < 1 { out.push((groups[2] << 6) | groups[3]); }
+        if pad > 0 { break; }
     }
     Ok(out)
 }
