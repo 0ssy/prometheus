@@ -6,6 +6,9 @@ Usage:
   python -m prometheus_cli demo                 # run happy-path demo
   python -m prometheus_cli test
   python -m prometheus_cli test --file tests/test_epsilon_service.py
+  python -m prometheus_cli launch               # launch full platform (backend + Go + cloud + frontend)
+  python -m prometheus_cli launch --distributed # + Go distributed services
+  python -m prometheus_cli launch --cloud       # + Go cloud services
 """
 
 from __future__ import annotations
@@ -26,6 +29,7 @@ from prometheus_cli.commands import (
     run_terminal,
     run_tests,
 )
+from prometheus_cli.launch import main as run_launch
 
 
 def main() -> int:
@@ -69,6 +73,12 @@ def main() -> int:
     verify_parser.add_argument("path", help="path to the .zip package to verify")
     test_parser = sub.add_parser("test", help="run pytest suite")
     test_parser.add_argument("--file", default=None, help="optional test file/directory")
+    launch_parser = sub.add_parser("launch", help="launch the full platform with one command")
+    launch_parser.add_argument("--distributed", action="store_true", help="start Go distributed services")
+    launch_parser.add_argument("--cloud", action="store_true", help="start Go cloud services")
+    launch_parser.add_argument("--frontend", action="store_true", help="start Vite dev server")
+    launch_parser.add_argument("--all", action="store_true", help="start every subsystem")
+    launch_parser.add_argument("--workers", type=int, default=1, help="number of local Go workers")
 
     args = parser.parse_args()
 
@@ -106,6 +116,8 @@ def main() -> int:
         return 0
     if args.command == "test":
         return run_tests(args.file)
+    if args.command == "launch":
+        return run_launch(args)
 
     parser.print_help()
     return 1
