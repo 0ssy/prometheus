@@ -154,6 +154,8 @@ export const sdk = {
       });
     },
     providers: () => client.get<any>("/assistant/providers"),
+    addProvider: (payload: Record<string, unknown>) =>
+      client.post("/assistant/providers", payload),
     toolCall: (tool: string, args: Record<string, unknown>, approved = false) =>
       client.post("/assistant/tools", { tool, args, approved }),
   },

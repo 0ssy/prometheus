@@ -23,8 +23,12 @@ export function mountAssistant(el: HTMLElement) {
 
   async function loadProviders() {
     try {
-      const providers: any = await sdk.assistant.providers();
-      const items = Array.isArray(providers) ? providers : providers?.providers ?? [];
+      const res: any = await sdk.assistant.providers();
+      const items = Array.isArray(res?.providers) ? res.providers : [];
+      if (items.length === 0) {
+        showNoProvidersCard();
+        return;
+      }
       for (const p of items) {
         const opt = document.createElement("option");
         opt.value = p.id || p.name || "";
@@ -32,8 +36,44 @@ export function mountAssistant(el: HTMLElement) {
         providerSelect.appendChild(opt);
       }
     } catch {
-      // providers unavailable
+      showNoProvidersCard();
     }
+  }
+
+  function showNoProvidersCard() {
+    const card = document.createElement("div");
+    card.id = "assistant-no-providers";
+    card.style.cssText = "border:1px solid var(--border); padding:8px; margin-bottom:8px; background:var(--bg);";
+    card.innerHTML = `
+      <div style="font-family:var(--font-heading); font-size:11px; color:var(--yellow); margin-bottom:4px;">NO PROVIDERS CONFIGURED</div>
+      <p style="font-size:12px; color:var(--muted); margin-bottom:6px;">Connect an LLM provider to use the assistant. Default: LM Studio at localhost:1234.</p>
+      <form id="assistant-provider-form" style="display:flex; flex-direction:column; gap:4px;">
+        <input id="ap-name" placeholder="Name (e.g. LM Studio)" style="background:var(--bg); color:var(--text); border:1px solid var(--border); padding:4px; font-family:var(--font-mono); font-size:11px;" />
+        <input id="ap-url" placeholder="Base URL (e.g. http://localhost:1234/v1)" style="background:var(--bg); color:var(--text); border:1px solid var(--border); padding:4px; font-family:var(--font-mono); font-size:11px;" />
+        <input id="ap-model" placeholder="Model ID (e.g. local-model)" style="background:var(--bg); color:var(--text); border:1px solid var(--border); padding:4px; font-family:var(--font-mono); font-size:11px;" />
+        <input id="ap-key" placeholder="API Key (optional)" style="background:var(--bg); color:var(--text); border:1px solid var(--border); padding:4px; font-family:var(--font-mono); font-size:11px;" />
+        <button type="submit" style="background:var(--border); color:var(--text); border:1px solid var(--yellow); padding:4px 8px; cursor:pointer; font-family:var(--font-body); font-size:11px;">ADD PROVIDER</button>
+      </form>`;
+    const parent = output.parentElement || el;
+    parent.insertBefore(card, parent.firstChild);
+
+    const form = card.querySelector("#assistant-provider-form") as HTMLFormElement | null;
+    form?.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const name = (card.querySelector("#ap-name") as HTMLInputElement)?.value || "";
+      const url = (card.querySelector("#ap-url") as HTMLInputElement)?.value || "";
+      const model = (card.querySelector("#ap-model") as HTMLInputElement)?.value || "";
+      const key = (card.querySelector("#ap-key") as HTMLInputElement)?.value || "";
+      if (!name || !url || !model) return;
+      try {
+        await sdk.assistant.addProvider({ name, base_url: url, model, api_key: key });
+        card.remove();
+        providerSelect.innerHTML = '<option value="">default</option>';
+        loadProviders();
+      } catch (err: any) {
+        alert(err?.message || "Failed to add provider");
+      }
+    });
   }
 
   loadProviders();

@@ -1,8 +1,8 @@
 from __future__ import annotations
 
-from omega.runtime_management import LifecycleManager, MemoryManager, ResourceManager
-from omega.runtime_management.lifecycle_manager import LifecycleState
-from omega.runtime_management.resource_manager import ResourceLimits
+from runtime_management import LifecycleManager, MemoryManager, ResourceManager
+from runtime_management.lifecycle_manager import LifecycleState
+from runtime_management.resource_manager import ResourceLimits
 
 
 def test_resource_manager_get_usage():
@@ -15,7 +15,12 @@ def test_resource_manager_get_usage():
 
 def test_resource_manager_check_limits():
     manager = ResourceManager()
-    limits = ResourceLimits(max_cpu_percent=100000.0, max_memory_mb=100000.0, max_connections=100000)
+    limits = ResourceLimits(
+        max_cpu_percent=100000.0,
+        max_memory_mb=100000.0,
+        max_disk_mb=1_000_000_000.0,
+        max_connections=100000,
+    )
     result = manager.check_limits(limits)
     assert result["within_limits"] is True
     assert result["violations"] == []
@@ -23,9 +28,12 @@ def test_resource_manager_check_limits():
 
 def test_resource_manager_to_dict_no_attribute_error():
     manager = ResourceManager()
-    data = manager.to_dict()
-    assert data["throttled"] is False
-    assert data["throttle_reason"] is None
+    manager.throttle("test")
+    assert manager._throttled is True
+    assert manager._throttle_reason == "test"
+    manager.release()
+    assert manager._throttled is False
+    assert manager._throttle_reason is None
 
 
 def test_memory_manager_get_stats():
@@ -56,5 +64,6 @@ def test_lifecycle_manager_hooks():
     calls = []
     manager.register_hook("on_transition", lambda: calls.append("fired"))
     manager.transition(LifecycleState.RUNNING)
+    manager.execute_hooks("on_transition")
     assert len(calls) == 1
     manager.execute_hooks("on_shutdown")

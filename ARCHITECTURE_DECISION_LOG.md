@@ -1,5 +1,28 @@
 # Architecture Decision Log
 
+## 2026-07-18 — RC3 Architecture Consolidation (Omega duplication)
+
+### Context
+Omega introduced duplicated subsystem implementations under `omega/` while canonical package roots already existed (`agents/`, `distributed/`, `policy/`, `marketplace/`, `enterprise/`, `runtime_management/`, `dashboard/`). This created split ownership and doubled maintenance risk.
+
+### Decision
+1. Canonicalize subsystem imports in Omega orchestration to root packages.
+2. Migrate tests to canonical root subsystem imports.
+3. Preserve `OmegaService` overview payload compatibility while switching to canonical dashboard wiring.
+4. Remove duplicated legacy Omega subsystem packages:
+   - `omega/agents/`
+   - `omega/distributed/`
+   - `omega/policy/`
+   - `omega/marketplace/`
+   - `omega/enterprise/`
+   - `omega/runtime_management/`
+   - `omega/dashboard/`
+
+### Consequences
+- Single implementation per subsystem is enforced for RC3.
+- Future subsystem changes happen in one place.
+- `OmegaService` remains stable for existing overview consumers during consolidation.
+
 ## 2026-07-06 — Phase Omega Kickoff (Olympus)
 
 ### Context

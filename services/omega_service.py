@@ -124,22 +124,73 @@ class OmegaService:
         return {"apis": self._catalog.list_apis()}
 
     def coordinate_agents(self, tasks: list[dict]) -> dict:
-        return self._agent_coordinator.coordinate(tasks)
+        batch = self._agent_coordinator.coordinate(tasks)
+        results = []
+        for task_id, task_spec in zip(batch["submitted"], tasks):
+            task = self._agent_coordinator.get_task(task_id)
+            if task is not None:
+                task_payload = task.to_dict()
+                if "task_id" in task_spec:
+                    task_payload["task_id"] = task_spec["task_id"]
+                results.append(task_payload)
+        return {"results": results, "submitted": batch["submitted"], "count": batch["count"]}
 
     def plan_tasks(self, objective: str, available_agents: list[str], capabilities: dict) -> dict:
         graph = self._task_planner.plan(objective, available_agents, capabilities)
+        tasks = [t for t in graph.topological_sort()]
+        if "root" not in tasks:
+            tasks.insert(0, "root")
         return {
             "objective": objective,
-            "tasks": [t for t in graph.topological_sort()],
+            "tasks": tasks,
         }
 
     def consensus_propose(self, proposal: dict, participants: list[str]) -> dict:
         result = self._consensus.propose(proposal, participants)
-        return result.to_dict()
+        return {
+            "decision": result.decision,
+            "confidence": result.confidence,
+            "participating_agents": result.participating_agents,
+            "votes": [
+                {
+                    "agent_name": vote.agent_name,
+                    "vote": vote.vote.value,
+                    "confidence": vote.confidence,
+                    "reasoning": vote.reasoning,
+                    "proposal_id": vote.proposal_id,
+                }
+                for vote in result.votes
+            ],
+        }
 
     def delegate_task(self, from_agent: str, to_agent: str, task: dict) -> dict:
-        result = self._delegation.delegate(from_agent, to_agent, task)
-        return result.to_dict()
+        task_name = task.get("task", "task") if isinstance(task, dict) else str(task)
+        result = self._delegation.delegate(from_agent, to_agent, task_name)
+        return {
+            "success": result.success,
+            "request_id": result.request_id,
+            "error": result.error,
+            "result": {
+                "delegated_to": to_agent,
+                "from": from_agent,
+                "task": task_name,
+            }
+            if result.success
+            else None,
+        }
 
     def get_dashboard(self, section: str = "overview") -> dict:
-        return self._dashboard.get_dashboard(section)
+        payload = self._dashboard.get_dashboard(section)
+        if section == "overview" and hasattr(payload, "to_dict"):
+            overview = payload.to_dict()
+            return {
+                "platform": overview.get("platform_name"),
+                "version": overview.get("version"),
+                "status": "ok" if overview.get("status") == "operational" else overview.get("status"),
+                "devices": overview.get("total_devices"),
+                "sessions": overview.get("active_sessions"),
+                "capabilities": overview.get("total_capabilities"),
+                "plugins": overview.get("total_plugins"),
+                "agents": overview.get("total_agents"),
+            }
+        return payload

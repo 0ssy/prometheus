@@ -83,6 +83,7 @@ export class Terminal {
         <button id="term-split" style="background:var(--bg); color:var(--text); border:1px solid var(--border); padding:1px 6px; cursor:pointer; font-size:11px;">Split</button>
         <button id="term-find" style="background:var(--bg); color:var(--text); border:1px solid var(--border); padding:1px 6px; cursor:pointer; font-size:11px;">Find</button>
         <input id="term-search" style="display:none; background:var(--bg); color:var(--text); border:1px solid var(--border); padding:1px 4px; font-family:var(--font-mono); font-size:11px;" placeholder="find..." />
+        <span id="term-mode" style="margin-left:auto; font-family:var(--font-mono); font-size:10px; padding:1px 6px; border:1px solid var(--border); color:${this.native ? "var(--green)" : "var(--orange)"};">${this.native ? "NATIVE" : "BROWSER"}</span>
       </div>
       <div id="term-tabs" class="term-tabs" style="display:flex; gap:2px; padding:2px 4px; border-bottom:1px solid var(--border);"></div>
       <div id="term-views" class="term-views" style="flex:1; display:flex; min-height:0;"></div>

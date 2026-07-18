@@ -1,27 +1,27 @@
 from __future__ import annotations
 
-from omega.agents import AgentCoordinator, TaskPlanner, ConsensusEngine, DelegationRouter
-from omega.distributed import NodeRegistry, DistributedRuntime, KnowledgeSynchronizer, CapabilitySynchronizer
-from omega.policy import PolicyEngine, PermissionHierarchy, RuleEngine, PolicyAuditLogger
-from omega.marketplace import (
+from agents import AgentCoordinator, TaskPlanner, ConsensusEngine, DelegationRouter
+from distributed import NodeRegistry, DistributedRuntime, KnowledgeSynchronizer, CapabilitySynchronizer
+from policy import PolicyEngine, PermissionHierarchy, RuleEngine, PolicyAuditLogger
+from marketplace import (
     PluginRepository,
     CapabilityRepository,
     DriverRepository,
     AgentRepository,
 )
-from omega.enterprise import (
+from enterprise import (
     OrganizationRegistry,
     ProjectRegistry,
     UserRegistry,
     TeamRegistry,
     RoleRegistry,
 )
-from omega.runtime_management import (
+from runtime_management import (
     ResourceManager,
     MemoryManager,
     LifecycleManager,
 )
-from omega.dashboard import DashboardHub
+from dashboard import DashboardHub
 
 __all__ = [
     "AgentCoordinator",

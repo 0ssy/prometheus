@@ -28,6 +28,7 @@ from core.native_runtime import NativeRuntimeManager
 from core.database import get_db
 from core.bootstrap import boot
 from core.container import ServiceContainer
+from core.provider_config import load_providers, save_providers
 from core.commands import _status_snapshot, dispatch_command
 from services.platform_service import PlatformService
 from services.llm_client import LLMClient
@@ -1411,6 +1412,36 @@ def assistant_query(
         return {"response": f"Assistant error: {exc}"}
 
 
+@app.get("/assistant/providers")
+def assistant_providers_list():
+    return {"providers": load_providers()}
+
+
+@app.post("/assistant/providers")
+def assistant_providers_create(payload: dict):
+    name = payload.get("name", "")
+    base_url = payload.get("base_url", "")
+    model = payload.get("model", "")
+    api_key = payload.get("api_key", "")
+    if not name or not base_url or not model:
+        raise RuntimeError("name, base_url, and model are required")
+    provider = {
+        "id": name.lower().replace(" ", "-"),
+        "name": name,
+        "base_url": base_url.rstrip("/"),
+        "model": model,
+        "api_key": api_key,
+    }
+    providers = add_provider(provider)
+    return {"providers": providers}
+
+
+@app.delete("/assistant/providers/{provider_id}")
+def assistant_providers_delete(provider_id: str):
+    providers = remove_provider(provider_id)
+    return {"providers": providers}
+
+
 # ---------------------------------------------------------------------------
 # Commands — deterministic command console (terminal grammar)
 # ---------------------------------------------------------------------------
@@ -1426,7 +1457,11 @@ def commands_endpoint(
     if not raw:
         raise RuntimeError("command is required")
     platform = container.resolve("platform_service", PlatformService)
-    response = dispatch_command(raw=raw, platform=platform, container=container, db=db)
+    try:
+        response = dispatch_command(raw=raw, platform=platform, container=container, db=db)
+    except Exception as exc:
+        logger.exception("Command dispatch failed")
+        response = f"command error: {exc}"
     return {"response": response}
 
 
