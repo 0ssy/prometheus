@@ -19,6 +19,7 @@ from prometheus_cli.commands import (
     run_install,
     run_new,
     run_pack,
+    run_verify,
     run_safe,
     run_server,
     run_status,
@@ -62,8 +63,10 @@ def main() -> int:
     new_parser = sub.add_parser("new", help="scaffold a new plugin, agent, or driver")
     new_parser.add_argument("kind", choices=["plugin", "agent", "driver"], help="type of scaffold")
     new_parser.add_argument("name", help="name of the new component")
-    pack_parser = sub.add_parser("pack", help="package an SDK plugin for distribution")
-    pack_parser.add_argument("name", nargs="?", help="plugin name to pack")
+    pack_parser = sub.add_parser("pack", help="create a signed package of a plugin/agent/driver")
+    pack_parser.add_argument("path", help="path to the plugin, agent, or driver directory")
+    verify_parser = sub.add_parser("verify", help="verify a signed package")
+    verify_parser.add_argument("path", help="path to the .zip package to verify")
     test_parser = sub.add_parser("test", help="run pytest suite")
     test_parser.add_argument("--file", default=None, help="optional test file/directory")
 
@@ -76,7 +79,9 @@ def main() -> int:
     if args.command == "new":
         return run_new(args.kind, args.name)
     if args.command == "pack":
-        return run_pack(getattr(args, "name", None))
+        return run_pack(args.path)
+    if args.command == "verify":
+        return run_verify(args.path)
 
     if not args.command:
         if args.terminal:

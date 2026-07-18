@@ -1,0 +1,64 @@
+syntax = "proto3";
+
+package controlplane;
+
+option go_package = "prometheus/internal/proto;proto";
+
+service ControlPlane {
+  rpc RegisterNode(RegisterNodeRequest) returns (RegisterNodeResponse);
+  rpc ListNodes(ListNodesRequest) returns (ListNodesResponse);
+  rpc SubmitTask(SubmitTaskRequest) returns (SubmitTaskResponse);
+  rpc ClaimTask(ClaimTaskRequest) returns (ClaimTaskResponse);
+  rpc CompleteTask(CompleteTaskRequest) returns (CompleteTaskResponse);
+}
+
+message Node {
+  string id = 1;
+  string last_seen = 2;
+  bool available = 3;
+}
+
+message Task {
+  string id = 1;
+  string node_id = 2;
+  string status = 3;
+  string payload = 4;
+}
+
+message RegisterNodeRequest {
+  string id = 1;
+}
+
+message RegisterNodeResponse {
+  bool ok = 1;
+}
+
+message ListNodesRequest {}
+
+message ListNodesResponse {
+  repeated Node nodes = 1;
+}
+
+message SubmitTaskRequest {
+  string payload = 1;
+}
+
+message SubmitTaskResponse {
+  Task task = 1;
+}
+
+message ClaimTaskRequest {
+  string node = 1;
+}
+
+message ClaimTaskResponse {
+  Task task = 1;
+}
+
+message CompleteTaskRequest {
+  string id = 1;
+}
+
+message CompleteTaskResponse {
+  bool ok = 1;
+}

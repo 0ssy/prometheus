@@ -7,6 +7,14 @@ members = [
     "crates/titan-core",
     "crates/prometheus-kernel",
     "crates/titan-engine",
+    "crates/distributed",
+    "crates/marketplace",
+    "crates/enterprise",
+    "crates/policy",
+    "crates/runtime_management",
+    "crates/cloud-core",
+    "crates/sdk-core",
+    "crates/sdk-cli",
 ]
 # src-tauri is excluded: it pulls Tauri/WebView2/NSIS host deps and is
 # built separately via `cargo tauri build` (see src-tauri/README.md).

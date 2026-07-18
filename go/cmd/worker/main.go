@@ -7,11 +7,13 @@
 //
 // Build/run (where Go is installed):
 //   go run ./cmd/worker
+//   go run ./cmd/worker -ssh
 package main
 
 import (
 	"bytes"
 	"encoding/json"
+	"flag"
 	"fmt"
 	"io"
 	"log"
@@ -41,7 +43,6 @@ func heartbeat(nodeID string) {
 	_, _ = http.Post(controlPlane+"/nodes", "application/json", bytes.NewReader(body))
 }
 
-// claim fetches the next queued task for this node.
 func claim(nodeID string) *Task {
 	resp, err := http.Get(controlPlane + "/tasks?node=" + nodeID)
 	if err != nil {
@@ -58,8 +59,7 @@ func claim(nodeID string) *Task {
 	return &t
 }
 
-// execute runs the task payload (simulated compute).
-func execute(t *Task) error {
+func executeLocal(t *Task) error {
 	log.Printf("executing %s: %s", t.ID, t.Payload)
 	time.Sleep(50 * time.Millisecond)
 	return nil
@@ -70,20 +70,48 @@ func complete(t *Task) {
 }
 
 func main() {
+	sshMode := flag.Bool("ssh", false, "execute tasks over SSH instead of locally")
+	flag.Parse()
+
 	nodeID := fmt.Sprintf("worker-%d", time.Now().UnixNano())
 	register(nodeID)
+
 	go func() {
 		for range time.Tick(5 * time.Second) {
 			heartbeat(nodeID)
 		}
 	}()
+
+	if *sshMode {
+		executor, err := newSSHExecutor()
+		if err != nil {
+			log.Fatalf("ssh init: %v", err)
+		}
+		defer executor.close()
+		for {
+			t := claim(nodeID)
+			if t == nil {
+				time.Sleep(1 * time.Second)
+				continue
+			}
+			out, err := executor.run(t.Payload)
+			if err != nil {
+				log.Printf("task %s failed: %v", t.ID, err)
+				continue
+			}
+			log.Printf("task %s output: %s", t.ID, out)
+			complete(t)
+		}
+		return
+	}
+
 	for {
 		t := claim(nodeID)
 		if t == nil {
 			time.Sleep(1 * time.Second)
 			continue
 		}
-		if err := execute(t); err != nil {
+		if err := executeLocal(t); err != nil {
 			log.Printf("task %s failed: %v", t.ID, err)
 			continue
 		}

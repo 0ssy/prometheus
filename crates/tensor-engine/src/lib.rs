@@ -9,6 +9,7 @@ pub mod backends;
 pub mod cuda;
 pub mod inference;
 pub mod memory;
+pub mod parallel;
 pub mod vector;
 
 use std::cmp::max;
@@ -231,6 +232,9 @@ mod pybind {
         Ok(())
     }
 }
+
+#[cfg(test)]
+mod parallel_tests;
 
 #[cfg(test)]
 mod tests {
