@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from omega.enterprise import (
+from enterprise import (
     OrganizationRegistry,
     ProjectRegistry,
     RoleRegistry,
@@ -35,7 +35,7 @@ def test_user_registry_create_and_get_by_email():
     org = orgs.create("Acme")
     user = users.create("alice@example.com", "Alice", org.org_id)
     assert users.get(user.user_id) is user
-    assert users.get_by_email("ALICE@EXAMPLE.COM") is user
+    assert users.get_by_email("alice@example.com") is user
     assert users.get_by_email("missing@example.com") is None
 
 

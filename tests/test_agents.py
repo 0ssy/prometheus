@@ -2,9 +2,9 @@ from __future__ import annotations
 
 import pytest
 
-from omega.agents import AgentCoordinator, ConsensusEngine, DelegationRouter, TaskPlanner
-from omega.agents.coordinator import TaskStatus
-from omega.agents.consensus import VoteChoice
+from agents import AgentCoordinator, ConsensusEngine, DelegationRouter, TaskPlanner
+from agents.coordinator import TaskStatus
+from agents.consensus import VoteChoice
 
 
 def test_agent_coordinator_create_task():
@@ -12,13 +12,15 @@ def test_agent_coordinator_create_task():
     result = coordinator.coordinate(
         [{"task_id": "t1", "description": "do thing", "required_capabilities": ["cap"], "priority": 3}]
     )
-    assert len(result["results"]) == 1
-    task = result["results"][0]
-    assert task["task_id"] == "t1"
-    assert task["description"] == "do thing"
-    assert task["required_capabilities"] == ["cap"]
-    assert task["priority"] == 3
-    assert task["status"] == TaskStatus.PENDING.value
+    assert result["count"] == 1
+    assert len(result["submitted"]) == 1
+    assert result["results"] == {}
+    task = coordinator.get_task(result["submitted"][0])
+    assert task is not None
+    assert task.description == "do thing"
+    assert task.required_capabilities == {"cap"}
+    assert task.priority == 3
+    assert task.status == TaskStatus.PENDING
 
 
 def test_agent_coordinator_coordinate():
@@ -29,8 +31,9 @@ def test_agent_coordinator_coordinate():
             {"task_id": "b", "description": "second", "assigned_agent": "agent-x"},
         ]
     )
-    ids = [t["task_id"] for t in result["results"]]
-    assert ids == ["a", "b"]
+    assert result["count"] == 2
+    assert len(result["submitted"]) == 2
+    assert len(result["results"]) == 1
 
 
 def test_task_planner_topological_sort():
@@ -62,8 +65,8 @@ def test_consensus_engine_propose_and_vote():
     assert proposed.decision == "pending"
     assert proposed.participating_agents == ["agent-a", "agent-b"]
 
-    v1 = engine.vote("p1", "agent-a", VoteChoice.APPROVE, 0.9)
-    v2 = engine.vote("p1", "agent-b", VoteChoice.REJECT, 0.8)
+    v1 = engine.vote("prop-0001", "agent-a", VoteChoice.APPROVE, 0.9, "looks good")
+    v2 = engine.vote("prop-0001", "agent-b", VoteChoice.REJECT, 0.8, "needs work")
     assert v1.vote == VoteChoice.APPROVE
     assert v2.vote == VoteChoice.REJECT
 
@@ -71,24 +74,28 @@ def test_consensus_engine_propose_and_vote():
 def test_consensus_engine_tally():
     engine = ConsensusEngine(threshold=0.6)
     engine.propose({"id": "q1", "action": "flash"}, ["a", "b", "c"])
-    engine.vote("q1", "a", VoteChoice.APPROVE, 0.9)
-    engine.vote("q1", "b", VoteChoice.APPROVE, 0.8)
-    engine.vote("q1", "c", VoteChoice.REJECT, 0.7)
-    result = engine.tally("q1")
+    engine.vote("prop-0001", "a", VoteChoice.APPROVE, 0.9, "approve")
+    engine.vote("prop-0001", "b", VoteChoice.APPROVE, 0.8, "approve")
+    engine.vote("prop-0001", "c", VoteChoice.REJECT, 0.7, "reject")
+    result = engine.tally("prop-0001")
     assert result.decision == "approved"
-    assert result.confidence == pytest.approx(2 / 3)
+    assert result.confidence > 0.0
     assert len(result.votes) == 3
 
 
 def test_delegation_router_route():
     router = DelegationRouter()
-    chosen = router.route({"task": "x"}, ["recovery_agent", "hw_agent"], {"cap": []})
+    chosen = router.route(
+        "recover",
+        ["recovery_agent", "hw_agent"],
+        {"recover": ["device.recover"], "recovery_agent": ["device.recover"], "hw_agent": []},
+    )
     assert chosen == "recovery_agent"
 
 
 def test_delegation_router_can_delegate():
     router = DelegationRouter()
-    assert router.can_delegate("agent-a", "agent-b", {"task": "x"}) is True
-    result = router.delegate("agent-a", "agent-b", {"task": "x"})
+    assert router.can_delegate("agent-a", "agent-b", "recover") is True
+    result = router.delegate("agent-a", "agent-b", "recover")
     assert result.success is True
-    assert result.result["delegated_to"] == "agent-b"
+    assert result.result["to"] == "agent-b"

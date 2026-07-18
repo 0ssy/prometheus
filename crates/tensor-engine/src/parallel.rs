@@ -223,7 +223,7 @@ pub fn tensor_parallel_matmul(tp: &TensorParallel, a: &Tensor, b: &Tensor) -> Te
         .map(|rank| {
             let dev = TensorParallel::new(rank, ws, format!("sim:{rank}"));
             let ar = dev.row_range(k_a);
-            let br = dev.row_range(n);
+            let br = dev.row_range(k_b);
 
             let mut ad = Vec::with_capacity(m * ar.len());
             for row in 0..m {

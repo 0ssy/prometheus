@@ -32,6 +32,11 @@ const STEPS: Step[] = [
       <p>The <b>Activity Feed</b> (top-right) records every event.</p>`,
   },
   {
+    title: "AI ASSISTANT",
+    html: `<p>The <b>Assistant</b> can help with engineering tasks once you connect an LLM provider.</p>
+      <p>Open <b>Assistant</b> and add your provider (e.g. LM Studio, OpenAI, Ollama) to get started.</p>`,
+  },
+  {
     title: "YOU'RE ALL SET",
     html: `<p>Press <span class="ob-key">1&ndash;9</span> to open dock apps, <span class="ob-key">\`</span> to focus the terminal, and <span class="ob-key">Ctrl+/</span> any time for the full shortcut list.</p>
       <p>What would you like to build today?</p>`,

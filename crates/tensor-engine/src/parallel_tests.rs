@@ -122,29 +122,32 @@ mod partition_linear_tests {
         assert_eq!(s1.shape[1], 2);
         assert_eq!(s2.shape[1], 2);
 
-        // last element (row 0 col 6 = 6.0, row 1 col 6 = 13.0) must be in s2
-        assert_eq!(s2.data[s2.data.len() - 2], 6.0);
-        assert_eq!(s2.data[s2.data.len() - 1], 13.0);
+        // Last shard is the final two columns [5..7): [5,6] and [12,13].
+        assert_eq!(s2.data, vec![5.0, 6.0, 12.0, 13.0]);
     }
 
     #[test]
     fn reconstructs_full_matrix_on_all_reduce() {
         let ws = 3;
         let w = Tensor::new(vec![2, 7], (0..14).map(|x| x as f32).collect());
-        let mut reconstructed = vec![vec![]; ws];
+        let mut rebuilt = vec![0.0f32; w.data.len()];
+        let rows = w.shape[0];
+        let cols = w.shape[1];
 
+        // Rebuild the full matrix by placing each contiguous column shard back.
         for rank in 0..ws {
             let tp = TensorParallel::new(rank, ws, format!("sim:{rank}"));
             let shard = partition_linear(&tp, &w);
-            reconstructed[rank] = shard.data.clone();
+            let col_range = tp.row_range(cols);
+            for row in 0..rows {
+                let dst_base = row * cols + col_range.start;
+                let src_base = row * shard.shape[1];
+                rebuilt[dst_base..dst_base + shard.shape[1]]
+                    .copy_from_slice(&shard.data[src_base..src_base + shard.shape[1]]);
+            }
         }
 
-        // all_reduce_sum over the shards (treating each shard as one "device" buffer)
-        let refs: Vec<&[f32]> = reconstructed.iter().map(|v| v.as_slice()).collect();
-        let reduced = all_reduce_sum(&refs);
-
-        // Only one device's output — should equal the original weight
-        assert_eq!(reduced[0], w.data);
+        assert_eq!(rebuilt, w.data);
     }
 }
 
@@ -352,7 +355,11 @@ fn partitioned_weight_shard_can_do_matmul_with_full_input() {
 
     // Compute the expected result with a full (non-parallel) linear layer
     let expected = a.matmul(&w);
-    let expected = expected.add(&Tensor::new(vec![m, k], bias.data.clone()));
+    let broadcast_bias = Tensor::new(
+        vec![m, k],
+        (0..m).flat_map(|_| bias.data.iter().copied()).collect(),
+    );
+    let expected = expected.add(&broadcast_bias);
 
     // Simulate each device's computation
     let mut partials = Vec::with_capacity(ws);
@@ -360,15 +367,30 @@ fn partitioned_weight_shard_can_do_matmul_with_full_input() {
         let tp = TensorParallel::new(rank, ws, format!("sim:{rank}"));
         let w_shard = partition_linear(&tp, &w);
         let b_shard = partition_bias(&tp, &bias);
-        let local = a.matmul(&w_shard);
-        let local = local.add_scalar(b_shard.data[0]); // bias has 1 element per shard
-        partials.push(local.data);
+        let mut local = a.matmul(&w_shard);
+        let shard_cols = w_shard.shape[1];
+        for row in 0..m {
+            let base = row * shard_cols;
+            for col in 0..shard_cols {
+                local.data[base + col] += b_shard.data[col];
+            }
+        }
+        partials.push((tp, local));
     }
 
-    // All-reduce
-    let refs: Vec<&[f32]> = partials.iter().map(|v| v.as_slice()).collect();
-    let reduced = all_reduce_sum(&refs);
+    // Reconstruct full output from column shards.
+    let mut rebuilt = vec![0.0f32; m * k];
+    for (tp, local) in partials {
+        let col_range = tp.row_range(k);
+        let shard_cols = local.shape[1];
+        for row in 0..m {
+            let dst_base = row * k + col_range.start;
+            let src_base = row * shard_cols;
+            rebuilt[dst_base..dst_base + shard_cols]
+                .copy_from_slice(&local.data[src_base..src_base + shard_cols]);
+        }
+    }
 
-    // The all-reduced result should equal the full (a @ W + bias) computation
-    approx_eq(&reduced[0], &expected.data, 1e-4);
+    // Reconstructed output should equal the full (a @ W + bias) computation.
+    approx_eq(&rebuilt, &expected.data, 1e-4);
 }

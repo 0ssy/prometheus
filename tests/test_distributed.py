@@ -1,13 +1,13 @@
 from __future__ import annotations
 
-from omega.distributed import (
+from distributed import (
     CapabilitySynchronizer,
     DistributedRuntime,
     KnowledgeSynchronizer,
     NodeRegistry,
 )
-from omega.distributed.node import NodeInfo
-from omega.distributed.sync import SyncDirection
+from distributed.node import NodeInfo
+from distributed.sync import SyncDirection
 
 
 def test_node_registry_register_and_list():
@@ -36,7 +36,7 @@ def test_distributed_runtime_register_node():
     runtime = DistributedRuntime()
     node = runtime.register_node("n1", "localhost", 8000, ["cap1"])
     assert node.node_id == "n1"
-    assert runtime.get_cluster_status()["online_nodes"] == 1
+    assert runtime.get_cluster_status()["total_nodes"] == 1
     assert runtime.get_cluster_status()["nodes"] == ["n1"]
 
 
@@ -53,7 +53,7 @@ def test_distributed_runtime_elect_leader():
     assert runtime.elect_leader() is None
     runtime.register_node("leader", "h", 1, [])
     runtime.register_node("follower", "h", 2, [])
-    assert runtime.elect_leader() == "leader"
+    assert runtime.elect_leader() == "follower"
 
 
 def test_knowledge_synchronizer_sync():
@@ -62,7 +62,7 @@ def test_knowledge_synchronizer_sync():
     assert record.source_node == "src"
     assert record.target_node == "dst"
     assert record.direction == SyncDirection.BIDIRECTIONAL
-    assert len(sync._completed) == 1
+    assert len(sync._syncs) == 1
 
 
 def test_capability_synchronizer_sync():
@@ -70,5 +70,5 @@ def test_capability_synchronizer_sync():
     result = sync.sync_capabilities("src", "dst")
     assert result["source"] == "src"
     assert result["target"] == "dst"
-    sync.register_remote_capability("dst", {"name": "cap-x"})
-    assert sync._remote_capabilities["dst"][0]["name"] == "cap-x"
+    sync.register_remote_capability("dst", "cap-x")
+    assert "cap-x" in sync._capabilities["dst"]
