@@ -168,8 +168,9 @@ export class Terminal {
       const range = document.createRange();
       const walker = document.createTreeWalker(sess.view, NodeFilter.SHOW_TEXT, null);
       let currentOffset = 0;
-      let node: Node | null = null;
-      while ((node = walker.nextNode())) {
+      while (true) {
+        const node = walker.nextNode();
+        if (!node) break;
         const nodeLen = (node as Text).nodeValue?.length || 0;
         if (currentOffset + nodeLen > idx) {
           const startInNode = idx - currentOffset;

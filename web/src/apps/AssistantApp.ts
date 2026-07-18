@@ -53,7 +53,7 @@ export function mountAssistant(el: HTMLElement) {
         return;
       }
       const reader = stream.getReader();
-      let chunk = document.createElement("div");
+      const chunk = document.createElement("div");
       chunk.style.cssText = "color: var(--text); margin-bottom: 4px;";
       output.appendChild(chunk);
       const decoder = new TextDecoder();
