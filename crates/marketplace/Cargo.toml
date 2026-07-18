@@ -1,0 +1,21 @@
+[package]
+name = "marketplace"
+version = "0.1.0"
+description = "P2 Cloud Platform — plugin/driver marketplace with registry, packages and verification"
+edition = "2021"
+rust-version = "1.77"
+license = "MIT"
+
+[dependencies]
+tokio = { version = "1", features = ["sync", "rt"] }
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+uuid = { version = "1", features = ["v4", "serde"] }
+thiserror = "1"
+tracing = "0.1"
+sha2 = "0.10"
+hmac = "0.12"
+base64 = "0.22"
+
+[lib]
+name = "marketplace"

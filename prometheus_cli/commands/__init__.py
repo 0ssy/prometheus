@@ -22,6 +22,8 @@ from core.logger import get_logger
 from services.platform_service import PlatformService
 
 from prometheus_cli.bootstrap import print_banner, print_boot_logo
+from prometheus_cli import pack as pack_mod
+from prometheus_cli import scaffold
 
 logger = get_logger(__name__)
 
@@ -108,70 +110,47 @@ def run_extensions() -> int:
 
 
 def run_new(kind: str, name: str) -> int:
-    name = name.lower().replace(" ", "-")
-    scaffold_dir = _EXTENSIONS_DIR / kind / name
-    scaffold_dir.mkdir(parents=True, exist_ok=True)
-
     if kind == "plugin":
-        manifest = scaffold_dir / "plugin.json"
-        if not manifest.exists():
-            manifest.write_text(
-                json.dumps(
-                    {
-                        "name": name,
-                        "version": "0.1.0",
-                        "description": f"Prometheus plugin: {name}",
-                        "capabilities": [],
-                        "permissions": [],
-                    },
-                    indent=2,
-                ),
-                encoding="utf-8",
-            )
-        readme = scaffold_dir / "README.md"
-        if not readme.exists():
-            readme.write_text(
-                f"# Plugin: {name}\n\nScaffolded by `prometheus new plugin {name}`.\n",
-                encoding="utf-8",
-            )
+        target = scaffold.scaffold_plugin(name)
     elif kind == "agent":
-        agent_file = scaffold_dir / "agent.py"
-        if not agent_file.exists():
-            agent_file.write_text(
-                f'"""Agent: {name}"""\n\nfrom core.agent import Agent\n\nclass {name.title().replace("-", "")}(Agent):\n    pass\n',
-                encoding="utf-8",
-            )
+        target = scaffold.scaffold_agent(name)
     elif kind == "driver":
-        driver_file = scaffold_dir / "driver.rs"
-        if not driver_file.exists():
-            driver_file.write_text(
-                f"// Driver: {name}\n\nuse hal_core::{{Hal, ProbeResult, Transport}};\n\npub struct {name.title().replace('-', '')}Driver;\n\nimpl Hal for {name.title().replace('-', '')}Driver {{\n    fn probe(&self, transport: Transport, target: &str) -> ProbeResult {{\n        todo!()\n    }}\n}}\n",
-                encoding="utf-8",
-            )
+        target = scaffold.scaffold_driver(name)
     else:
-        print(f"unknown scaffold kind: {kind}")
+        print(f"unknown scaffold kind: {kind} (expected plugin/agent/driver)")
         return 1
 
-    print(f"scaffolded {kind}: {scaffold_dir}")
+    print(f"scaffolded {kind}: {target}")
     return 0
 
 
-def run_pack(name: str | None = None) -> int:
-    target = _EXTENSIONS_DIR / (name or "") if name else _EXTENSIONS_DIR
-    if not target.exists():
-        print(f"not found: {target}")
+def run_pack(path: str) -> int:
+    try:
+        zip_path = pack_mod.pack(path)
+    except FileNotFoundError as exc:
+        logger.error(str(exc))
+        print(f"error: {exc}")
         return 1
-
-    import tarfile
-
-    pack_path = Path("dist") / f"{name or 'extensions'}.tar.gz"
-    pack_path.parent.mkdir(parents=True, exist_ok=True)
-    with tarfile.open(pack_path, "w:gz") as tar:
-        for path in target.rglob("*"):
-            if path.is_file():
-                tar.add(path, arcname=path.relative_to(target.parent))
-    print(f"packed: {pack_path}")
+    except Exception as exc:  # noqa: BLE001
+        logger.error(f"pack failed: {exc}")
+        print(f"error: pack failed: {exc}")
+        return 1
+    print(f"packed: {zip_path}")
     return 0
+
+
+def run_verify(path: str) -> int:
+    result = pack_mod.verify(path)
+    if result["ok"]:
+        print(f"verified: {path}")
+        print(f"  component: {result.get('component')}")
+        print(f"  members:   {result.get('member_count')}")
+        print(f"  algorithm: {result.get('algorithm')}")
+        return 0
+    print(f"verification failed: {path}")
+    for err in result.get("errors", []):
+        print(f"  - {err}")
+    return 1
 
 
 def _status_snapshot(container: ServiceContainer, db) -> dict:

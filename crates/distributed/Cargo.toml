@@ -1,0 +1,18 @@
+[package]
+name = "distributed"
+version = "0.1.0"
+description = "P2 Distributed Platform — distributed computing primitives (nodes, CRDTs, scheduler, sync)"
+edition = "2021"
+rust-version = "1.77"
+license = "MIT"
+
+[dependencies]
+tokio = { version = "1", features = ["sync", "rt", "time", "macros"] }
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+uuid = { version = "1", features = ["v4", "serde"] }
+thiserror = "1"
+tracing = "0.1"
+
+[lib]
+name = "distributed"

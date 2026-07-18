@@ -7,6 +7,7 @@ from enum import Enum
 from typing import Any
 
 from core.logger import get_logger
+from distributed.crdt import CrdtNode
 
 
 class SyncDirection(Enum):
@@ -31,6 +32,7 @@ class KnowledgeSynchronizer:
         self._lock = threading.Lock()
         self._logger = get_logger(__name__)
         self._sync_counter = 0
+        self._nodes: dict[str, CrdtNode] = {}
 
     def sync(self, source_node: str, target_node: str, direction: SyncDirection = SyncDirection.PUSH) -> KnowledgeSync:
         with self._lock:
@@ -46,6 +48,40 @@ class KnowledgeSynchronizer:
             self._syncs[sync_id] = knowledge_sync
             self._logger.info("sync %s: %s -> %s (%s)", sync_id, source_node, target_node, direction.value)
             return knowledge_sync
+
+    def register_node(self, node_id: str) -> CrdtNode:
+        with self._lock:
+            if node_id not in self._nodes:
+                self._nodes[node_id] = CrdtNode(node_id=node_id)
+            return self._nodes[node_id]
+
+    def merge_nodes(self, source_node_id: str, target_node_id: str) -> CrdtNode | None:
+        with self._lock:
+            source = self._nodes.get(source_node_id)
+            target = self._nodes.get(target_node_id)
+            if source is None or target is None:
+                return None
+            merged = target.merge(source)
+            self._nodes[target_node_id] = merged
+            return merged
+
+    def get_node_state(self, node_id: str) -> dict[str, Any] | None:
+        with self._lock:
+            node = self._nodes.get(node_id)
+            if node is None:
+                return None
+            return node.to_dict()
+
+    def apply_remote_state(self, node_id: str, state: dict[str, Any]) -> CrdtNode | None:
+        with self._lock:
+            remote = CrdtNode.from_dict(state)
+            local = self._nodes.get(node_id)
+            if local is None:
+                self._nodes[node_id] = remote
+                return remote
+            merged = local.merge(remote)
+            self._nodes[node_id] = merged
+            return merged
 
     def get_pending_changes(self, node_id: str) -> list[dict[str, Any]]:
         with self._lock:

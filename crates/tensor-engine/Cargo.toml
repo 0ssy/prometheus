@@ -33,6 +33,7 @@ memmap = ["dep:memmap2"]
 python = ["pyo3"]
 qdrant = ["dep:reqwest", "dep:serde_json"]
 simd = []
+tensor-parallel = []
 wgpu = ["dep:wgpu", "dep:bytemuck", "dep:futures-intrusive", "dep:half", "dep:pollster"]
 
 [dev-dependencies]

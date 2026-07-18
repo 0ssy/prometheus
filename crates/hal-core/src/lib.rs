@@ -17,6 +17,8 @@ use thiserror::Error;
 
 mod registry;
 
+pub mod driver_manifest;
+
 #[cfg(feature = "c-hal")]
 pub mod c_hal {
     include!(concat!(env!("OUT_DIR"), "/hal_bindings.rs"));
