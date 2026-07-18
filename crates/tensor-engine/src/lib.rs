@@ -5,6 +5,12 @@
 //! Production builds memory-map the buffer (see `Tensor::mmap`) for zero-copy
 //! large tensors; here we keep a portable, testable `Vec<f32>` implementation.
 
+pub mod backends;
+pub mod cuda;
+pub mod inference;
+pub mod memory;
+pub mod vector;
+
 use std::cmp::max;
 
 #[derive(Debug, Clone, PartialEq)]
