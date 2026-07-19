@@ -28,6 +28,10 @@ optional = true
 version = "0.9"
 optional = true
 
+[dependencies.serialport]
+version = "4"
+optional = true
+
 [features]
 default = []
 python = ["pyo3", "c-hal"]
@@ -36,7 +40,9 @@ dynamic-hal = ["libloading"]
 # Real USB enumeration + hot-plug via libusb (rusb). Off by default so the
 # crate still builds/tests on CI hosts without libusb present.
 usb-real = ["rusb"]
-full = ["c-hal", "python", "usb-real"]
+# Real serial port enumeration + hot-plug via libserialport. Off by default.
+serial-real = ["serialport"]
+full = ["c-hal", "python", "usb-real", "serial-real"]
 
 [build-dependencies]
 cc = "1.0"

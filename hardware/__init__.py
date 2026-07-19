@@ -9,6 +9,15 @@ from hardware.drivers.usb import USBDriver
 from hardware.drivers.network import NetworkDriver
 from hardware.drivers.virtual import VirtualDriver
 from hardware.drivers.serial import SerialDriver
+from hardware.serial import (
+    SerialManager,
+    SerialPort,
+    get_serial_manager,
+    SerialCapability,
+    SerialPermissionPolicy,
+    SerialAllowRule,
+    SerialDenyRule,
+)
 from hardware.drivers.bus import (
     I2CDriver,
     SPIDriver,
@@ -149,6 +158,13 @@ __all__ = [
     "UsbPermissionPolicy",
     "UsbAllowRule",
     "UsbDenyRule",
+    "SerialManager",
+    "SerialPort",
+    "get_serial_manager",
+    "SerialCapability",
+    "SerialPermissionPolicy",
+    "SerialAllowRule",
+    "SerialDenyRule",
     "HardwareEvent",
     "DeviceConnectedEvent",
     "DeviceDisconnectedEvent",

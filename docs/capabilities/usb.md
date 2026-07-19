@@ -32,6 +32,11 @@ event primitives introduced here.
   `usb:*` actions for the workflow engine.
 - **Terminal / CLI** — `prometheus usb list|info|monitor|allow|deny` and the
   `usb` terminal command.
+- **Driver bridge** — `hardware.drivers.usb.USBDriver` is the legacy
+  `HardwareDriver` implementation, now bound to a real device via
+  `USBManager`. `USBDriver.for_device(device_id)` exposes the same driver
+  contract as the other simulated drivers but reads live device metadata and
+  enforces the permission policy on `connect()`.
 
 ## Architecture
 

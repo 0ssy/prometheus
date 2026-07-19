@@ -381,6 +381,92 @@ def run_usb(args: list[str]) -> int:
     return 1
 
 
+def run_serial(args: list[str]) -> int:
+    """Serial communication capability CLI.
+
+    Usage:
+      prometheus serial list
+      prometheus serial info <port>
+      prometheus serial connect <port> [baud]
+      prometheus serial disconnect <port>
+      prometheus serial monitor [seconds]
+      prometheus serial allow --port COM3 [--capability connect]
+      prometheus serial deny  --port COM3
+    """
+    from sdk.serial import Serial
+
+    client = Serial()
+
+    if not args or args[0] == "list":
+        ports = client.enumerate()
+        if not ports:
+            print("no serial ports detected.")
+            return 0
+        for p in ports:
+            print(f"  {p['port']}  {p.get('vid_pid') or ''}  {p.get('manufacturer') or ''} {p.get('product') or ''}".rstrip())
+            print(f"      baud_rates={p['baud_rates']}")
+        return 0
+
+    if args[0] == "info":
+        if len(args) < 2:
+            print("error: serial info requires a port")
+            return 1
+        info = client.get(args[1])
+        if info is None:
+            print(f"error: unknown port: {args[1]}")
+            return 1
+        for key, value in info.items():
+            print(f"  {key}: {value}")
+        return 0
+
+    if args[0] == "connect":
+        if len(args) < 2:
+            print("error: serial connect requires a port")
+            return 1
+        baud = int(args[2]) if len(args) > 2 else 115200
+        result = client.connect(args[1], baud_rate=baud)
+        print(result)
+        return 0
+
+    if args[0] == "disconnect":
+        if len(args) < 2:
+            print("error: serial disconnect requires a port")
+            return 1
+        print(client.disconnect(args[1]))
+        return 0
+
+    if args[0] == "monitor":
+        seconds = float(args[1]) if len(args) > 1 else 10.0
+        client.start_monitor(interval=1.0)
+        print(f"monitoring serial hot-plug for {seconds:g}s (Ctrl+C to stop)...")
+        try:
+            time.sleep(seconds)
+        except KeyboardInterrupt:
+            pass
+        client.stop_monitor()
+        return 0
+
+    if args[0] in ("allow", "deny"):
+        port = _parse_flag(args, "--port")
+        vid = _parse_hex_flag(args, "--vid")
+        pid = _parse_hex_flag(args, "--pid")
+        serial = _parse_flag(args, "--serial")
+        if args[0] == "allow":
+            caps = (
+                {c for a in args if a.startswith("--capability=") for c in [a.split("=", 1)[1]]}
+                or None
+            )
+            client.allow(port=port, vendor_id=vid, product_id=pid, serial=serial, capabilities=caps)
+            print(f"allowed serial port={port} vid={vid} pid={pid} serial={serial} caps={caps}")
+        else:
+            client.deny(port=port, vendor_id=vid, product_id=pid, serial=serial)
+            print(f"denied serial port={port} vid={vid} pid={pid} serial={serial}")
+        return 0
+
+    print("error: unknown serial subcommand (list|info|connect|disconnect|monitor|allow|deny)")
+    return 1
+
+
 def _parse_hex_flag(args: list[str], name: str) -> int | None:
     for i, a in enumerate(args):
         if a == name and i + 1 < len(args):
