@@ -1,11 +1,11 @@
 # Prometheus Platform
 
-Prometheus is a local-first engineering platform that combines:
+Prometheus is a local-first engineering platform with:
 
-- a Python/FastAPI backend,
-- a desktop-style web workspace,
-- plugin + agent extensibility,
-- knowledge, simulation, and hardware-oriented services.
+- Python + FastAPI backend
+- Desktop-style web workspace
+- Plugin and agent extensibility
+- Knowledge, simulation, and hardware capabilities
 
 ---
 
@@ -13,47 +13,30 @@ Prometheus is a local-first engineering platform that combines:
 
 **v1.0 foundation is frozen.**
 
-That means platform core work is now limited to:
+Core platform changes should be limited to:
 
 1. bug fixes, or
-2. breaking architectural improvements.
+2. major architectural improvements.
 
-New value should be added as capabilities on top of the platform.
+New value should be added as capabilities built on top of the platform.
 
 ---
 
-## Start here
+## One README, two paths
 
-- **I want to use Prometheus** -> [User guide](#user-guide)
-- **I want to build on Prometheus** -> [Developer guide](#developer-guide)
-
-### 30-second repository map
-
-Use this when deciding where a change belongs:
-
-- `core/` -> shared runtime foundations (config, boot, container, logging)
-- `backend/` -> HTTP API surface and endpoint wiring
-- `services/` -> orchestration/business logic used by API and CLI
-- `hardware/` -> hardware capability implementations (USB/Serial/Bluetooth/etc.)
-- `firmware/` -> firmware parsing, metadata, and compatibility logic
-- `knowledge/`, `memory/`, `simulation/` -> platform intelligence layers
-- `agents/`, `plugins/`, `sdk/` -> extension and automation surfaces
-- `omega/` -> compatibility/orchestration facade (not a duplicate subsystem tree)
-- `web/`, `src-tauri/` -> desktop UI and native packaging
-
-If you are adding a capability (for example Bluetooth support), start in
-`hardware/` and expose integration points through `services/` and `backend/`.
+- **I am a user** -> [User guide](#user-guide)
+- **I am a developer** -> [Developer guide](#developer-guide)
 
 ---
 
 ## User guide
 
-### 1) Requirements
+### Requirements
 
 - Python 3.11+
 - pip
 
-### 2) Install and run
+### Install
 
 ```bash
 python -m venv venv
@@ -63,60 +46,62 @@ venv\Scripts\activate
 # source venv/bin/activate
 
 pip install -r requirements.txt
+```
+
+### Start Prometheus
+
+```bash
 python prometheus.py
 ```
 
-By default this starts the backend and opens the dashboard.
-
-### 3) Open the product
+### Open it
 
 - Dashboard: <http://127.0.0.1:8000/dashboard>
 - API docs: <http://127.0.0.1:8000/docs>
-- Health check: <http://127.0.0.1:8000/health>
+- Health: <http://127.0.0.1:8000/health>
 
-### 4) Common commands
+### Most-used commands
 
 ```bash
-python prometheus.py --server       # API only (no browser)
-python prometheus.py --terminal     # terminal mode
-python prometheus.py --safe-mode    # minimal services
-python prometheus.py status         # platform status banner
-python prometheus.py demo           # happy-path demo
-python prometheus.py test           # run tests
-python prometheus.py extensions     # list SDK extension packages
+python prometheus.py --server
+python prometheus.py --terminal
+python prometheus.py --developer
+python prometheus.py --safe-mode
+
+python prometheus.py status
+python prometheus.py demo
+python prometheus.py test
+python prometheus.py extensions
 ```
 
-### 5) What users get
+### Hardware capability commands
 
-- Desktop workspace + terminal
-- Dashboard and API
-- Plugin system
-- Agent runtime
-- Knowledge and simulation surfaces
-- Hardware-oriented services and diagnostics endpoints
+```bash
+python prometheus.py usb -h
+python prometheus.py serial -h
+```
 
 ---
 
 ## Developer guide
 
-### Architecture at a glance
+### 30-second repo map
 
-Prometheus is organized around stable service contracts and a bootstrapped container:
+- `core/` -> runtime foundations (boot, config, container, logging)
+- `backend/` -> API endpoints
+- `services/` -> orchestration and business logic
+- `hardware/` -> hardware capabilities (USB, Serial, etc.)
+- `firmware/` -> firmware parsing/metadata/compatibility
+- `knowledge/`, `memory/`, `simulation/` -> intelligence layers
+- `agents/`, `plugins/`, `sdk/` -> extension surfaces
+- `dashboard/` -> dashboard data and composition
+- `omega/` -> compatibility/orchestration facade
+- `web/` + `src-tauri/` -> UI and native desktop packaging
 
-- **API runtime**: `backend/main.py`
-- **Bootstrap/wiring**: `core/bootstrap.py`
-- **Service container**: `core/container.py`
-- **Orchestration services**: `services/`
-- **Core subsystems**:
-  - `agents/`
-  - `distributed/`
-  - `policy/`
-  - `marketplace/`
-  - `enterprise/`
-  - `runtime_management/`
-  - `dashboard/`
+If you add a new capability (for example Bluetooth), start in `hardware/`,
+then expose integration through `services/` and `backend/`.
 
-### Local development setup
+### Local development
 
 ```bash
 python -m venv venv
@@ -135,7 +120,7 @@ python prometheus.py --server
 pytest -q
 ```
 
-### Frontend workspace (`web/`)
+### Frontend (`web/`)
 
 ```bash
 cd web
@@ -147,9 +132,9 @@ npm run build
 
 ### Rust workspace (`crates/`)
 
-The repository also includes Rust crates (HAL/runtime/Titan/distributed/etc.) managed via the root `Cargo.toml` workspace.
+Rust crates are managed by the root `Cargo.toml` workspace.
 
-### Native desktop build (Tauri)
+### Native desktop (`src-tauri/`)
 
 ```bash
 cd src-tauri
@@ -157,13 +142,11 @@ cargo tauri dev
 cargo tauri build
 ```
 
-Use this path for native desktop packaging/distribution.
-
 ---
 
-## Extending the platform
+## Extending Prometheus
 
-### Plugin/agent scaffolding
+### Scaffold a plugin/agent/driver
 
 ```bash
 python prometheus.py new plugin my_plugin
@@ -180,7 +163,7 @@ python prometheus.py verify <path-to-zip>
 
 ---
 
-## API highlights
+## API quick list
 
 - `GET /health`
 - `GET /status`
@@ -190,10 +173,12 @@ python prometheus.py verify <path-to-zip>
 - `POST /assistant`
 - `POST /commands`
 
-For full contract details, use `/docs` in a running instance.
+For complete API contracts, use `/docs` on a running instance.
 
 ---
 
 ## Current direction
 
-The next major expansion is **Hardware Platform capabilities** (HAL-first), then higher-level engineering applications that reuse those capabilities across Assistant, SDK, plugins, and automation workflows.
+The next major expansion is **hardware platform capabilities** (HAL-first),
+followed by higher-level engineering applications that reuse those capabilities
+across Assistant, SDK, plugins, and automation workflows.
