@@ -310,6 +310,91 @@ def run_tests(path: str | None = None) -> int:
     return result.returncode
 
 
+def run_usb(args: list[str]) -> int:
+    """USB capability CLI.
+
+    Usage:
+      prometheus usb list
+      prometheus usb info <device_id>
+      prometheus usb monitor [seconds]
+      prometheus usb allow --vid 0x18d1 --pid 0x4ee7 [--capability enumerate]
+      prometheus usb deny  --vid 0x1234
+    """
+    from sdk.usb import Usb
+    from hardware.usb import UsbCapability
+
+    client = Usb()
+
+    if not args or args[0] == "list":
+        devices = client.enumerate()
+        if not devices:
+            print("no USB devices detected.")
+            return 0
+        for d in devices:
+            print(
+                f"  {d['device_id']}  {d['vid_pid']}  "
+                f"{d['manufacturer'] or ''} {d['product'] or ''}".rstrip()
+            )
+            print(f"      serial={d['serial_number']} bus={d['bus_number']}.{d['port_number']}")
+        return 0
+
+    if args[0] == "info":
+        if len(args) < 2:
+            print("error: usb info requires a device_id")
+            return 1
+        info = client.get(args[1])
+        if info is None:
+            print(f"error: unknown device: {args[1]}")
+            return 1
+        for key, value in info.items():
+            print(f"  {key}: {value}")
+        return 0
+
+    if args[0] == "monitor":
+        seconds = float(args[1]) if len(args) > 1 else 10.0
+        client.start_monitor(interval=1.0)
+        print(f"monitoring USB hot-plug for {seconds:g}s (Ctrl+C to stop)...")
+        try:
+            time.sleep(seconds)
+        except KeyboardInterrupt:
+            pass
+        client.stop_monitor()
+        return 0
+
+    if args[0] in ("allow", "deny"):
+        vid = _parse_hex_flag(args, "--vid")
+        pid = _parse_hex_flag(args, "--pid")
+        serial = _parse_flag(args, "--serial")
+        if args[0] == "allow":
+            caps = (
+                {c for a in args if a.startswith("--capability=") for c in [a.split("=", 1)[1]]}
+                or None
+            )
+            client.allow(vendor_id=vid, product_id=pid, serial=serial, capabilities=caps)
+            print(f"allowed usb device vid={vid} pid={pid} serial={serial} caps={caps}")
+        else:
+            client.deny(vendor_id=vid, product_id=pid, serial=serial)
+            print(f"denied usb device vid={vid} pid={pid} serial={serial}")
+        return 0
+
+    print("error: unknown usb subcommand (list|info|monitor|allow|deny)")
+    return 1
+
+
+def _parse_hex_flag(args: list[str], name: str) -> int | None:
+    for i, a in enumerate(args):
+        if a == name and i + 1 < len(args):
+            return int(args[i + 1], 0)
+    return None
+
+
+def _parse_flag(args: list[str], name: str) -> str | None:
+    for i, a in enumerate(args):
+        if a == name and i + 1 < len(args):
+            return args[i + 1]
+    return None
+
+
 def run_full_system(open_browser: bool = True) -> None:
     import uvicorn
     from backend.main import app

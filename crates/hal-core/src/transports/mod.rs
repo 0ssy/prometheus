@@ -8,7 +8,7 @@ mod network;
 mod bluetooth;
 mod jtag;
 
-pub use usb::UsbTransport;
+pub use usb::{UsbChange, UsbDeviceInfo, UsbMonitor, UsbTransport};
 pub use serial::SerialTransport;
 pub use gpio::GpioTransport;
 pub use spi::SpiTransport;

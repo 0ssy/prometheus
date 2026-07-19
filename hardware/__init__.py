@@ -63,6 +63,15 @@ from hardware.drivers.recovery import (
 from hardware.session import DeviceSession, DeviceSessionManager
 from hardware.diagnostics import HardwareDiagnostics
 from hardware.recovery import HardwareRecovery
+from hardware.usb import (
+    USBManager,
+    UsbDevice,
+    get_usb_manager,
+    UsbCapability,
+    UsbPermissionPolicy,
+    UsbAllowRule,
+    UsbDenyRule,
+)
 from hardware.events import (
     HardwareEvent,
     DeviceConnectedEvent,
@@ -133,6 +142,13 @@ __all__ = [
     "DeviceSessionManager",
     "HardwareDiagnostics",
     "HardwareRecovery",
+    "USBManager",
+    "UsbDevice",
+    "get_usb_manager",
+    "UsbCapability",
+    "UsbPermissionPolicy",
+    "UsbAllowRule",
+    "UsbDenyRule",
     "HardwareEvent",
     "DeviceConnectedEvent",
     "DeviceDisconnectedEvent",

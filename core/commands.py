@@ -171,4 +171,25 @@ def dispatch_command(raw: str, platform, container, db=None) -> str:
             return str(kernel.status())
         return "show what? try: devices | agents | kernel"
 
+    if cmd == "usb" and len(parts) >= 2:
+        from sdk.usb import Usb
+
+        client = Usb()
+        subcmd = parts[1]
+        if subcmd == "list":
+            devices = client.enumerate()
+            if not devices:
+                return "no USB devices detected"
+            return "\n".join(
+                f"  - {d['device_id']} {d['vid_pid']} {d['manufacturer'] or ''} {d['product'] or ''}".rstrip()
+                for d in devices
+            )
+        if subcmd == "info" and len(parts) >= 3:
+            info = client.get(parts[2])
+            return str(info) if info else f"unknown device: {parts[2]}"
+        if subcmd == "monitor":
+            client.start_monitor(interval=1.0)
+            return "USB hot-plug monitor started (background thread)"
+        return "usb: list | info <device_id> | monitor"
+
     return "unrecognized command. type 'help'."
