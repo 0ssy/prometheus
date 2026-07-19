@@ -1,6 +1,7 @@
 mod usb;
 mod serial;
 mod adb;
+mod fastboot;
 mod gpio;
 mod spi;
 mod i2c;
@@ -12,6 +13,7 @@ mod jtag;
 pub use usb::{UsbChange, UsbDeviceInfo, UsbMonitor, UsbTransport};
 pub use serial::{SerialChange, SerialMonitor, SerialPortInfo, SerialTransport};
 pub use adb::{AdbChange, AdbDeviceInfo, AdbMonitor, AdbTransport};
+pub use fastboot::{FastbootChange, FastbootDeviceInfo, FastbootMonitor, FastbootTransport};
 pub use gpio::GpioTransport;
 pub use spi::SpiTransport;
 pub use i2c::I2cTransport;

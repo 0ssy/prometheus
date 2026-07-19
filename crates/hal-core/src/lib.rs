@@ -32,6 +32,7 @@ pub use transports::{
     SerialTransport, SerialPortInfo, SerialChange, SerialMonitor, SpiTransport,
     UsbChange, UsbDeviceInfo, UsbMonitor, UsbTransport,
     AdbTransport, AdbDeviceInfo, AdbChange, AdbMonitor,
+    FastbootTransport, FastbootDeviceInfo, FastbootChange, FastbootMonitor,
 };
 
 #[derive(Debug, Error)]

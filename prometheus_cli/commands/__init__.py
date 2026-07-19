@@ -467,6 +467,191 @@ def run_serial(args: list[str]) -> int:
     return 1
 
 
+def run_adb(args: list[str]) -> int:
+    """ADB (Android Debug Bridge) capability CLI.
+
+    Usage:
+      prometheus adb list
+      prometheus adb shell <serial> <command...>
+      prometheus adb logcat <serial> [lines]
+      prometheus adb push <serial> <local> <remote>
+      prometheus adb pull <serial> <remote> <local>
+      prometheus adb install <serial> <apk>
+      prometheus adb reboot <serial> [mode]
+      prometheus adb sideload <serial> <ota>
+      prometheus adb monitor [seconds]
+      prometheus adb allow --serial <serial> [--capability shell]
+      prometheus adb deny  --serial <serial>
+    """
+    from sdk.adb import ADB
+
+    client = ADB()
+
+    if not args or args[0] == "list":
+        devices = client.enumerate()
+        if not devices:
+            print("no ADB devices detected.")
+            return 0
+        for d in devices:
+            print(
+                f"  {d['serial']}  {d['state']}  {d.get('model') or ''} {d.get('product') or ''}".rstrip()
+            )
+        return 0
+
+    if args[0] == "shell" and len(args) >= 3:
+        command = " ".join(args[2:])
+        print(client.shell(args[1], command))
+        return 0
+
+    if args[0] == "logcat" and len(args) >= 2:
+        lines = int(args[2]) if len(args) > 2 else 100
+        print(client.logcat(args[1], lines=lines))
+        return 0
+
+    if args[0] == "push" and len(args) >= 5:
+        print(client.push(args[1], args[2], args[3]))
+        return 0
+
+    if args[0] == "pull" and len(args) >= 5:
+        print(client.pull(args[1], args[2], args[3]))
+        return 0
+
+    if args[0] == "install" and len(args) >= 3:
+        print(client.install(args[1], args[2]))
+        return 0
+
+    if args[0] == "reboot" and len(args) >= 2:
+        mode = args[2] if len(args) > 2 else "normal"
+        print(client.reboot(args[1], mode=mode))
+        return 0
+
+    if args[0] == "sideload" and len(args) >= 3:
+        print(client.sideload(args[1], args[2]))
+        return 0
+
+    if args[0] == "monitor":
+        seconds = float(args[1]) if len(args) > 1 else 10.0
+        client.start_monitor(interval=2.0)
+        print(f"monitoring ADB hot-plug for {seconds:g}s (Ctrl+C to stop)...")
+        try:
+            time.sleep(seconds)
+        except KeyboardInterrupt:
+            pass
+        client.stop_monitor()
+        return 0
+
+    if args[0] in ("allow", "deny"):
+        serial = _parse_flag(args, "--serial")
+        vid = _parse_hex_flag(args, "--vid")
+        pid = _parse_hex_flag(args, "--pid")
+        if args[0] == "allow":
+            caps = (
+                {c for a in args if a.startswith("--capability=") for c in [a.split("=", 1)[1]]}
+                or None
+            )
+            client.allow(serial=serial, vendor_id=vid, product_id=pid, capabilities=caps)
+            print(f"allowed adb device serial={serial} vid={vid} pid={pid} caps={caps}")
+        else:
+            client.deny(serial=serial, vendor_id=vid, product_id=pid)
+            print(f"denied adb device serial={serial} vid={vid} pid={pid}")
+        return 0
+
+    print("error: unknown adb subcommand (list|shell|logcat|push|pull|install|reboot|sideload|monitor|allow|deny)")
+    return 1
+
+
+def run_fastboot(args: list[str]) -> int:
+    """Fastboot capability CLI.
+
+    Usage:
+      prometheus fastboot list
+      prometheus fastboot getvar <serial> [variable]
+      prometheus fastboot unlock <serial>
+      prometheus fastboot lock <serial>
+      prometheus fastboot flash <serial> <partition> <image>
+      prometheus fastboot erase <serial> <partition>
+      prometheus fastboot boot <serial> <image>
+      prometheus fastboot reboot <serial> [mode]
+      prometheus fastboot monitor [seconds]
+      prometheus fastboot allow --serial <serial> [--capability flash]
+      prometheus fastboot deny  --serial <serial>
+    """
+    from sdk.fastboot import Fastboot
+
+    client = Fastboot()
+
+    if not args or args[0] == "list":
+        devices = client.enumerate()
+        if not devices:
+            print("no fastboot devices detected.")
+            return 0
+        for d in devices:
+            print(
+                f"  {d['serial']}  {d['state']}  unlocked={d['unlocked']}  {d.get('product') or ''}".rstrip()
+            )
+        return 0
+
+    if args[0] == "getvar" and len(args) >= 2:
+        variable = args[2] if len(args) > 2 else "all"
+        print(client.getvar(args[1], variable=variable))
+        return 0
+
+    if args[0] == "unlock" and len(args) >= 2:
+        print(client.unlock(args[1]))
+        return 0
+
+    if args[0] == "lock" and len(args) >= 2:
+        print(client.lock(args[1]))
+        return 0
+
+    if args[0] == "flash" and len(args) >= 5:
+        print(client.flash(args[1], args[2], args[3]))
+        return 0
+
+    if args[0] == "erase" and len(args) >= 4:
+        print(client.erase(args[1], args[2]))
+        return 0
+
+    if args[0] == "boot" and len(args) >= 3:
+        print(client.boot(args[1], args[2]))
+        return 0
+
+    if args[0] == "reboot" and len(args) >= 2:
+        mode = args[2] if len(args) > 2 else "normal"
+        print(client.reboot(args[1], mode=mode))
+        return 0
+
+    if args[0] == "monitor":
+        seconds = float(args[1]) if len(args) > 1 else 10.0
+        client.start_monitor(interval=2.0)
+        print(f"monitoring fastboot hot-plug for {seconds:g}s (Ctrl+C to stop)...")
+        try:
+            time.sleep(seconds)
+        except KeyboardInterrupt:
+            pass
+        client.stop_monitor()
+        return 0
+
+    if args[0] in ("allow", "deny"):
+        serial = _parse_flag(args, "--serial")
+        vid = _parse_hex_flag(args, "--vid")
+        pid = _parse_hex_flag(args, "--pid")
+        if args[0] == "allow":
+            caps = (
+                {c for a in args if a.startswith("--capability=") for c in [a.split("=", 1)[1]]}
+                or None
+            )
+            client.allow(serial=serial, vendor_id=vid, product_id=pid, capabilities=caps)
+            print(f"allowed fastboot device serial={serial} vid={vid} pid={pid} caps={caps}")
+        else:
+            client.deny(serial=serial, vendor_id=vid, product_id=pid)
+            print(f"denied fastboot device serial={serial} vid={vid} pid={pid}")
+        return 0
+
+    print("error: unknown fastboot subcommand (list|getvar|unlock|lock|flash|erase|boot|reboot|monitor|allow|deny)")
+    return 1
+
+
 def _parse_hex_flag(args: list[str], name: str) -> int | None:
     for i, a in enumerate(args):
         if a == name and i + 1 < len(args):

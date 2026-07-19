@@ -218,4 +218,30 @@ def dispatch_command(raw: str, platform, container, db=None) -> str:
             return "Serial hot-plug monitor started (background thread)"
         return "serial: list | info <port> | connect <port> [baud] | disconnect <port> | monitor"
 
+    if cmd == "adb" and len(parts) >= 2:
+        from sdk.adb import ADB
+
+        client = ADB()
+        subcmd = parts[1]
+        if subcmd == "list":
+            devices = client.enumerate()
+            if not devices:
+                return "no ADB devices detected"
+            return "\n".join(
+                f"  - {d['serial']} {d['state']} {d.get('model') or ''} {d.get('product') or ''}".rstrip()
+                for d in devices
+            )
+        if subcmd == "shell" and len(parts) >= 3:
+            return str(client.shell(parts[2], " ".join(parts[3:])))
+        if subcmd == "logcat" and len(parts) >= 3:
+            lines = int(parts[3]) if len(parts) > 3 else 100
+            return str(client.logcat(parts[2], lines=lines))
+        if subcmd == "reboot" and len(parts) >= 3:
+            mode = parts[3] if len(parts) > 3 else "normal"
+            return str(client.reboot(parts[2], mode=mode))
+        if subcmd == "monitor":
+            client.start_monitor(interval=2.0)
+            return "ADB hot-plug monitor started (background thread)"
+        return "adb: list | shell <serial> <cmd> | logcat <serial> [lines] | reboot <serial> [mode] | monitor"
+
     return "unrecognized command. type 'help'."

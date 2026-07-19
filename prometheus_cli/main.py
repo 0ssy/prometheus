@@ -30,6 +30,7 @@ from prometheus_cli.commands import (
     run_tests,
     run_usb,
     run_serial,
+    run_adb,
 )
 from prometheus_cli.launch import main as run_launch
 
@@ -79,6 +80,8 @@ def main() -> int:
     usb_parser.add_argument("usb_args", nargs=argparse.REMAINDER, help="usb subcommand and options")
     serial_parser = sub.add_parser("serial", help="Serial capability: list/info/connect/disconnect/monitor/allow/deny")
     serial_parser.add_argument("serial_args", nargs=argparse.REMAINDER, help="serial subcommand and options")
+    adb_parser = sub.add_parser("adb", help="ADB capability: list/shell/logcat/push/pull/install/reboot/sideload/monitor/allow/deny")
+    adb_parser.add_argument("adb_args", nargs=argparse.REMAINDER, help="adb subcommand and options")
     launch_parser = sub.add_parser("launch", help="launch the full platform with one command")
     launch_parser.add_argument("--distributed", action="store_true", help="start Go distributed services")
     launch_parser.add_argument("--cloud", action="store_true", help="start Go cloud services")
@@ -126,6 +129,8 @@ def main() -> int:
         return run_usb(args.usb_args)
     if args.command == "serial":
         return run_serial(args.serial_args)
+    if args.command == "adb":
+        return run_adb(args.adb_args)
     if args.command == "launch":
         return run_launch(args)
 
