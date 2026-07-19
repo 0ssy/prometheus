@@ -12,6 +12,21 @@ safety, and long-term maintainability over short-term speed.
 - Keep naming clear and domain-oriented.
 - Add tests or at least test scaffolding for behavior changes.
 
+## Placement rules (discoverability)
+
+Before creating a new top-level folder, map your change to an existing area:
+
+- Runtime foundations -> `core/`
+- HTTP/API behavior -> `backend/`
+- Orchestration logic -> `services/`
+- Hardware capabilities (USB/Serial/Bluetooth/JTAG/...) -> `hardware/`
+- Firmware behavior -> `firmware/`
+- Intelligence layers -> `knowledge/`, `memory/`, `simulation/`
+- Extensions -> `plugins/`, `agents/`, `sdk/`
+- UI -> `web/`, `src-tauri/`
+
+If none fit, open an RFC before introducing a new top-level namespace.
+
 ## Branch strategy
 
 - `main` is the integration branch.

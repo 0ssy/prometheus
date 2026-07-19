@@ -21,8 +21,18 @@ build/
 # --- Build artifacts ---
 go/*.exe
 cpp/build/
+zig/.zig-cache/
+zig/zig-out/
 
 # --- Runtime data (never track) ---
 data/prometheus.db
 data/prometheus.log
 data/prometheus.db.corrupted.*
+
+# --- Local artifacts / logs ---
+InstallationLog.txt
+sidecar_out.txt
+sidecar_err.txt
+titan_build.log
+dom.txt
+*.log

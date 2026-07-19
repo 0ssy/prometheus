@@ -27,6 +27,23 @@ New value should be added as capabilities on top of the platform.
 - **I want to use Prometheus** -> [User guide](#user-guide)
 - **I want to build on Prometheus** -> [Developer guide](#developer-guide)
 
+### 30-second repository map
+
+Use this when deciding where a change belongs:
+
+- `core/` -> shared runtime foundations (config, boot, container, logging)
+- `backend/` -> HTTP API surface and endpoint wiring
+- `services/` -> orchestration/business logic used by API and CLI
+- `hardware/` -> hardware capability implementations (USB/Serial/Bluetooth/etc.)
+- `firmware/` -> firmware parsing, metadata, and compatibility logic
+- `knowledge/`, `memory/`, `simulation/` -> platform intelligence layers
+- `agents/`, `plugins/`, `sdk/` -> extension and automation surfaces
+- `omega/` -> compatibility/orchestration facade (not a duplicate subsystem tree)
+- `web/`, `src-tauri/` -> desktop UI and native packaging
+
+If you are adding a capability (for example Bluetooth support), start in
+`hardware/` and expose integration points through `services/` and `backend/`.
+
 ---
 
 ## User guide
