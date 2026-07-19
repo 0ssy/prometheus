@@ -1,124 +1,124 @@
-# Prometheus Core — v1.0.0-rc1
+# Prometheus Platform
 
-## What this is
+Prometheus is a local-first engineering platform that combines:
 
-Prometheus Core includes Alpha foundation, Beta intelligence, Gamma knowledge, Delta simulation, Epsilon hardware abstraction, and Omega ecosystem:
-knowledge graph, ontology, provenance, confidence-based facts, query engine, learning, digital twin, HAL, drivers, firmware intelligence, security, plugin SDK, multi-agent coordination, distributed runtime, policy engine, marketplace, enterprise configuration, runtime management, and unified dashboard.
+- a Python/FastAPI backend,
+- a desktop-style web workspace,
+- plugin + agent extensibility,
+- knowledge, simulation, and hardware-oriented services.
 
-| Deliverable            | File                                |
-|-------------------------|--------------------------------------|
-| Plugin architecture     | `plugins/base.py`, `plugins/manager.py` |
-| Agent manager           | `agents/base.py`, `agents/manager.py`   |
-| Platform contracts      | `contracts/`                            |
-| Internal services       | `services/platform_service.py`, `services/event_handlers.py` |
-| Implementations layer   | `implementations/platform_components.py` |
-| Capability framework    | `core/capabilities.py`, `contracts/capability.py` |
-| Reasoning pipeline      | `reasoning/pipeline.py` |
-| Simulation engine       | `simulation/engine.py` |
-| Core runtime             | `kernel/runtime.py` |
-| Observability           | `core/observability.py` |
-| Knowledge engine        | `knowledge/engine.py`, `knowledge/graph.py`, `knowledge/query.py` |
-| Ontology + provenance   | `knowledge/ontology.py`, `knowledge/provenance.py` |
-| Learning layer          | `knowledge/learning.py` |
-| Event bus               | `core/event_bus.py`, `api/events.py`    |
-| Long-term memory        | `memory/models.py`, `memory/store.py`   |
-| Knowledge graph         | `reasoning/models.py`, `reasoning/graph.py` |
-| Task scheduler          | `core/scheduler.py`                 |
-| Local API               | `backend/main.py`                   |
-| Local database          | `core/database.py`                  |
-| Logging system          | `core/logger.py`                    |
-| Configuration manager   | `core/config.py`                    |
-| Unified entry point     | `prometheus.py`                      |
+---
 
-Everything runs locally on SQLite — no cloud dependency.
+## Platform status
 
-## Quickstart
+**v1.0 foundation is frozen.**
+
+That means platform core work is now limited to:
+
+1. bug fixes, or
+2. breaking architectural improvements.
+
+New value should be added as capabilities on top of the platform.
+
+---
+
+## Start here
+
+- **I want to use Prometheus** -> [User guide](#user-guide)
+- **I want to build on Prometheus** -> [Developer guide](#developer-guide)
+
+---
+
+## User guide
+
+### 1) Requirements
+
+- Python 3.11+
+- pip
+
+### 2) Install and run
 
 ```bash
-# 1. Create an isolated environment and install dependencies
-python3 -m venv venv
-source venv/bin/activate        # Windows: venv\Scripts\activate
+python -m venv venv
+# Windows
+venv\Scripts\activate
+# macOS/Linux
+# source venv/bin/activate
+
 pip install -r requirements.txt
-
-# 2. Start the platform (boots the platform + opens the dashboard in a browser)
 python prometheus.py
-
-# 3. Confirm it is alive
-curl http://127.0.0.1:8000/health
 ```
 
-The engineering dashboard is at <http://127.0.0.1:8000/dashboard> and the
-interactive API docs at <http://127.0.0.1:8000/docs>.
+By default this starts the backend and opens the dashboard.
 
-## Startup modes
+### 3) Open the product
+
+- Dashboard: <http://127.0.0.1:8000/dashboard>
+- API docs: <http://127.0.0.1:8000/docs>
+- Health check: <http://127.0.0.1:8000/health>
+
+### 4) Common commands
 
 ```bash
-python prometheus.py --terminal    # Terminal Only: live Prometheus shell, no GUI
-python prometheus.py --developer   # Developer Workspace: full system + service dump
-python prometheus.py --server      # Headless Server: API only, no browser
-python prometheus.py --safe-mode   # Minimal Services: platform only, no plugins/agents
-
-python prometheus.py status        # print branded status banner
-python prometheus.py demo --db     # run happy-path demo against ephemeral DB
-python prometheus.py test          # run pytest suite
-python prometheus.py install robotics   # scaffold an SDK extension
-python prometheus.py extensions         # list installed SDK packages
+python prometheus.py --server       # API only (no browser)
+python prometheus.py --terminal     # terminal mode
+python prometheus.py --safe-mode    # minimal services
+python prometheus.py status         # platform status banner
+python prometheus.py demo           # happy-path demo
+python prometheus.py test           # run tests
+python prometheus.py extensions     # list SDK extension packages
 ```
 
-### Native runtime process mode (Go service boundaries)
+### 5) What users get
 
-Prometheus can auto-start the non-Python runtime services (control-plane and
-billing) as isolated Go processes:
+- Desktop workspace + terminal
+- Dashboard and API
+- Plugin system
+- Agent runtime
+- Knowledge and simulation surfaces
+- Hardware-oriented services and diagnostics endpoints
+
+---
+
+## Developer guide
+
+### Architecture at a glance
+
+Prometheus is organized around stable service contracts and a bootstrapped container:
+
+- **API runtime**: `backend/main.py`
+- **Bootstrap/wiring**: `core/bootstrap.py`
+- **Service container**: `core/container.py`
+- **Orchestration services**: `services/`
+- **Core subsystems**:
+  - `agents/`
+  - `distributed/`
+  - `policy/`
+  - `marketplace/`
+  - `enterprise/`
+  - `runtime_management/`
+  - `dashboard/`
+
+### Local development setup
 
 ```bash
-# off | auto | on
-set PROMETHEUS_NATIVE_RUNTIME=auto
-set PROMETHEUS_GO_CONTROLPLANE_URL=http://127.0.0.1:8080
-set PROMETHEUS_GO_BILLING_URL=http://127.0.0.1:8081
-set PROMETHEUS_EXTRA_PATHS=C:\msys64\ucrt64\bin
+python -m venv venv
+# Windows
+venv\Scripts\activate
+# macOS/Linux
+# source venv/bin/activate
+
+pip install -r requirements.txt
+python prometheus.py --server
 ```
 
-- `auto`: starts when toolchains are present, skips during pytest.
-- `on`: always attempts to start and reports missing toolchains.
-- `off`: disables native process startup.
-- `PROMETHEUS_EXTRA_PATHS`: optional `;`-separated extra toolchain paths
-  prepended at runtime (Windows default also auto-detects `C:\msys64\ucrt64\bin`
-  when present for `gcc`/`g++`).
-
-Runtime status: `GET /system/native-runtime`.
-
-## Advanced
-
-### Native desktop window (Tauri)
-
-The browser is the dev surface. To ship Prometheus as a real desktop app
-(Terminal -> Python -> FastAPI -> **Tauri** -> React UI), build the Tauri
-shell in `src-tauri/`:
+### Run tests
 
 ```bash
-# prerequisites: Rust toolchain + WebView2 (Windows), Node 18+, Python 3.11+
-cd src-tauri && cargo tauri dev      # auto-starts the backend, opens the native window
-cd src-tauri && cargo tauri build    # produces an NSIS .exe installer
+pytest -q
 ```
 
-`beforeDevCommand` in `src-tauri/tauri.conf.json` already starts the FastAPI
-backend (`python prometheus.py --server`), so `cargo tauri dev` is
-one command. App icons (`icons/32x32.png`, `128x128.png`, `icon.ico`) are
-committed — replace them with `cargo tauri icon path/to/logo.png` for branding.
-
-> `src-tauri` builds a **fully self-contained** installer: `cargo tauri build`
-> produces `target/bundle/nsis/Prometheus_1.0.0_x64-setup.exe`, which
-> bundles the frozen Python backend as a Tauri `externalBin` sidecar so the
-> installed app needs **no system Python** on `PATH`. Host prerequisites:
-> Rust >= 1.77, WebView2 (Windows), Node 18+, Python 3.11+, NSIS
-> (`makensis` on `PATH`), and PyInstaller. One-time setup:
-> `python -m venv venv && venv\Scripts\activate && pip install -r requirements.txt pyinstaller`,
-> then `cargo tauri build` runs `beforeBuildCommand` to build the SPA and the
-> sidecar. See `src-tauri/README.md`.
-
-### Engineering Dashboard (Vite + TypeScript)
-
-The dashboard is a Vite + TypeScript SPA located in `web/`.
+### Frontend workspace (`web/`)
 
 ```bash
 cd web
@@ -128,205 +128,55 @@ npm run lint
 npm run build
 ```
 
-Serve the built `web/dist/` alongside the FastAPI backend. The backend serves
-the SPA at `/dashboard` and keeps `/docs` and `/omega/dashboard/{section}`
-intact.
+### Rust workspace (`crates/`)
 
-## Verify the architecture vertical slice
+The repository also includes Rust crates (HAL/runtime/Titan/distributed/etc.) managed via the root `Cargo.toml` workspace.
+
+### Native desktop build (Tauri)
 
 ```bash
-# 1. Prometheus starts, loads plugins/agents
-curl http://127.0.0.1:8000/health
-
-# 2. Runs a plugin
-curl -X POST http://127.0.0.1:8000/plugins/echo/run \
-  -H "Content-Type: application/json" -d '{"message": "hello"}'
-
-# 3. Dispatches an agent, which tracks a "device" in the knowledge graph
-curl -X POST http://127.0.0.1:8000/agents/echo_agent/dispatch \
-  -H "Content-Type: application/json" -d '{"device_id": "esp32_01", "status": "online"}'
-
-# 4. Stores and recalls memory
-curl -X POST "http://127.0.0.1:8000/memory?content=test&tag=milestone"
-curl http://127.0.0.1:8000/memory
-
-# 5. Queries the knowledge graph
-curl "http://127.0.0.1:8000/knowledge?subject=esp32_01"
-
-# 6. Lists capabilities (after registering devices)
-curl "http://127.0.0.1:8000/capabilities"
-
-# 7. Run Beta workflow (digital-device -> simulation -> reasoning)
-curl -X POST "http://127.0.0.1:8000/beta/workflow/esp32_01?failure_mode=disconnect"
-
-# 8. Query Gamma knowledge graph views
-curl "http://127.0.0.1:8000/gamma/knowledge/devices-supporting-recovery"
-curl "http://127.0.0.1:8000/gamma/knowledge/simulations-failed"
-curl "http://127.0.0.1:8000/gamma/learning"
+cd src-tauri
+cargo tauri dev
+cargo tauri build
 ```
 
-If every call above returns sensible JSON, the core platform orchestration is working end-to-end.
+Use this path for native desktop packaging/distribution.
 
-## Writing your first real plugin
+---
 
-Copy `plugins/installed/echo_plugin.py`. Your plugin must:
-1. Subclass `PrometheusPlugin` (from `plugins/base.py`)
-2. Implement `on_load()` and `run(context)`
-3. Get registered by `core/bootstrap.py` during startup
+## Extending the platform
 
-Same pattern for agents — copy `agents/echo_agent.py`, subclass `PrometheusAgent`.
+### Plugin/agent scaffolding
 
-### Contract versioning rules (plugin compatibility)
-
-Prometheus plugin contracts follow semantic versioning:
-
-- `MAJOR`: breaking contract changes
-- `MINOR`: backward-compatible contract additions
-- `PATCH`: backward-compatible fixes/clarifications
-
-Runtime contract version is defined in `contracts/versioning.py` as `CONTRACT_VERSION`.
-Each plugin declares `required_contract_version` in `PrometheusPlugin`.
-
-A plugin is load-compatible when:
-
-- `required_contract_version.major == CONTRACT_VERSION.major`
-- `required_contract_version <= CONTRACT_VERSION` (minor/patch)
-
-If incompatible, plugin registration fails fast with a clear error.
-
-## What's deliberately NOT here yet
-
-- Dynamic plugin discovery from the filesystem (Phase Beta+, needs a security model first)
-- Real device I/O — cameras, GPIO, ESP32/UART (Phase Beta)
-- Firmware inspection, boot chain analysis (Phase Gamma)
-- Digital twin modeling beyond flat knowledge-graph facts (Phase Delta)
-- Postgres (swap is one line in `core/database.py` when you need it — change
-  the SQLite URL to a Postgres URL, same `engine`/`Session` pattern holds)
-
-Don't build these now. Get comfortable extending plugins/agents on top of
-this skeleton first — that's the actual Phase Alpha goal.
-
-## Roadmap (RFC-governed phases)
-
-| Version | Codename        | Phase                                      |
-|---------|-----------------|---------------------------------------------|
-| v0.1.0-alpha | Genesis    | Foundation                                  |
-| v0.2.0-beta  | Atlas      | Reasoning + capabilities                    |
-| v0.3.0-gamma | Helios     | Knowledge + learning                        |
-| v0.4.0-delta | Daedalus   | Simulation + digital engineering lab        |
-| v0.5.0-epsilon | Hephaestus | Hardware abstractions + recovery planning   |
-| v1.0.0-rc1   | Olympus RC1 | Stable ecosystem + public APIs — release candidate |
-
-Roadmap changes are made deliberately through RFC updates.
-
-## Release candidate hardening
-
-Before beginning major post-omega architecture work, run the RC1 hardening
-checklist:
-
-- `docs/release/rc1-checklist.md`
-- `KNOWN_LIMITATIONS.md` — what is intentionally out of RC1 scope
-- Performance benchmarks in `benchmarks/` (run from repo root):
-  - `python benchmarks/boot/benchmark_boot.py`
-  - `python benchmarks/memory/benchmark_memory.py`
-- GitHub Actions automation in `.github/workflows/`:
-  - `ci.yml` (backend tests + server boot check + frontend typecheck/lint/build)
-  - `windows.yml` / `linux.yml` (OS verification with `/health` boot check)
-  - `installer.yml` (clean-install smoke path)
-  - `performance.yml` (startup/memory/latency regression gate)
-  - `security.yml` (pip-audit + bandit + dependency review)
-  - `docs.yml` (markdown links + docs entrypoint checks)
-  - `release.yml` (tag-triggered release verification + GitHub Release publish)
-
-## Gamma Helios knowledge workflow
-
-```
-User Request
-       ↓
-Capability Lookup
-       ↓
-Digital Device View
-       ↓
-Simulation Engine
-       ↓
-Reasoning Pipeline
-       ↓
-Recommendation
-       ↓
-Optional Capability Execution
-       ↓
-Knowledge Graph Search
-       ↓
-Related Devices + Capabilities + Past Simulations
-       ↓
-Recommendation + Learning record
+```bash
+python prometheus.py new plugin my_plugin
+python prometheus.py new agent my_agent
+python prometheus.py new driver my_driver
 ```
 
-## Delta/Epsilon/Omega upgrade endpoints
+### Package and verify
 
-- Delta (Daedalus):
-  - `POST /delta/lab/workspaces/{workspace_id}`
-  - `POST /delta/lab/workspaces/{workspace_id}/failures`
-  - `POST /delta/scenarios/{workspace_id}`
-  - `GET /delta/time/battery-forecast`
-- Epsilon (Hephaestus):
-  - `POST /epsilon/hal/register-defaults`
-  - `GET /epsilon/hal/interfaces`
-  - `GET /epsilon/diagnostics/{device_id}`
-  - `POST /epsilon/recovery/{device_id}`
-  - `POST /epsilon/firmware/summary`
-- Omega (Olympus):
-  - `POST /omega/marketplace/plugins`
-  - `GET /omega/marketplace/plugins`
-  - `POST /omega/collaboration/plan`
-  - `POST /omega/distributed/nodes/{node_id}`
-  - `GET /omega/distributed/nodes`
-  - `POST /omega/policy/grant`
-  - `GET /omega/policy/check`
-  - `GET /omega/public-apis`
-  - `GET /dashboard` — engineering dashboard
-  - `GET /omega/dashboard/{section}` — dashboard JSON API
-  - `POST /assistant` — LLM-backed conversational assistant
-  - `POST /commands` — deterministic command console
-
-## Phase Alpha freeze checkpoint
-
-- Tag: `v0.1.0-alpha`
-- Codename: `Genesis`
-- Status: `COMPLETE`
-
-This tag is the formal architectural freeze for the Phase Alpha foundation.
-All subsequent work should be tracked as post-Alpha milestones.
-
-## Project layout
-
+```bash
+python prometheus.py pack <path>
+python prometheus.py verify <path-to-zip>
 ```
-prometheus/
-├── contracts/      # platform interfaces (plugin/device/agent/memory/scheduler/event bus)
-├── core/           # config, logging, database, scheduler, bootstrap container wiring
-├── services/       # internal APIs/orchestration services + event handlers
-├── implementations/# concrete wiring for platform components
-├── plugins/        # plugin SDK + installed plugins
-├── agents/         # agent SDK + registered agents
-├── memory/         # long-term memory store
-├── reasoning/      # reasoning pipeline + compatibility reasoning API
-├── knowledge/      # graph, ontology, provenance, learning, query engine
-├── delta/          # digital engineering lab + time/scenario engines
-├── epsilon/        # HAL, diagnostics, firmware knowledge, recovery planning
-├── hardware/       # HAL interfaces, drivers, sessions, diagnostics, recovery
-├── firmware/       # firmware metadata, partitions, compatibility, parser
-├── security/       # authorization, permissions, auditing, integrity
-├── sdk/            # plugin SDK (interfaces, decorators, lifecycle, testing)
-├── omega/          # marketplace, policy, distributed runtime, public API catalog
-├── agents/         # multi-agent coordination (coordinator, planner, consensus)
-├── distributed/    # multi-node runtime (node registry, sync, runtime)
-├── policy/         # policy engine (authorization, permissions, rules, audit)
-├── marketplace/    # repositories (plugins, capabilities, drivers, agents)
-├── enterprise/     # multi-tenancy (orgs, projects, users, teams, roles)
-├── runtime_management/ # resource, memory, lifecycle management
-├── dashboard/      # unified engineering dashboard (JSON API)
-├── backend/        # FastAPI app — the local API
-├── web/            # Vite + TypeScript engineering workstation SPA
-├── tests/          # pytest coverage for managers/stores/bootstrap/happy path
-└── requirements.txt
-```
+
+---
+
+## API highlights
+
+- `GET /health`
+- `GET /status`
+- `GET /stats`
+- `GET /dashboard`
+- `GET /omega/dashboard/{section}`
+- `POST /assistant`
+- `POST /commands`
+
+For full contract details, use `/docs` in a running instance.
+
+---
+
+## Current direction
+
+The next major expansion is **Hardware Platform capabilities** (HAL-first), then higher-level engineering applications that reuse those capabilities across Assistant, SDK, plugins, and automation workflows.
