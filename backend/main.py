@@ -28,7 +28,7 @@ from core.native_runtime import NativeRuntimeManager
 from core.database import get_db
 from core.bootstrap import boot
 from core.container import ServiceContainer
-from core.provider_config import load_providers, save_providers
+from core.provider_config import load_providers, save_providers, add_provider, remove_provider
 from core.commands import _status_snapshot, dispatch_command
 from services.platform_service import PlatformService
 from services.llm_client import LLMClient

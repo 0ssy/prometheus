@@ -9,6 +9,15 @@ from hardware.drivers.usb import USBDriver
 from hardware.drivers.network import NetworkDriver
 from hardware.drivers.virtual import VirtualDriver
 from hardware.drivers.serial import SerialDriver
+from hardware.serial import (
+    SerialManager,
+    SerialPort,
+    get_serial_manager,
+    SerialCapability,
+    SerialPermissionPolicy,
+    SerialAllowRule,
+    SerialDenyRule,
+)
 from hardware.drivers.bus import (
     I2CDriver,
     SPIDriver,
@@ -63,6 +72,15 @@ from hardware.drivers.recovery import (
 from hardware.session import DeviceSession, DeviceSessionManager
 from hardware.diagnostics import HardwareDiagnostics
 from hardware.recovery import HardwareRecovery
+from hardware.usb import (
+    USBManager,
+    UsbDevice,
+    get_usb_manager,
+    UsbCapability,
+    UsbPermissionPolicy,
+    UsbAllowRule,
+    UsbDenyRule,
+)
 from hardware.events import (
     HardwareEvent,
     DeviceConnectedEvent,
@@ -133,6 +151,20 @@ __all__ = [
     "DeviceSessionManager",
     "HardwareDiagnostics",
     "HardwareRecovery",
+    "USBManager",
+    "UsbDevice",
+    "get_usb_manager",
+    "UsbCapability",
+    "UsbPermissionPolicy",
+    "UsbAllowRule",
+    "UsbDenyRule",
+    "SerialManager",
+    "SerialPort",
+    "get_serial_manager",
+    "SerialCapability",
+    "SerialPermissionPolicy",
+    "SerialAllowRule",
+    "SerialDenyRule",
     "HardwareEvent",
     "DeviceConnectedEvent",
     "DeviceDisconnectedEvent",

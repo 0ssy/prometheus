@@ -1,6 +1,0 @@
-************************************* Invoked: Thu Jul 16 18:22:59 2026
-[0] Arguments: C:\Users\josep\AppData\Local\Temp\msys2-x86_64-latest.exe, /?
-[11] Operations sanity check succeeded.
-[13] Warning: Cannot create lock file "C:\Users\josep\AppData\Local\Temp\msys2-x86_64-latest1234865.lock": The process cannot access the file because it is being used by another process.
- (0x00000020)
-[101] UnableToStart : Unable to start installer : Another msys2-x86_64-latest instance is already running. Wait until it finishes, close it, or restart your system.

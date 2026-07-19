@@ -65,19 +65,19 @@ def test_consensus_engine_propose_and_vote():
     assert proposed.decision == "pending"
     assert proposed.participating_agents == ["agent-a", "agent-b"]
 
-    v1 = engine.vote("prop-0001", "agent-a", VoteChoice.APPROVE, 0.9, "looks good")
-    v2 = engine.vote("prop-0001", "agent-b", VoteChoice.REJECT, 0.8, "needs work")
+    v1 = engine.vote(proposed.proposal_id, "agent-a", VoteChoice.APPROVE, 0.9, "looks good")
+    v2 = engine.vote(proposed.proposal_id, "agent-b", VoteChoice.REJECT, 0.8, "needs work")
     assert v1.vote == VoteChoice.APPROVE
     assert v2.vote == VoteChoice.REJECT
 
 
 def test_consensus_engine_tally():
     engine = ConsensusEngine(threshold=0.6)
-    engine.propose({"id": "q1", "action": "flash"}, ["a", "b", "c"])
-    engine.vote("prop-0001", "a", VoteChoice.APPROVE, 0.9, "approve")
-    engine.vote("prop-0001", "b", VoteChoice.APPROVE, 0.8, "approve")
-    engine.vote("prop-0001", "c", VoteChoice.REJECT, 0.7, "reject")
-    result = engine.tally("prop-0001")
+    proposed = engine.propose({"id": "q1", "action": "flash"}, ["a", "b", "c"])
+    engine.vote(proposed.proposal_id, "a", VoteChoice.APPROVE, 0.9, "approve")
+    engine.vote(proposed.proposal_id, "b", VoteChoice.APPROVE, 0.8, "approve")
+    engine.vote(proposed.proposal_id, "c", VoteChoice.REJECT, 0.7, "reject")
+    result = engine.tally(proposed.proposal_id)
     assert result.decision == "approved"
     assert result.confidence > 0.0
     assert len(result.votes) == 3

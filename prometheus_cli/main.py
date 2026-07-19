@@ -28,6 +28,8 @@ from prometheus_cli.commands import (
     run_status,
     run_terminal,
     run_tests,
+    run_usb,
+    run_serial,
 )
 from prometheus_cli.launch import main as run_launch
 
@@ -73,6 +75,10 @@ def main() -> int:
     verify_parser.add_argument("path", help="path to the .zip package to verify")
     test_parser = sub.add_parser("test", help="run pytest suite")
     test_parser.add_argument("--file", default=None, help="optional test file/directory")
+    usb_parser = sub.add_parser("usb", help="USB capability: list/info/monitor/allow/deny devices")
+    usb_parser.add_argument("usb_args", nargs=argparse.REMAINDER, help="usb subcommand and options")
+    serial_parser = sub.add_parser("serial", help="Serial capability: list/info/connect/disconnect/monitor/allow/deny")
+    serial_parser.add_argument("serial_args", nargs=argparse.REMAINDER, help="serial subcommand and options")
     launch_parser = sub.add_parser("launch", help="launch the full platform with one command")
     launch_parser.add_argument("--distributed", action="store_true", help="start Go distributed services")
     launch_parser.add_argument("--cloud", action="store_true", help="start Go cloud services")
@@ -116,6 +122,10 @@ def main() -> int:
         return 0
     if args.command == "test":
         return run_tests(args.file)
+    if args.command == "usb":
+        return run_usb(args.usb_args)
+    if args.command == "serial":
+        return run_serial(args.serial_args)
     if args.command == "launch":
         return run_launch(args)
 

@@ -171,4 +171,51 @@ def dispatch_command(raw: str, platform, container, db=None) -> str:
             return str(kernel.status())
         return "show what? try: devices | agents | kernel"
 
+    if cmd == "usb" and len(parts) >= 2:
+        from sdk.usb import Usb
+
+        client = Usb()
+        subcmd = parts[1]
+        if subcmd == "list":
+            devices = client.enumerate()
+            if not devices:
+                return "no USB devices detected"
+            return "\n".join(
+                f"  - {d['device_id']} {d['vid_pid']} {d['manufacturer'] or ''} {d['product'] or ''}".rstrip()
+                for d in devices
+            )
+        if subcmd == "info" and len(parts) >= 3:
+            info = client.get(parts[2])
+            return str(info) if info else f"unknown device: {parts[2]}"
+        if subcmd == "monitor":
+            client.start_monitor(interval=1.0)
+            return "USB hot-plug monitor started (background thread)"
+        return "usb: list | info <device_id> | monitor"
+
+    if cmd == "serial" and len(parts) >= 2:
+        from sdk.serial import Serial
+
+        client = Serial()
+        subcmd = parts[1]
+        if subcmd == "list":
+            ports = client.enumerate()
+            if not ports:
+                return "no serial ports detected"
+            return "\n".join(
+                f"  - {p['port']} {p.get('vid_pid') or ''} {p.get('manufacturer') or ''} {p.get('product') or ''}".rstrip()
+                for p in ports
+            )
+        if subcmd == "info" and len(parts) >= 3:
+            info = client.get(parts[2])
+            return str(info) if info else f"unknown port: {parts[2]}"
+        if subcmd == "connect" and len(parts) >= 3:
+            baud = int(parts[3]) if len(parts) > 3 else 115200
+            return str(client.connect(parts[2], baud_rate=baud))
+        if subcmd == "disconnect" and len(parts) >= 3:
+            return str(client.disconnect(parts[2]))
+        if subcmd == "monitor":
+            client.start_monitor(interval=1.0)
+            return "Serial hot-plug monitor started (background thread)"
+        return "serial: list | info <port> | connect <port> [baud] | disconnect <port> | monitor"
+
     return "unrecognized command. type 'help'."

@@ -1,5 +1,6 @@
 mod usb;
 mod serial;
+mod adb;
 mod gpio;
 mod spi;
 mod i2c;
@@ -8,8 +9,9 @@ mod network;
 mod bluetooth;
 mod jtag;
 
-pub use usb::UsbTransport;
-pub use serial::SerialTransport;
+pub use usb::{UsbChange, UsbDeviceInfo, UsbMonitor, UsbTransport};
+pub use serial::{SerialChange, SerialMonitor, SerialPortInfo, SerialTransport};
+pub use adb::{AdbChange, AdbDeviceInfo, AdbMonitor, AdbTransport};
 pub use gpio::GpioTransport;
 pub use spi::SpiTransport;
 pub use i2c::I2cTransport;

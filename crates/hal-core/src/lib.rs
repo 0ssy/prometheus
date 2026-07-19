@@ -29,7 +29,9 @@ mod transports;
 pub use registry::HalRegistry;
 pub use transports::{
     BluetoothTransport, CanTransport, GpioTransport, I2cTransport, JtagTransport, NetworkTransport,
-    SerialTransport, SpiTransport, UsbTransport,
+    SerialTransport, SerialPortInfo, SerialChange, SerialMonitor, SpiTransport,
+    UsbChange, UsbDeviceInfo, UsbMonitor, UsbTransport,
+    AdbTransport, AdbDeviceInfo, AdbChange, AdbMonitor,
 };
 
 #[derive(Debug, Error)]

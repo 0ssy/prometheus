@@ -34,7 +34,8 @@ class Vote:
 
 @dataclass
 class ConsensusResult:
-    decision: str
+    proposal_id: str = ""
+    decision: str = ""
     votes: list[Vote] = field(default_factory=list)
     confidence: float = 0.0
     participating_agents: list[str] = field(default_factory=list)
@@ -68,6 +69,7 @@ class ConsensusEngine:
             self._votes[proposal_id] = []
         logger.info(f"Proposed {proposal_id} to {len(participants)} participants")
         return ConsensusResult(
+            proposal_id=proposal_id,
             decision="pending",
             votes=[],
             confidence=0.0,
@@ -111,6 +113,7 @@ class ConsensusEngine:
             votes = list(self._votes[proposal_id])
         if not participants:
             return ConsensusResult(
+                proposal_id=proposal_id,
                 decision="no_participants",
                 votes=votes,
                 confidence=0.0,
@@ -132,6 +135,7 @@ class ConsensusEngine:
             confidence = round(approve_conf * ratio, 4)
             decision = "approved" if ratio >= self._threshold else "rejected"
         return ConsensusResult(
+            proposal_id=proposal_id,
             decision=decision,
             votes=votes,
             confidence=confidence,
