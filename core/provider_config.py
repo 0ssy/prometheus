@@ -34,7 +34,11 @@ def save_providers(providers: list[dict]) -> None:
 
 def add_provider(provider: dict) -> list[dict]:
     providers = load_providers()
-    providers.append(provider)
+    existing = [i for i, p in enumerate(providers) if p.get("id") == provider.get("id")]
+    if existing:
+        providers[existing[0]] = provider
+    else:
+        providers.append(provider)
     save_providers(providers)
     return providers
 

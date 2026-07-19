@@ -4,6 +4,16 @@
       "id": "final_demo",
       "declared_at": "2026-07-05T18:44:30.227010+00:00",
       "note": "final test"
+    },
+    {
+      "id": "esp32_01",
+      "owner": "",
+      "declared_at": "2026-07-19T10:50:19.603114+00:00",
+      "note": "demo device",
+      "trust_level": "declared",
+      "keys": [],
+      "certificates": [],
+      "recovery_policy": null
     }
   ]
 }

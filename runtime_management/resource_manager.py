@@ -93,3 +93,23 @@ class ResourceManager:
             self._throttled = False
             self._throttle_reason = None
         logger.info("Resource throttling released")
+
+    def to_dict(self) -> dict:
+        usage = self.get_usage()
+        return {
+            "limits": {
+                "max_cpu_percent": self._limits.max_cpu_percent,
+                "max_memory_mb": self._limits.max_memory_mb,
+                "max_disk_mb": self._limits.max_disk_mb,
+                "max_connections": self._limits.max_connections,
+            },
+            "usage": {
+                "cpu_percent": usage.cpu_percent,
+                "memory_mb": usage.memory_mb,
+                "disk_mb": usage.disk_mb,
+                "network_mbps": usage.network_mbps,
+                "active_connections": usage.active_connections,
+            },
+            "throttled": self._throttled,
+            "throttle_reason": self._throttle_reason,
+        }

@@ -36,6 +36,17 @@ CLOUD_GATEWAY_CMD = ["go", "run", "./cmd/gateway"]
 CLOUD_AUTH_CMD = ["go", "run", "./cmd/auth"]
 CLOUD_TUNNEL_CMD = ["go", "run", "./cmd/tunnel"]
 
+_ALLOWED_CMDS = {
+    tuple(BACKEND_CMD),
+    tuple(FRONTEND_CMD),
+    tuple(GO_CONTROLPLANE_CMD),
+    tuple(GO_WORKER_CMD),
+    tuple(GO_BILLING_CMD),
+    tuple(CLOUD_GATEWAY_CMD),
+    tuple(CLOUD_AUTH_CMD),
+    tuple(CLOUD_TUNNEL_CMD),
+}
+
 BACKEND_URL = "http://127.0.0.1:8000/health"
 FRONTEND_URL = "http://localhost:5173"
 GO_HEALTH_URL = "http://127.0.0.1:8080/health"
@@ -55,6 +66,8 @@ class ComponentProcess:
         self.started = False
 
     def start(self) -> None:
+        if tuple(self.cmd) not in _ALLOWED_CMDS:
+            raise ValueError(f"Refusing to start untrusted command: {self.cmd}")
         print(f"[launch] starting {self.name} ...")
         try:
             self.process = subprocess.Popen(
@@ -138,57 +151,61 @@ def build_plan(args: argparse.Namespace) -> list[ComponentProcess]:
         health_url=BACKEND_URL,
     ))
 
-    if args.distributed or args.all:
+    distributed_requested = args.distributed or args.all
+    if distributed_requested:
         if not _check_go_available():
             print("[launch] Go toolchain not found; skipping distributed components")
-            return plan
+            distributed_requested = False
 
-        plan.append(ComponentProcess(
-            name="control-plane",
-            cmd=GO_CONTROLPLANE_CMD,
-            cwd=REPO_ROOT / "go",
-            health_url=GO_HEALTH_URL,
-        ))
-
-        plan.append(ComponentProcess(
-            name="billing",
-            cmd=GO_BILLING_CMD,
-            cwd=REPO_ROOT / "go",
-            health_url=GO_BILLING_HEALTH_URL,
-        ))
-
-        worker_count = args.workers if args.workers > 1 else 1
-        for i in range(worker_count):
+        if distributed_requested:
             plan.append(ComponentProcess(
-                name=f"worker-{i + 1}",
-                cmd=GO_WORKER_CMD,
+                name="control-plane",
+                cmd=GO_CONTROLPLANE_CMD,
                 cwd=REPO_ROOT / "go",
-                health_url=None,
+                health_url=GO_HEALTH_URL,
             ))
 
-    if args.cloud or args.all:
+            plan.append(ComponentProcess(
+                name="billing",
+                cmd=GO_BILLING_CMD,
+                cwd=REPO_ROOT / "go",
+                health_url=GO_BILLING_HEALTH_URL,
+            ))
+
+            worker_count = args.workers if args.workers > 1 else 1
+            for i in range(worker_count):
+                plan.append(ComponentProcess(
+                    name=f"worker-{i + 1}",
+                    cmd=GO_WORKER_CMD,
+                    cwd=REPO_ROOT / "go",
+                    health_url=None,
+                ))
+
+    cloud_requested = args.cloud or args.all
+    if cloud_requested:
         if not _check_go_available():
             print("[launch] Go toolchain not found; skipping cloud components")
-            return plan
+            cloud_requested = False
 
-        plan.append(ComponentProcess(
-            name="cloud-gateway",
-            cmd=CLOUD_GATEWAY_CMD,
-            cwd=REPO_ROOT / "cloud",
-            health_url=CLOUD_GATEWAY_HEALTH_URL,
-        ))
-        plan.append(ComponentProcess(
-            name="cloud-auth",
-            cmd=CLOUD_AUTH_CMD,
-            cwd=REPO_ROOT / "cloud",
-            health_url=CLOUD_AUTH_HEALTH_URL,
-        ))
-        plan.append(ComponentProcess(
-            name="cloud-tunnel",
-            cmd=CLOUD_TUNNEL_CMD,
-            cwd=REPO_ROOT / "cloud",
-            health_url=CLOUD_TUNNEL_HEALTH_URL,
-        ))
+        if cloud_requested:
+            plan.append(ComponentProcess(
+                name="cloud-gateway",
+                cmd=CLOUD_GATEWAY_CMD,
+                cwd=REPO_ROOT / "cloud",
+                health_url=CLOUD_GATEWAY_HEALTH_URL,
+            ))
+            plan.append(ComponentProcess(
+                name="cloud-auth",
+                cmd=CLOUD_AUTH_CMD,
+                cwd=REPO_ROOT / "cloud",
+                health_url=CLOUD_AUTH_HEALTH_URL,
+            ))
+            plan.append(ComponentProcess(
+                name="cloud-tunnel",
+                cmd=CLOUD_TUNNEL_CMD,
+                cwd=REPO_ROOT / "cloud",
+                health_url=CLOUD_TUNNEL_HEALTH_URL,
+            ))
 
     if args.frontend or args.all:
         if _check_npm_available():

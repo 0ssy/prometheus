@@ -62,7 +62,7 @@ def seed_knowledge(container: ServiceContainer) -> None:
 
 def main() -> None:
     ap = argparse.ArgumentParser(description="Bootstrap Prometheus platform")
-    ap.add_argument("--db", default="./data/prometheus.db", help="SQLite database path")
+    ap.add_argument("--db", help="SQLite database path (currently unused; uses default config)")
     args = ap.parse_args()
 
     print("Booting Prometheus platform...")
