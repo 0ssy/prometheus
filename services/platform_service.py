@@ -222,6 +222,9 @@ class PlatformService:
     def capability_history(self, capability_name: str | None = None) -> list[dict[str, Any]]:
         return self._capability_api.history(capability_name=capability_name)
 
+    def capability_health(self, name: str) -> dict[str, Any]:
+        return self._capability_api.health(name)
+
     def digital_device(self, db: Session, device_id: str) -> dict[str, Any]:
         service = DigitalDeviceService(
             device_api=self._device_api,

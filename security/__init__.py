@@ -13,6 +13,9 @@ from security.auditing import AuditEntry, AuditLogger
 from security.authorization import AuthorizationResult, Authorizer
 from security.integrity import AttestationResult, IntegrityCheck, IntegrityVerifier
 from security.permissions import Permission, PermissionRegistry, default_registry
+from security.sandbox import SandboxManager
+from security.secure_boot import SecureBootValidator
+from security.tpm import TPMKeyStore
 
 __all__ = [
     "AuthorizationResult",
@@ -25,4 +28,7 @@ __all__ = [
     "IntegrityCheck",
     "IntegrityVerifier",
     "AttestationResult",
+    "SandboxManager",
+    "SecureBootValidator",
+    "TPMKeyStore",
 ]

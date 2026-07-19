@@ -311,6 +311,14 @@ def capability_history(
     return {"history": platform.capability_history(capability_name=name)}
 
 
+@app.get("/capabilities/{name}/health")
+def capability_health(
+    name: str,
+    platform: PlatformService = Depends(get_platform_service),
+):
+    return platform.capability_health(name)
+
+
 @app.get("/core/status")
 def core_status(container: ServiceContainer = Depends(get_container)):
     kernel = container.get("kernel")
