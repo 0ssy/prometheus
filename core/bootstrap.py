@@ -81,10 +81,35 @@ def _register_services(container: ServiceContainer, workflow_runtime: Any) -> No
     )
 
     from services.capability_registry import register_default_hardware_capabilities
+    from services.distributed_capabilities import register_distributed_capabilities
 
     register_default_hardware_capabilities(
         components.capability_api, epsilon_service
     )
+
+    from services.recovery_capabilities import register_recovery_capabilities
+
+    register_recovery_capabilities(components.capability_api)
+
+    from services.ai_capabilities import register_ai_capabilities
+
+    register_ai_capabilities(
+        components.capability_api,
+        components.memory_api,
+        components.reasoning_api,
+        SessionLocal,
+    )
+    register_distributed_capabilities(components.capability_api)
+
+    from services.hardware_capabilities import register_default_hardware_capabilities as register_hw_caps
+    register_hw_caps(components.capability_api, epsilon_service)
+
+    from services.engineering_capabilities import register_engineering_capabilities
+    register_engineering_capabilities(components.capability_api)
+
+    from services.security_capabilities import register_security_capabilities
+
+    register_security_capabilities(components.capability_api)
 
     platform_service = PlatformService(
         plugin_api=components.plugin_api,

@@ -14,10 +14,15 @@ class CapabilityApi(ABC):
         description: str,
         permissions: set[str],
         executor: Callable[[dict[str, Any]], Any],
+        version: str = "1.0.0",
+        dependencies: list[str] | None = None,
     ) -> None: ...
 
     @abstractmethod
     def exists(self, name: str) -> bool: ...
+
+    @abstractmethod
+    def health(self, name: str) -> dict[str, Any]: ...
 
     @abstractmethod
     def discover(

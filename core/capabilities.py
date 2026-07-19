@@ -24,6 +24,8 @@ class CapabilityDefinition:
     description: str
     permissions: set[str]
     executor: Callable[[dict[str, Any]], Any]
+    version: str = "1.0.0"
+    dependencies: list[str] | None = None
 
 
 @dataclass
@@ -59,6 +61,8 @@ class CapabilityManager(CapabilityApi):
         description: str,
         permissions: set[str],
         executor: Callable[[dict[str, Any]], Any],
+        version: str = "1.0.0",
+        dependencies: list[str] | None = None,
     ) -> None:
         if name in self._capabilities:
             raise ValueError(f"Capability '{name}' is already registered")
@@ -68,11 +72,24 @@ class CapabilityManager(CapabilityApi):
             description=description,
             permissions=set(permissions),
             executor=executor,
+            version=version,
+            dependencies=list(dependencies) if dependencies else [],
         )
         logger.info("Registered capability: %s (target=%s)", name, target)
 
     def exists(self, name: str) -> bool:
         return name in self._capabilities
+
+    def health(self, name: str) -> dict[str, Any]:
+        capability = self._capabilities.get(name)
+        if capability is None:
+            return {"status": "not_found"}
+        return {
+            "status": "ok",
+            "name": capability.name,
+            "version": capability.version,
+            "target": capability.target,
+        }
 
     def discover(
         self, prefix: str | None = None, target: str | None = None
@@ -88,6 +105,8 @@ class CapabilityManager(CapabilityApi):
                     "name": capability.name,
                     "target": capability.target,
                     "description": capability.description,
+                    "version": capability.version,
+                    "dependencies": capability.dependencies,
                     "permissions": sorted(capability.permissions),
                 }
             )

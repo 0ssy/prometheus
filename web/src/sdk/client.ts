@@ -160,6 +160,22 @@ export const sdk = {
       client.post("/assistant/tools", { tool, args, approved }),
   },
 
+  capabilities: {
+    discover: (prefix?: string, target?: string) => {
+      const params = new URLSearchParams();
+      if (prefix) params.set("prefix", prefix);
+      if (target) params.set("target", target);
+      const qs = params.toString();
+      return client.get<any>(`/capabilities${qs ? "?" + qs : ""}`);
+    },
+    execute: (name: string, payload: Record<string, unknown>, grantedPermissions: string[]) =>
+      client.post<any>("/capabilities/execute", { name, payload, granted_permissions: grantedPermissions }),
+    health: (name: string) =>
+      client.get<any>(`/capabilities/${encodeURIComponent(name)}/health`),
+    history: (name?: string) =>
+      client.get<any>(`/capabilities/history${name ? "?name=" + encodeURIComponent(name) : ""}`),
+  },
+
   memory: {
     list: () => client.get<any>("/memory"),
     add: (text: string) => client.post("/memory", { text }),
