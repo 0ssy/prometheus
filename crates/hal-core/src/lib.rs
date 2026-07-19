@@ -31,6 +31,7 @@ pub use transports::{
     BluetoothTransport, CanTransport, GpioTransport, I2cTransport, JtagTransport, NetworkTransport,
     SerialTransport, SerialPortInfo, SerialChange, SerialMonitor, SpiTransport,
     UsbChange, UsbDeviceInfo, UsbMonitor, UsbTransport,
+    AdbTransport, AdbDeviceInfo, AdbChange, AdbMonitor,
 };
 
 #[derive(Debug, Error)]
