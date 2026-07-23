@@ -6,6 +6,10 @@ fn main() {
     let manifest_dir = PathBuf::from(env::var("CARGO_MANIFEST_DIR").unwrap());
     let cpp_dir = manifest_dir.parent().unwrap().parent().unwrap().join("cpp");
 
+    if !env::var_os("CARGO_FEATURE_C_HAL").is_some() {
+        return;
+    }
+
     let mut build = cc::Build::new();
     build.cpp(true);
     build.include(&cpp_dir);

@@ -9,6 +9,10 @@ mod can;
 mod network;
 mod bluetooth;
 mod jtag;
+mod hid;
+mod dfu;
+mod swd;
+mod recovery;
 
 pub use usb::{UsbChange, UsbDeviceInfo, UsbMonitor, UsbTransport};
 pub use serial::{SerialChange, SerialMonitor, SerialPortInfo, SerialTransport};
@@ -21,3 +25,7 @@ pub use can::CanTransport;
 pub use network::NetworkTransport;
 pub use bluetooth::BluetoothTransport;
 pub use jtag::JtagTransport;
+pub use hid::{HidChange, HidDeviceInfo, HidMonitor, HidTransport};
+pub use dfu::{DfuChange, DfuDeviceInfo, DfuMonitor, DfuTransport};
+pub use swd::{SwdChange, SwdDeviceInfo, SwdMonitor, SwdTransport};
+pub use recovery::{RecoveryDeviceInfo, RecoveryMode, RecoveryTransport};

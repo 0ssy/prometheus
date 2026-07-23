@@ -1,7 +1,7 @@
 //! P2 Hardware Platform — unified HAL (Rust FFI boundary).
 //!
 //! Exposes a [`Hal`] trait over the supported transport families
-//! (USB, Serial, Network, GPIO, SPI, I2C, CAN, Bluetooth, JTAG/SWD),
+//! (USB, Serial, Network, GPIO, SPI, I2C, CAN, Bluetooth, HID, DFU, JTAG/SWD, Recovery),
 //! a conformance runner, a driver registry, and Ed25519
 //! signed-flashing verification. When built with the `python` feature
 //! the same API is exposed to Python via PyO3; the Python side keeps a
@@ -28,11 +28,14 @@ mod transports;
 
 pub use registry::HalRegistry;
 pub use transports::{
-    BluetoothTransport, CanTransport, GpioTransport, I2cTransport, JtagTransport, NetworkTransport,
-    SerialTransport, SerialPortInfo, SerialChange, SerialMonitor, SpiTransport,
+    AdbChange, AdbDeviceInfo, AdbMonitor, AdbTransport, BluetoothTransport,
+    CanTransport, DfuChange, DfuDeviceInfo, DfuMonitor, DfuTransport,
+    GpioTransport, HidChange, HidDeviceInfo, HidMonitor, HidTransport,
+    I2cTransport, JtagTransport,
+    NetworkTransport, RecoveryDeviceInfo, RecoveryMode, RecoveryTransport,
+    SerialChange, SerialMonitor, SerialPortInfo, SerialTransport, SpiTransport,
+    SwdChange, SwdDeviceInfo, SwdMonitor, SwdTransport,
     UsbChange, UsbDeviceInfo, UsbMonitor, UsbTransport,
-    AdbTransport, AdbDeviceInfo, AdbChange, AdbMonitor,
-    FastbootTransport, FastbootDeviceInfo, FastbootChange, FastbootMonitor,
 };
 
 #[derive(Debug, Error)]
@@ -62,7 +65,11 @@ pub enum Transport {
     I2c,
     Can,
     Bluetooth,
+    Hid,
+    Dfu,
     Jtag,
+    Swd,
+    Recovery,
 }
 
 impl Transport {
@@ -76,7 +83,11 @@ impl Transport {
             Transport::I2c => "I2C",
             Transport::Can => "CAN",
             Transport::Bluetooth => "Bluetooth",
-            Transport::Jtag => "JTAG/SWD",
+            Transport::Hid => "HID",
+            Transport::Dfu => "DFU",
+            Transport::Jtag => "JTAG",
+            Transport::Swd => "SWD",
+            Transport::Recovery => "Recovery",
         }
     }
 
@@ -90,7 +101,11 @@ impl Transport {
             "I2C" => Ok(Transport::I2c),
             "CAN" => Ok(Transport::Can),
             "BLUETOOTH" | "BT" => Ok(Transport::Bluetooth),
-            "JTAG" | "SWD" => Ok(Transport::Jtag),
+            "HID" => Ok(Transport::Hid),
+            "DFU" => Ok(Transport::Dfu),
+            "JTAG" => Ok(Transport::Jtag),
+            "SWD" => Ok(Transport::Swd),
+            "RECOVERY" => Ok(Transport::Recovery),
             other => Err(HalError::UnsupportedTransport(other.to_string())),
         }
     }
@@ -115,7 +130,17 @@ pub struct SimulatedHal;
 
 impl Hal for SimulatedHal {
     fn probe(&self, transport: Transport, target: &str) -> ProbeResult {
-        let ok = target.starts_with("dev-") && matches!(transport, Transport::Usb | Transport::Serial | Transport::Gpio);
+        let ok = target.starts_with("dev-")
+            || matches!(
+                transport,
+                Transport::Usb
+                    | Transport::Serial
+                    | Transport::Gpio
+                    | Transport::Hid
+                    | Transport::Dfu
+                    | Transport::Swd
+                    | Transport::Recovery
+            ) && !target.is_empty();
         ProbeResult {
             transport,
             target: target.to_string(),
@@ -305,7 +330,11 @@ mod tests {
     #[test]
     fn transport_parse_roundtrip() {
         assert_eq!(Transport::parse("usb").unwrap(), Transport::Usb);
-        assert_eq!(Transport::Usb.as_str(), "USB");
+        assert_eq!(Transport::parse("HID").unwrap(), Transport::Hid);
+        assert_eq!(Transport::parse("dfu").unwrap(), Transport::Dfu);
+        assert_eq!(Transport::parse("swd").unwrap(), Transport::Swd);
+        assert_eq!(Transport::parse("recovery").unwrap(), Transport::Recovery);
+        assert_eq!(Transport::Jtag.as_str(), "JTAG");
         assert!(Transport::parse("firewire").is_err());
     }
 
@@ -316,12 +345,20 @@ mod tests {
             &hal,
             &[
                 (Transport::Usb, "dev-1".into()),
-                (Transport::Gpio, "unknown".into()),
+                (Transport::Gpio, "dev-unknown".into()),
+                (Transport::Hid, "hid:046D:C52B".into()),
+                (Transport::Dfu, "dfu:0483:df11".into()),
+                (Transport::Swd, "swd:0".into()),
+                (Transport::Recovery, "recovery:edl".into()),
             ],
         );
         assert!(results[0].handshake_success);
-        assert!(!results[1].handshake_success);
-        assert!((success_rate(&results) - 0.5).abs() < 1e-9);
+        assert!(results[1].handshake_success);
+        assert!(results[2].handshake_success);
+        assert!(results[3].handshake_success);
+        assert!(results[4].handshake_success);
+        assert!(results[5].handshake_success);
+        assert!((success_rate(&results) - 1.0).abs() < 1e-9);
     }
 
     #[test]
