@@ -156,7 +156,7 @@ def scaffold_driver(name: str) -> Path:
             f"[lib]\n"
             f'name = "{name.replace("-", "_")}"\n'
             f'path = "src/lib.rs"\n\n'
-            f"[dependencies]\n',
+            f"[dependencies]\n",
             encoding="utf-8",
         )
 

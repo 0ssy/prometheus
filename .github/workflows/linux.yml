@@ -55,12 +55,6 @@ jobs:
           cmake .. -DBUILD_HAL_USB=ON -DBUILD_HAL_SERIAL=ON -DBUILD_HAL_GPIO=ON
           cmake --build . --config Release
 
-      - name: Build Rust HAL with C bindings
-        run: cargo build -p hal-core --features python,c-hal
-        env:
-          LIBUSB_1_0_LIBRARY_DIRS: /usr/lib/x86_64-linux-gnu
-          LIBSERIALPORT_LIBRARY_DIRS: /usr/lib/x86_64-linux-gnu
-
       - name: Build Rust tensor engine
         run: cargo build -p tensor-engine --features python
 

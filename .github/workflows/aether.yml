@@ -1,6 +1,6 @@
 name: Aether AI Runtime
 
-# Builds and tests the standalone `ai-runtime` Rust crate only. This must NOT
+# Builds and tests the standalone `aether-runtime` Rust crate only. This must NOT
 # invoke `cargo tauri build` (needs WebView2/NSIS/webkit2gtk) so the verified
 # RC1 desktop build stays isolated. Mirrors the cross-platform matrix used by
 # the Python `windows.yml` / `linux.yml` jobs.
@@ -9,13 +9,13 @@ on:
   push:
     branches: ["main", "feature/aether"]
     paths:
-      - "crates/ai-runtime/**"
+      - "crates/aether-runtime/**"
       - "src-tauri/Cargo.toml"
       - "src-tauri/src/lib.rs"
       - ".github/workflows/aether.yml"
   pull_request:
     paths:
-      - "crates/ai-runtime/**"
+      - "crates/aether-runtime/**"
       - "src-tauri/Cargo.toml"
       - "src-tauri/src/lib.rs"
       - ".github/workflows/aether.yml"
@@ -29,7 +29,7 @@ env:
 
 jobs:
   aether:
-    name: ai-runtime (${{ matrix.os }})
+    name: aether-runtime (${{ matrix.os }})
     runs-on: ${{ matrix.os }}
     timeout-minutes: 25
     strategy:
@@ -51,19 +51,19 @@ jobs:
           path: |
             ~/.cargo/registry
             ~/.cargo/git
-            crates/ai-runtime/target
-          key: ${{ runner.os }}-aether-${{ hashFiles('crates/ai-runtime/Cargo.toml') }}
+            crates/aether-runtime/target
+          key: ${{ runner.os }}-aether-${{ hashFiles('crates/aether-runtime/Cargo.toml') }}
           restore-keys: |
             ${{ runner.os }}-aether-
 
-      - name: Build ai-runtime
-        run: cargo build --manifest-path crates/ai-runtime/Cargo.toml --verbose
+      - name: Build aether-runtime
+        run: cargo build --manifest-path crates/aether-runtime/Cargo.toml --verbose
 
-      - name: Test ai-runtime
-        run: cargo test --manifest-path crates/ai-runtime/Cargo.toml --verbose
+      - name: Test aether-runtime
+        run: cargo test --manifest-path crates/aether-runtime/Cargo.toml --verbose
 
       - name: Check formatting
-        run: cargo fmt --manifest-path crates/ai-runtime/Cargo.toml -- --check
+        run: cargo fmt --manifest-path crates/aether-runtime/Cargo.toml -- --check
 
       - name: Clippy
-        run: cargo clippy --manifest-path crates/ai-runtime/Cargo.toml -- -D warnings
+        run: cargo clippy --manifest-path crates/aether-runtime/Cargo.toml -- -D warnings
