@@ -2,7 +2,7 @@
 
 **Status:** Implemented (Phase 2 — Capability 4)
 **Owner:** Hardware Platform
-**Languages:** Rust (`hal-core`), Python (Hardware API, SDK, CLI, Assistant, Automation)
+**Languages:** C++ (`cpp/hal/`), Python (Hardware API, SDK, CLI, Assistant, Automation)
 
 Fastboot is the Android bootloader flashing and diagnostic protocol. It reuses
 the same discovery, hot-plug, and permission primitives as USB and Serial and
@@ -45,7 +45,7 @@ FastbootManager (hardware.fastboot)   FastbootPermissionPolicy
 fastboot CLI (real)  ──  hal-core FastbootTransport (simulated fallback)
 ```
 
-### Rust (`crates/hal-core`)
+### C++ (`cpp/hal/`)
 
 - `transports::fastboot::FastbootDeviceInfo` — cross-language device model with
   serial, state, product, model, VID/PID, and unlock status.
@@ -121,13 +121,13 @@ prometheus> fastboot monitor
 
 ## Tests
 
-- Rust: `cargo test -p hal-core --lib fastboot` (default + `--features fastboot-real`).
+- C++: `ctest / CMake test -p hal-core --lib fastboot` (default + `--features fastboot-real`).
 - Python: `pytest tests/test_fastboot_capability.py tests/test_hardware_drivers.py`.
 
 ## Build notes
 
 Real Fastboot discovery requires the `fastboot` executable on `PATH`. Build the
-Rust crate with:
+C++ transport with:
 
 ```bash
 cargo build -p hal-core --features fastboot-real

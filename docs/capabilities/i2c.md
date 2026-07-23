@@ -2,7 +2,7 @@
 
 **Status:** Implemented (Phase 2 — Capability 7)
 **Owner:** Hardware Platform
-**Languages:** Rust (`hal-core`), Python integration pending
+**Languages:** C++ (`cpp/hal/`), Python integration pending
 
 I2C (Inter-Integrated Circuit) provides multi-device, two-wire bus access for
 sensors, EEPROMs, PMICs, and other addressable peripherals on embedded and SBC
@@ -28,13 +28,13 @@ CLI / Terminal / SDK / Assistant / Automation
     I2CDriver (hardware.drivers.bus)
          │  probe / connect / read / write / scan
          ▼
-hal-core (Rust)  ── I2cTransport ── i2c-dev / sysfs
+hal-core (C++)  ── I2cTransport ── i2c-dev / sysfs
          │   (fallback: simulated backend — any i2c: target accepted)
          ▼
     Linux I2C adapter / MCU I2C peripheral
 ```
 
-### Rust (`crates/hal-core`)
+### C++ (`cpp/hal/`)
 
 - `transports::i2c::I2cTransport` — bus-capable transport for I2C targets.
 - `transports::i2c::I2cTransport::probe(target)` — accepts `i2c:` prefixed
@@ -43,21 +43,21 @@ hal-core (Rust)  ── I2cTransport ── i2c-dev / sysfs
 
 ## Usage examples
 
-### Rust
+### C++
 
-```rust
+```cpp
 let transport = I2cTransport;
 transport.probe("i2c:1:0x50").unwrap();  // bus 1, addr 0x50
 ```
 
 ## Tests
 
-- Rust: `cargo test -p hal-core --lib i2c`.
+- C++: `ctest / CMake test -p hal-core --lib i2c`.
 
 ## Build notes
 
 Real I2C requires a Linux kernel with `i2c-dev` exposed (or a `c-hal` backend).
-Build the Rust crate with:
+Build the C++ transport with:
 
 ```bash
 cargo build -p hal-core --features c-hal

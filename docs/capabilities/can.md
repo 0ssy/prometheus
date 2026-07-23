@@ -2,7 +2,7 @@
 
 **Status:** Implemented (Phase 2 — Capability 8)
 **Owner:** Hardware Platform
-**Languages:** Rust (`hal-core`), Python integration pending
+**Languages:** C++ (`cpp/hal/`), Python integration pending
 
 CAN (Controller Area Network) provides multi-node, message-based bus access
 for automotive, industrial automation, IoT, and embedded systems. The platform
@@ -28,13 +28,13 @@ CLI / Terminal / SDK / Assistant / Automation
     CANDriver (hardware.drivers.bus)
          │  probe / connect / send / receive
          ▼
-hal-core (Rust)  ── CanTransport ── socketcan / netlink
+hal-core (C++)  ── CanTransport ── socketcan / netlink
          │   (fallback: simulated backend — can:/vcan: targets accepted)
          ▼
     Linux SocketCAN / MCU CAN peripheral
 ```
 
-### Rust (`crates/hal-core`)
+### C++ (`cpp/hal/`)
 
 - `transports::can::CanTransport` — interface-capable transport for CAN buses.
 - `transports::can::CanTransport::probe(target)` — accepts `can:` and `vcan:`
@@ -43,9 +43,9 @@ hal-core (Rust)  ── CanTransport ── socketcan / netlink
 
 ## Usage examples
 
-### Rust
+### C++
 
-```rust
+```cpp
 let transport = CanTransport;
 transport.probe("can0").unwrap();
 transport.probe("vcan0").unwrap();
@@ -53,12 +53,12 @@ transport.probe("vcan0").unwrap();
 
 ## Tests
 
-- Rust: `cargo test -p hal-core --lib can`.
+- C++: `ctest / CMake test -p hal-core --lib can`.
 
 ## Build notes
 
 Real CAN requires a Linux kernel with SocketCAN support loaded.
-Build the Rust crate with:
+Build the C++ transport with:
 
 ```bash
 cargo build -p hal-core --features c-hal

@@ -2,7 +2,7 @@
 
 **Status:** Implemented (Phase 2 — Capability 3)
 **Owner:** Hardware Platform
-**Languages:** Rust (`hal-core`), Python (Hardware API, SDK, CLI, Assistant, Automation)
+**Languages:** C++ (`cpp/hal/`), Python (Hardware API, SDK, CLI, Assistant, Automation)
 
 ADB makes Android support real. It reuses the same primitives as USB and
 Serial (discovery, hot-plug, permission policy, events, driver bridge) and
@@ -44,7 +44,7 @@ ADBManager (hardware.adb)   AdbPermissionPolicy
 adb CLI (real)  ──  hal-core AdbTransport (simulated fallback)
 ```
 
-### Rust (`crates/hal-core`)
+### C++ (`cpp/hal/`)
 
 - `transports::adb::AdbDeviceInfo` — cross-language device model.
 - `transports::adb::AdbTransport::enumerate()` — real discovery via the `adb`
@@ -120,12 +120,12 @@ prometheus> adb monitor
 
 ## Tests
 
-- Rust: `cargo test -p hal-core --lib adb` (default + `--features adb-real`).
+- C++: `ctest / CMake test -p hal-core --lib adb` (default + `--features adb-real`).
 - Python: `pytest tests/test_adb_capability.py tests/test_hardware_drivers.py`.
 
 ## Build notes
 
-Real ADB discovery requires the `adb` executable on `PATH`. Build the Rust
+Real ADB discovery requires the `adb` executable on `PATH`. Build the C++
 crate with:
 
 ```bash

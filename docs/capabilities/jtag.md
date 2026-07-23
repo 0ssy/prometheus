@@ -2,7 +2,7 @@
 
 **Status:** Implemented (Phase 2 — Capability 11)
 **Owner:** Hardware Platform
-**Languages:** Rust (`hal-core`), Python integration pending
+**Languages:** C++ (`cpp/hal/`), Python integration pending
 
 JTAG (IEEE 1149.1) provides boundary-scan and debug access for board-level
 testing, silicon validation, and firmware debugging across ARM, RISC-V, and
@@ -29,13 +29,13 @@ CLI / Terminal / SDK / Assistant / Automation
     JTAGDriver (hardware.drivers.bus)
          │  probe / connect / scan / halt / resume / read / write
          ▼
-hal-core (Rust)  ── JtagTransport ── OpenOCD / J-Link / CMSIS-DAP
+hal-core (C++)  ── JtagTransport ── OpenOCD / J-Link / CMSIS-DAP
          │   (fallback: simulated backend — jtag:/swd: targets accepted)
          ▼
     Physical JTAG probe / embedded debugger
 ```
 
-### Rust (`crates/hal-core`)
+### C++ (`cpp/hal/`)
 
 - `transports::jtag::JtagTransport` — probe transport for JTAG targets.
 - `transports::jtag::JtagTransport::probe(target)` — accepts `jtag:` and `swd:`
@@ -44,9 +44,9 @@ hal-core (Rust)  ── JtagTransport ── OpenOCD / J-Link / CMSIS-DAP
 
 ## Usage examples
 
-### Rust
+### C++
 
-```rust
+```cpp
 let transport = JtagTransport;
 transport.probe("jtag:cortex-m33").unwrap();
 transport.probe("swd:0").unwrap();
@@ -54,12 +54,12 @@ transport.probe("swd:0").unwrap();
 
 ## Tests
 
-- Rust: `cargo test -p hal-core --lib jtag`.
+- C++: `ctest / CMake test -p hal-core --lib jtag`.
 
 ## Build notes
 
 Real JTAG requires OpenOCD, J-Link, or a CMSIS-DAP probe.
-Build the Rust crate with:
+Build the C++ transport with:
 
 ```bash
 cargo build -p hal-core --features c-hal

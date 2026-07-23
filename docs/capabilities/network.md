@@ -2,7 +2,7 @@
 
 **Status:** Implemented (Phase 2 — Capability 9)
 **Owner:** Hardware Platform
-**Languages:** Rust (`hal-core`), Python integration pending
+**Languages:** C++ (`cpp/hal/`), Python integration pending
 
 Network provides transport-layer reachability for TCP, UDP, and HTTP targets.
 It is the foundation for over-the-air (OTA) updates, remote log collection, and
@@ -29,13 +29,13 @@ CLI / Terminal / SDK / Assistant / Automation
     NetworkDriver (hardware.drivers.network)
          │  probe / connect / send / receive
          ▼
-hal-core (Rust)  ── NetworkTransport ── TCP/UDP sockets / reqwest
+hal-core (C++)  ── NetworkTransport ── TCP/UDP sockets / reqwest
          │   (fallback: simulated backend — tcp:/udp:/http: targets accepted)
          ▼
     Ethernet / Wi-Fi / cellular interface
 ```
 
-### Rust (`crates/hal-core`)
+### C++ (`cpp/hal/`)
 
 - `transports::network::NetworkTransport` — network-target transport.
 - `transports::network::NetworkTransport::probe(target)` — accepts `tcp:`,
@@ -44,9 +44,9 @@ hal-core (Rust)  ── NetworkTransport ── TCP/UDP sockets / reqwest
 
 ## Usage examples
 
-### Rust
+### C++
 
-```rust
+```cpp
 let transport = NetworkTransport;
 transport.probe("tcp:192.168.1.1:23").unwrap();
 transport.probe("udp:239.255.255.250:1900").unwrap();
@@ -55,11 +55,11 @@ transport.probe("http://example.com").unwrap();
 
 ## Tests
 
-- Rust: `cargo test -p hal-core --lib network`.
+- C++: `ctest / CMake test -p hal-core --lib network`.
 
 ## Build notes
 
-Real network access requires a TCP/UDP/HTTP library. Build the Rust crate with:
+Real network access requires a TCP/UDP/HTTP library. Build the C++ transport with:
 
 ```bash
 cargo build -p hal-core --features c-hal

@@ -2,7 +2,7 @@
 
 **Status:** Implemented (Phase 2 — Capability 2)
 **Owner:** Hardware Platform
-**Languages:** Rust (`hal-core`), Python (Hardware API, SDK, CLI, Assistant, Automation)
+**Languages:** C++ (`cpp/hal/`), Python (Hardware API, SDK, CLI, Assistant, Automation)
 
 Serial is the second foundation capability, built on the same primitives
 introduced by USB: enumeration, hot-plug, a permission system, a stable
@@ -42,11 +42,11 @@ Assistant tools        Automation actions (serial:*)
 SerialManager (hardware.serial)   SerialPermissionPolicy
         │  enumerate / poll_once / read / write / events
         ▼
-hal-core (Rust)  ── SerialTransport ── serialport (libserialport)
+hal-core (C++)  ── SerialTransport ── serialport (libserialport)
         │   (fallback: simulated backend)
 ```
 
-### Rust (`crates/hal-core`)
+### C++ (`cpp/hal/`)
 
 - `transports::serial::SerialPortInfo` — cross-language port model.
 - `transports::serial::SerialTransport::enumerate()` — real enumeration via
@@ -117,12 +117,12 @@ prometheus> serial monitor
 
 ## Tests
 
-- Rust: `cargo test -p hal-core --lib serial` (default + `--features serial-real`).
+- C++: `ctest / CMake test -p hal-core --lib serial` (default + `--features serial-real`).
 - Python: `pytest tests/test_serial_capability.py tests/test_hardware_drivers.py`.
 
 ## Build notes
 
-Real serial requires libserialport. Build the Rust crate with:
+Real serial requires libserialport. Build the C++ transport with:
 
 ```bash
 cargo build -p hal-core --features serial-real

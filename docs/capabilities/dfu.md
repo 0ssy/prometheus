@@ -2,7 +2,7 @@
 
 **Status:** Implemented (Phase 2 — Capability 13)
 **Owner:** Hardware Platform
-**Languages:** Rust (`hal-core`), Python integration pending
+**Languages:** C++ (`cpp/hal/`), Python integration pending
 
 DFU (Device Firmware Upgrade) provides device discovery and state monitoring
 for devices that expose an official USB DFU runtime or bootloader. The platform
@@ -36,13 +36,13 @@ CLI / Terminal / SDK / Assistant / Automation
     DFUDriver (hardware.drivers.recovery)
          │  enumerate / probe / detach / download / upload
          ▼
-hal-core (Rust)  ── DfuTransport / DfuMonitor ── dfu-util
+hal-core (C++)  ── DfuTransport / DfuMonitor ── dfu-util
          │   (fallback: simulated backend — two deterministic DFU devices)
          ▼
     USB DFU bootloader / runtime
 ```
 
-### Rust (`crates/hal-core`)
+### C++ (`cpp/hal/`)
 
 - `transports::dfu::DfuDeviceInfo` — cross-language device model with `path`,
   `vendor_id`, `product_id`, `state`, `firmware_version`, `can_detach`.
@@ -56,9 +56,9 @@ hal-core (Rust)  ── DfuTransport / DfuMonitor ── dfu-util
 
 ## Usage examples
 
-### Rust
+### C++
 
-```rust
+```cpp
 let transport = DfuTransport;
 for dev in DfuTransport::enumerate() {
     println!("{} state={}", dev.vid_pid(), dev.state);
@@ -73,12 +73,12 @@ for change in monitor.poll() {
 
 ## Tests
 
-- Rust: `cargo test -p hal-core --lib dfu` (default + `--features dfu-real`).
+- C++: `ctest / CMake test -p hal-core --lib dfu` (default + `--features dfu-real`).
 
 ## Build notes
 
 Real DFU requires the `dfu-util` executable on `PATH`.
-Build the Rust crate with:
+Build the C++ transport with:
 
 ```bash
 cargo build -p hal-core --features dfu-real

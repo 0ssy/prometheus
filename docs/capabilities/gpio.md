@@ -2,7 +2,7 @@
 
 **Status:** Implemented (Phase 2 — Capability 5)
 **Owner:** Hardware Platform
-**Languages:** Rust (`hal-core`), Python integration pending
+**Languages:** C++ (`cpp/hal/`), Python integration pending
 
 GPIO provides foundational pin-level access for embedded and SBC targets. It
 covers GPIO chip enumeration and target probing; higher-level pin read/write
@@ -28,13 +28,13 @@ CLI / Terminal / SDK / Assistant / Automation
     GPIODriver (hardware.drivers.bus)
          │  probe / connect / read / write
          ▼
-hal-core (Rust)  ── GpioTransport ── c-hal (libgpiod-like C ABI)
+hal-core (C++)  ── GpioTransport ── c-hal (libgpiod-like C ABI)
          │   (fallback: simulated backend)
          ▼
     Linux GPIO sysfs / character devices
 ```
 
-### Rust (`crates/hal-core`)
+### C++ (`cpp/hal/`)
 
 - `transports::gpio::ProbeInfo` — target identity, connected state, pin count.
 - `transports::gpio::GpioTransport::enumerate_chips()` — real enumeration via
@@ -44,9 +44,9 @@ hal-core (Rust)  ── GpioTransport ── c-hal (libgpiod-like C ABI)
 
 ## Usage examples
 
-### Rust
+### C++
 
-```rust
+```cpp
 let transport = GpioTransport::new();
 for (id, label) in transport.enumerate_chips() {
     println!("chip {}: {}", id, label);
@@ -56,11 +56,11 @@ transport.probe("gpio:0").unwrap();
 
 ## Tests
 
-- Rust: `cargo test -p hal-core --lib gpio` (default + `--features c-hal`).
+- C++: `ctest / CMake test -p hal-core --lib gpio` (default + `--features c-hal`).
 
 ## Build notes
 
-Real GPIO requires the `c-hal` feature. Build the Rust crate with:
+Real GPIO requires the `c-hal` feature. Build the C++ transport with:
 
 ```bash
 cargo build -p hal-core --features c-hal

@@ -2,7 +2,7 @@
 
 **Status:** Implemented (Phase 2 — Capability 6)
 **Owner:** Hardware Platform
-**Languages:** Rust (`hal-core`), Python integration pending
+**Languages:** C++ (`cpp/hal/`), Python integration pending
 
 SPI (Serial Peripheral Interface) provides high-speed, full-duplex bus access
 for sensors, displays, flash memory, and other peripherals attached to embedded
@@ -28,13 +28,13 @@ CLI / Terminal / SDK / Assistant / Automation
     SPIDriver (hardware.drivers.bus)
          │  probe / connect / transfer
          ▼
-hal-core (Rust)  ── SpiTransport ── spidev / sysfs
+hal-core (C++)  ── SpiTransport ── spidev / sysfs
          │   (fallback: simulated backend — any spi: target accepted)
          ▼
     Linux SPI controller / MCU SPI peripheral
 ```
 
-### Rust (`crates/hal-core`)
+### C++ (`cpp/hal/`)
 
 - `transports::spi::SpiTransport` — bus-capable transport for SPI targets.
 - `transports::spi::SpiTransport::probe(target)` — accepts `spi:` prefixed
@@ -43,21 +43,21 @@ hal-core (Rust)  ── SpiTransport ── spidev / sysfs
 
 ## Usage examples
 
-### Rust
+### C++
 
-```rust
+```cpp
 let transport = SpiTransport;
 transport.probe("spi:0.0").unwrap();  // bus 0, CS 0
 ```
 
 ## Tests
 
-- Rust: `cargo test -p hal-core --lib spi`.
+- C++: `ctest / CMake test -p hal-core --lib spi`.
 
 ## Build notes
 
 Real SPI requires a Linux kernel with `spidev` exposed (or a `c-hal` backend).
-Build the Rust crate with:
+Build the C++ transport with:
 
 ```bash
 cargo build -p hal-core --features c-hal

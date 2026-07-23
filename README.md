@@ -2,8 +2,9 @@
 
 Prometheus is a local-first engineering platform with:
 
+- C++ hardware HAL (`cpp/hal/`)
+- CUDA/Titan AI acceleration
 - Python + FastAPI backend
-- Rust-first hardware HAL (`crates/hal-core`)
 - Desktop-style web workspace
 - Plugin and agent extensibility
 - Knowledge, simulation, and hardware capabilities
@@ -32,8 +33,8 @@ New value is added as capabilities built on top of the platform.
 | **Windows** | `prome.bat install` |
 | **macOS / Linux** | `python prome.py install` |
 
-`install` creates the Python venv, installs dependencies, checks for Rust/cargo,
-and builds the native HAL crate (`hal-core`).
+`install` creates the Python venv, installs dependencies, checks for CMake/C++,
+and builds the native HAL library (`cpp/hal/`).
 
 ### Run
 
@@ -54,7 +55,7 @@ python prome.py run
 ### Other launcher commands
 
 ```bash
-prome.py status   # show Python, venv, cargo, hal-core paths
+prome.py status   # show Python, venv, CMake, cpp/hal paths
 prome.py update   # reinstall + rebuild after a pull
 ```
 
@@ -78,23 +79,23 @@ distribution if you prefer a `prometheus.exe` without Tauri.
 
 | Capability | Transport | Primary Language | Status |
 |---|---|---|---|
-| USB | `usb:` | Rust + Python | Implemented |
-| Serial / UART | `serial:` / `COM*` / `/dev/tty*` | Rust + Python | Implemented |
-| ADB | `adb:` | Rust + Python | Implemented |
-| Fastboot | `fastboot:` | Rust + Python | Implemented |
-| GPIO | `gpio:` | Rust | Implemented |
-| SPI | `spi:` | Rust | Implemented |
-| I²C | `i2c:` | Rust | Implemented |
-| CAN Bus | `can:` / `vcan:` | Rust | Implemented |
-| Bluetooth / BLE | `ble:` / `bt:` | Rust | Implemented |
-| JTAG | `jtag:` | Rust + C | Implemented |
-| SWD | `swd:` | Rust + C | Implemented |
-| HID | `hid:` / `/dev/hidraw*` | Rust | Implemented |
-| DFU | `dfu:` | Rust | Implemented |
-| Recovery | `recovery:` | Rust | Implemented |
-| Network | `tcp:` / `udp:` / `http:` | Rust | Implemented |
+| USB | `usb:` | C++ | Implemented |
+| Serial / UART | `serial:` / `COM*` / `/dev/tty*` | C++ | Implemented |
+| ADB | `adb:` | C++ | Implemented |
+| Fastboot | `fastboot:` | C++ | Implemented |
+| GPIO | `gpio:` | C++ | Implemented |
+| SPI | `spi:` | C++ | Implemented |
+| I²C | `i2c:` | C++ | Implemented |
+| CAN Bus | `can:` / `vcan:` | C++ | Implemented |
+| Bluetooth / BLE | `ble:` / `bt:` | C++ | Implemented |
+| JTAG | `jtag:` | C++ | Implemented |
+| SWD | `swd:` | C++ | Implemented |
+| HID | `hid:` / `/dev/hidraw*` | C++ | Implemented |
+| DFU | `dfu:` | C++ | Implemented |
+| Recovery | `recovery:` | C++ | Implemented |
+| Network | `tcp:` / `udp:` / `http:` | C++ | Implemented |
 
-Platform transport support is exposed through `crates/hal-core` with
+Platform transport support is exposed through `cpp/hal/` with
 feature-gated real backends (`usb-real`, `serial-real`, `adb-real`,
 `fastboot-real`, `hid-real`, `dfu-real`, `swd-real`, `recovery-real`).
 Unused transports fall back to deterministic simulation by default.
@@ -114,7 +115,7 @@ Unused transports fall back to deterministic simulation by default.
 
 - Python 3.11+
 - pip
-- Rust toolchain (for `hal-core` and native HAL features)
+- CMake + C++ compiler (for `cpp/hal/` and native HAL features)
 
 ### Install (manual)
 
@@ -153,10 +154,11 @@ python prometheus.py hid -h
 - `dashboard/` -> dashboard data and composition
 - `omega/` -> compatibility/orchestration facade
 - `web/` + `src-tauri/` -> UI and native desktop packaging
-- `crates/` -> Rust workspace (HAL core, Titan, Aether, SDK, policy, etc.)
+- `cpp/` -> C++ HAL transports and native bindings
+- `crates/` -> C++/CUDA workspace (Titan, Aether, SDK core, policy, etc.)
 
-If you add a new capability (for example Bluetooth), start in `hardware/`,
-then expose integration through `services/` and `backend/`.
+If you add a new capability (for example Bluetooth), start in `cpp/hal/`,
+then expose integration through `hardware/`, `services/`, and `backend/`.
 
 ### Local development
 
@@ -188,16 +190,22 @@ npm run lint
 npm run build
 ```
 
-### Rust workspace (`crates/`)
+### C++ / CUDA workspace (`cpp/` and `crates/`)
 
-Rust crates are managed by the root `Cargo.toml` workspace.
+C++ and CUDA code is managed under `cpp/hal/` (transports) and `crates/`
+(Titan GPU engine, Aether runtime, SDK core, policy, distributed).
 
 ```bash
-# check all crates
-cargo check --workspace
+# build C++ HAL
+cmake -B build -S cpp
+cmake --build build --config Release
 
-# test HAL core
-cargo test -p hal-core --lib
+# test HAL core (C++)
+ctest --test-dir build
+
+# CUDA/Titan workspace
+cargo check -p titan-engine
+cargo test -p titan-engine
 ```
 
 ### Native desktop (`src-tauri/`)

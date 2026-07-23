@@ -14,7 +14,7 @@
 
 ## P1 — Prometheus Engineering OS (Complete / Hardening)
 
-- Languages: Rust, TypeScript, React, SQL, Bash/PowerShell
+- Languages: C++, TypeScript, React, SQL, Bash/PowerShell
 - Deliverables:
   - Desktop workspace and window manager
   - Terminal/filesystem integration
@@ -37,7 +37,7 @@
 
 ## P2 — Complete Hardware Platform
 
-- Languages: Rust, C, C++, Zig
+- Languages: C++, CUDA, Zig
 - Deliverables:
   - Multi-protocol device communication stack
   - Recovery workflows (mobile, BIOS/UEFI, embedded, ECU)
@@ -59,7 +59,7 @@
 
 ## P3 — Aether AI Runtime
 
-- Languages: Rust, C++, TypeScript
+- Languages: C++, CUDA, TypeScript
 - Deliverables:
   - Provider abstraction (cloud + local)
   - Context engine (short/long memory + retrieval)
@@ -81,7 +81,7 @@
 
 ## P4 — Engineering Intelligence
 
-- Languages: Rust, C++, TypeScript
+- Languages: C++, CUDA, TypeScript
 - Deliverables:
   - Repo understanding, design/code generation, verification engine
   - Failure/root-cause analysis workflows
@@ -100,7 +100,7 @@
 
 ## P5 — Titan AI Platform
 
-- Languages: Python, Rust, C++, CUDA
+- Languages: Python, C++, CUDA
 - Deliverables:
   - Dataset/tokenizer/embedding/fine-tuning pipeline
   - RLHF/DPO/PPO training support
@@ -120,7 +120,7 @@
 
 ## P6 — High Performance Engine
 
-- Languages: Rust, C++, CUDA
+- Languages: C++, CUDA
 - Deliverables:
   - Tensor/memory/vector engines
   - GPU scheduler/runtime kernels
@@ -140,7 +140,7 @@
 
 ## P7 — Distributed Computing
 
-- Languages: Rust, Go, C++
+- Languages: Go, C++
 - Deliverables:
   - Distributed agents, cluster control plane, worker runtime
   - Task scheduler and distributed memory/inference/training
@@ -159,7 +159,7 @@
 
 ## P8 — Cloud Platform
 
-- Languages: Rust, TypeScript, Go
+- Languages: C++, TypeScript, Go
 - Deliverables:
   - Auth, teams/orgs, collaboration, sync, deployment, API gateway, billing
   - Remote hardware/workspace support
@@ -178,7 +178,7 @@
 
 ## P9 — Prometheus SDK
 
-- Languages: Rust, TypeScript, C++, Python
+- Languages: C++, TypeScript, Python
 - Deliverables:
   - SDKs for plugins, drivers, agents, providers, simulators, extensions
   - Developer tooling and package distribution
@@ -197,7 +197,7 @@
 
 ## P10 — Engineering Ecosystem
 
-- Languages: TypeScript, React, Rust, C++
+- Languages: TypeScript, React, C++
 - Deliverables:
   - Domain studios (robotics, firmware, PCB, security, AI, networking, IoT)
   - Shared extension framework and marketplace integration
@@ -216,7 +216,7 @@
 
 ## P11 — Prometheus OS (Final Product)
 
-- Languages: Rust, TypeScript, React, Python, C++
+- Languages: C++, TypeScript, React, Python
 - Deliverables:
   - Unified engineering workspace and AI OS experience
   - Aether runtime + Titan platform + distributed intelligence
