@@ -41,7 +41,7 @@ jobs:
           curl -L "https://ziglang.org/download/${ZIG_VERSION}/${ZIG_ARCHIVE}" -o "${ZIG_ARCHIVE}"
           tar -xf "${ZIG_ARCHIVE}"
           echo "${PWD}/${ZIG_BASENAME}" >> "$GITHUB_PATH"
-          zig version
+          "./${ZIG_BASENAME}/zig" version
 
       - name: Set up Rust toolchain
         uses: dtolnay/rust-toolchain@stable

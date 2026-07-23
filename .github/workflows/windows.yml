@@ -39,7 +39,7 @@ jobs:
           Invoke-WebRequest -Uri "https://ziglang.org/download/$zigVersion/$zigZip" -OutFile $zigZip
           Expand-Archive -Path $zigZip -DestinationPath .
           Add-Content -Path $env:GITHUB_PATH -Value "$PWD\\$zigFolder"
-          zig version
+          & ".\\$zigFolder\\zig.exe" version
 
       - name: Set up Rust toolchain
         uses: dtolnay/rust-toolchain@stable
