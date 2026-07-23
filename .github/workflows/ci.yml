@@ -36,7 +36,7 @@ jobs:
       - name: Set up Zig
         uses: mlugg/setup-zig@v1
         with:
-          version: "0.16.0"
+          version: "0.15.1"
 
       - name: Set up Rust toolchain
         uses: dtolnay/rust-toolchain@stable
