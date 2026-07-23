@@ -2,7 +2,7 @@
 
 **Status:** Implemented (Phase 2 — Capability 12)
 **Owner:** Hardware Platform
-**Languages:** Rust (`hal-core`), Python integration pending
+**Languages:** C++ (`cpp/hal/`), Python integration pending
 
 HID (Human Interface Device) provides enumeration and hot-plug detection for
 keyboards, mice, game controllers, barcode scanners, and other USB-based or
@@ -34,13 +34,13 @@ CLI / Terminal / SDK / Assistant / Automation
     HIDManager (pending)
          │  enumerate / poll_once / read / write
          ▼
-hal-core (Rust)  ── HidTransport / HidMonitor ── hidapi (libusb/HIDAPI)
+hal-core (C++)  ── HidTransport / HidMonitor ── hidapi (libusb/HIDAPI)
          │   (fallback: simulated backend — two deterministic HID devices)
          ▼
     OS hidraw device nodes (e.g. /dev/hidraw0)
 ```
 
-### Rust (`crates/hal-core`)
+### C++ (`cpp/hal/`)
 
 - `transports::hid::HidDeviceInfo` — cross-language device model with `path`,
   `vendor_id`, `product_id`, `manufacturer`, `product`, `serial_number`,
@@ -55,9 +55,9 @@ hal-core (Rust)  ── HidTransport / HidMonitor ── hidapi (libusb/HIDAPI)
 
 ## Usage examples
 
-### Rust
+### C++
 
-```rust
+```cpp
 let transport = HidTransport;
 for dev in HidTransport::enumerate() {
     println!("{} {} {}", dev.path, dev.vid_pid(), dev.label());
@@ -72,12 +72,12 @@ for change in monitor.poll() {
 
 ## Tests
 
-- Rust: `cargo test -p hal-core --lib hid` (default + `--features hid-real`).
+- C++: `ctest / CMake test -p hal-core --lib hid` (default + `--features hid-real`).
 
 ## Build notes
 
 Real HID requires the `hidapi` system library.
-Build the Rust crate with:
+Build the C++ transport with:
 
 ```bash
 cargo build -p hal-core --features hid-real

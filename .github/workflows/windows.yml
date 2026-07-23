@@ -52,10 +52,6 @@ jobs:
           cmake --build . --config Release
           Pop-Location
 
-      - name: Build Rust HAL with C bindings
-        run: cargo build -p hal-core --features python,c-hal
-        shell: pwsh
-
       - name: Build Rust tensor engine
         run: cargo build -p tensor-engine --features python
         shell: pwsh

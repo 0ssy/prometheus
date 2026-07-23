@@ -239,25 +239,25 @@ Built `DeviceTwin` as a materialized view over the knowledge graph, never a seco
 Prometheus spans multiple capabilities (hardware, AI inference, UI, distributed services) with no documented language strategy. CUDA was being considered for hardware interfaces where it does not fit.
 
 ### Decision
-1. **Rust first** for all Platform capabilities: USB, Serial, Bluetooth/BLE, GPIO, I²C, SPI, CAN Bus, HID, Fastboot, ADB, DFU, Firmware Flashing, Device Recovery, Drivers, HAL, Recovery, SDK, Kernel, Plugins, Automation.
+1. **C++ first** for all Platform capabilities: USB, Serial, Bluetooth/BLE, GPIO, I²C, SPI, CAN Bus, HID, Fastboot, ADB, DFU, Firmware Flashing, Device Recovery, Drivers, HAL, Recovery, SDK, Kernel, Plugins, Automation.
 2. **CUDA + C++** only for Titan (GPU kernels, TensorRT, inference, model optimization).
 3. **Python** for AI research and model development (training, datasets, evaluation) — not for core platform capabilities.
 4. **TypeScript** for UI and Dashboard.
 5. **Go** for distributed workers, cluster, and cloud services.
 6. **C** only when required by vendor SDKs, firmware, embedded targets, or OS interfaces.
-7. **Rust + C** where needed for JTAG/SWD integration with vendor toolchains.
+7. **C++ + CUDA** where needed for hardware acceleration or GPU-adjacent sensor pipelines.
 
 ### Rationale
-- CUDA is for GPU kernels, not hardware transport protocols.
-- Rust provides memory safety, excellent async ecosystems, and cross-platform support for hardware communication.
-- Separating Titan from Platform prevents GPU acceleration logic from bleeding into every capability module.
-- A clear ownership boundary between Rust Platform and Python AI enables teams to move independently.
+- CUDA is for GPU kernels, not hardware transport protocols, but C++ is the shared substrate for both Platform and Titan.
+- C++ provides deterministic performance, direct hardware access, and a mature ecosystem for device communication.
+- Separating Titan from Platform still matters, but both share C++ as the implementation language.
+- A clear ownership boundary between C++ Platform and Python AI enables teams to move independently.
 
 ### Consequences
-- All new platform capabilities must be implemented in Rust unless a vendor SDK requires C/C++.
-- Titan modules may use CUDA; Platform modules must not.
-- AI training research stays in Python; production inference stays in Rust or CUDA depending on context.
-- Existing Python hardware modules should be migrated to Rust crates where practical.
+- All new platform capabilities must be implemented in C++ unless a vendor SDK requires C or CUDA.
+- Titan modules may use CUDA; Platform modules must not introduce GPU-only dependencies.
+- AI training research stays in Python; production inference stays in CUDA/C++ depending on context.
+- Existing Python hardware modules should be migrated to `cpp/hal/` where practical.
 
 ## 2026-07-04 — Phase Beta Device Interface (RFC 0001)
 

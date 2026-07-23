@@ -29,6 +29,9 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r requirements.txt
 
+      - name: Install native HAL dependencies
+        run: brew install libusb libserialport pkg-config
+
       - name: Set up Zig
         uses: mlugg/setup-zig@v1
         with:
@@ -49,9 +52,6 @@ jobs:
           cd cpp/build
           cmake .. -DBUILD_HAL_USB=ON -DBUILD_HAL_SERIAL=ON -DBUILD_HAL_GPIO=ON
           cmake --build . --config Release
-
-      - name: Build Rust HAL with C bindings
-        run: cargo build -p hal-core --features python,c-hal
 
       - name: Build Rust tensor engine
         run: cargo build -p tensor-engine --features python

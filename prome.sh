@@ -9,8 +9,9 @@ REPO_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 cmd_install() {
   python3 -m venv "$REPO_ROOT/venv"
   "$REPO_ROOT/venv/bin/pip" install -r "$REPO_ROOT/requirements.txt"
-  command -v cargo >/dev/null 2>&1 || { echo "Rust/cargo not found. Install from https://rustup.rs/"; exit 1; }
-  (cd "$REPO_ROOT/crates" && cargo check -p hal-core --lib)
+  command -v cmake >/dev/null 2>&1 || { echo "CMake not found. Install from https://cmake.org/"; exit 1; }
+  cmake -B "$REPO_ROOT/build" -S "$REPO_ROOT/cpp"
+  cmake --build "$REPO_ROOT/build" --config Release
   echo "Prometheus ready. Run: ./prome.sh run"
 }
 
@@ -25,8 +26,8 @@ cmd_run() {
 cmd_status() {
   python3 --version
   echo "venv    : $([ -d "$REPO_ROOT/venv" ] && echo present || echo missing)"
-  echo "hal-core: $([ -f "$REPO_ROOT/target/debug/libhal_core.so" ] && echo built || echo missing)"
-  command -v cargo >/dev/null 2>&1 && cargo --version || echo "cargo   : not found"
+  echo "cpp/hal : $([ -f "$REPO_ROOT/build/hal/libprom_hal_usb.so" ] && echo built || echo missing)"
+  command -v cmake >/dev/null 2>&1 && cmake --version | head -n1 || echo "cmake   : not found"
 }
 
 case "${1:-}" in

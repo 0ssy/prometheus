@@ -2,7 +2,7 @@
 
 **Status:** Implemented (Phase 2 — Capability 14)
 **Owner:** Hardware Platform
-**Languages:** Rust (`hal-core`), Python integration pending
+**Languages:** C++ (`cpp/hal/`), Python integration pending
 
 SWD (Serial Wire Debug) is ARM's low-pin-count debug interface, used to
 program, debug, and trace Cortex-M and Cortex-R targets. The platform supports
@@ -34,13 +34,13 @@ CLI / Terminal / SDK / Assistant / Automation
     SWDDriver (hardware.drivers.bus)
          │  probe / connect / read / write / halt / resume
          ▼
-hal-core (Rust)  ── SwdTransport / SwdMonitor ── OpenOCD / pyOCD
+hal-core (C++)  ── SwdTransport / SwdMonitor ── OpenOCD / pyOCD
          │   (fallback: simulated backend)
          ▼
     CMSIS-DAP / JTAG-SWD probe
 ```
 
-### Rust (`crates/hal-core`)
+### C++ (`cpp/hal/`)
 
 - `transports::swd::SwdDeviceInfo` — cross-language device model with target
   ID, IDCODE, core, DP version, and serial.
@@ -54,9 +54,9 @@ hal-core (Rust)  ── SwdTransport / SwdMonitor ── OpenOCD / pyOCD
 
 ## Usage examples
 
-### Rust
+### C++
 
-```rust
+```cpp
 let transport = SwdTransport;
 for dev in SwdTransport::enumerate() {
     println!("{} {:?} id=0x{:08X}", dev.target_id, dev.core, dev.idcode.unwrap());
@@ -71,12 +71,12 @@ for change in monitor.poll() {
 
 ## Tests
 
-- Rust: `cargo test -p hal-core --lib swd` (default + `--features swd-real`).
+- C++: `ctest / CMake test -p hal-core --lib swd` (default + `--features swd-real`).
 
 ## Build notes
 
 Real SWD requires OpenOCD with a CMSIS-DAP interface.
-Build the Rust crate with:
+Build the C++ transport with:
 
 ```bash
 cargo build -p hal-core --features swd-real

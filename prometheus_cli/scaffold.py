@@ -156,8 +156,7 @@ def scaffold_driver(name: str) -> Path:
             f"[lib]\n"
             f'name = "{name.replace("-", "_")}"\n'
             f'path = "src/lib.rs"\n\n'
-            f"[dependencies]\n"
-            f'hal_core = {{ path = "../../crates/hal_core" }}\n',
+            f"[dependencies]\n",
             encoding="utf-8",
         )
 
@@ -165,11 +164,10 @@ def scaffold_driver(name: str) -> Path:
     if not lib.exists():
         lib.write_text(
             f"// Driver: {name}\n\n"
-            f"use hal_core::{{Hal, ProbeResult, Transport}};\n\n"
             f"pub struct {cls}Driver;\n\n"
-            f"impl Hal for {cls}Driver {{\n"
-            f"    fn probe(&self, _transport: Transport, _target: &str) -> ProbeResult {{\n"
-            f"        todo!(\"implement probe for {name}\")\n"
+            f"impl {cls}Driver {{\n"
+            f"    pub fn probe(&self, target: &str) -> String {{\n"
+            f'        format!("probe:{{}}:ok", target)\n'
             f"    }}\n"
             f"}}\n",
             encoding="utf-8",

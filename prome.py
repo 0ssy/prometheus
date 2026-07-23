@@ -2,7 +2,7 @@
 prome — Prometheus Platform bootstrap / installer launcher.
 
 Usage:
-    python prome.py install      # first-time setup: venv + deps + Rust crates
+    python prome.py install      # first-time setup: venv + deps + C++ HAL
     python prome.py run          # start Prometheus
     python prome.py run --server # start server only
     python prome.py update       # pull + rebuild
@@ -51,32 +51,37 @@ def _install_python_deps(pip: Path) -> bool:
     return result.returncode == 0
 
 
-def _cargo_path() -> str | None:
-    return which("cargo")
+def _cmake_path() -> str | None:
+    return which("cmake")
 
 
-def _ensure_rust() -> bool:
-    cargo = _cargo_path()
-    if not cargo:
-        print("Rust/cargo not found in PATH. Install from https://rustup.rs/")
+def _ensure_cpp_toolchain() -> bool:
+    cmake = _cmake_path()
+    if not cmake:
+        print("CMake not found in PATH. Install from https://cmake.org/")
         return False
-    r = _run([cargo, "--version"], capture_output=True, text=True)
+    r = _run([cmake, "--version"], capture_output=True, text=True)
     if r.returncode == 0:
-        print(f"Rust toolchain: {r.stdout.strip()} OK")
+        print(f"CMake: {r.stdout.strip().splitlines()[0]} OK")
         return True
     return False
 
 
 def _build_hal_core() -> bool:
-    cargo = _cargo_path()
-    if not cargo:
+    cmake = _cmake_path()
+    if not cmake:
         return False
-    print("Building Rust HAL core...")
-    r = _run([cargo, "check", "-p", "hal-core", "--lib"], cwd=REPO_ROOT / "crates")
-    if r.returncode == 0:
-        print("hal-core built OK")
+    build_dir = REPO_ROOT / "build"
+    print("Building C++ HAL core...")
+    r1 = _run([cmake, "-B", str(build_dir), "-S", str(REPO_ROOT / "cpp")], cwd=REPO_ROOT)
+    if r1.returncode != 0:
+        print(f"CMake configure failed (rc={r1.returncode})")
+        return False
+    r2 = _run([cmake, "--build", str(build_dir), "--config", "Release"], cwd=REPO_ROOT)
+    if r2.returncode == 0:
+        print("C++ HAL built OK")
         return True
-    print(f"hal-core build failed (rc={r.returncode})")
+    print(f"C++ HAL build failed (rc={r2.returncode})")
     return False
 
 
@@ -85,8 +90,8 @@ def cmd_install() -> int:
         return 1
     pip = _ensure_venv()
     py_ok = _install_python_deps(pip)
-    rs_ok = _ensure_rust()
-    hal_ok = _build_hal_core() if rs_ok else False
+    cpp_ok = _ensure_cpp_toolchain()
+    hal_ok = _build_hal_core() if cpp_ok else False
     if py_ok and hal_ok:
         print("\nPrometheus is ready. Run: python prome.py run")
         return 0
@@ -107,14 +112,17 @@ def cmd_status() -> int:
     print(f"Python    : {sys.version}")
     venv = REPO_ROOT / "venv"
     print(f"venv      : {'present' if venv.exists() else 'missing'}")
-    hal_lib = REPO_ROOT / "target" / "debug" / "libhal_core.dll"
-    print(f"hal-core   : {'built' if hal_lib.exists() else 'missing'}")
-    cargo = _cargo_path()
-    if cargo:
-        r = _run([cargo, "--version"], capture_output=True, text=True)
-        print(f"cargo     : {r.stdout.strip() if r.returncode == 0 else 'not found'}")
+    if sys.platform == "win32":
+        hal_so = REPO_ROOT / "build" / "hal" / "Release" / "prom_hal_usb.dll"
     else:
-        print("cargo     : not found")
+        hal_so = REPO_ROOT / "build" / "hal" / "libprom_hal_usb.so"
+    print(f"cpp/hal    : {'built' if hal_so.exists() else 'missing'} ({hal_so})")
+    cmake = _cmake_path()
+    if cmake:
+        r = _run([cmake, "--version"], capture_output=True, text=True)
+        print(f"cmake     : {r.stdout.strip().splitlines()[0] if r.returncode == 0 else 'not found'}")
+    else:
+        print("cmake     : not found")
     return 0
 
 

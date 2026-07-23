@@ -40,9 +40,9 @@ by testers and operators.
 
 ## Tauri build prerequisites
 
-- Building the desktop installer requires a Windows host with Rust ≥ 1.77,
+- Building the desktop installer requires a Windows host with CMake + C++ compiler,
   Node 18+, Python 3.11+ on `PATH`, Microsoft WebView2 (preinstalled on
   Windows 10/11), NSIS (`makensis` on `PATH`), and a `venv` with
-  `pyinstaller` installed. `python ../scripts/pre_tauri_build.py` locates
-  the interpreter cross-platform, but the `nsis` bundle target itself is
+  `pyinstaller` installed. `python ../scripts/pre_tauri_build.py` locates the
+  interpreter cross-platform, but the `nsis` bundle target itself is
   Windows-only.

@@ -2,7 +2,7 @@
 
 **Status:** Implemented (Phase 2 — Capability 15)
 **Owner:** Hardware Platform
-**Languages:** Rust (`hal-core`), Python (`hardware.recovery`)
+**Languages:** C++ (`cpp/hal/`), Python (`hardware.recovery`)
 
 Recovery provides cross-platform device recovery mode identification and
 planning: Android Recovery, EDL (Qualcomm), Samsung Odin, DFU, BIOS/UEFI, TPM,
@@ -51,7 +51,7 @@ RecoveryDriver subclasses (hardware.drivers.recovery)
     Device in recovery mode
 ```
 
-### Rust (`crates/hal-core`)
+### C++ (`cpp/hal/`)
 
 - `transports::recovery::RecoveryMode` — enum with `as_str()`, `parse()`, and
   case-insensitive aliases for every supported recovery mode.
@@ -73,15 +73,15 @@ RecoveryDriver subclasses (hardware.drivers.recovery)
 
 - `hardware.recovery.HardwareRecovery` — risk assessment and recovery planning.
 
-## Rust crate
+## C++ transport
 
 `crates/hal-core/src/transports/recovery.rs`
 
 ## Usage examples
 
-### Rust
+### C++
 
-```rust
+```cpp
 let transport = RecoveryTransport;
 let r = transport.probe("recovery:edl:0000").unwrap();
 assert_eq!(r.mode, Some(RecoveryMode::Edl));
@@ -100,13 +100,13 @@ print(plan["risk"], plan["strategies"])
 
 ## Tests
 
-- Rust: `cargo test -p hal-core --lib recovery`.
+- C++: `ctest / CMake test -p hal-core --lib recovery`.
 - Python: `pytest tests/test_recovery.py tests/test_hardware_drivers.py`.
 
 ## Build notes
 
 Recovery tooling is provided by vendor-specific CLIs (adb, fastboot, dfu-util,
-UEFI tools, etc.). The Rust crate uses a simulated backend by default; enable
+UEFI tools, etc.). The C++ transport uses a simulated backend by default; enable
 `c-hal` for vendor bridge integration:
 
 ```bash

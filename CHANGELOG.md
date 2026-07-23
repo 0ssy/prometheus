@@ -8,23 +8,12 @@ Platform 1.0 release. Engineering Intelligence Platform with distributed computi
 
 ### Added
 - Phase 7 — Distributed Platform:
-  - Go control plane with gRPC + HTTP boundaries, mDNS node discovery, work-stealing task queue
-  - Go worker runtime with local and SSH-based remote execution
-  - Go billing metering service with persistent event storage
-  - Rust crates: `distributed` (CRDT types, node registry, scheduler, sync), `marketplace` (plugin/driver registry, package versioning, HMAC-SHA256 verification), `enterprise` (multi-tenant, RBAC, billing), `policy` (policy engine, rules, audit), `runtime_management` (lifecycle, health, rolling updates)
-  - Python distributed runtime with CRDT-backed state sync and capability routing
-  - Cloud Go services: gateway (rate-limited REST API with tenant auth), auth (OIDC + passkey), billing, SSH tunnel, CRDT-based git workspace sync
-  - bbolt persistence across all P7/P8 Go services (nodes, tasks, billing, tenants, tunnels)
+  - Rust crates (superseded by Go/Python in v1.0): `distributed`, `marketplace`, `enterprise`, `policy`, `runtime_management`
 - Phase 8 — Cloud Platform:
-  - Multi-tenant cloud platform with OIDC + passkey authentication
-  - Organization and team hierarchy with role-based access control
-  - Git-backed project sync with CRDT conflict-free merging
-  - Secure SSH tunneling to remote hardware with reservation and scheduling
-  - Rate-limited REST/GraphQL API gateway with usage metering
-  - Rust `cloud-core` crate with tenant, auth, tunnel, and billing modules
+  - Rust `cloud-core` crate (superseded by Python/Go in v1.0)
 - Phase 9 — SDK:
-  - Rust `sdk-core` crate: plugin manifest/capability/permission model, HAL trait definitions, engineering module interface, SDK versioning/compatibility matrix
-  - Rust `sdk-cli` crate: `prometheus new` scaffolding, `prometheus pack` signed distribution, `prometheus verify` signature checking
+  - Rust `sdk-core` crate (migrated to C++ HAL in `cpp/hal/`)
+  - Rust `sdk-cli` crate (superseded by Python CLI tooling)
   - TypeScript plugin runtime with lifecycle management and permission enforcement
   - TypeScript driver runtime with HAL trait conformance
   - Plugin hot-reload with file watcher and state preservation
@@ -49,7 +38,9 @@ Platform 1.0 release. Engineering Intelligence Platform with distributed computi
   - End-to-end workflow success >= 95%
 
 ### Architecture
-- Rust workspace expanded to 11 crates covering distributed computing, cloud platform, marketplace, enterprise, policy, runtime management, SDK, and cloud-core.
+- Rust workspace retains Titan AI crates (`titan-engine`, `titan-core`, `tensor-engine`, `aether-runtime`).
+- Stale Platform crates (`hal-core`, `sdk-core`, `sdk-cli`, `prometheus-kernel`, `distributed`, `cloud-core`, `enterprise`, `marketplace`, `policy`, `runtime_management`) moved to `crates/graveyard/`.
+- Driver HAL now implemented in C++ (`cpp/hal/`) with ctypes bridge in Python.
 - Go services (control plane, worker, billing, gateway, auth, tunnel, gitsync) provide the distributed and cloud mesh.
 - Python backend remains the primary runtime orchestrator with FastAPI.
 - TypeScript frontend provides desktop-like UX with window manager, dock, and 15 engineering studios.

@@ -2,7 +2,7 @@
 
 **Status:** Implemented (Phase 2 — Capability 1)
 **Owner:** Hardware Platform
-**Languages:** Rust (`hal-core`), Python (Hardware API, SDK, CLI, Assistant, Automation)
+**Languages:** C++ (`cpp/hal/`), Python (Hardware API, SDK, CLI, Assistant, Automation)
 
 USB is the foundation capability. Every other hardware capability (Serial,
 ADB, Fastboot, …) builds on the same enumeration, hot-plug, permission, and
@@ -20,7 +20,7 @@ event primitives introduced here.
 - **Permission system** — `UsbPermissionPolicy` gates access by
   vendor/product id, serial, and capability; defaults to **deny-unknown**.
 - **Driver abstraction** — the Hardware API hides the backend; real
-  enumeration runs through the `hal-core` Rust crate (`rusb`), with a
+  enumeration runs through the `hal-core` C++ transport (`rusb`), with a
   deterministic simulated backend for CI/hosts without libusb.
 - **Stable Hardware API** — `hardware.usb.USBManager` is the single entry
   point for the rest of the platform.
@@ -50,13 +50,13 @@ event primitives introduced here.
         USBManager (hardware.usb)   UsbPermissionPolicy
                 │  enumerate / poll_once / events
                 ▼
-        hal-core (Rust)  ── UsbTransport ── rusb (libusb)
+        hal-core (C++)  ── UsbTransport ── rusb (libusb)
                 │   (fallback: simulated backend)
                 ▼
         OS USB stack
 ```
 
-### Rust (`crates/hal-core`)
+### C++ (`cpp/hal/`)
 
 - `transports::usb::UsbDeviceInfo` — cross-language device model.
 - `transports::usb::UsbTransport::enumerate()` — real enumeration via
@@ -121,14 +121,14 @@ prometheus> usb monitor
 
 ## Tests
 
-- Rust: `cargo test -p hal-core --lib usb` (default + `--features usb-real`).
+- C++: `ctest / CMake test -p hal-core --lib usb` (default + `--features usb-real`).
 - Python: `pytest tests/test_usb_capability.py` — permission policy, Hardware
   API enumeration/hot-plug events, SDK client, automation actions, assistant
   tools.
 
 ## Build notes
 
-Real USB requires libusb. Build the Rust crate with:
+Real USB requires libusb. Build the C++ transport with:
 
 ```bash
 cargo build -p hal-core --features usb-real

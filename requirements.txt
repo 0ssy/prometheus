@@ -7,4 +7,3 @@ cryptography
 psutil
 httpx
 pytest
-triton
