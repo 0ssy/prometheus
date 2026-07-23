@@ -32,10 +32,19 @@ jobs:
       - name: Install native HAL dependencies
         run: brew install libusb libserialport pkg-config
 
-      - name: Set up Zig
-        uses: mlugg/setup-zig@v1
-        with:
-          version: "0.15.1"
+      - name: Install Zig
+        run: |
+          ZIG_VERSION="0.15.1"
+          if [ "$(uname -m)" = "arm64" ]; then
+            ZIG_ARCH="aarch64"
+          else
+            ZIG_ARCH="x86_64"
+          fi
+          ZIG_ARCHIVE="zig-macos-${ZIG_ARCH}-${ZIG_VERSION}.tar.xz"
+          curl -L "https://ziglang.org/download/${ZIG_VERSION}/${ZIG_ARCHIVE}" -o "${ZIG_ARCHIVE}"
+          tar -xf "${ZIG_ARCHIVE}"
+          echo "${PWD}/zig-macos-${ZIG_ARCH}-${ZIG_VERSION}" >> "$GITHUB_PATH"
+          zig version
 
       - name: Set up Rust toolchain
         uses: dtolnay/rust-toolchain@stable

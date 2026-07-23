@@ -29,10 +29,17 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r requirements.txt
 
-      - name: Set up Zig
-        uses: mlugg/setup-zig@v1
-        with:
-          version: "0.15.1"
+      - name: Install Zig
+        shell: pwsh
+        run: |
+          $zigVersion = "0.15.1"
+          $zigArch = "x86_64"
+          $zigFolder = "zig-windows-$zigArch-$zigVersion"
+          $zigZip = "$zigFolder.zip"
+          Invoke-WebRequest -Uri "https://ziglang.org/download/$zigVersion/$zigZip" -OutFile $zigZip
+          Expand-Archive -Path $zigZip -DestinationPath .
+          Add-Content -Path $env:GITHUB_PATH -Value "$PWD\\$zigFolder"
+          zig version
 
       - name: Set up Rust toolchain
         uses: dtolnay/rust-toolchain@stable

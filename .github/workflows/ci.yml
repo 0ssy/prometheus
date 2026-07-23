@@ -33,10 +33,14 @@ jobs:
           sudo apt-get update
           sudo apt-get install -y libusb-1.0-0-dev libserialport-dev libudev-dev
 
-      - name: Set up Zig
-        uses: mlugg/setup-zig@v1
-        with:
-          version: "0.15.1"
+      - name: Install Zig
+        run: |
+          ZIG_VERSION="0.15.1"
+          ZIG_ARCHIVE="zig-linux-x86_64-${ZIG_VERSION}.tar.xz"
+          curl -L "https://ziglang.org/download/${ZIG_VERSION}/${ZIG_ARCHIVE}" -o "${ZIG_ARCHIVE}"
+          tar -xf "${ZIG_ARCHIVE}"
+          echo "${PWD}/zig-linux-x86_64-${ZIG_VERSION}" >> "$GITHUB_PATH"
+          zig version
 
       - name: Set up Rust toolchain
         uses: dtolnay/rust-toolchain@stable
