@@ -1,8 +1,7 @@
 // P2 Hardware Platform — USB transport driver (C).
 //
-// Wrapped into Rust via `bindgen`/`cc` in hal-core and exposed to Python
-// via PyO3. This is the native transport primitive; the unified HAL calls
-// into it for real USB device I/O (simulated here for CI portability).
+// Native transport primitive exposed via C++ HAL shared libraries and
+// loaded from Python through the ctypes bridge.
 #ifndef PROMETHEUS_HARDWARE_USB_H
 #define PROMETHEUS_HARDWARE_USB_H
 

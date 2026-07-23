@@ -2,6 +2,11 @@
 #include <string.h>
 #include <stdio.h>
 
+#ifdef _WIN32
+#include <string.h>
+#define strcasecmp _stricmp
+#endif
+
 static const char *recovery_mode_names[] = {
     "android_recovery", "edl", "odin", "dfu", "bios", "uefi", "tpm",
     "router", "iot", "drone", "vehicle", "ecu", "eeprom", "nand", "nor",

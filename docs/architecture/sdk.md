@@ -4,7 +4,7 @@
 
 The Prometheus SDK provides interfaces and runtimes for extending the platform at
 every layer: plugins, drivers, and external integrations. It spans Python
-(backend), TypeScript (frontend), and Rust (driver HAL).
+(backend), TypeScript (frontend), and C++ (driver HAL).
 
 ## Versioning
 
@@ -70,23 +70,19 @@ pluginRuntime.onStateChange("ready", (e) => console.log(e));
 
 ## Driver SDK
 
-### Rust HAL Core
+### C++ HAL
 
-Drivers implement HAL traits defined in `hal-core`. Each trait declares methods
-and a `safety_level`:
+Drivers implement HAL transports defined in `cpp/hal/`. Each transport exposes
+C functions for enumeration, probing, and I/O:
 
-```rust
-pub trait HalTrait {
-    fn name(&self) -> &'static str;
-    fn methods(&self) -> &[HalMethod];
-    fn safety_level(&self) -> SafetyLevel;
-}
+```c
+prom_usb_device_list_t prom_usb_enumerate(void);
+prom_usb_err_t prom_usb_probe(const char *target);
 ```
 
-Safety levels:
-- `safe` — read-only or low-risk operations.
-- `unsafe` — write operations requiring explicit approval.
-- `critical` — operations requiring ownership declaration and admin review.
+The ctypes bridge (`hardware/hal/ctypes_bridge.py`) loads the shared libraries
+from `build/hal/` and exposes them to Python as `UsbTransport` and
+`SerialTransport`.
 
 ### TypeScript
 

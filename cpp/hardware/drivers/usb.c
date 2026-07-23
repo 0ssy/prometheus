@@ -1,8 +1,7 @@
 // P2 Hardware Platform — USB transport driver implementation (C).
 //
 // Real driver would open libusb; here we implement a deterministic probe
-// so the HAL conformance suite runs without hardware. The Rust `hal-core`
-// crate compiles and calls this via `cc`/`bindgen`.
+// so the HAL conformance suite runs without hardware.
 #include "usb.h"
 #include <string.h>
 

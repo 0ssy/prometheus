@@ -2,10 +2,10 @@
 
 The manager enumerates serial ports, tracks connect/disconnect via a hot-plug
 monitor, enforces the serial permission policy, performs read/write with
-logging, and publishes hardware events. Real enumeration uses the
-`hal-core` Rust crate when built with the `serial-real` feature; otherwise a
-deterministic simulated backend is used so the rest of the platform keeps
-working in CI and on hosts without libserialport.
+logging, and publishes hardware events. Real enumeration uses the C++ HAL
+transport when the shared library is present; otherwise a deterministic
+simulated backend is used so the rest of the platform keeps working in CI
+and on hosts without libserialport.
 """
 
 from __future__ import annotations
@@ -107,11 +107,10 @@ class SerialManager:
 
     def _try_load_real_backend(self) -> None:
         try:
-            from hal_core import SerialTransport  # type: ignore
-
+            from hardware.hal.ctypes_bridge import SerialTransport
             self._real_serial_transport = SerialTransport
             self._real_backend = True
-            logger.info("Serial capability: using real backend (hal-core + serialport)")
+            logger.info("Serial capability: using real backend (C++ HAL)")
         except Exception as exc:  # pragma: no cover - depends on build
             self._real_backend = False
             logger.info(f"Serial capability: real backend unavailable ({exc}); using simulated")

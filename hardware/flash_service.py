@@ -36,13 +36,9 @@ class SigningVerifier:
         if self._public_key_pem is None:
             return True
         try:
-            import hal_core as _hal_core
-            return _hal_core.verify_signature(
-                self._public_key_pem.hex(),
-                payload,
-                signature,
-            )
-        except ImportError:
+            from hardware.hal.ctypes_bridge import verify_signature
+            return verify_signature(self._public_key_pem, payload, signature)
+        except (ImportError, OSError):
             pass
         try:
             from cryptography.hazmat.primitives.asymmetric.ed25519 import (

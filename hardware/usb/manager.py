@@ -5,10 +5,9 @@ a hot-plug monitor, enforces the USB permission policy, and publishes
 hardware events so that every other subsystem (SDK, Assistant, automation,
 terminal, UI) can react to changes.
 
-Real enumeration is performed by the `hal-core` Rust crate when it is built
-with the `usb-real` feature and importable; otherwise a deterministic
-simulated backend is used so the rest of the platform keeps working in CI
-and on hosts without libusb.
+Real enumeration is performed by the C++ HAL transport when the shared
+library is present; otherwise a deterministic simulated backend is used so
+the rest of the platform keeps working in CI and on hosts without libusb.
 """
 
 from __future__ import annotations
@@ -119,11 +118,10 @@ class USBManager:
 
     def _try_load_real_backend(self) -> None:
         try:
-            from hal_core import UsbTransport  # type: ignore
-
+            from hardware.hal.ctypes_bridge import UsbTransport
             self._real_usb_transport = UsbTransport
             self._real_backend = True
-            logger.info("USB capability: using real backend (hal-core + rusb)")
+            logger.info("USB capability: using real backend (C++ HAL)")
         except Exception as exc:  # pragma: no cover - depends on build
             self._real_backend = False
             logger.info(f"USB capability: real backend unavailable ({exc}); using simulated")

@@ -26,7 +26,7 @@ cmd_run() {
 cmd_status() {
   python3 --version
   echo "venv    : $([ -d "$REPO_ROOT/venv" ] && echo present || echo missing)"
-  echo "cpp/hal : $([ -f "$REPO_ROOT/build/libhal_core.so" ] && echo built || echo missing)"
+  echo "cpp/hal : $([ -f "$REPO_ROOT/build/hal/libprom_hal_usb.so" ] && echo built || echo missing)"
   command -v cmake >/dev/null 2>&1 && cmake --version | head -n1 || echo "cmake   : not found"
 }
 

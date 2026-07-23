@@ -112,7 +112,10 @@ def cmd_status() -> int:
     print(f"Python    : {sys.version}")
     venv = REPO_ROOT / "venv"
     print(f"venv      : {'present' if venv.exists() else 'missing'}")
-    hal_so = REPO_ROOT / "build" / "Release" / "hal_core.dll"
+    if sys.platform == "win32":
+        hal_so = REPO_ROOT / "build" / "hal" / "Release" / "prom_hal_usb.dll"
+    else:
+        hal_so = REPO_ROOT / "build" / "hal" / "libprom_hal_usb.so"
     print(f"cpp/hal    : {'built' if hal_so.exists() else 'missing'} ({hal_so})")
     cmake = _cmake_path()
     if cmake:
