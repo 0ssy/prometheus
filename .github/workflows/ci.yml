@@ -31,7 +31,7 @@ jobs:
       - name: Install native HAL dependencies
         run: |
           sudo apt-get update
-          sudo apt-get install -y libusb-1.0-0-dev libserialport-dev libudev-dev
+          sudo apt-get install -y pkg-config libusb-1.0-0-dev libserialport-dev libudev-dev
 
       - name: Install Zig
         run: |
