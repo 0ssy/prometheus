@@ -233,6 +233,32 @@ Built `DeviceTwin` as a materialized view over the knowledge graph, never a seco
 - Simple rules-based health scoring for v0.1 (no ML per RFC 0003's explicit non-goal).
 - Live device state blended with historical facts.
 
+## 2026-07-23 — Language Standardization Strategy
+
+### Context
+Prometheus spans multiple capabilities (hardware, AI inference, UI, distributed services) with no documented language strategy. CUDA was being considered for hardware interfaces where it does not fit.
+
+### Decision
+1. **Rust first** for all Platform capabilities: USB, Serial, Bluetooth/BLE, GPIO, I²C, SPI, CAN Bus, HID, Fastboot, ADB, DFU, Firmware Flashing, Device Recovery, Drivers, HAL, Recovery, SDK, Kernel, Plugins, Automation.
+2. **CUDA + C++** only for Titan (GPU kernels, TensorRT, inference, model optimization).
+3. **Python** for AI research and model development (training, datasets, evaluation) — not for core platform capabilities.
+4. **TypeScript** for UI and Dashboard.
+5. **Go** for distributed workers, cluster, and cloud services.
+6. **C** only when required by vendor SDKs, firmware, embedded targets, or OS interfaces.
+7. **Rust + C** where needed for JTAG/SWD integration with vendor toolchains.
+
+### Rationale
+- CUDA is for GPU kernels, not hardware transport protocols.
+- Rust provides memory safety, excellent async ecosystems, and cross-platform support for hardware communication.
+- Separating Titan from Platform prevents GPU acceleration logic from bleeding into every capability module.
+- A clear ownership boundary between Rust Platform and Python AI enables teams to move independently.
+
+### Consequences
+- All new platform capabilities must be implemented in Rust unless a vendor SDK requires C/C++.
+- Titan modules may use CUDA; Platform modules must not.
+- AI training research stays in Python; production inference stays in Rust or CUDA depending on context.
+- Existing Python hardware modules should be migrated to Rust crates where practical.
+
 ## 2026-07-04 — Phase Beta Device Interface (RFC 0001)
 
 ### Context

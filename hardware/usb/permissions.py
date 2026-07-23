@@ -113,15 +113,16 @@ class UsbPermissionPolicy:
             if rule.matches(vendor_id, product_id, serial):
                 return False, rule.reason
 
+        # Allowed if any matching allow rule grants the requested capability.
+        # Rules that match but omit the capability are ignored so multiple
+        # allow rules can grant different capability subsets.
+        denied_reason: str | None = None
         for rule in self.allow_rules:
             if rule.matches(vendor_id, product_id, serial):
                 if capability in rule.capabilities:
                     return True, "allowed by rule"
-                return (
-                    False,
-                    f"capability '{capability.value}' not permitted for this device",
-                )
+                denied_reason = f"capability '{capability.value}' not permitted for this device"
 
         if self.default_allow:
             return True, "allowed by default policy"
-        return False, "no matching allow rule (default deny)"
+        return False, denied_reason or "no matching allow rule (default deny)"

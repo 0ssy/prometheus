@@ -16,6 +16,10 @@ serde = { version = "1", features = ["derive"] }
 version = "1.0"
 optional = true
 
+[dependencies.hidapi]
+version = "2"
+optional = true
+
 [dependencies.libloading]
 version = "0.8"
 optional = true
@@ -37,12 +41,15 @@ default = []
 python = ["pyo3", "c-hal"]
 c-hal = ["cc"]
 dynamic-hal = ["libloading"]
-# Real USB enumeration + hot-plug via libusb (rusb). Off by default so the
-# crate still builds/tests on CI hosts without libusb present.
 usb-real = ["rusb"]
-# Real serial port enumeration + hot-plug via libserialport. Off by default.
 serial-real = ["serialport"]
-full = ["c-hal", "python", "usb-real", "serial-real"]
+adb-real = []
+fastboot-real = []
+hid-real = ["hidapi"]
+dfu-real = []
+swd-real = []
+recovery-real = []
+full = ["c-hal", "python", "usb-real", "serial-real", "adb-real", "fastboot-real", "hid-real", "dfu-real", "swd-real", "recovery-real"]
 
 [build-dependencies]
 cc = "1.0"

@@ -1,11 +1,12 @@
 # Prometheus Platform
 
-Prometheus is a local-first engineering platform that combines:
+Prometheus is a local-first engineering platform with:
 
-- a Python/FastAPI backend,
-- a desktop-style web workspace,
-- plugin + agent extensibility,
-- knowledge, simulation, and hardware-oriented services.
+- Python + FastAPI backend
+- Rust-first hardware HAL (`crates/hal-core`)
+- Desktop-style web workspace
+- Plugin and agent extensibility
+- Knowledge, simulation, and hardware capabilities
 
 ---
 
@@ -13,47 +14,109 @@ Prometheus is a local-first engineering platform that combines:
 
 **v1.0 foundation is frozen.**
 
-That means platform core work is now limited to:
+Core platform changes should be limited to:
 
 1. bug fixes, or
-2. breaking architectural improvements.
+2. major architectural improvements.
 
-New value should be added as capabilities on top of the platform.
+New value is added as capabilities built on top of the platform.
 
 ---
 
-## Start here
+## Quick start (end users)
 
-- **I want to use Prometheus** -> [User guide](#user-guide)
-- **I want to build on Prometheus** -> [Developer guide](#developer-guide)
+### One-click install
 
-### 30-second repository map
+| OS | Command |
+|---|---|
+| **Windows** | `prome.bat install` |
+| **macOS / Linux** | `python prome.py install` |
 
-Use this when deciding where a change belongs:
+`install` creates the Python venv, installs dependencies, checks for Rust/cargo,
+and builds the native HAL crate (`hal-core`).
 
-- `core/` -> shared runtime foundations (config, boot, container, logging)
-- `backend/` -> HTTP API surface and endpoint wiring
-- `services/` -> orchestration/business logic used by API and CLI
-- `hardware/` -> hardware capability implementations (USB/Serial/Bluetooth/etc.)
-- `firmware/` -> firmware parsing, metadata, and compatibility logic
-- `knowledge/`, `memory/`, `simulation/` -> platform intelligence layers
-- `agents/`, `plugins/`, `sdk/` -> extension and automation surfaces
-- `omega/` -> compatibility/orchestration facade (not a duplicate subsystem tree)
-- `web/`, `src-tauri/` -> desktop UI and native packaging
+### Run
 
-If you are adding a capability (for example Bluetooth support), start in
-`hardware/` and expose integration points through `services/` and `backend/`.
+```bash
+# Windows
+prome.bat run
+
+# macOS / Linux
+python prome.py run
+```
+
+### Open
+
+- Dashboard: <http://127.0.0.1:8000/dashboard>
+- API docs: <http://127.0.0.1:8000/docs>
+- Health: <http://127.0.0.1:8000/health>
+
+### Other launcher commands
+
+```bash
+prome.py status   # show Python, venv, cargo, hal-core paths
+prome.py update   # reinstall + rebuild after a pull
+```
+
+### Native desktop packaging
+
+A Tauri-based desktop wrapper lives in `src-tauri/`:
+
+```bash
+cd src-tauri
+cargo tauri build
+```
+
+Windows builds produce a self-contained `.exe` in `src-tauri/target/release/bundle/`.
+
+A PyInstaller spec (`prometheus.spec`) is also included for pure-Python
+distribution if you prefer a `prometheus.exe` without Tauri.
+
+---
+
+## Implemented capabilities
+
+| Capability | Transport | Primary Language | Status |
+|---|---|---|---|
+| USB | `usb:` | Rust + Python | Implemented |
+| Serial / UART | `serial:` / `COM*` / `/dev/tty*` | Rust + Python | Implemented |
+| ADB | `adb:` | Rust + Python | Implemented |
+| Fastboot | `fastboot:` | Rust + Python | Implemented |
+| GPIO | `gpio:` | Rust | Implemented |
+| SPI | `spi:` | Rust | Implemented |
+| I²C | `i2c:` | Rust | Implemented |
+| CAN Bus | `can:` / `vcan:` | Rust | Implemented |
+| Bluetooth / BLE | `ble:` / `bt:` | Rust | Implemented |
+| JTAG | `jtag:` | Rust + C | Implemented |
+| SWD | `swd:` | Rust + C | Implemented |
+| HID | `hid:` / `/dev/hidraw*` | Rust | Implemented |
+| DFU | `dfu:` | Rust | Implemented |
+| Recovery | `recovery:` | Rust | Implemented |
+| Network | `tcp:` / `udp:` / `http:` | Rust | Implemented |
+
+Platform transport support is exposed through `crates/hal-core` with
+feature-gated real backends (`usb-real`, `serial-real`, `adb-real`,
+`fastboot-real`, `hid-real`, `dfu-real`, `swd-real`, `recovery-real`).
+Unused transports fall back to deterministic simulation by default.
+
+---
+
+## One README, two paths
+
+- **I am a user** -> [User guide](#user-guide)
+- **I am a developer** -> [Developer guide](#developer-guide)
 
 ---
 
 ## User guide
 
-### 1) Requirements
+### Requirements
 
 - Python 3.11+
 - pip
+- Rust toolchain (for `hal-core` and native HAL features)
 
-### 2) Install and run
+### Install (manual)
 
 ```bash
 python -m venv venv
@@ -63,60 +126,39 @@ venv\Scripts\activate
 # source venv/bin/activate
 
 pip install -r requirements.txt
-python prometheus.py
+python prometheus.py --server
 ```
 
-By default this starts the backend and opens the dashboard.
-
-### 3) Open the product
-
-- Dashboard: <http://127.0.0.1:8000/dashboard>
-- API docs: <http://127.0.0.1:8000/docs>
-- Health check: <http://127.0.0.1:8000/health>
-
-### 4) Common commands
+### Hardware capability commands
 
 ```bash
-python prometheus.py --server       # API only (no browser)
-python prometheus.py --terminal     # terminal mode
-python prometheus.py --safe-mode    # minimal services
-python prometheus.py status         # platform status banner
-python prometheus.py demo           # happy-path demo
-python prometheus.py test           # run tests
-python prometheus.py extensions     # list SDK extension packages
+python prometheus.py usb -h
+python prometheus.py serial -h
+python prometheus.py hid -h
 ```
-
-### 5) What users get
-
-- Desktop workspace + terminal
-- Dashboard and API
-- Plugin system
-- Agent runtime
-- Knowledge and simulation surfaces
-- Hardware-oriented services and diagnostics endpoints
 
 ---
 
 ## Developer guide
 
-### Architecture at a glance
+### 30-second repo map
 
-Prometheus is organized around stable service contracts and a bootstrapped container:
+- `core/` -> runtime foundations (boot, config, container, logging)
+- `backend/` -> API endpoints
+- `services/` -> orchestration and business logic
+- `hardware/` -> hardware capabilities (USB, Serial, HAL, recovery, drivers)
+- `firmware/` -> firmware parsing/metadata/compatibility
+- `knowledge/`, `memory/`, `simulation/` -> intelligence layers
+- `agents/`, `plugins/`, `sdk/` -> extension surfaces
+- `dashboard/` -> dashboard data and composition
+- `omega/` -> compatibility/orchestration facade
+- `web/` + `src-tauri/` -> UI and native desktop packaging
+- `crates/` -> Rust workspace (HAL core, Titan, Aether, SDK, policy, etc.)
 
-- **API runtime**: `backend/main.py`
-- **Bootstrap/wiring**: `core/bootstrap.py`
-- **Service container**: `core/container.py`
-- **Orchestration services**: `services/`
-- **Core subsystems**:
-  - `agents/`
-  - `distributed/`
-  - `policy/`
-  - `marketplace/`
-  - `enterprise/`
-  - `runtime_management/`
-  - `dashboard/`
+If you add a new capability (for example Bluetooth), start in `hardware/`,
+then expose integration through `services/` and `backend/`.
 
-### Local development setup
+### Local development
 
 ```bash
 python -m venv venv
@@ -133,9 +175,10 @@ python prometheus.py --server
 
 ```bash
 pytest -q
+cargo test -p hal-core --lib
 ```
 
-### Frontend workspace (`web/`)
+### Frontend (`web/`)
 
 ```bash
 cd web
@@ -147,9 +190,17 @@ npm run build
 
 ### Rust workspace (`crates/`)
 
-The repository also includes Rust crates (HAL/runtime/Titan/distributed/etc.) managed via the root `Cargo.toml` workspace.
+Rust crates are managed by the root `Cargo.toml` workspace.
 
-### Native desktop build (Tauri)
+```bash
+# check all crates
+cargo check --workspace
+
+# test HAL core
+cargo test -p hal-core --lib
+```
+
+### Native desktop (`src-tauri/`)
 
 ```bash
 cd src-tauri
@@ -157,13 +208,21 @@ cargo tauri dev
 cargo tauri build
 ```
 
-Use this path for native desktop packaging/distribution.
+---
+
+## Packaging for end users
+
+| Method | Output | Notes |
+|---|---|---|
+| `prome.bat install` | venv + deps on user machine | Use for dev / portable |
+| `src-tauri` build | `prometheus.exe` | Best distribution artifact |
+| `pyinstaller` (`prometheus.spec`) | `prometheus.exe` | Pure-Python bundle |
 
 ---
 
-## Extending the platform
+## Extending Prometheus
 
-### Plugin/agent scaffolding
+### Scaffold a plugin/agent/driver
 
 ```bash
 python prometheus.py new plugin my_plugin
@@ -180,7 +239,7 @@ python prometheus.py verify <path-to-zip>
 
 ---
 
-## API highlights
+## API quick list
 
 - `GET /health`
 - `GET /status`
@@ -190,10 +249,12 @@ python prometheus.py verify <path-to-zip>
 - `POST /assistant`
 - `POST /commands`
 
-For full contract details, use `/docs` in a running instance.
+For complete API contracts, use `/docs` on a running instance.
 
 ---
 
 ## Current direction
 
-The next major expansion is **Hardware Platform capabilities** (HAL-first), then higher-level engineering applications that reuse those capabilities across Assistant, SDK, plugins, and automation workflows.
+The next major expansion is **hardware platform capabilities** (HAL-first),
+followed by higher-level engineering applications that reuse those capabilities
+across Assistant, SDK, plugins, and automation workflows.
