@@ -34,7 +34,7 @@ jobs:
         run: |
           $zigVersion = "0.15.1"
           $zigArch = "x86_64"
-          $zigFolder = "zig-windows-$zigArch-$zigVersion"
+          $zigFolder = "zig-$zigArch-windows-$zigVersion"
           $zigZip = "$zigFolder.zip"
           Invoke-WebRequest -Uri "https://ziglang.org/download/$zigVersion/$zigZip" -OutFile $zigZip
           Expand-Archive -Path $zigZip -DestinationPath .

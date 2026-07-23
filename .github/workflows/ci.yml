@@ -36,10 +36,11 @@ jobs:
       - name: Install Zig
         run: |
           ZIG_VERSION="0.15.1"
-          ZIG_ARCHIVE="zig-linux-x86_64-${ZIG_VERSION}.tar.xz"
+          ZIG_BASENAME="zig-x86_64-linux-${ZIG_VERSION}"
+          ZIG_ARCHIVE="${ZIG_BASENAME}.tar.xz"
           curl -L "https://ziglang.org/download/${ZIG_VERSION}/${ZIG_ARCHIVE}" -o "${ZIG_ARCHIVE}"
           tar -xf "${ZIG_ARCHIVE}"
-          echo "${PWD}/zig-linux-x86_64-${ZIG_VERSION}" >> "$GITHUB_PATH"
+          echo "${PWD}/${ZIG_BASENAME}" >> "$GITHUB_PATH"
           zig version
 
       - name: Set up Rust toolchain
