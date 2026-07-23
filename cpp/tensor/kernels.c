@@ -1,5 +1,6 @@
 // P6 High Performance Engine — tensor compute kernels implementation (C).
 #include "kernels.h"
+#include <stddef.h>
 
 int prometheus_matmul(const float* a, const float* b, float* out,
                       int m, int k, int n) {
