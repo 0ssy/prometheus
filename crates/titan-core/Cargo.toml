@@ -11,7 +11,7 @@ thiserror = "1"
 serde = { version = "1", features = ["derive"] }
 
 [dependencies.pyo3]
-version = "0.21"
+version = "0.29"
 optional = true
 
 [features]

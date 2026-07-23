@@ -13,7 +13,7 @@ crate-type = ["cdylib"]
 tensor-engine = { path = "../tensor-engine", features = ["python"] }
 
 [dependencies.pyo3]
-version = "0.21"
+version = "0.29"
 optional = true
 
 [features]
