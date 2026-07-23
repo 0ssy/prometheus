@@ -11,6 +11,32 @@ option(BUILD_HAL_SPI "Build SPI HAL transport" OFF)
 option(BUILD_HAL_I2C "Build I2C HAL transport" OFF)
 option(BUILD_HAL_CAN "Build CAN HAL transport" OFF)
 option(BUILD_HAL_JTAG "Build JTAG HAL transport" OFF)
+option(BUILD_HAL_HID "Build HID HAL transport" ON)
+option(BUILD_HAL_DFU "Build DFU HAL transport" ON)
+option(BUILD_HAL_SWD "Build SWD HAL transport" ON)
+option(BUILD_HAL_RECOVERY "Build Recovery HAL transport" ON)
+option(BUILD_HAL_I2S "Build I2S HAL transport" ON)
+option(BUILD_HAL_AUDIO_JACK "Build Audio Jack HAL transport" ON)
+option(BUILD_HAL_MIDI "Build MIDI HAL transport" ON)
+option(BUILD_HAL_MIPI "Build MIPI HAL transport" ON)
+option(BUILD_HAL_CSI "Build CSI HAL transport" ON)
+option(BUILD_HAL_DSI "Build DSI HAL transport" ON)
+option(BUILD_HAL_HDMI "Build HDMI HAL transport" ON)
+option(BUILD_HAL_DISPLAYPORT "Build DisplayPort HAL transport" ON)
+option(BUILD_HAL_NFC "Build NFC HAL transport" ON)
+option(BUILD_HAL_RFID "Build RFID HAL transport" ON)
+option(BUILD_HAL_LIN "Build LIN HAL transport" ON)
+option(BUILD_HAL_PCIE "Build PCIe HAL transport" ON)
+option(BUILD_HAL_SATA "Build SATA HAL transport" ON)
+option(BUILD_HAL_SD "Build SD HAL transport" ON)
+option(BUILD_HAL_MQTT "Build MQTT HAL transport" ON)
+option(BUILD_HAL_MODBUS "Build Modbus HAL transport" ON)
+option(BUILD_HAL_OPCUA "Build OPC UA HAL transport" ON)
+option(BUILD_HAL_BACNET "Build BACnet HAL transport" ON)
+option(BUILD_HAL_DRONE "Build Drone HAL transport" ON)
+option(BUILD_HAL_VEHICLE "Build Vehicle HAL transport" ON)
+option(BUILD_HAL_FPGA "Build FPGA HAL transport" ON)
+option(BUILD_HAL_PLC "Build PLC HAL transport" ON)
 
 if(WIN32)
     find_library(WINUSB_LIBRARY winusb)
@@ -28,6 +54,15 @@ target_include_directories(prom_hal_core INTERFACE
     ${CMAKE_CURRENT_SOURCE_DIR}
     ${CMAKE_CURRENT_SOURCE_DIR}/..
 )
+
+macro(prom_add_hal_transport name)
+    string(TOLOWER "${name}" _lower)
+    if(BUILD_HAL_${name})
+        add_library(prom_hal_${_lower} STATIC ${_lower}/${_lower}.c)
+        target_include_directories(prom_hal_${_lower} PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/${_lower})
+        target_link_libraries(prom_hal_core INTERFACE prom_hal_${_lower})
+    endif()
+endmacro()
 
 if(BUILD_HAL_USB)
     add_library(prom_hal_usb STATIC usb/usb.c)
@@ -59,35 +94,48 @@ if(BUILD_HAL_GPIO)
     target_link_libraries(prom_hal_core INTERFACE prom_hal_gpio)
 endif()
 
+prom_add_hal_transport(HID)
+prom_add_hal_transport(DFU)
+prom_add_hal_transport(SWD)
+prom_add_hal_transport(RECOVERY)
+prom_add_hal_transport(I2S)
+prom_add_hal_transport(AUDIO_JACK)
+prom_add_hal_transport(MIDI)
+prom_add_hal_transport(MIPI)
+prom_add_hal_transport(CSI)
+prom_add_hal_transport(DSI)
+prom_add_hal_transport(HDMI)
+prom_add_hal_transport(DISPLAYPORT)
+prom_add_hal_transport(NFC)
+prom_add_hal_transport(RFID)
+prom_add_hal_transport(LIN)
+prom_add_hal_transport(PCIE)
+prom_add_hal_transport(SATA)
+prom_add_hal_transport(SD)
+prom_add_hal_transport(MQTT)
+prom_add_hal_transport(MODBUS)
+prom_add_hal_transport(OPCUA)
+prom_add_hal_transport(BACNET)
+prom_add_hal_transport(DRONE)
+prom_add_hal_transport(VEHICLE)
+prom_add_hal_transport(FPGA)
+prom_add_hal_transport(PLC)
+
 install(TARGETS prom_hal_core
     EXPORT prometheus_hal_targets
     ARCHIVE DESTINATION lib
     LIBRARY DESTINATION lib
 )
 
-if(BUILD_HAL_USB)
-    install(TARGETS prom_hal_usb
-        EXPORT prometheus_hal_targets
-        ARCHIVE DESTINATION lib
-        LIBRARY DESTINATION lib
-    )
-    install(FILES usb/usb.h DESTINATION include/prometheus/hal)
-endif()
-
-if(BUILD_HAL_SERIAL)
-    install(TARGETS prom_hal_serial
-        EXPORT prometheus_hal_targets
-        ARCHIVE DESTINATION lib
-        LIBRARY DESTINATION lib
-    )
-    install(FILES serial/serial.h DESTINATION include/prometheus/hal)
-endif()
-
-if(BUILD_HAL_GPIO)
-    install(TARGETS prom_hal_gpio
-        EXPORT prometheus_hal_targets
-        ARCHIVE DESTINATION lib
-        LIBRARY DESTINATION lib
-    )
-    install(FILES gpio/gpio.h DESTINATION include/prometheus/hal)
-endif()
+set(_HAL_TRANSPORTS USB SERIAL GPIO HID DFU SWD RECOVERY I2S AUDIO_JACK MIDI MIPI CSI DSI HDMI DISPLAYPORT NFC RFID LIN PCIE SATA SD MQTT MODBUS OPCUA BACNET DRONE VEHICLE FPGA PLC)
+foreach(_t ${_HAL_TRANSPORTS})
+    string(TOLOWER "${_t}" _t_lower)
+    if(BUILD_HAL_${_t})
+        install(TARGETS prom_hal_${_t_lower}
+            EXPORT prometheus_hal_targets
+            ARCHIVE DESTINATION lib
+            LIBRARY DESTINATION lib
+        )
+        install(FILES ${_t_lower}/${_t_lower}.h DESTINATION include/prometheus/hal)
+    endif()
+endforeach()
