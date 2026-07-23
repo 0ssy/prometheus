@@ -143,6 +143,9 @@ class USBManager:
         except Exception as exc:  # pragma: no cover - depends on host
             logger.warning(f"USB real enumeration failed: {exc}")
             return _build_simulated_devices()
+        if not raw:
+            logger.info("USB real enumeration returned no devices; using simulated fallback")
+            return _build_simulated_devices()
         return [
             UsbDevice(
                 device_id=d.get("device_id", f"{d.get('vendor_id'):04x}:{d.get('product_id'):04x}"),

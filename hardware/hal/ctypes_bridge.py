@@ -18,8 +18,19 @@ REPO_ROOT = Path(__file__).resolve().parents[2]
 
 def _find_hal_dir() -> Path:
     if sys.platform == "win32":
-        return REPO_ROOT / "build" / "hal" / "Release"
-    return REPO_ROOT / "build" / "hal"
+        candidates = [
+            REPO_ROOT / "cpp" / "build" / "hal" / "Release",
+            REPO_ROOT / "build" / "hal" / "Release",
+        ]
+    else:
+        candidates = [
+            REPO_ROOT / "cpp" / "build" / "hal",
+            REPO_ROOT / "build" / "hal",
+        ]
+    for candidate in candidates:
+        if candidate.exists():
+            return candidate
+    return candidates[0]
 
 
 def _load_dll(name: str) -> ctypes.CDLL:
